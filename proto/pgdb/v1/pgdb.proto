@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package pgdb.v1;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/ductone/protoc-gen-pgdb/pgdb/v1";
+
+// TODO(pquerna): register here https://github.com/protocolbuffers/protobuf/blob/master/docs/options.md
+extend google.protobuf.MessageOptions {
+  MessageOptions msg = 6010;
+}
+
+message MessageOptions {
+  bool enabled = 1;
+  message Index {
+    enum IndexType {
+      INDEX_TYPE_UNSPECIFIED = 0;
+      INDEX_TYPE_BTREE = 1;
+      INDEX_TYPE_GIN = 2;
+      INDEX_TYPE_BTREE_GIN = 3;
+    }
+    string name = 1;
+    IndexType type = 2;
+    repeated string columns = 3;
+  }
+  repeated Index indexes = 2;
+}
+
+extend google.protobuf.FieldOptions {
+  FieldOptions options = 6010;
+}
+
+message FieldOptions {
+  enum FullTextType {
+    FULL_TEXT_TYPE_UNSPECIFIED = 0;
+    FULL_TEXT_TYPE_SIMPLE = 1;
+    FULL_TEXT_TYPE_ENGLISH = 2;
+    FULL_TEXT_TYPE_EDGE_NGRAM = 3;
+  }
+  enum FullTextWeight {
+    FULL_TEXT_WEIGHT_UNSPECIFIED = 0;
+    FULL_TEXT_WEIGHT_LOW = 1;
+    FULL_TEXT_WEIGHT_MED = 2;
+    FULL_TEXT_WEIGHT_HIGH = 3;
+  }
+  FullTextType full_text_type = 1;
+  FullTextWeight full_text_weight = 2;
+}
