@@ -1,0 +1,26 @@
+
+type {{.Type}} struct{}
+
+var (
+    instance{{.Type}} pgdb_v1.Descriptor = &{{.Type}}{}
+)
+
+func (d {{.ReceiverType}}) TableName() string {
+    return "{{.TableName}}"
+}
+
+func (d {{.ReceiverType}}) Fields() []*pgdb_v1.Field {
+  return nil
+}
+
+func (d {{.ReceiverType}}) DataField() *pgdb_v1.Field {
+  return nil
+}
+
+func (d {{.ReceiverType}}) SearchField() *pgdb_v1.Field {
+  return nil
+}
+
+func (d {{.ReceiverType}}) Indexes() []*pgdb_v1.Index {
+  return nil
+}

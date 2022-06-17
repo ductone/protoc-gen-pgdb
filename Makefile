@@ -1,13 +1,18 @@
 MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --no-builtin-variables
 
-.PHONY: install
-install:
-	go install -mod=vendor -v .
+.PHONY: build
+build:
+	mkdir -p build
+	go build -mod=vendor -v -o build/ . 
 
 .PHONY: generate
 generate:
-	buf generate
+	buf generate --path proto
+
+.PHONY: example
+example: build
+	buf generate --template buf.example.gen.yaml --path example/models
 
 .PHONY: fmt
 fmt:
