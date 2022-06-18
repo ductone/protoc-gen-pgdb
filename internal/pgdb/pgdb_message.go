@@ -17,6 +17,7 @@ type messageTemplateContext struct {
 func renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
 	ix.PGDB_v1 = true
 	ix.GoquExp = true
+	ix.ProtobufProto = true
 	c := &messageTemplateContext{
 		ReceiverType:   "*" + m.Name().UpperCamelCase().String(),
 		MessageType:    getMessageType(m),

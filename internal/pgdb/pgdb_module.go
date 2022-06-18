@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
@@ -63,7 +64,17 @@ func (m *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffer, in
 	buf := &bytes.Buffer{}
 
 	for _, m := range in.Messages() {
-		err := renderDescriptor(ctx, buf, in, m, ix)
+		fext := pgdb_v1.MessageOptions{}
+		ok, err := m.Extension(pgdb_v1.E_Msg, &fext)
+		if err != nil {
+			return fmt.Errorf("pgdb: applyTemplate: failed to extract Message extension from '%s': %w", m.FullyQualifiedName(), err)
+		}
+		// TODO(pquerna): how to handle nested messages that may not directly have sql enabled?
+		if !ok {
+			continue
+		}
+
+		err = renderDescriptor(ctx, buf, in, m, ix)
 		if err != nil {
 			return err
 		}

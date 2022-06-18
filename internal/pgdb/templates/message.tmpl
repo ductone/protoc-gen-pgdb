@@ -14,10 +14,18 @@ func (m *{{.MessageType}}) Descriptor() pgdb_v1.Descriptor {
 }
 
 func (m *{{.MessageType}}) Record(opts ...pgdb_v1.QueryOptions) (exp.Record, error) {
-   rv := exp.Record{
-   {{ range .Fields }}
-      "{{.ColumnName}}": {{.ColumnValueExp}},
-   {{ end }}
+    pbData, err := proto.Marshal(m.self)
+    if err != nil {
+        return nil, err
+    }
+    rv := exp.Record{
+        "pk": m.self.PartitionKey(),
+        "sk": m.self.SortKey(),
+        "pb_data": string(pbData),
+        "fts_data": "",
+        {{ range .Fields }}
+        "{{.ColumnName}}": {{.ColumnValueExp}},
+        {{ end }}
    }
    return rv, nil
 }

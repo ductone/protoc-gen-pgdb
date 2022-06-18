@@ -8,10 +8,11 @@ import (
 )
 
 type importTracker struct {
-	PGDB_v1 bool
-	GoquExp bool
-	Fmt     bool
-	Time    bool
+	PGDB_v1       bool
+	GoquExp       bool
+	Fmt           bool
+	Time          bool
+	ProtobufProto bool
 }
 
 type headerTemplateContext struct {
