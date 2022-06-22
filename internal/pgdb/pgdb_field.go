@@ -5,6 +5,7 @@ import (
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
+	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
 
 type fieldContext struct {
@@ -20,7 +21,7 @@ type FiledConverter interface {
 	VarForValue() (string, error)
 }
 
-func getField(f pgs.Field, vn *varNamer) *fieldContext {
+func getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker) *fieldContext {
 	ext := pgdb_v1.FieldOptions{}
 	_, err := f.Extension(pgdb_v1.E_Options, &ext)
 	if err != nil {
@@ -40,6 +41,8 @@ func getField(f pgs.Field, vn *varNamer) *fieldContext {
 	}
 
 	convertDef := &fieldConvert{
+		ctx:     ctx,
+		ix:      ix,
 		F:       f,
 		varName: vn.String(),
 	}
@@ -149,7 +152,7 @@ const (
 	lenCommonFields = 4
 )
 
-func getCommonFields(m pgs.Message) ([]*fieldContext, error) {
+func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) {
 	vn := &varNamer{prefix: "cfv", offset: 0}
 	_ = vn
 	vcDataType, _ := pgDataTypeForName("varchar")
@@ -162,6 +165,7 @@ func getCommonFields(m pgs.Message) ([]*fieldContext, error) {
 			DataType: vcDataType,
 		},
 		Convert: &dynamoKeyDataConvert{
+			ctx:     ctx,
 			VarName: vn.String(),
 			Message: m,
 			KeyType: DKT_PK,
@@ -175,6 +179,7 @@ func getCommonFields(m pgs.Message) ([]*fieldContext, error) {
 			DataType: vcDataType,
 		},
 		Convert: &dynamoKeyDataConvert{
+			ctx:     ctx,
 			VarName: vn.String(),
 			Message: m,
 			KeyType: DKT_SK,
@@ -188,6 +193,7 @@ func getCommonFields(m pgs.Message) ([]*fieldContext, error) {
 			DataType: tsDataType,
 		},
 		Convert: &ftsDataConvert{
+			ctx:     ctx,
 			VarName: vn.String(),
 		},
 	}

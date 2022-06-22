@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	pgs "github.com/lyft/protoc-gen-star"
+	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 	dynamopb "github.com/pquerna/protoc-gen-dynamo/dynamo"
 )
 
@@ -17,6 +18,7 @@ const (
 )
 
 type dynamoKeyDataConvert struct {
+	ctx     pgsgo.Context
 	VarName string
 	Message pgs.Message
 	KeyType dynamoKeyType
@@ -64,7 +66,7 @@ func (dkdc *dynamoKeyDataConvert) CodeForValue() (string, error) {
 
 	for _, fieldName := range keyFields {
 		field := fieldByName(dkdc.Message, fieldName)
-		formatter, err := typeToString(field.Type().ProtoType(), "m.self."+field.Name().UpperCamelCase().String())
+		formatter, err := typeToString(field.Type().ProtoType(), "m.self."+dkdc.ctx.Name(field).String())
 		if err != nil {
 			panic(err)
 		}

@@ -1,11 +1,16 @@
 package pgdb
 
 import (
+	"fmt"
+
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
+	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
 
 type fieldConvert struct {
+	ctx         pgsgo.Context
+	ix          *importTracker
 	F           pgs.Field
 	varName     string
 	PostgesName string
@@ -37,9 +42,100 @@ const (
 	GT_PB_WKT_STRUCT    goTypeConversion = 14
 )
 
+type formatContext struct {
+	VarName   string
+	InputName string
+	CastType  string
+	IsArray   bool
+}
+
 func (fc *fieldConvert) CodeForValue() (string, error) {
-	// TODO(pquerna): template this
-	return fc.varName + " := m.self." + string(fc.F.Name().UpperCamelCase()), nil
+	selfName := "m.self." + fc.ctx.Name(fc.F).String()
+	switch fc.TypeConversion {
+	case GT_FLOAT32:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "float32",
+			IsArray:   fc.IsArray,
+		})
+	case GT_FLOAT64:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "float64",
+			IsArray:   fc.IsArray,
+		})
+	case GT_INT32:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "int32",
+			IsArray:   fc.IsArray,
+		})
+	case GT_INT64:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "int64",
+			IsArray:   fc.IsArray,
+		})
+	case GT_UINT32:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "uint32",
+			IsArray:   fc.IsArray,
+		})
+	case GT_UINT64:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "uint64",
+			IsArray:   fc.IsArray,
+		})
+	case GT_BOOL:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "bool",
+			IsArray:   fc.IsArray,
+		})
+	case GT_STRING:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "string",
+			IsArray:   fc.IsArray,
+		})
+	case GT_BYTES:
+		return fc.varName + " := " + selfName, nil
+	case GT_ENUM:
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "int32",
+		})
+	case GT_PB_WKT_TIMESTAMP:
+		fc.ix.Time = true
+		return templateExecToString("proto_format_time.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+		})
+	case GT_PB_WKT_DURATION:
+		return templateExecToString("proto_format_duration.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+		})
+	case GT_PB_WKT_STRUCT, GT_PB_WKT_ANY:
+		fc.ix.ProtobufEncodingJson = true
+		return templateExecToString("proto_format_jsonb.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+		})
+	default:
+		panic(fmt.Errorf("pgdb: Implement CodeForValue for %v", fc.TypeConversion))
+	}
 }
 func (fc *fieldConvert) VarForValue() (string, error) {
 	return fc.varName, nil
@@ -69,5 +165,5 @@ func typeToString(pt pgs.ProtoType, varName string) (string, error) {
 	default:
 		panic("typeToString: need to implement for your type")
 	}
-	return templateExecToString("proto_format_string.tmpl", c)
+	return templateExecToString("proto_convert_string.tmpl", c)
 }

@@ -3,6 +3,7 @@ module github.com/ductone/protoc-gen-pgdb
 go 1.18
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/jackc/pgtype v1.11.0
 	github.com/lyft/protoc-gen-star v0.6.0

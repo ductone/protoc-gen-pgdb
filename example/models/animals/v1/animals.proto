@@ -2,9 +2,11 @@ syntax = "proto3";
 
 package pgdb.example.models.animals.v1;
 
+import "dynamo/dynamo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "pgdb/v1/pgdb.proto";
-import "dynamo/dynamo.proto";
 
 option go_package = "github.com/ductone/protoc-gen-pgdb/pgdb/example/models/animals/v1";
 
@@ -38,4 +40,54 @@ message Pet {
     full_text_type: FULL_TEXT_TYPE_ENGLISH
   }];
   bool system_builtin = 9;
+  google.protobuf.Duration elapsed = 10;
+  google.protobuf.Struct profile = 11;
+  float cuteness = 12;
+  double price = 13;
+}
+
+message ScalarValue {
+  option (dynamo.msg).key = {
+    pk_fields: [
+      "tenant_id"
+    ],
+    sk_fields: [
+      "id"
+    ],
+  };
+  option (pgdb.v1.msg).enabled = true;
+  string tenant_id = 1;
+  string id = 2;
+
+  double double = 3;
+  float float = 4;
+  int32 int32 = 5;
+  int64 int64 = 6;
+  uint32 uint32 = 7;
+  uint64 uint64 = 8;
+  sint32 sint32 = 9;
+  sint64 sint64 = 10;
+  fixed32 fixed32 = 11;
+  fixed64 fixed64 = 12;
+  sfixed32 sfixed32 = 13;
+  sfixed64 sfixed64 = 14;
+  bool bool = 15;
+  string string = 16;
+  bytes bytes = 17;
+
+  repeated double repeated_double = 23;
+  repeated float repeated_float = 24;
+  repeated int32 repeated_int32 = 25;
+  repeated int64 repeated_int64 = 26;
+  repeated uint32 repeated_uint32 = 27;
+  repeated uint64 repeated_uint64 = 28;
+  repeated sint32 repeated_sint32 = 29;
+  repeated sint64 repeated_sint64 = 30;
+  repeated fixed32 repeated_fixed32 = 31;
+  repeated fixed64 repeated_fixed64 = 32;
+  repeated sfixed32 repeated_sfixed32 = 33;
+  repeated sfixed64 repeated_sfixed64 = 34;
+  repeated bool repeated_bool = 35;
+  repeated string repeated_string = 36;
+  repeated bytes repeated_bytes = 37;
 }

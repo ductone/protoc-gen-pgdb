@@ -1,0 +1,6 @@
+{{ .VarName -}}tmp, err := protojson.Marshal({{.InputName}})
+if err != nil {
+    return nil, err
+}
+{{/* Due to this: https://github.com/jackc/pgtype/issues/45 we cast json bytes to a string */}}
+{{ .VarName }} := string({{- .VarName -}}tmp)

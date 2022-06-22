@@ -4,7 +4,10 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os"
+	"strconv"
 
+	"github.com/davecgh/go-spew/spew"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
@@ -55,6 +58,9 @@ func (m *Module) processFile(ctx pgsgo.Context, f pgs.File) {
 		m.Fail("code generation failed")
 	} else {
 		generatedFileName := m.ctx.OutputPath(f).SetExt(fmt.Sprintf(".%s.go", moduleName)).String()
+		if ok, _ := strconv.ParseBool(os.Getenv("PGDB_DEBUG_FILE_RAW")); ok {
+			spew.Fdump(os.Stderr, out.String())
+		}
 		m.AddGeneratorFile(generatedFileName, out.String())
 	}
 }

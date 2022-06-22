@@ -8,12 +8,13 @@ import (
 )
 
 type importTracker struct {
-	PGDB_v1       bool
-	GoquExp       bool
-	Fmt           bool
-	Time          bool
-	Strings       bool
-	ProtobufProto bool
+	PGDB_v1              bool
+	GoquExp              bool
+	Fmt                  bool
+	Time                 bool
+	Strings              bool
+	ProtobufProto        bool
+	ProtobufEncodingJson bool
 }
 
 type headerTemplateContext struct {

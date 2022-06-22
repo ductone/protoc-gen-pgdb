@@ -1,6 +1,9 @@
 package pgdb
 
+import pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+
 type ftsDataConvert struct {
+	ctx     pgsgo.Context
 	VarName string
 }
 
