@@ -14,9 +14,8 @@ type Descriptor interface {
 }
 
 type Field struct {
-	DataType          pgtype.DataType
-	Name              string
-	DoesNotMapToProto bool
+	DataType *pgtype.DataType
+	Name     string
 }
 
 type Index struct {

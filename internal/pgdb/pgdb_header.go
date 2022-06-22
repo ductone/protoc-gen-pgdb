@@ -12,6 +12,7 @@ type importTracker struct {
 	GoquExp       bool
 	Fmt           bool
 	Time          bool
+	Strings       bool
 	ProtobufProto bool
 }
 

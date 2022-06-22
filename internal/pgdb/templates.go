@@ -1,6 +1,7 @@
 package pgdb
 
 import (
+	"bytes"
 	"embed"
 	"fmt"
 	"io/fs"
@@ -19,6 +20,15 @@ func init() {
 	if err != nil {
 		panic(fmt.Errorf("pgdb.loadTemplates failed; %w", err))
 	}
+}
+
+func templateExecToString(name string, c interface{}) (string, error) {
+	buf := bytes.Buffer{}
+	err := templates[name].Execute(&buf, c)
+	if err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }
 
 func loadTemplates() error {

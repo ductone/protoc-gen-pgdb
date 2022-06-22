@@ -1,0 +1,13 @@
+
+sb.Reset()
+{{$first := true}}
+{{range .Parts}}
+    {{if $first}}
+        {{$first = false}}
+    {{else}}
+        _, _ = sb.WriteString(":")
+    {{end}}
+    _, _ = sb.WriteString({{.}})
+{{ end }}
+
+{{.VarName}} := sb.String()

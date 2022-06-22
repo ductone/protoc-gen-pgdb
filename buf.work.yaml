@@ -2,3 +2,4 @@ version: v1
 directories:
   - example
   - proto
+  - vendor/github.com/pquerna/protoc-gen-dynamo

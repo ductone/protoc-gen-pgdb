@@ -3,8 +3,11 @@ package pgdb
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"strings"
+	"sync"
 
+	"github.com/jackc/pgtype"
 	pgs "github.com/lyft/protoc-gen-star"
 )
 
@@ -32,6 +35,10 @@ func getTableName(m pgs.Message) (string, error) {
 	return proposed, nil
 }
 
+func getColumnName(f pgs.Field) (string, error) {
+	return fmt.Sprintf("pb_%d", *f.Descriptor().Number), nil
+}
+
 func sha256String(input string) string {
 	h := sha256.New()
 	h.Write([]byte(input))
@@ -43,4 +50,14 @@ func min(a, b int) int {
 		return a
 	}
 	return b
+}
+
+var initCachedConnInfo sync.Once
+var cachedConnInfo *pgtype.ConnInfo
+
+func pgDataTypeForName(input string) (*pgtype.DataType, bool) {
+	initCachedConnInfo.Do(func() {
+		cachedConnInfo = pgtype.NewConnInfo()
+	})
+	return cachedConnInfo.DataTypeForName(input)
 }

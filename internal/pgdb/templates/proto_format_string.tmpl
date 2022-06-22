@@ -1,0 +1,12 @@
+{{- if .IsFloat -}}
+    strconv.FormatFloat({{.VarName}}, 'E', -1, 64)
+{{- end -}}
+{{- if .IsInt -}}
+    strconv.FormatInt(int64({{.VarName}}), 10)
+{{- end -}}
+{{- if .IsUint -}}
+    strconv.FormatUint(uint64({{.VarName}}), 10)
+{{- end -}}
+{{- if .IsString -}}
+    {{- .VarName -}}
+{{- end -}}
