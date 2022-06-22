@@ -1,0 +1,37 @@
+
+type {{.MessageType}} struct {
+    self {{.ReceiverType}}
+}
+
+func (dbr {{.ReceiverType}}) DBReflect() pgdb_v1.Message {
+    return &{{.MessageType}}{
+        self: dbr,
+    }
+}
+
+func (m *{{.MessageType}}) Descriptor() pgdb_v1.Descriptor {
+    return instance{{.DescriptorType}}
+}
+
+func (m *{{.MessageType}}) Record(opts ...pgdb_v1.QueryOptions) (exp.Record, error) {
+    {{- if .WantRecordStringBuilder -}}
+	var sb strings.Builder
+    {{- end -}}
+
+    {{- range .Fields }}
+        {{.Convert.CodeForValue}}
+    {{ end -}}
+
+    rv := exp.Record{
+        {{- range .Fields }}
+        "{{.DB.Name}}": {{.Convert.VarForValue}},
+        {{ end -}}
+   }
+   return rv, nil
+}
+
+func (m *{{.MessageType}}) ConflictUpdateExpression(opts ...pgdb_v1.QueryOptions) (exp.ConflictUpdateExpression, error) {
+    return nil, nil
+}
+
+

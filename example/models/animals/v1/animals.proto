@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package pgdb.example.models.animals.v1;
+
+import "google/protobuf/timestamp.proto";
+import "pgdb/v1/pgdb.proto";
+import "dynamo/dynamo.proto";
+
+option go_package = "github.com/ductone/protoc-gen-pgdb/pgdb/example/models/animals/v1";
+
+enum FurType {
+  FUR_TYPE_UNSPECIFIED = 0;
+  FUR_TYPE_NONE = 1;
+  FUR_TYPE_LOTS = 2;
+}
+
+message Pet {
+  option (dynamo.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "id"
+    ]
+    sk_const: "example"
+  };
+  option (pgdb.v1.msg).enabled = true;
+  string tenant_id = 1;
+  string id = 2 [(pgdb.v1.options) = {
+    full_text_type: FULL_TEXT_TYPE_SIMPLE
+  }];
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
+  string display_name = 6 [(pgdb.v1.options) = {
+    full_text_type: FULL_TEXT_TYPE_EDGE_NGRAM
+    full_text_weight: FULL_TEXT_WEIGHT_HIGH
+  }];
+  string description = 7 [(pgdb.v1.options) = {
+    full_text_type: FULL_TEXT_TYPE_ENGLISH
+  }];
+  bool system_builtin = 9;
+}

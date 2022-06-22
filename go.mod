@@ -6,6 +6,7 @@ require (
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/jackc/pgtype v1.11.0
 	github.com/lyft/protoc-gen-star v0.6.0
+	github.com/pquerna/protoc-gen-dynamo v0.3.1
 	google.golang.org/protobuf v1.28.0
 )
 

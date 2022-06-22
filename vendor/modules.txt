@@ -22,6 +22,9 @@ github.com/jackc/pgtype
 ## explicit; go 1.14
 github.com/lyft/protoc-gen-star
 github.com/lyft/protoc-gen-star/lang/go
+# github.com/pquerna/protoc-gen-dynamo v0.3.1
+## explicit; go 1.13
+github.com/pquerna/protoc-gen-dynamo/dynamo
 # github.com/spf13/afero v1.8.2
 ## explicit; go 1.13
 github.com/spf13/afero
@@ -61,4 +64,5 @@ google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
 google.golang.org/protobuf/runtime/protoimpl
 google.golang.org/protobuf/types/descriptorpb
+google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/pluginpb
