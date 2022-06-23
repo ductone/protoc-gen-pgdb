@@ -44,6 +44,7 @@ message Pet {
   google.protobuf.Struct profile = 11;
   float cuteness = 12;
   double price = 13;
+  bool very_long_naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame = 14;
 }
 
 message ScalarValue {

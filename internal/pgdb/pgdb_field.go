@@ -34,7 +34,8 @@ func getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker) *
 	isArray := f.Type().ProtoLabel() == pgs.Repeated
 	pt := f.Type().ProtoType()
 
-	pgColName, err := getColumnName(f)
+	// TODO(pquerna): nested fields/messages
+	pgColName, err := getColumnName(f, nil)
 	if err != nil {
 		panic(fmt.Errorf("pgdb: getColumnName failed for: %v: %s (of type %s)",
 			pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
