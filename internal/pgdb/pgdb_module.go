@@ -60,6 +60,7 @@ func (m *Module) processFile(ctx pgsgo.Context, f pgs.File) {
 		generatedFileName := m.ctx.OutputPath(f).SetExt(fmt.Sprintf(".%s.go", moduleName)).String()
 		if ok, _ := strconv.ParseBool(os.Getenv("PGDB_DEBUG_FILE_RAW")); ok {
 			spew.Fdump(os.Stderr, out.String())
+			_, _ = fmt.Fprintf(os.Stderr, "\n%s\n", out.String())
 		}
 		m.AddGeneratorFile(generatedFileName, out.String())
 	}

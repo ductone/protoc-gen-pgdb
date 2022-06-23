@@ -204,6 +204,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 		DataType: nil,
 		Convert: &ftsDataConvert{
 			ctx:     ctx,
+			m:       m,
 			VarName: vn.String(),
 		},
 	}
