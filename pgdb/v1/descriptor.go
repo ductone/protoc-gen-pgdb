@@ -1,9 +1,5 @@
 package v1
 
-import (
-	"github.com/jackc/pgtype"
-)
-
 // Descriptor is the same for all instances of a Message
 type Descriptor interface {
 	TableName() string
@@ -14,8 +10,9 @@ type Descriptor interface {
 }
 
 type Field struct {
-	DataType *pgtype.DataType
-	Name     string
+	// DataType *pgtype.DataType
+	Name string
+	Type string
 }
 
 type Index struct {

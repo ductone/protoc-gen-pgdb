@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+	"github.com/jackc/pgtype"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
@@ -13,6 +14,7 @@ type fieldContext struct {
 	IsVirtual bool
 	Field     pgs.Field
 	DB        pgdb_v1.Field
+	DataType  *pgtype.DataType
 	Convert   FiledConverter
 }
 
@@ -140,10 +142,11 @@ func getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker) *
 		IsVirtual: false,
 		Field:     f,
 		DB: pgdb_v1.Field{
-			Name:     pgColName,
-			DataType: dbTypeRef,
+			Name: pgColName,
+			Type: dbTypeRef.Name,
 		},
-		Convert: convertDef,
+		DataType: dbTypeRef,
+		Convert:  convertDef,
 	}
 	return rv
 }
@@ -157,14 +160,18 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	vn := &varNamer{prefix: "cfv", offset: 0}
 	_ = vn
 	vcDataType, _ := pgDataTypeForName("varchar")
-	tsDataType, _ := pgDataTypeForName("tsvector")
+	// https://github.com/jackc/pgtype/issues/150
+	// tsvector is not in-tree.  but we use to_tsvector() when inserting, so we just need to have the right type name
+	// in the Field{} struct.
+	// tsDataType, _ := pgDataTypeForName("tsvector")
 	byteaDataType, _ := pgDataTypeForName("bytea")
 	pkField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Field{
-			Name:     "pk",
-			DataType: vcDataType,
+			Name: "pk",
+			Type: vcDataType.Name,
 		},
+		DataType: vcDataType,
 		Convert: &dynamoKeyDataConvert{
 			ctx:     ctx,
 			VarName: vn.String(),
@@ -176,9 +183,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	skField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Field{
-			Name:     "sk",
-			DataType: vcDataType,
+			Name: "sk",
+			Type: vcDataType.Name,
 		},
+		DataType: vcDataType,
 		Convert: &dynamoKeyDataConvert{
 			ctx:     ctx,
 			VarName: vn.String(),
@@ -190,9 +198,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	ftsDataField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Field{
-			Name:     "fts_data",
-			DataType: tsDataType,
+			Name: "fts_data",
+			Type: "tsvector",
 		},
+		DataType: nil,
 		Convert: &ftsDataConvert{
 			ctx:     ctx,
 			VarName: vn.String(),
@@ -202,9 +211,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	pbDataField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Field{
-			Name:     "pb_data",
-			DataType: byteaDataType,
+			Name: "pb_data",
+			Type: byteaDataType.Name,
 		},
+		DataType: byteaDataType,
 		Convert: &pbDataConvert{
 			VarName: vn.String(),
 		},

@@ -10,7 +10,14 @@ func (d {{.ReceiverType}}) TableName() string {
 }
 
 func (d {{.ReceiverType}}) Fields() []*pgdb_v1.Field {
-  return nil
+  return []*pgdb_v1.Field{
+  {{ range .Fields }}
+    {
+      Name: "{{ .DB.Name }}",
+      Type: "{{ .DB.Type }}",
+    },
+  {{ end }}
+  }
 }
 
 func (d {{.ReceiverType}}) DataField() *pgdb_v1.Field {
