@@ -1,0 +1,5 @@
+var {{ .VarName }} *time.Duration
+if {{ .InputName }}.IsValid() {
+    {{.VarName -}}tmp := {{ .InputName }}.AsDuration()
+    {{ .VarName }} = &{{- .VarName -}}tmp
+}

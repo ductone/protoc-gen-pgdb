@@ -25,7 +25,7 @@ func renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, i
 		ReceiverType:            "*" + m.Name().UpperCamelCase().String(),
 		MessageType:             getMessageType(m),
 		DescriptorType:          getDescriptorType(m),
-		Fields:                  getMessageFields(m),
+		Fields:                  getMessageFields(ctx, m, ix),
 		WantRecordStringBuilder: true, // unconditionally used by pk/sk builder
 	}
 	return templates["message.tmpl"].Execute(w, c)
@@ -48,10 +48,10 @@ func (fn *varNamer) String() string {
 	return fmt.Sprintf("%s%d", fn.prefix, fn.offset)
 }
 
-func getMessageFields(m pgs.Message) []*fieldContext {
+func getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields)+lenCommonFields)
-	cf, err := getCommonFields(m)
+	cf, err := getCommonFields(ctx, m)
 	if err != nil {
 		panic(err)
 	}
@@ -59,7 +59,7 @@ func getMessageFields(m pgs.Message) []*fieldContext {
 	vn := &varNamer{prefix: "v", offset: 0}
 	for _, field := range fields {
 		vn = vn.Next()
-		rv = append(rv, getField(field, vn))
+		rv = append(rv, getField(ctx, field, vn, ix))
 	}
 	return rv
 }

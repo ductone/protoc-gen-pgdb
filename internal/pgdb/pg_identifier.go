@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -35,8 +36,32 @@ func getTableName(m pgs.Message) (string, error) {
 	return proposed, nil
 }
 
-func getColumnName(f pgs.Field) (string, error) {
-	return fmt.Sprintf("pb_%d", *f.Descriptor().Number), nil
+func getColumnName(f pgs.Field, parents []pgs.Field) (string, error) {
+	buf := strings.Builder{}
+	_, _ = buf.WriteString("pb")
+	for _, pf := range parents {
+		_, _ = buf.WriteString("$")
+		_, _ = buf.WriteString(pf.Name().LowerSnakeCase().String())
+	}
+	_, _ = buf.WriteString("$")
+	_, _ = buf.WriteString(f.Name().LowerSnakeCase().String())
+
+	// if the field name is too long, convert to number version
+	if len(buf.String()) < postgresNameLen {
+		return buf.String(), nil
+	}
+	buf.Reset()
+	_, _ = buf.WriteString("pb")
+	for _, pf := range parents {
+		_, _ = buf.WriteString("_")
+		_, _ = buf.WriteString(strconv.FormatInt(int64(*pf.Descriptor().Number), 10))
+	}
+	_, _ = buf.WriteString("_")
+	_, _ = buf.WriteString(strconv.FormatInt(int64(*f.Descriptor().Number), 10))
+	if len(buf.String()) < postgresNameLen {
+		return buf.String(), nil
+	}
+	panic(fmt.Errorf("pgdb: getColumnName: can't find short enough name for %v", f.FullyQualifiedName()))
 }
 
 func sha256String(input string) string {

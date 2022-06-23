@@ -1,0 +1,6 @@
+var {{ .VarName }} *time.Time
+if {{ .InputName }}.IsValid() {
+    {{.VarName -}}tmp := {{ .InputName }}.AsTime()
+    {{ .VarName }} = &{{- .VarName -}}tmp
+}
+

@@ -1,0 +1,8 @@
+{{ if .IsArray }}
+{{ .VarName }} := make([]{{.CastType}}, 0, len({{.InputName}}))
+for _, arrTmp := range {{.InputName}} {
+    {{ .VarName }} = append({{ .VarName }}, {{.CastType}}(arrTmp))
+}
+{{ else }}
+{{ .VarName }} := {{.CastType}}({{.InputName}})
+{{ end }}

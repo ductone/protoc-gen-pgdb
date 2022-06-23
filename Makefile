@@ -12,7 +12,7 @@ generate:
 
 .PHONY: example
 example: build
-	buf generate --template buf.example.gen.yaml --path example/models
+	buf --debug generate --template buf.example.gen.yaml --path example/models
 
 .PHONY: fmt
 fmt:
