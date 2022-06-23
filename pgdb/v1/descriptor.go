@@ -10,7 +10,6 @@ type Descriptor interface {
 }
 
 type Field struct {
-	// DataType *pgtype.DataType
 	Name string
 	Type string
 }
