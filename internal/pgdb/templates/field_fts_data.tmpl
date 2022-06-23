@@ -1,40 +1,37 @@
-
-{{ $vn := .VarName }}
-tmp{{ $vn }}Vectors := []string{}
-tmp{{ $vn }}Args := []interface{}{}
-{{ range .SearchFields }}
-    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_SIMPLE` }}
-        tmp{{ $vn }}Vectors = append(tmp{{ $vn }}Vectors,
-            "setweight(to_tsvector(?, ?::text), ?)",
-        )
-		tmp{{ $vn }}Args = append(tmp{{ $vn }}Args,
-            {{ .VarName }},
-            "simple",
-            "{{ .Weight }}",
-            )
-    {{ end }}
-    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_ENGLISH` }}
-        tmp{{ $vn }}Vectors = append(tmp{{ $vn }}Vectors,
-            "setweight(to_tsvector(?, ?::text), ?)",
-        )
-		tmp{{ $vn }}Args = append(tmp{{ $vn }}Args,
-            {{ .VarName }},
-            "english",
-            "{{ .Weight }}",
-            )
-    {{ end }}
-    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_EDGE_NGRAM` }}
-        tmp{{ $vn }}Vectors = append(tmp{{ $vn }}Vectors, 
-            "edge_gram_tsvector(?::text, ?)",
-        )
-		tmp{{ $vn }}Args = append(tmp{{ $vn }}Args,
-            {{ .VarName }},
-            "{{ .Weight }}",
-            )
-    {{ end }}
-{{ end }}
+{{$first := true}}
 
 {{.VarName}} := exp.NewLiteralExpression(
-    strings.Join(tmp{{ $vn }}Vectors, " || "),
-        tmp{{ $vn }}Args...,
+{{ range .SearchFields }}
+    {{- if $first -}}
+        {{$first = false}}
+    {{- else -}}
+    " || " +
+    {{- end -}}
+    {{- if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_SIMPLE` }}
+         "setweight(to_tsvector(?, ?::text), ?)" +
+    {{ end -}}
+    {{- if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_ENGLISH` }}
+            "setweight(to_tsvector(?, ?::text), ?)" +
+    {{ end -}}
+    {{- if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_EDGE_NGRAM` }}
+            "edge_gram_tsvector(?::text, ?)" +
+    {{ end -}}
+{{ end -}}
+    "",
+{{ range .SearchFields }}
+    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_SIMPLE` }}
+        "simple",
+        {{ .VarName }},
+        "{{ .Weight }}",
+    {{ end }}
+    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_ENGLISH` }}
+            "english",
+            {{ .VarName }},
+            "{{ .Weight }}",
+    {{ end }}
+    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_EDGE_NGRAM` }}
+            {{ .VarName }},
+            "{{ .Weight }}",
+    {{ end }}
+{{ end }}
         )
