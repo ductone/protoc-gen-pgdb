@@ -5,7 +5,7 @@ type pbDataConvert struct {
 }
 
 func (pbdc *pbDataConvert) CodeForValue() (string, error) {
-	return templateExecToString("field_pbdata.tmpl", pbdc)
+	return templateExecToString("field_pb_data.tmpl", pbdc)
 }
 
 func (pbdc *pbDataConvert) VarForValue() (string, error) {
