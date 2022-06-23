@@ -29,9 +29,6 @@ func getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker) *
 	if err != nil {
 		panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err))
 	}
-	if ext.FullTextWeight == pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED {
-		ext.FullTextWeight = pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_MED
-	}
 
 	isArray := f.Type().ProtoLabel() == pgs.Repeated
 	pt := f.Type().ProtoType()

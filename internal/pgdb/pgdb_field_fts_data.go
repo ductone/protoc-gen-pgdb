@@ -43,9 +43,6 @@ func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 		if err != nil {
 			panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err))
 		}
-		if ext.FullTextWeight == pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED {
-			ext.FullTextWeight = pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_MED
-		}
 		if ext.FullTextType != pgdb_v1.FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED {
 			fdc.SearchFields = append(fdc.SearchFields, &searchFieldContext{
 				Ext:     ext,
