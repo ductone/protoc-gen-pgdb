@@ -8,7 +8,7 @@ build:
 
 .PHONY: generate
 generate:
-	buf generate --path proto
+	buf generate proto
 
 .PHONY: example
 example: build
@@ -17,6 +17,10 @@ example: build
 .PHONY: fmt
 fmt:
 	buf format -w 
+
+.PHONY: lint
+lint:
+	buf lint ./proto
 
 .PHONY: adddep
 adddep:
@@ -28,3 +32,4 @@ updatedeps:
 	go get -d -u ./...
 	go mod tidy -v
 	go mod vendor
+

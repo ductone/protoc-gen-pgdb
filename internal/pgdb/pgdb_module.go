@@ -66,7 +66,7 @@ func (m *Module) processFile(ctx pgsgo.Context, f pgs.File) {
 	}
 }
 
-func (m *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffer, in pgs.File) error {
+func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffer, in pgs.File) error {
 	ix := &importTracker{}
 	buf := &bytes.Buffer{}
 
@@ -81,18 +81,18 @@ func (m *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffer, in
 			continue
 		}
 
-		err = renderDescriptor(ctx, buf, in, m, ix)
+		err = module.renderDescriptor(ctx, buf, in, m, ix)
 		if err != nil {
 			return err
 		}
 
-		err = renderMessage(ctx, buf, in, m, ix)
+		err = module.renderMessage(ctx, buf, in, m, ix)
 		if err != nil {
 			return err
 		}
 	}
 
-	err := renderHeader(ctx, outputBuffer, in, ix)
+	err := module.renderHeader(ctx, outputBuffer, in, ix)
 	if err != nil {
 		return err
 	}

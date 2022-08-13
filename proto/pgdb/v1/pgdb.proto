@@ -46,4 +46,12 @@ message FieldOptions {
   }
   FullTextType full_text_type = 1;
   FullTextWeight full_text_weight = 2;
+
+  enum MessageBehavoir {
+    MESSAGE_BEHAVOIR_UNSPECIFIED = 0;
+    MESSAGE_BEHAVOIR_EXPAND = 1;
+    MESSAGE_BEHAVOIR_OMIT = 2;
+    MESSAGE_BEHAVOIR_JSONB = 3;
+  }
+  MessageBehavoir message_behavoir = 3;
 }

@@ -2,6 +2,7 @@
 package {{.PackageName}}
 
 import (
+{{ if .Imports.Bytes }} "bytes" {{ end }}
 {{ if .Imports.Fmt }} "fmt" {{ end }}
 {{ if .Imports.Time }} "time" {{ end }}
 {{ if .Imports.Strings }} "strings" {{ end }}

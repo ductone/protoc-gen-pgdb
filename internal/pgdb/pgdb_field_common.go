@@ -40,6 +40,7 @@ const (
 	GT_PB_WKT_TIMESTAMP goTypeConversion = 12
 	GT_PB_WKT_DURATION  goTypeConversion = 13
 	GT_PB_WKT_STRUCT    goTypeConversion = 14
+	GT_PB_GENERIC_MSG   goTypeConversion = 15
 )
 
 type formatContext struct {
@@ -127,11 +128,16 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 		})
-	case GT_PB_WKT_STRUCT, GT_PB_WKT_ANY:
+	case GT_PB_WKT_STRUCT, GT_PB_WKT_ANY, GT_PB_GENERIC_MSG:
 		fc.ix.ProtobufEncodingJson = true
+		if fc.IsArray {
+			fc.ix.Bytes = true
+		}
+
 		return templateExecToString("proto_format_jsonb.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
+			IsArray:   fc.IsArray,
 		})
 	default:
 		panic(fmt.Errorf("pgdb: Implement CodeForValue for %v", fc.TypeConversion))

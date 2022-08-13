@@ -23,7 +23,7 @@ type FiledConverter interface {
 	VarForValue() (string, error)
 }
 
-func getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker) *fieldContext {
+func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker) *fieldContext {
 	ext := pgdb_v1.FieldOptions{}
 	_, err := f.Extension(pgdb_v1.E_Options, &ext)
 	if err != nil {
@@ -104,14 +104,24 @@ func getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker) *
 			convertDef.IsArray = isArray
 			convertDef.TypeConversion = GT_PB_WKT_DURATION
 		case ".google.protobuf.Struct":
-			if isArray {
-				panic(fmt.Errorf("pgdb: unsupported field type: %v: %s: repeated Struct not supported", pt, f.FullyQualifiedName()))
-			}
+			convertDef.IsArray = isArray
 			convertDef.PostgresTypeName = "jsonb"
 			convertDef.TypeConversion = GT_PB_WKT_STRUCT
 		default:
-			panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
-				pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+			switch ext.MessageBehavoir {
+			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT:
+				// explict option to just not store this in postgres
+				return nil
+			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND:
+				// getMessageFields(ctx)
+			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
+				convertDef.IsArray = isArray
+				convertDef.PostgresTypeName = "jsonb"
+				convertDef.TypeConversion = GT_PB_GENERIC_MSG
+			default:
+				panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
+					pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+			}
 		}
 
 	case pgs.BytesT:

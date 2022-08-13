@@ -8,13 +8,15 @@ import (
 )
 
 type importTracker struct {
-	PGDB_v1              bool
-	GoquExp              bool
+	PGDB_v1 bool
+
+	Bytes                bool
 	Fmt                  bool
-	Time                 bool
-	Strings              bool
-	ProtobufProto        bool
+	GoquExp              bool
 	ProtobufEncodingJson bool
+	ProtobufProto        bool
+	Strings              bool
+	Time                 bool
 }
 
 type headerTemplateContext struct {
@@ -24,7 +26,7 @@ type headerTemplateContext struct {
 	Imports     *importTracker
 }
 
-func renderHeader(ctx pgsgo.Context, w io.Writer, in pgs.File, ix *importTracker) error {
+func (module *Module) renderHeader(ctx pgsgo.Context, w io.Writer, in pgs.File, ix *importTracker) error {
 	c := &headerTemplateContext{
 		Version:     version,
 		SourceFile:  in.Name().String(),

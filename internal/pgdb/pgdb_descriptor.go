@@ -14,7 +14,7 @@ type descriptorTemplateContext struct {
 	Fields       []*fieldContext
 }
 
-func renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
+func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
 	ix.PGDB_v1 = true
 	mt := getDescriptorType(m)
 	tableName, err := getTableName(m)
@@ -25,7 +25,7 @@ func renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message
 	c := &descriptorTemplateContext{
 		Type:         mt,
 		ReceiverType: "*" + mt,
-		Fields:       getMessageFields(ctx, m, ix),
+		Fields:       module.getMessageFields(ctx, m, ix),
 		TableName:    tableName,
 	}
 	return templates["descriptor.tmpl"].Execute(w, c)
