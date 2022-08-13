@@ -23,7 +23,7 @@ type FiledConverter interface {
 	VarForValue() (string, error)
 }
 
-func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker) *fieldContext {
+func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker, goPrefix string) *fieldContext {
 	ext := pgdb_v1.FieldOptions{}
 	_, err := f.Extension(pgdb_v1.E_Options, &ext)
 	if err != nil {
@@ -41,10 +41,11 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	}
 
 	convertDef := &fieldConvert{
-		ctx:     ctx,
-		ix:      ix,
-		F:       f,
-		varName: vn.String(),
+		goPrefix: goPrefix,
+		ctx:      ctx,
+		ix:       ix,
+		F:        f,
+		varName:  vn.String(),
 	}
 	// https://developers.google.com/protocol-buffers/docs/proto3#scalar
 	switch pt {
@@ -167,10 +168,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	vn := &varNamer{prefix: "cfv", offset: 0}
 	_ = vn
 	vcDataType, _ := pgDataTypeForName("varchar")
-	// https://github.com/jackc/pgtype/issues/150
-	// tsvector is not in-tree.  but we use to_tsvector() when inserting, so we just need to have the right type name
-	// in the Field{} struct.
-	// tsDataType, _ := pgDataTypeForName("tsvector")
+
 	byteaDataType, _ := pgDataTypeForName("bytea")
 	pkField := &fieldContext{
 		IsVirtual: true,
@@ -201,6 +199,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			KeyType: DKT_SK,
 		},
 	}
+	// https://github.com/jackc/pgtype/issues/150
+	// tsvector is not in-tree.  but we use to_tsvector() when inserting, so we just need to have the right type name
+	// in the Field{} struct.
+	// tsDataType, _ := pgDataTypeForName("tsvector")
 	vn = vn.Next()
 	ftsDataField := &fieldContext{
 		IsVirtual: true,

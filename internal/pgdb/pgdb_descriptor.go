@@ -25,7 +25,7 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 	c := &descriptorTemplateContext{
 		Type:         mt,
 		ReceiverType: "*" + mt,
-		Fields:       module.getMessageFields(ctx, m, ix),
+		Fields:       module.getMessageFields(ctx, m, ix, "m.self"),
 		TableName:    tableName,
 	}
 	return templates["descriptor.tmpl"].Execute(w, c)

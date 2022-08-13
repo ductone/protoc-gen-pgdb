@@ -9,6 +9,8 @@ import (
 )
 
 type fieldConvert struct {
+	// starts as "m.self.", nested messages append
+	goPrefix    string
 	ctx         pgsgo.Context
 	ix          *importTracker
 	F           pgs.Field
@@ -51,7 +53,7 @@ type formatContext struct {
 }
 
 func (fc *fieldConvert) CodeForValue() (string, error) {
-	selfName := "m.self." + fc.ctx.Name(fc.F).String()
+	selfName := fc.goPrefix + "." + fc.ctx.Name(fc.F).String()
 	switch fc.TypeConversion {
 	case GT_FLOAT32:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
@@ -143,6 +145,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		panic(fmt.Errorf("pgdb: Implement CodeForValue for %v", fc.TypeConversion))
 	}
 }
+
 func (fc *fieldConvert) VarForValue() (string, error) {
 	return fc.varName, nil
 }
