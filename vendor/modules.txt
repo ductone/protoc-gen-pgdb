@@ -18,7 +18,7 @@ github.com/golang/protobuf/protoc-gen-go/plugin
 # github.com/jackc/pgio v1.0.0
 ## explicit; go 1.12
 github.com/jackc/pgio
-# github.com/jackc/pgtype v1.11.0
+# github.com/jackc/pgtype v1.12.0
 ## explicit; go 1.13
 github.com/jackc/pgtype
 # github.com/lyft/protoc-gen-star v0.6.0
@@ -28,15 +28,17 @@ github.com/lyft/protoc-gen-star/lang/go
 # github.com/pquerna/protoc-gen-dynamo v0.3.1
 ## explicit; go 1.13
 github.com/pquerna/protoc-gen-dynamo/dynamo
-# github.com/spf13/afero v1.8.2
-## explicit; go 1.13
+# github.com/spf13/afero v1.9.2
+## explicit; go 1.16
 github.com/spf13/afero
+github.com/spf13/afero/internal/common
 github.com/spf13/afero/mem
 # golang.org/x/text v0.3.7
 ## explicit; go 1.17
+golang.org/x/text/runes
 golang.org/x/text/transform
 golang.org/x/text/unicode/norm
-# google.golang.org/protobuf v1.28.0
+# google.golang.org/protobuf v1.28.1
 ## explicit; go 1.11
 google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo
 google.golang.org/protobuf/compiler/protogen
