@@ -14,15 +14,18 @@ extend google.protobuf.MessageOptions {
 message MessageOptions {
   bool enabled = 1;
   message Index {
-    enum IndexType {
-      INDEX_TYPE_UNSPECIFIED = 0;
-      INDEX_TYPE_BTREE = 1;
-      INDEX_TYPE_GIN = 2;
-      INDEX_TYPE_BTREE_GIN = 3;
+    enum IndexMethod {
+      INDEX_METHOD_UNSPECIFIED = 0;
+      INDEX_METHOD_BTREE = 1;
+      INDEX_METHOD_GIN = 2;
+      // Requires loading of BTREE_GIN extension: https://www.postgresql.org/docs/current/btree-gin.html
+      INDEX_METHOD_BTREE_GIN = 3;
     }
     string name = 1;
-    IndexType type = 2;
+    IndexMethod nethod = 2;
     repeated string columns = 3;
+    // used to indicate the index by this name can be dropped
+    bool dropped = 4;
   }
   repeated Index indexes = 2;
 }

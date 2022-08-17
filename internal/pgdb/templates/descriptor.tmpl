@@ -9,8 +9,8 @@ func (d {{.ReceiverType}}) TableName() string {
     return "{{.TableName}}"
 }
 
-func (d {{.ReceiverType}}) Fields() []*pgdb_v1.Field {
-  return []*pgdb_v1.Field{
+func (d {{.ReceiverType}}) Fields() []*pgdb_v1.Column {
+  return []*pgdb_v1.Column{
   {{ range .Fields }}
     {
       Name: "{{ .DB.Name }}",
@@ -20,14 +20,26 @@ func (d {{.ReceiverType}}) Fields() []*pgdb_v1.Field {
   }
 }
 
-func (d {{.ReceiverType}}) DataField() *pgdb_v1.Field {
-  return nil
+func (d {{.ReceiverType}}) DataField() *pgdb_v1.Column {
+  return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
 }
 
-func (d {{.ReceiverType}}) SearchField() *pgdb_v1.Field {
-  return nil
+func (d {{.ReceiverType}}) SearchField() *pgdb_v1.Column {
+  return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
 func (d {{.ReceiverType}}) Indexes() []*pgdb_v1.Index {
-  return nil
+  return []*pgdb_v1.Index{
+  {{ range .Indexes }}
+    {
+      Name: "{{ .DB.Name }}",
+      Method: pgdb_v1.MessageOptions_Index_{{- .DB.Method.String -}},
+      IsPrimary: {{ .DB.IsPrimary }},
+      IsUnique: {{ .DB.IsUnique }},
+      IsDropped: {{ .DB.IsDropped }},
+      Columns: []string{ {{- range .DB.Columns -}} "{{- . -}}", {{- end -}} },
+      Where: "{{ .DB.Where }}",
+    },
+  {{ end }}
+  }
 }

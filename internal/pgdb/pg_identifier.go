@@ -64,6 +64,19 @@ func getColumnName(f pgs.Field, parents []pgs.Field) (string, error) {
 	panic(fmt.Errorf("pgdb: getColumnName: can't find short enough name for %v", f.FullyQualifiedName()))
 }
 
+func getIndexName(m pgs.Message, name string) (string, error) {
+	fqnHash := sha256String(m.FullyQualifiedName() + "$" + name)
+
+	pkgName := m.Package().ProtoName().LowerSnakeCase().String()
+	msgName := m.Name().LowerSnakeCase().String()
+	proposed := strings.Join([]string{"pbidx", name, msgName, pkgName}, "_")
+	shortHash := fqnHash[0:8]
+	// shorten to <63 with enough room to append short hash
+	proposed = proposed[0:min(postgresNameLen-(len(shortHash)+1), len(proposed))]
+	proposed = strings.ToLower(strings.TrimSuffix(proposed, "_")) + "_" + shortHash
+	return proposed, nil
+}
+
 func sha256String(input string) string {
 	h := sha256.New()
 	h.Write([]byte(input))
