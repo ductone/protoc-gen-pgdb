@@ -10,6 +10,10 @@ build:
 generate:
 	buf generate proto
 
+.PHONY: test
+test:
+	go test -v ./...
+
 .PHONY: example
 example: build
 	buf --debug generate --template buf.example.gen.yaml --path example/models

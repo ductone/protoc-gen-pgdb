@@ -28,6 +28,8 @@ message MessageOptions {
     bool dropped = 4;
   }
   repeated Index indexes = 2;
+  // defaults to `tenant_id`.  Must be set if an object does not have a `tenant_id` field.
+  string tenant_id_field = 3;
 }
 
 extend google.protobuf.FieldOptions {

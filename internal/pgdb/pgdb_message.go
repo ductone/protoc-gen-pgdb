@@ -59,7 +59,15 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 	}
 	rv = append(rv, cf...)
 	vn := &varNamer{prefix: "v", offset: 0}
+	tenantIdField, err := getTenantIDField(m)
+	if err != nil {
+		panic(err)
+	}
 	for _, field := range fields {
+		// tenant_id done via common fields
+		if tenantIdField == field.Name().LowerSnakeCase().String() {
+			continue
+		}
 		vn = vn.Next()
 		fieldRep := module.getField(ctx, field, vn, ix, goPrefix)
 		if fieldRep != nil {
