@@ -6,8 +6,8 @@ import (
 
 	"github.com/clipperhouse/jargon"
 	"github.com/clipperhouse/jargon/filters/ascii"
-	"github.com/clipperhouse/jargon/filters/stackoverflow"
 	"github.com/doug-martin/goqu/v9/exp"
+	"github.com/ductone/protoc-gen-pgdb/internal/stackoverflow"
 )
 
 type SearchContent struct {

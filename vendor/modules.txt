@@ -3,7 +3,6 @@
 github.com/clipperhouse/jargon
 github.com/clipperhouse/jargon/filters/ascii
 github.com/clipperhouse/jargon/filters/mapper
-github.com/clipperhouse/jargon/filters/stackoverflow
 github.com/clipperhouse/jargon/filters/synonyms
 github.com/clipperhouse/jargon/filters/synonyms/trie
 github.com/clipperhouse/jargon/tokenqueue
