@@ -1,0 +1,9 @@
+.vscode/*
+*.test
+*.ts
+cpu.prof
+mem.prof
+cmd/jargon/dist/*
+
+dist/
+.DS_Store

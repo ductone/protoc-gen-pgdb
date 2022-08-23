@@ -3,6 +3,8 @@ module github.com/ductone/protoc-gen-pgdb
 go 1.18
 
 require (
+	github.com/clipperhouse/jargon v1.0.9
+	github.com/clipperhouse/uax29 v1.11.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/jackc/pgtype v1.12.0
@@ -10,6 +12,7 @@ require (
 	github.com/lyft/protoc-gen-star v0.6.1
 	github.com/pquerna/protoc-gen-dynamo v0.3.1
 	github.com/stretchr/testify v1.7.0
+	golang.org/x/exp v0.0.0-20220823124025-807a23277127
 	google.golang.org/protobuf v1.28.1
 )
 
@@ -25,6 +28,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa // indirect
+	golang.org/x/net v0.0.0-20220607020251-c690dde0001d // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )

@@ -1,3 +1,19 @@
+# github.com/clipperhouse/jargon v1.0.9
+## explicit; go 1.14
+github.com/clipperhouse/jargon
+github.com/clipperhouse/jargon/filters/ascii
+github.com/clipperhouse/jargon/filters/mapper
+github.com/clipperhouse/jargon/filters/stackoverflow
+github.com/clipperhouse/jargon/filters/synonyms
+github.com/clipperhouse/jargon/filters/synonyms/trie
+github.com/clipperhouse/jargon/tokenqueue
+# github.com/clipperhouse/uax29 v1.11.0
+## explicit; go 1.16
+github.com/clipperhouse/uax29/graphemes
+github.com/clipperhouse/uax29/iterators
+github.com/clipperhouse/uax29/iterators/filter
+github.com/clipperhouse/uax29/iterators/util
+github.com/clipperhouse/uax29/words
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
@@ -68,6 +84,13 @@ github.com/stretchr/testify/require
 # golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
 ## explicit; go 1.17
 golang.org/x/crypto/pbkdf2
+# golang.org/x/exp v0.0.0-20220823124025-807a23277127
+## explicit; go 1.18
+golang.org/x/exp/constraints
+# golang.org/x/net v0.0.0-20220607020251-c690dde0001d
+## explicit; go 1.17
+golang.org/x/net/html
+golang.org/x/net/html/atom
 # golang.org/x/text v0.3.7
 ## explicit; go 1.17
 golang.org/x/text/cases
@@ -82,6 +105,7 @@ golang.org/x/text/secure/precis
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
+golang.org/x/text/unicode/rangetable
 golang.org/x/text/width
 # google.golang.org/protobuf v1.28.1
 ## explicit; go 1.11
