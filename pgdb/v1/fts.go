@@ -66,6 +66,11 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 			_ = err
 		}
 	}
+
+	if len(rv) == 0 {
+		exp.NewLiteralExpression("NULL::tsvector")
+	}
+
 	return exp.NewLiteralExpression("?::tsvector", strings.Join(rv, " "))
 }
 

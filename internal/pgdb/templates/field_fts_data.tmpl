@@ -1,37 +1,9 @@
-{{$first := true}}
-
-{{.VarName}} := exp.NewLiteralExpression(
-{{ range .SearchFields }}
-    {{- if $first -}}
-        {{$first = false}}
-    {{- else -}}
-    " || " +
-    {{- end -}}
-    {{- if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_SIMPLE` }}
-         "setweight(to_tsvector(?, ?::text), ?)" +
-    {{ end -}}
-    {{- if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_ENGLISH` }}
-            "setweight(to_tsvector(?, ?::text), ?)" +
-    {{ end -}}
-    {{- if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_EDGE_NGRAM` }}
-            "edge_gram_tsvector(?::text, ?)" +
-    {{ end -}}
-{{ end -}}
-    "",
-{{ range .SearchFields }}
-    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_SIMPLE` }}
-        "simple",
-        {{ .VarName }},
-        "{{ .Weight }}",
+{{.VarName}} := pgdb_v1.FullTextSearchVectors([]pgdb_v1.SearchContent{
+    {{ range .SearchFields }}
+		{
+			Type:   pgdb_v1.FieldOptions_{{- .Ext.FullTextType.String -}},
+			Weight: pgdb_v1.FieldOptions_{{- .Ext.FullTextWeight.String -}},
+			Value:  {{ .VarName }},
+		},
     {{ end }}
-    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_ENGLISH` }}
-            "english",
-            {{ .VarName }},
-            "{{ .Weight }}",
-    {{ end }}
-    {{ if eq .Ext.FullTextType.String `FULL_TEXT_TYPE_EDGE_NGRAM` }}
-            {{ .VarName }},
-            "{{ .Weight }}",
-    {{ end }}
-{{ end }}
-        )
+    })
