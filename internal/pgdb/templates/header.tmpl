@@ -6,8 +6,8 @@ import (
 {{ if .Imports.Fmt }} "fmt" {{ end }}
 {{ if .Imports.Time }} "time" {{ end }}
 {{ if .Imports.Strings }} "strings" {{ end }}
-{{ if .Imports.PGDB_v1 }} pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1" {{ end }}
+{{ if .Imports.PGDBV1 }} pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1" {{ end }}
 {{ if .Imports.GoquExp }} "github.com/doug-martin/goqu/v9/exp" {{ end }}
 {{ if .Imports.ProtobufProto }} "google.golang.org/protobuf/proto" {{ end }}
-{{ if .Imports.ProtobufEncodingJson }}"google.golang.org/protobuf/encoding/protojson" {{ end }}
+{{ if .Imports.ProtobufEncodingJSON }}"google.golang.org/protobuf/encoding/protojson" {{ end }}
 )

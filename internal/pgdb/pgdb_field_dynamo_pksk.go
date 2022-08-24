@@ -11,10 +11,8 @@ import (
 type dynamoKeyType int64
 
 const (
-	DKT_PK    dynamoKeyType = 1
-	DKT_SK    dynamoKeyType = 2
-	DKT_GS1PK dynamoKeyType = 3
-	DKT_GS1SK dynamoKeyType = 4
+	DynamoKeyTypePartition dynamoKeyType = 1
+	DynamoKeyTypeSort      dynamoKeyType = 2
 )
 
 type dynamoKeyDataConvert struct {
@@ -43,14 +41,14 @@ func (dkdc *dynamoKeyDataConvert) CodeForValue() (string, error) {
 	dkdc.Parts = []string{}
 	keyFields := []string{}
 	switch dkdc.KeyType {
-	case DKT_PK:
+	case DynamoKeyTypePartition:
 		// prefix
 		dkdc.Parts = append(dkdc.Parts,
 			fmt.Sprintf(`"%s_%s"`,
 				dkdc.Message.Package().ProtoName().LowerSnakeCase().String(), dkdc.Message.Name().LowerSnakeCase().String()),
 		)
 		keyFields = dynExt.Key[0].PkFields
-	case DKT_SK:
+	case DynamoKeyTypeSort:
 		if dynExt.Key[0].SkConst != "" {
 			dkdc.Parts = append(dkdc.Parts,
 				fmt.Sprintf(`"%s"`,

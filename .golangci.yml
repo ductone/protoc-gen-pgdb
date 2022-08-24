@@ -106,6 +106,10 @@ issues:
     - source: "(TODO)"
       linters: [godot]
 
+    - path: "internal/stackoverflow/generated.go"
+      linters:
+        - revive
+
     - path: "_test\\.go"
       linters:
         - goconst

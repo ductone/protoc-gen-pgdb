@@ -8,12 +8,12 @@ import (
 )
 
 type importTracker struct {
-	PGDB_v1 bool
+	PGDBV1 bool
 
 	Bytes                bool
 	Fmt                  bool
 	GoquExp              bool
-	ProtobufEncodingJson bool
+	ProtobufEncodingJSON bool
 	ProtobufProto        bool
 	Strings              bool
 	Time                 bool

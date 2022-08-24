@@ -9,6 +9,10 @@ import (
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
 
+const (
+	pgTypeJSONB = "jsonb"
+)
+
 type fieldContext struct {
 	// denotes a realized/virtual field that comes from multiple fields. in this case, F is nil.
 	IsVirtual bool
@@ -53,38 +57,38 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		// aka float64
 		convertDef.PostgresTypeName = "float8"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_FLOAT64
+		convertDef.TypeConversion = gtFloat64
 	case pgs.FloatT:
 		// aka float32
 		convertDef.PostgresTypeName = "float4"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_FLOAT32
+		convertDef.TypeConversion = gtFloat32
 	case pgs.Int32T, pgs.SInt32, pgs.SFixed32:
 		convertDef.PostgresTypeName = "int4"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_INT32
+		convertDef.TypeConversion = gtInt32
 	case pgs.Int64T, pgs.SInt64, pgs.SFixed64:
 		convertDef.PostgresTypeName = "int8"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_INT64
+		convertDef.TypeConversion = gtInt64
 	case pgs.UInt32T, pgs.Fixed32T:
 		convertDef.PostgresTypeName = "int8"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_UINT32
+		convertDef.TypeConversion = gtUint32
 	case pgs.UInt64T, pgs.Fixed64T:
 		// not ideal, but postgres only has signed types for int8.
 		convertDef.PostgresTypeName = "numeric"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_UINT64
+		convertDef.TypeConversion = gtUint64
 	case pgs.BoolT:
 		convertDef.PostgresTypeName = "bool"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_BOOL
+		convertDef.TypeConversion = gtBool
 	case pgs.StringT:
 		// TODO(pquerna): annotations for max size
 		convertDef.PostgresTypeName = "text"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_STRING
+		convertDef.TypeConversion = gtString
 		convertDef.FullTextType = ext.FullTextType
 		convertDef.FullTextWeight = ext.FullTextWeight
 	case pgs.MessageT:
@@ -94,20 +98,20 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 			if isArray {
 				panic(fmt.Errorf("pgdb: unsupported field type: %v: %s: repeated Any not supported", pt, f.FullyQualifiedName()))
 			}
-			convertDef.PostgresTypeName = "jsonb"
-			convertDef.TypeConversion = GT_PB_WKT_ANY
+			convertDef.PostgresTypeName = pgTypeJSONB
+			convertDef.TypeConversion = gtPbWktAny
 		case ".google.protobuf.Timestamp":
 			convertDef.PostgresTypeName = "timestamptz"
 			convertDef.IsArray = isArray
-			convertDef.TypeConversion = GT_PB_WKT_TIMESTAMP
+			convertDef.TypeConversion = gtPbWktTimestamp
 		case ".google.protobuf.Duration":
 			convertDef.PostgresTypeName = "interval"
 			convertDef.IsArray = isArray
-			convertDef.TypeConversion = GT_PB_WKT_DURATION
+			convertDef.TypeConversion = gtPbWktDuration
 		case ".google.protobuf.Struct":
 			convertDef.IsArray = isArray
-			convertDef.PostgresTypeName = "jsonb"
-			convertDef.TypeConversion = GT_PB_WKT_STRUCT
+			convertDef.PostgresTypeName = pgTypeJSONB
+			convertDef.TypeConversion = gtPbWktStruct
 		default:
 			switch ext.MessageBehavoir {
 			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT:
@@ -117,8 +121,8 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 				// getMessageFields(ctx)
 			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
 				convertDef.IsArray = isArray
-				convertDef.PostgresTypeName = "jsonb"
-				convertDef.TypeConversion = GT_PB_GENERIC_MSG
+				convertDef.PostgresTypeName = pgTypeJSONB
+				convertDef.TypeConversion = gtPbGenericMsg
 			default:
 				panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
 					pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
@@ -128,11 +132,11 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	case pgs.BytesT:
 		// single bytes and repeated bytes we store the same way
 		convertDef.PostgresTypeName = "bytea"
-		convertDef.TypeConversion = GT_BYTES
+		convertDef.TypeConversion = gtBytes
 	case pgs.EnumT:
 		convertDef.PostgresTypeName = "int4"
 		convertDef.IsArray = isArray
-		convertDef.TypeConversion = GT_ENUM
+		convertDef.TypeConversion = gtEnum
 	case pgs.GroupT:
 		panic(fmt.Errorf("pgdb: unsupported field type: Group: %s", f.FullyQualifiedName()))
 	default:
@@ -160,7 +164,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 }
 
 const (
-	// fts_data, pb_data, pk, sk
+	// fts_data, pb_data, pk, sk.
 	lenCommonFields = 4
 )
 
@@ -196,7 +200,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			ctx:     ctx,
 			VarName: vn.String(),
 			Message: m,
-			KeyType: DKT_PK,
+			KeyType: DynamoKeyTypePartition,
 		},
 	}
 
@@ -212,7 +216,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			ctx:     ctx,
 			VarName: vn.String(),
 			Message: m,
-			KeyType: DKT_SK,
+			KeyType: DynamoKeyTypeSort,
 		},
 	}
 	// https://github.com/jackc/pgtype/issues/150

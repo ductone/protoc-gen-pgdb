@@ -38,7 +38,7 @@ func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 		}
 	}
 
-	if len(fdc.SearchFields) <= 0 {
+	if len(fdc.SearchFields) == 0 {
 		return fdc.VarName + ` := exp.NewLiteralExpression("NULL")`, nil
 	}
 

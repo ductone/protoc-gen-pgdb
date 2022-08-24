@@ -27,22 +27,23 @@ type fieldConvert struct {
 type goTypeConversion int64
 
 const (
-	GT_UNSPECIFIED      goTypeConversion = 0
-	GT_FLOAT32          goTypeConversion = 1
-	GT_FLOAT64          goTypeConversion = 2
-	GT_INT32            goTypeConversion = 3
-	GT_INT64            goTypeConversion = 4
-	GT_UINT32           goTypeConversion = 5
-	GT_UINT64           goTypeConversion = 6
-	GT_BOOL             goTypeConversion = 7
-	GT_STRING           goTypeConversion = 8
-	GT_BYTES            goTypeConversion = 9
-	GT_ENUM             goTypeConversion = 10
-	GT_PB_WKT_ANY       goTypeConversion = 11
-	GT_PB_WKT_TIMESTAMP goTypeConversion = 12
-	GT_PB_WKT_DURATION  goTypeConversion = 13
-	GT_PB_WKT_STRUCT    goTypeConversion = 14
-	GT_PB_GENERIC_MSG   goTypeConversion = 15
+	//nolint:deadcode,varcheck // i like unsued unspecified
+	gtUnspecified    goTypeConversion = 0
+	gtFloat32        goTypeConversion = 1
+	gtFloat64        goTypeConversion = 2
+	gtInt32          goTypeConversion = 3
+	gtInt64          goTypeConversion = 4
+	gtUint32         goTypeConversion = 5
+	gtUint64         goTypeConversion = 6
+	gtBool           goTypeConversion = 7
+	gtString         goTypeConversion = 8
+	gtBytes          goTypeConversion = 9
+	gtEnum           goTypeConversion = 10
+	gtPbWktAny       goTypeConversion = 11
+	gtPbWktTimestamp goTypeConversion = 12
+	gtPbWktDuration  goTypeConversion = 13
+	gtPbWktStruct    goTypeConversion = 14
+	gtPbGenericMsg   goTypeConversion = 15
 )
 
 type formatContext struct {
@@ -55,83 +56,83 @@ type formatContext struct {
 func (fc *fieldConvert) CodeForValue() (string, error) {
 	selfName := fc.goPrefix + "." + fc.ctx.Name(fc.F).String()
 	switch fc.TypeConversion {
-	case GT_FLOAT32:
+	case gtFloat32:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "float32",
 			IsArray:   fc.IsArray,
 		})
-	case GT_FLOAT64:
+	case gtFloat64:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "float64",
 			IsArray:   fc.IsArray,
 		})
-	case GT_INT32:
+	case gtInt32:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "int32",
 			IsArray:   fc.IsArray,
 		})
-	case GT_INT64:
+	case gtInt64:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "int64",
 			IsArray:   fc.IsArray,
 		})
-	case GT_UINT32:
+	case gtUint32:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "uint32",
 			IsArray:   fc.IsArray,
 		})
-	case GT_UINT64:
+	case gtUint64:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "uint64",
 			IsArray:   fc.IsArray,
 		})
-	case GT_BOOL:
+	case gtBool:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "bool",
 			IsArray:   fc.IsArray,
 		})
-	case GT_STRING:
+	case gtString:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "string",
 			IsArray:   fc.IsArray,
 		})
-	case GT_BYTES:
+	case gtBytes:
 		return fc.varName + " := " + selfName, nil
-	case GT_ENUM:
+	case gtEnum:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "int32",
 		})
-	case GT_PB_WKT_TIMESTAMP:
+	case gtPbWktTimestamp:
 		fc.ix.Time = true
 		return templateExecToString("proto_format_time.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 		})
-	case GT_PB_WKT_DURATION:
+	case gtPbWktDuration:
 		return templateExecToString("proto_format_duration.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 		})
-	case GT_PB_WKT_STRUCT, GT_PB_WKT_ANY, GT_PB_GENERIC_MSG:
-		fc.ix.ProtobufEncodingJson = true
+	case gtPbWktStruct, gtPbWktAny, gtPbGenericMsg:
+		fc.ix.ProtobufEncodingJSON = true
 		if fc.IsArray {
 			fc.ix.Bytes = true
 		}

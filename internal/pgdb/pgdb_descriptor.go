@@ -16,7 +16,7 @@ type descriptorTemplateContext struct {
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
-	ix.PGDB_v1 = true
+	ix.PGDBV1 = true
 	mt := getDescriptorType(m)
 	tableName, err := getTableName(m)
 	if err != nil {

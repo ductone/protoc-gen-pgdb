@@ -15,6 +15,7 @@ var (
 	templates     map[string]*template.Template
 )
 
+//nolint:gochecknoinits // compling templates from embed
 func init() {
 	err := loadTemplates()
 	if err != nil {

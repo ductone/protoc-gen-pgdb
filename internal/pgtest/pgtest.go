@@ -39,7 +39,7 @@ type PG struct {
 // than your production database. This makes it less reliable in case of system
 // crashes, but we don't care about that anyway during unit testing.
 //
-// Use the DB field to access the database connection
+// Use the DB field to access the database connection.
 func Start() (*PG, error) {
 	return start(New())
 }
@@ -79,7 +79,7 @@ func start(config *PGConfig) (*PG, error) {
 	if isRoot {
 		pgUser, err := user.Lookup("postgres")
 		if err != nil {
-			return nil, fmt.Errorf("could not find postgres user, which is required when running as root: %s", err)
+			return nil, fmt.Errorf("could not find postgres user, which is required when running as root: %w", err)
 		}
 
 		uid, err := strconv.ParseInt(pgUser.Uid, 10, 64)
@@ -168,7 +168,7 @@ func start(config *PGConfig) (*PG, error) {
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		stderr.Close()
+		_ = stderr.Close()
 		return nil, err
 	}
 
@@ -227,9 +227,9 @@ func start(config *PGConfig) (*PG, error) {
 }
 
 // Stop the database and remove storage files.
-func (p *PG) Stop() error {
+func (p *PG) Stop() {
 	if p == nil {
-		return nil
+		return
 	}
 
 	if !p.persistent {
@@ -241,7 +241,7 @@ func (p *PG) Stop() error {
 
 	err := p.cmd.Process.Signal(os.Interrupt)
 	if err != nil {
-		return err
+		return
 	}
 	done := make(chan struct{})
 	go func() {
@@ -255,22 +255,20 @@ func (p *PG) Stop() error {
 	err = p.cmd.Wait()
 	close(done)
 	if err != nil {
-		return err
+		return
 	}
 
 	if p.stderr != nil {
-		p.stderr.Close()
+		_ = p.stderr.Close()
 	}
 
 	if p.stdout != nil {
-		p.stdout.Close()
+		_ = p.stdout.Close()
 	}
-
-	return nil
 }
 
 // Needed because Ubuntu doesn't put initdb in $PATH
-// binDir a path to a directory that contains postgresql binaries
+// binDir a path to a directory that contains postgresql binaries.
 func findBinPath(binDir string) (string, error) {
 	// In $PATH (e.g. Fedora) great!
 	if binDir == "" {
@@ -300,7 +298,7 @@ func findBinPath(binDir string) (string, error) {
 		}
 		for _, fi := range files {
 			if !fi.IsDir() && fi.Name() == "initdb" {
-				return filepath.Join(folder), nil
+				return folder, nil
 			}
 
 			if !fi.IsDir() {
@@ -362,6 +360,7 @@ func prepareCommand(ctx context.Context, isRoot bool, command string, args ...st
 		}
 	}
 
+	//nolint:gosec // using su to run postgres as non-root
 	return exec.CommandContext(ctx, "su",
 		"-",
 		"postgres",
@@ -371,12 +370,12 @@ func prepareCommand(ctx context.Context, isRoot bool, command string, args ...st
 }
 
 func abort(msg string, cmd *exec.Cmd, stderr, stdout io.ReadCloser, err error) error {
-	cmd.Process.Signal(os.Interrupt)
-	cmd.Wait()
+	_ = cmd.Process.Signal(os.Interrupt)
+	_ = cmd.Wait()
 
 	serr, _ := io.ReadAll(stderr)
 	sout, _ := io.ReadAll(stdout)
-	stderr.Close()
-	stdout.Close()
-	return fmt.Errorf("%s: %s\nOUT: %s\nERR: %s", msg, err, string(sout), string(serr))
+	_ = stderr.Close()
+	_ = stdout.Close()
+	return fmt.Errorf("%s: %w\nOUT: %s\nERR: %s", msg, err, string(sout), string(serr))
 }
