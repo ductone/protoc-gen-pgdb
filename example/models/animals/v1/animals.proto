@@ -27,13 +27,13 @@ message Pet {
   option (pgdb.v1.msg).enabled = true;
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_SIMPLE
+    full_text_type: FULL_TEXT_TYPE_EXACT
   }];
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp updated_at = 4;
   google.protobuf.Timestamp deleted_at = 5;
   string display_name = 6 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_EDGE_NGRAM
+    full_text_type: FULL_TEXT_TYPE_ENGLISH
     full_text_weight: FULL_TEXT_WEIGHT_HIGH
   }];
   string description = 7 [(pgdb.v1.options) = {

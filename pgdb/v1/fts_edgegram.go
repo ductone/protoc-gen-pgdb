@@ -5,7 +5,6 @@ import (
 
 	"github.com/clipperhouse/jargon"
 	"github.com/clipperhouse/uax29/graphemes"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 )
 
@@ -65,7 +64,6 @@ func (t *edgegram) next() (*jargon.Token, error) {
 	}
 	grams = slice.Unique(grams)
 	slice.Sort(grams)
-	spew.Dump(grams)
 	for _, k := range grams {
 		t.pending = append(t.pending, jargon.NewToken(k, true))
 	}

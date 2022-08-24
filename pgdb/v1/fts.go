@@ -6,6 +6,7 @@ import (
 
 	"github.com/clipperhouse/jargon"
 	"github.com/clipperhouse/jargon/filters/ascii"
+	"github.com/clipperhouse/jargon/filters/stemmer"
 	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/ductone/protoc-gen-pgdb/internal/stackoverflow"
 )
@@ -17,8 +18,9 @@ type SearchContent struct {
 }
 
 // FullTextSearchVectors converts a set of input documents
-// into a ::tsvector.
-func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Filter) (string, error) {
+// into a ::tsvector. Note: this function may generally ignore errors in input text, to be robust to
+// untrusted inputs, and will do its "best", for some value of "best"
+func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Filter) (exp.Expression, error) {
 	edgeGramFilter := edgegramStream(3)
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
@@ -33,21 +35,35 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 				pos += len(v)
 				continue
 			}
-			rv = append(rv, pgLexeme(v, pos, doc.Weight))
 
-			grams, err := jargon.TokenizeString(v).Filter(edgeGramFilter).Words().ToSlice()
-			if err != nil {
-				return "", err
-			}
-			for _, gram := range grams {
-				rv = append(rv, pgLexeme(gram.String(), pos, doc.Weight))
+			// always add the full word, without stemming (besides stackoverflow normalization)
+			rv = append(rv, pgLexeme(v, pos, doc.Weight))
+			switch doc.Type {
+			case FieldOptions_FULL_TEXT_TYPE_EXACT:
+				// no additional indexing for exact
+			case FieldOptions_FULL_TEXT_TYPE_ENGLISH, FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED:
+				// for english, we also index "edge-grams" to make partial word matching work better.
+				grams, _ := jargon.TokenizeString(v).Filter(edgeGramFilter).Words().ToSlice()
+				gramWeight := lowerWeight(doc.Weight)
+				for _, gram := range grams {
+					rv = append(rv, pgLexeme(gram.String(), pos, gramWeight))
+				}
+
+				// we also apply stemming. yay?
+				stemmed, _ := jargon.TokenizeString(v).Filter(stemmer.English).Words().ToSlice()
+				for _, stemmedWord := range stemmed {
+					rv = append(rv, pgLexeme(stemmedWord.String(), pos, gramWeight))
+				}
 			}
 			pos += len(v)
+			// wrap around guard for position
+			if pos > 2^15 {
+				pos = 1
+			}
 		}
 		if err := ts.Err(); err != nil {
-			return "", err
+			return nil, err
 		}
-
 	}
 	//
 	// TODO: add a "transcode" version for FTS data field
@@ -68,15 +84,19 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 	//  use webserach()
 	// to_tsvector?
 	// (more or less what we do today)
-	return strings.Join(rv, " "), nil
+
+	return exp.NewLiteralExpression("?::tsvector", strings.Join(rv, " ")), nil
 }
 
-// expose function to do same stemming
-// returns exp including websearch_to_tsquery()
+func FullTextSerachQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
+	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
+	filters = append(filters, additionalFilters...)
 
-func FullTextSerachQuery(input string, filters ...jargon.Filter) exp.Expression {
-
-	return nil
+	terms, _ := jargon.TokenizeString(input).Filter(filters...).String()
+	stemmedTerms, _ := jargon.TokenizeString(input).Filter(stemmer.English).String()
+	return exp.NewLiteralExpression(
+		"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
+		terms, stemmedTerms)
 }
 
 func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string {
@@ -93,5 +113,18 @@ func weightToString(weight FieldOptions_FullTextWeight) string {
 		return "C"
 	default:
 		return "D"
+	}
+}
+
+func lowerWeight(weight FieldOptions_FullTextWeight) FieldOptions_FullTextWeight {
+	switch weight {
+	case FieldOptions_FULL_TEXT_WEIGHT_HIGH:
+		return FieldOptions_FULL_TEXT_WEIGHT_MED
+	case FieldOptions_FULL_TEXT_WEIGHT_MED:
+		return FieldOptions_FULL_TEXT_WEIGHT_LOW
+	case FieldOptions_FULL_TEXT_WEIGHT_LOW:
+		return FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED
+	default:
+		return FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED
 	}
 }

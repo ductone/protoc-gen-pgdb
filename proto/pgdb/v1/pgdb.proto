@@ -39,9 +39,8 @@ extend google.protobuf.FieldOptions {
 message FieldOptions {
   enum FullTextType {
     FULL_TEXT_TYPE_UNSPECIFIED = 0;
-    FULL_TEXT_TYPE_SIMPLE = 1;
+    FULL_TEXT_TYPE_EXACT = 1;
     FULL_TEXT_TYPE_ENGLISH = 2;
-    FULL_TEXT_TYPE_EDGE_NGRAM = 3;
   }
   enum FullTextWeight {
     FULL_TEXT_WEIGHT_UNSPECIFIED = 0;
