@@ -19,7 +19,7 @@ const (
 	// docs: https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
 	//
 	// The system uses no more than NAMEDATALEN-1 bytes of an identifier; longer names can be written in commands, but they will be
-	// truncated. By default, NAMEDATALEN is 64 so the maximum identifier length is 63 bytes
+	// truncated. By default, NAMEDATALEN is 64 so the maximum identifier length is 63 bytes.
 	postgresNameLen = 63
 )
 
@@ -79,7 +79,7 @@ func getIndexName(m pgs.Message, name string) (string, error) {
 
 func sha256String(input string) string {
 	h := sha256.New()
-	h.Write([]byte(input))
+	_, _ = h.Write([]byte(input))
 	return hex.EncodeToString(h.Sum(nil))
 }
 

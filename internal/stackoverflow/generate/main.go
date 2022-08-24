@@ -2,10 +2,11 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"go/format"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -22,7 +23,7 @@ func main() {
 	}
 }
 
-// Hard-coded exceptions that cause bad mappings
+// Hard-coded exceptions that cause bad mappings.
 var ignore = map[string]bool{
 	"drop-down": true,
 	"datatable": true,
@@ -30,7 +31,7 @@ var ignore = map[string]bool{
 	"this":      true,
 }
 
-// run this in generator_test.go
+// run this in generator_test.go.
 func writeDictionary() error {
 	pageSize := 100
 
@@ -116,7 +117,10 @@ func writeDictionary() error {
 
 			if wrapper.Backoff > 10 {
 				// That's too much for this run
-				err := fmt.Errorf("abort: received a message to backoff %d seconds from api.stackexchange.com. That's too much, try again later. See http://api.stackexchange.com/docs/throttle", wrapper.Backoff)
+				err := fmt.Errorf(
+					"abort: received a message to backoff %d seconds from api.stackexchange.com. That's too much, try again later. See http://api.stackexchange.com/docs/throttle",
+					wrapper.Backoff,
+				)
 				return err
 			}
 
@@ -174,7 +178,7 @@ package stackoverflow
 var mappings = {{ printf "%#v" . }}
 `))
 
-// sites to query, with the number of tags to get, based on eyeballing how many of the top x are 'interesting'
+// sites to query, with the number of tags to get, based on eyeballing how many of the top x are 'interesting'.
 var sites = map[string]int{
 	"stackoverflow": 2000,
 	// "serverfault":   600,
@@ -182,6 +186,8 @@ var sites = map[string]int{
 	// "datascience":   200,
 }
 var tagsURL = "http://api.stackexchange.com/2.2/tags?page=%d&pagesize=%d&order=desc&sort=popular&site=%s&filter=!4-J-du8hXSkh2Is1a&key=%s"
+
+//nolint:gosec // not our api key, present in upstream repo
 var stackExchangeAPIKey = "*AbAX7kb)BKJTlmKgb*Tkw(("
 
 var client = http.Client{
@@ -190,6 +196,7 @@ var client = http.Client{
 var empty = wrapper{}
 
 func fetchTags(page, pageSize int, site string) (wrapper, error) {
+	ctx := context.Background()
 	if page == 0 {
 		page = 1
 	}
@@ -199,14 +206,18 @@ func fetchTags(page, pageSize int, site string) (wrapper, error) {
 	}
 
 	url := fmt.Sprintf(tagsURL, page, pageSize, site, stackExchangeAPIKey)
-	r, httpErr := client.Get(url)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return empty, err
+	}
+	r, httpErr := client.Do(req)
 	if httpErr != nil {
 		return empty, httpErr
 	}
 
 	defer r.Body.Close()
 
-	body, readErr := ioutil.ReadAll(r.Body)
+	body, readErr := io.ReadAll(r.Body)
 	if readErr != nil {
 		return empty, readErr
 	}

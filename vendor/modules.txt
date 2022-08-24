@@ -7,8 +7,8 @@ github.com/clipperhouse/jargon/filters/stemmer
 github.com/clipperhouse/jargon/filters/synonyms
 github.com/clipperhouse/jargon/filters/synonyms/trie
 github.com/clipperhouse/jargon/tokenqueue
-# github.com/clipperhouse/uax29 v1.11.0
-## explicit; go 1.16
+# github.com/clipperhouse/uax29 v1.12.4
+## explicit; go 1.14
 github.com/clipperhouse/uax29/graphemes
 github.com/clipperhouse/uax29/iterators
 github.com/clipperhouse/uax29/iterators/filter
@@ -38,7 +38,7 @@ github.com/golang/protobuf/protoc-gen-go/plugin
 # github.com/jackc/chunkreader/v2 v2.0.1
 ## explicit; go 1.12
 github.com/jackc/chunkreader/v2
-# github.com/jackc/pgconn v1.9.1-0.20210724152538-d89c8390a530
+# github.com/jackc/pgconn v1.13.0
 ## explicit; go 1.12
 github.com/jackc/pgconn
 github.com/jackc/pgconn/internal/ctxwatch
@@ -49,7 +49,7 @@ github.com/jackc/pgio
 # github.com/jackc/pgpassfile v1.0.0
 ## explicit; go 1.12
 github.com/jackc/pgpassfile
-# github.com/jackc/pgproto3/v2 v2.1.1
+# github.com/jackc/pgproto3/v2 v2.3.1
 ## explicit; go 1.12
 github.com/jackc/pgproto3/v2
 # github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b
@@ -58,12 +58,12 @@ github.com/jackc/pgservicefile
 # github.com/jackc/pgtype v1.12.0
 ## explicit; go 1.13
 github.com/jackc/pgtype
-# github.com/jackc/pgx/v4 v4.12.1-0.20210724153913-640aa07df17c
+# github.com/jackc/pgx/v4 v4.17.0
 ## explicit; go 1.13
 github.com/jackc/pgx/v4
 github.com/jackc/pgx/v4/internal/sanitize
 github.com/jackc/pgx/v4/pgxpool
-# github.com/jackc/puddle v1.1.3
+# github.com/jackc/puddle v1.2.1
 ## explicit; go 1.12
 github.com/jackc/puddle
 # github.com/kljensen/snowball v0.6.0
@@ -83,25 +83,25 @@ github.com/lyft/protoc-gen-star/lang/go
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib
-# github.com/pquerna/protoc-gen-dynamo v0.3.1
+# github.com/pquerna/protoc-gen-dynamo v0.4.0
 ## explicit; go 1.13
-github.com/pquerna/protoc-gen-dynamo/dynamo
+github.com/pquerna/protoc-gen-dynamo/dynamo/v1
 # github.com/spf13/afero v1.9.2
 ## explicit; go 1.16
 github.com/spf13/afero
 github.com/spf13/afero/internal/common
 github.com/spf13/afero/mem
-# github.com/stretchr/testify v1.7.0
+# github.com/stretchr/testify v1.8.0
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
+# golang.org/x/crypto v0.0.0-20220824171710-5757bc0c5503
 ## explicit; go 1.17
 golang.org/x/crypto/pbkdf2
 # golang.org/x/exp v0.0.0-20220823124025-807a23277127
 ## explicit; go 1.18
 golang.org/x/exp/constraints
-# golang.org/x/net v0.0.0-20220607020251-c690dde0001d
+# golang.org/x/net v0.0.0-20220822230855-b0a4917ee28c
 ## explicit; go 1.17
 golang.org/x/net/html
 golang.org/x/net/html/atom
@@ -158,6 +158,6 @@ google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/structpb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/pluginpb
-# gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+# gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3

@@ -1,6 +1,6 @@
 package v1
 
-// Descriptor is the same for all instances of a Message
+// Descriptor is the same for all instances of a Message.
 type Descriptor interface {
 	TableName() string
 	Fields() []*Column

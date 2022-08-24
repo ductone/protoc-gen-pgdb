@@ -18,7 +18,7 @@ type messageTemplateContext struct {
 }
 
 func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
-	ix.PGDB_v1 = true
+	ix.PGDBV1 = true
 	ix.GoquExp = true
 	ix.ProtobufProto = true
 	ix.Strings = true

@@ -21,8 +21,7 @@ func TestPostgreSQL(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE TABLE test (val text)")
 	assert.NoError(err)
 
-	err = pg.Stop()
-	assert.NoError(err)
+	pg.Stop()
 }
 
 func TestPostgreSQLWithConfig(t *testing.T) {
@@ -37,8 +36,7 @@ func TestPostgreSQLWithConfig(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE TABLE test (val text)")
 	assert.NoError(err)
 
-	err = pg.Stop()
-	assert.NoError(err)
+	pg.Stop()
 }
 
 func TestPersistent(t *testing.T) {
@@ -61,8 +59,7 @@ func TestPersistent(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "INSERT INTO test VALUES ('foo')")
 	assert.NoError(err)
 
-	err = pg.Stop()
-	assert.NoError(err)
+	pg.Stop()
 
 	// Open it again
 	pg, err = StartPersistent(dir)
@@ -74,6 +71,5 @@ func TestPersistent(t *testing.T) {
 	assert.NoError(err)
 	assert.Equal(val, "foo")
 
-	err = pg.Stop()
-	assert.NoError(err)
+	pg.Stop()
 }
