@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package models.animals.v1;
 
-import "dynamo/dynamo.proto";
+import "dynamo/v1/dynamo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
@@ -17,7 +17,7 @@ enum FurType {
 }
 
 message Pet {
-  option (dynamo.msg).key = {
+  option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id",
       "id"
@@ -49,7 +49,7 @@ message Pet {
 }
 
 message ScalarValue {
-  option (dynamo.msg).key = {
+  option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id"
     ],
