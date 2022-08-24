@@ -51,7 +51,7 @@ func TestSearchBigQueryDoc(t *testing.T) {
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
 	qb := goqu.Dialect("postgres")
 	ctx := context.Background()
-	q := FullTextSerachQuery(input)
+	q := FullTextSearchQuery(input)
 	query, args, err := qb.Select(
 		goqu.L("? @@ ?", vectors, q),
 	).ToSQL()
@@ -71,13 +71,13 @@ func requireQueryFalse(t *testing.T, pg *pgtest.PG, vectors exp.Expression, quer
 	requireQueryIs(t, pg, vectors, query, false)
 }
 
-func FuzzFullTextSerachQuery(f *testing.F) {
+func FuzzFullTextSearchQuery(f *testing.F) {
 	testcases := []string{"Hello, world", " ", "!12345", "☃️ snowman!"}
 	for _, tc := range testcases {
 		f.Add(tc) // Use f.Add to provide a seed corpus
 	}
 	f.Fuzz(func(t *testing.T, orig string) {
-		_ = FullTextSerachQuery(orig)
+		_ = FullTextSearchQuery(orig)
 	})
 }
 
