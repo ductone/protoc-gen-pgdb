@@ -43,6 +43,9 @@ func TestSearchBigQueryDoc(t *testing.T) {
 
 	// make sure basic query works!
 	requireQueryTrue(t, pg, vector, "biquery")
+
+	// make sure basic query also misses
+	requireQueryFalse(t, pg, vector, "github")
 }
 
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
