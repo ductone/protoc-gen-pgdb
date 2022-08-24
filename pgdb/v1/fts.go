@@ -69,7 +69,7 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 	return exp.NewLiteralExpression("?::tsvector", strings.Join(rv, " "))
 }
 
-func FullTextSerachQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
+func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
 
