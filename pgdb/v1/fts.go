@@ -20,7 +20,7 @@ type SearchContent struct {
 // FullTextSearchVectors converts a set of input documents
 // into a ::tsvector. Note: this function may generally ignore errors in input text, to be robust to
 // untrusted inputs, and will do its "best", for some value of "best"
-func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Filter) (exp.Expression, error) {
+func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Filter) exp.Expression {
 	edgeGramFilter := edgegramStream(3)
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
@@ -62,30 +62,11 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 			}
 		}
 		if err := ts.Err(); err != nil {
-			return nil, err
+			// we eat the error on purpose
+			_ = err
 		}
 	}
-	//
-	// TODO: add a "transcode" version for FTS data field
-	// __transcode_version:1
-	//
-	// https://github.com/clipperhouse/jargon
-	// desc := msg.DBReflect().Descriptor()
-	// option 1:
-	// do ngrams
-	// do split
-	// do stemming AND non-stemmed
-	// "aaa:3 abb:3 "::tsvector
-	// + READ side needs function
-	//    websearch_to_tsquery
-	//
-	// option 2:
-	//   ... do ngrams?
-	//  use webserach()
-	// to_tsvector?
-	// (more or less what we do today)
-
-	return exp.NewLiteralExpression("?::tsvector", strings.Join(rv, " ")), nil
+	return exp.NewLiteralExpression("?::tsvector", strings.Join(rv, " "))
 }
 
 func FullTextSerachQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
