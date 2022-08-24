@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package pgdb.example.models.animals.v1;
+package models.animals.v1;
 
 import "dynamo/dynamo.proto";
 import "google/protobuf/duration.proto";
