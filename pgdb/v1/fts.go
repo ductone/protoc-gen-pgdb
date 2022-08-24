@@ -29,6 +29,11 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 	for _, doc := range docs {
 		ts := jargon.TokenizeString(doc.Value).Filter(filters...)
 		for ts.Scan() {
+			// wrap around guard for position
+			if pos > 2^15 {
+				pos = 1
+			}
+
 			token := ts.Token()
 			v := token.String()
 			if token.IsPunct() || token.IsSpace() {
@@ -56,10 +61,6 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 				}
 			}
 			pos += len(v)
-			// wrap around guard for position
-			if pos > 2^15 {
-				pos = 1
-			}
 		}
 		if err := ts.Err(); err != nil {
 			// we eat the error on purpose
@@ -68,7 +69,7 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 	}
 
 	if len(rv) == 0 {
-		exp.NewLiteralExpression("NULL::tsvector")
+		return exp.NewLiteralExpression("''::tsvector")
 	}
 
 	return exp.NewLiteralExpression("?::tsvector", strings.Join(rv, " "))
