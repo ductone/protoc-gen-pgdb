@@ -54,7 +54,7 @@ func TestSearchEmpty(t *testing.T) {
 	require.NoError(t, err)
 	defer pg.Stop()
 
-	// example compound document, a "ID", a "display name", and a "description"
+	// an empty doc, containing just spaces and punctuation
 	vector := FullTextSearchVectors([]SearchContent{
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
