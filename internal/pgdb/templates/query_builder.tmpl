@@ -57,6 +57,6 @@ func (x *{{ $ColumnType }}) WithTable(t string) *{{- $ColumnType }} {
 
 {{ range .ColumnFields }}
 func (x *{{ $ColumnType }}) {{ .GoName -}}() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "{{ .PgName }}")
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .DB.Name -}}")
 }
 {{ end }}

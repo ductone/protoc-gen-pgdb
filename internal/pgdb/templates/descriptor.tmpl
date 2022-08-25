@@ -5,11 +5,11 @@ var (
     instance{{.Type}} pgdb_v1.Descriptor = &{{.Type}}{}
 )
 
-func (d {{.ReceiverType}}) TableName() string {
+func (d *{{.ReceiverType}}) TableName() string {
     return "{{.TableName}}"
 }
 
-func (d {{.ReceiverType}}) Fields() []*pgdb_v1.Column {
+func (d *{{.ReceiverType}}) Fields() []*pgdb_v1.Column {
   return []*pgdb_v1.Column{
   {{ range .Fields }}
     {
@@ -20,15 +20,15 @@ func (d {{.ReceiverType}}) Fields() []*pgdb_v1.Column {
   }
 }
 
-func (d {{.ReceiverType}}) DataField() *pgdb_v1.Column {
+func (d *{{.ReceiverType}}) DataField() *pgdb_v1.Column {
   return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
 }
 
-func (d {{.ReceiverType}}) SearchField() *pgdb_v1.Column {
+func (d *{{.ReceiverType}}) SearchField() *pgdb_v1.Column {
   return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
-func (d {{.ReceiverType}}) Indexes() []*pgdb_v1.Index {
+func (d *{{.ReceiverType}}) Indexes() []*pgdb_v1.Index {
   return []*pgdb_v1.Index{
   {{ range .Indexes }}
     {

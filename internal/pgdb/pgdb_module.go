@@ -90,6 +90,11 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 		if err != nil {
 			return err
 		}
+
+		err = module.renderQueryBuilder(ctx, buf, in, m, ix)
+		if err != nil {
+			return err
+		}
 	}
 
 	err := module.renderHeader(ctx, outputBuffer, in, ix)

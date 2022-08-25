@@ -23,9 +23,9 @@ func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File,
 	ix.ProtobufProto = true
 	ix.Strings = true
 	c := &messageTemplateContext{
-		ReceiverType:            "*" + m.Name().UpperCamelCase().String(),
-		MessageType:             getMessageType(m),
-		DescriptorType:          getDescriptorType(m),
+		ReceiverType:            ctx.Name(m).String(),
+		MessageType:             getMessageType(ctx, m),
+		DescriptorType:          getDescriptorType(ctx, m),
 		Fields:                  module.getMessageFields(ctx, m, ix, "m.self"),
 		Indexes:                 module.getMessageIndexes(ctx, m, ix),
 		WantRecordStringBuilder: true, // unconditionally used by pk/sk builder
@@ -33,8 +33,8 @@ func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File,
 	return templates["message.tmpl"].Execute(w, c)
 }
 
-func getMessageType(m pgs.Message) string {
-	return "pgdbMessage" + m.Name().UpperCamelCase().String()
+func getMessageType(ctx pgsgo.Context, m pgs.Message) string {
+	return "pgdbMessage" + ctx.Name(m).String()
 }
 
 type varNamer struct {

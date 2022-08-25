@@ -16,6 +16,7 @@ const (
 type fieldContext struct {
 	// denotes a realized/virtual field that comes from multiple fields. in this case, F is nil.
 	IsVirtual bool
+	GoName    string
 	Field     pgs.Field
 	DB        pgdb_v1.Column
 	DataType  *pgtype.DataType
@@ -152,6 +153,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 
 	rv := &fieldContext{
 		IsVirtual: false,
+		GoName:    ctx.Name(f).String(),
 		Field:     f,
 		DB: pgdb_v1.Column{
 			Name: pgColName,
@@ -180,6 +182,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			Name: "tenant_id",
 			Type: vcDataType.Name,
 		},
+		GoName:   "TenantID",
 		DataType: vcDataType,
 		Convert: &tenantIdDataConvert{
 			ctx:     ctx,
@@ -195,6 +198,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			Name: "pk",
 			Type: vcDataType.Name,
 		},
+		GoName:   "PK",
 		DataType: vcDataType,
 		Convert: &dynamoKeyDataConvert{
 			ctx:     ctx,
@@ -211,6 +215,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			Name: "sk",
 			Type: vcDataType.Name,
 		},
+		GoName:   "SK",
 		DataType: vcDataType,
 		Convert: &dynamoKeyDataConvert{
 			ctx:     ctx,
@@ -230,6 +235,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			Name: "fts_data",
 			Type: "tsvector",
 		},
+		GoName:   "FTSData",
 		DataType: nil,
 		Convert: &ftsDataConvert{
 			ctx:     ctx,
@@ -244,6 +250,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			Name: "pb_data",
 			Type: byteaDataType.Name,
 		},
+		GoName:   "PBData",
 		DataType: byteaDataType,
 		Convert: &pbDataConvert{
 			VarName: vn.String(),
