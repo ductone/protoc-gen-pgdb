@@ -40,7 +40,10 @@ message FieldOptions {
   enum FullTextType {
     FULL_TEXT_TYPE_UNSPECIFIED = 0;
     FULL_TEXT_TYPE_EXACT = 1;
+    // Best used for short display names
     FULL_TEXT_TYPE_ENGLISH = 2;
+    // Removes short-tokens (<3 chars), useful for descirptions
+    FULL_TEXT_TYPE_ENGLISH_LONG = 3;
   }
   enum FullTextWeight {
     FULL_TEXT_WEIGHT_UNSPECIFIED = 0;

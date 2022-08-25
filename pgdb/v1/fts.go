@@ -30,7 +30,7 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 		ts := jargon.TokenizeString(doc.Value).Filter(filters...)
 		for ts.Scan() {
 			// wrap around guard for position
-			if pos > 2^15 {
+			if pos > 32767 {
 				pos = 1
 			}
 
@@ -46,18 +46,20 @@ func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Fil
 			switch doc.Type {
 			case FieldOptions_FULL_TEXT_TYPE_EXACT:
 				// no additional indexing for exact
-			case FieldOptions_FULL_TEXT_TYPE_ENGLISH, FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED:
+			case FieldOptions_FULL_TEXT_TYPE_ENGLISH, FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED, FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG:
 				// for english, we also index "edge-grams" to make partial word matching work better.
-				grams, _ := jargon.TokenizeString(v).Filter(edgeGramFilter).Words().ToSlice()
-				gramWeight := lowerWeight(doc.Weight)
-				for _, gram := range grams {
-					rv = append(rv, pgLexeme(gram.String(), pos, gramWeight))
+				if doc.Type != FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG {
+					grams, _ := jargon.TokenizeString(v).Filter(edgeGramFilter).Words().ToSlice()
+					gramWeight := lowerWeight(doc.Weight)
+					for _, gram := range grams {
+						rv = append(rv, pgLexeme(gram.String(), pos, gramWeight))
+					}
 				}
 
 				// we also apply stemming. yay?
 				stemmed, _ := jargon.TokenizeString(v).Filter(stemmer.English).Words().ToSlice()
 				for _, stemmedWord := range stemmed {
-					rv = append(rv, pgLexeme(stemmedWord.String(), pos, gramWeight))
+					rv = append(rv, pgLexeme(stemmedWord.String(), pos, doc.Weight))
 				}
 			}
 			pos += len(v)

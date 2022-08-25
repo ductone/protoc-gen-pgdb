@@ -30,7 +30,8 @@ func TestSearchBigQueryDoc(t *testing.T) {
 			Value:  "role/biquery.user",
 		},
 		{
-			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			// filter all tokens < 3 characters out?
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_MED,
 			Value:  "When applied to a dataset, this role provides the ability to read the dataset's metadata and list tables in the dataset.",
 		},
