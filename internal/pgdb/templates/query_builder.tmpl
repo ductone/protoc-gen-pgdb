@@ -1,0 +1,62 @@
+
+{{ $UnsafeType := .UnsafeType }}
+{{ $ColumnType := .ColumnType }}
+{{ $QueryType := .QueryType }}
+
+type {{ .DbType }} struct {
+}
+
+type {{ .QueryType }} struct {
+	tableName string
+}
+
+type {{ .UnsafeType }} struct {
+	tableName string
+}
+
+type {{ .ColumnType }} struct {
+	tableName string
+}
+
+func (x *{{ .ReceiverType -}}) DB() *{{- .DbType}} {
+	return &{{- .DbType -}}{}
+}
+
+func (x *{{- .DbType -}}) Query() *{{- .QueryType }} {
+	return &{{- .QueryType -}}{}
+}
+
+func (x *{{- .DbType -}}) Columns() *{{- .ColumnType }} {
+	return &{{- .ColumnType -}}{}
+}
+
+func (x *{{ $QueryType }}) WithTable(t string) *{{- $QueryType }} {
+	return &{{- $QueryType -}}{tableName: t}
+}
+
+func (x *{{- .QueryType -}}) Unsafe() *{{- .UnsafeType }} {
+	return &{{ .UnsafeType }}{tableName: x.tableName}
+}
+
+{{ range .QueryFields }}
+// TODO(pquerna): expressing valid types!
+func (x *{{ $QueryType }}) {{ .GoName -}}() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{ .PgName }}")
+}
+{{ end }}
+
+{{ range .UnsafeFields }}
+func (x *{{ $UnsafeType }}) {{ .GoName -}}() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{ .PgName }}")
+}
+{{ end }}
+
+func (x *{{ $ColumnType }}) WithTable(t string) *{{- $ColumnType }} {
+	return &{{- $ColumnType -}}{tableName: t}
+}
+
+{{ range .ColumnFields }}
+func (x *{{ $ColumnType }}) {{ .GoName -}}() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{ .PgName }}")
+}
+{{ end }}
