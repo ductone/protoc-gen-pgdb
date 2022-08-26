@@ -24,7 +24,7 @@ type dynamoKeyDataConvert struct {
 }
 
 func (tidc *dynamoKeyDataConvert) GoType() (string, error) {
-	return "string", nil
+	return fieldConvertString, nil
 }
 
 func (dkdc *dynamoKeyDataConvert) CodeForValue() (string, error) {

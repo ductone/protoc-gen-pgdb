@@ -53,6 +53,8 @@ type formatContext struct {
 	IsArray   bool
 }
 
+const fieldConvertString = "string"
+
 func (fc *fieldConvert) GoType() (string, error) {
 	switch fc.TypeConversion {
 	case gtFloat32:
@@ -70,7 +72,7 @@ func (fc *fieldConvert) GoType() (string, error) {
 	case gtBool:
 		return "bool", nil
 	case gtString:
-		return "string", nil
+		return fieldConvertString, nil
 	case gtBytes:
 		return "[]byte", nil
 	case gtEnum:
@@ -143,7 +145,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
-			CastType:  "string",
+			CastType:  fieldConvertString,
 			IsArray:   fc.IsArray,
 		})
 	case gtBytes:

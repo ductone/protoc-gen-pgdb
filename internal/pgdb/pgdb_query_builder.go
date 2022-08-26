@@ -178,11 +178,11 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod) *saf
 		indexMethods[m] = true
 	}
 	btree := pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE
-	btree_gin := pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN
+	btreeGin := pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN
 	gin := pgdb_v1.MessageOptions_Index_INDEX_METHOD_GIN
 
 	rv := &safeOps{
-		Eq:  safeOpCheck(indexMethods, btree, btree_gin, gin),
+		Eq:  safeOpCheck(indexMethods, btree, btreeGin, gin),
 		Neq: safeOpCheck(indexMethods, btree),
 		Gt:  safeOpCheck(indexMethods, btree),
 		Gte: safeOpCheck(indexMethods, btree),
@@ -198,12 +198,12 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod) *saf
 		Between:    safeOpCheck(indexMethods, btree),
 		NotBetween: safeOpCheck(indexMethods, btree),
 
-		ObjectContains:     safeOpCheck(indexMethods, btree_gin, gin),
-		ObjectPathExists:   safeOpCheck(indexMethods, btree_gin, gin),
-		ObjectPath:         safeOpCheck(indexMethods, btree_gin, gin),
-		ObjectKeyExists:    safeOpCheck(indexMethods, btree_gin, gin),
-		ObjectAnyKeyExists: safeOpCheck(indexMethods, btree_gin, gin),
-		ObjectAllKeyExists: safeOpCheck(indexMethods, btree_gin, gin),
+		ObjectContains:     safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectPathExists:   safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectPath:         safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectKeyExists:    safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectAnyKeyExists: safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectAllKeyExists: safeOpCheck(indexMethods, btreeGin, gin),
 	}
 	return rv
 }
