@@ -39,15 +39,56 @@ func (x *{{- .QueryType -}}) Unsafe() *{{- .UnsafeType }} {
 }
 
 {{ range .QueryFields }}
-// TODO(pquerna): expressing valid types!
-func (x *{{ $QueryType }}) {{ .GoName -}}() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "{{ .PgName }}")
+type {{ .OpsTypeName }} struct {
+	tableName string
+}
+
+{{if .Op.Eq }}
+func  (x *{{ .OpsTypeName }}) Eq(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").Eq(v)
+}
+{{end}}
+
+{{if .Op.Neq }}
+func  (x *{{ .OpsTypeName }}) Neq(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").Neq(v)
+}
+{{end}}
+
+
+{{if .Op.Gt }}
+func  (x *{{ .OpsTypeName }}) Gt(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").Gt(v)
+}
+{{end}}
+
+{{if .Op.Gte }}
+func  (x *{{ .OpsTypeName }}) Gte(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").Gte(v)
+}
+{{end}}
+
+{{if .Op.Lt }}
+func  (x *{{ .OpsTypeName }}) Lt(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").Lt(v)
+}
+{{end}}
+
+{{if .Op.Lte }}
+func  (x *{{ .OpsTypeName }}) Lte(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").Lte(v)
+}
+{{end}}
+
+
+func (x *{{ $QueryType }}) {{ .Field.GoName -}}() *{{ .OpsTypeName }} {
+	return &{{- .OpsTypeName -}}{tableName: x.tableName}
 }
 {{ end }}
 
 {{ range .UnsafeFields }}
 func (x *{{ $UnsafeType }}) {{ .GoName -}}() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "{{ .PgName }}")
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .DB.Name -}}")
 }
 {{ end }}
 

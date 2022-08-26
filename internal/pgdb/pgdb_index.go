@@ -9,7 +9,8 @@ import (
 )
 
 type indexContext struct {
-	DB pgdb_v1.Index
+	DB           pgdb_v1.Index
+	SourceFields []string
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -50,6 +51,7 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 	rv.DB.Method = idx.Nethod
 	for _, fieldName := range idx.Columns {
 		f := fieldByName(m, fieldName)
+		rv.SourceFields = append(rv.SourceFields, ctx.Name(f).String())
 		pgColName, err := getColumnName(f, nil)
 		if err != nil {
 			panic(err)
@@ -73,6 +75,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:   []string{"tenant_id", "pk", "sk"},
 		},
+		SourceFields: []string{"TenantId", "PK", "SK"},
 	}
 
 	ftsIndexName, err := getIndexName(m, "fts_data")
@@ -85,6 +88,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			Columns: []string{"tenant_id", "fts_data"},
 		},
+		SourceFields: []string{"FTSData"},
 	}
 
 	return []*indexContext{primaryIndex, ftsIndex}, nil

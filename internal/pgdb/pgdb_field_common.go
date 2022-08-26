@@ -53,6 +53,40 @@ type formatContext struct {
 	IsArray   bool
 }
 
+func (fc *fieldConvert) GoType() (string, error) {
+	switch fc.TypeConversion {
+	case gtFloat32:
+		return "float32", nil
+	case gtFloat64:
+		return "float64", nil
+	case gtInt32:
+		return "int32", nil
+	case gtInt64:
+		return "int64", nil
+	case gtUint32:
+		return "uint32", nil
+	case gtUint64:
+		return "uint64", nil
+	case gtBool:
+		return "bool", nil
+	case gtString:
+		return "string", nil
+	case gtBytes:
+		return "[]byte", nil
+	case gtEnum:
+		return "int32", nil
+	case gtPbWktAny, gtPbWktStruct, gtPbGenericMsg:
+		// objects are stored as JSONB, take input as interface{}, convert to
+		return "any", nil
+	case gtPbWktTimestamp:
+		return "time.Time", nil
+	case gtPbWktDuration:
+		return "time.Duration", nil
+	default:
+		panic(fmt.Errorf("pgdb: Implement fieldConvert.GoType for %v", fc.TypeConversion))
+	}
+}
+
 func (fc *fieldConvert) CodeForValue() (string, error) {
 	selfName := fc.goPrefix + "." + fc.ctx.Name(fc.F).String()
 	switch fc.TypeConversion {

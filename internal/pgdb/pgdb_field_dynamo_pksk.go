@@ -23,6 +23,10 @@ type dynamoKeyDataConvert struct {
 	Parts   []string
 }
 
+func (tidc *dynamoKeyDataConvert) GoType() (string, error) {
+	return "string", nil
+}
+
 func (dkdc *dynamoKeyDataConvert) CodeForValue() (string, error) {
 	dynExt := dynamopb.DynamoMessageOptions{}
 	ok, err := dkdc.Message.Extension(dynamopb.E_Msg, &dynExt)

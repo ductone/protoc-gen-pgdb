@@ -24,6 +24,7 @@ type fieldContext struct {
 }
 
 type FiledConverter interface {
+	GoType() (string, error)
 	CodeForValue() (string, error)
 	VarForValue() (string, error)
 }
@@ -182,7 +183,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			Name: "tenant_id",
 			Type: vcDataType.Name,
 		},
-		GoName:   "TenantID",
+		GoName:   "TenantId",
 		DataType: vcDataType,
 		Convert: &tenantIdDataConvert{
 			ctx:     ctx,

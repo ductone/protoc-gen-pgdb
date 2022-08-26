@@ -14,6 +14,10 @@ type tenantIdDataConvert struct {
 	Message pgs.Message
 }
 
+func (tidc *tenantIdDataConvert) GoType() (string, error) {
+	return "string", nil
+}
+
 func (tidc *tenantIdDataConvert) CodeForValue() (string, error) {
 	fieldName, err := getTenantIDField(tidc.Message)
 	if err != nil {
