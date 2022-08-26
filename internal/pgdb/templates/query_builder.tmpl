@@ -80,6 +80,97 @@ func  (x *{{ .OpsTypeName }}) Lte(v {{.InputType}}) exp.BooleanExpression {
 }
 {{end}}
 
+{{if .Op.In }}
+func  (x *{{ .OpsTypeName }}) In(v []{{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").In(v)
+}
+{{end}}
+
+{{if .Op.NotIn }}
+func  (x *{{ .OpsTypeName }}) NotIn(v []{{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").NotIn(v)
+}
+{{end}}
+
+{{if .Op.IsNull }}
+func  (x *{{ .OpsTypeName }}) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").IsNull()
+}
+{{end}}
+
+{{if .Op.IsNotNull }}
+func  (x *{{ .OpsTypeName }}) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").IsNotNull()
+}
+{{end}}
+
+{{if .Op.Between }}
+func  (x *{{ .OpsTypeName }}) Between(start {{.InputType}}, end {{.InputType}}) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").Between(exp.NewRangeVal(start, end))
+}
+{{end}}
+
+{{if .Op.NotBetween }}
+func  (x *{{ .OpsTypeName }}) NotBetween(start {{.InputType}}, end {{.InputType}}) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}").NotBetween(exp.NewRangeVal(start, end))
+}
+{{end}}
+
+{{if .Op.ObjectContains }}
+func  (x *{{ .OpsTypeName }}) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
+	return exp.NewLiteralExpression("? @> ?::jsonb", idExp, string(data)), nil
+}
+{{end}}
+
+{{if .Op.ObjectPathExists }}
+func  (x *{{ .OpsTypeName }}) ObjectPathExists(path string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
+	return exp.NewLiteralExpression("? @\\? ?", idExp, path)
+}
+{{end}}
+
+{{if .Op.ObjectPath }}
+func  (x *{{ .OpsTypeName }}) ObjectPath(path string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+{{end}}
+
+{{if .Op.ObjectKeyExists }}
+func  (x *{{ .OpsTypeName }}) ObjectKeyExists(key string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+{{end}}
+
+{{if .Op.ObjectAnyKeyExists }}
+func  (x *{{ .OpsTypeName }}) ObjectAnyKeyExists(keys ...string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
+	return exp.NewLiteralExpression("? \\?| ?", idExp, keys)
+}
+{{end}}
+
+{{if .Op.ObjectAllKeyExists }}
+func  (x *{{ .OpsTypeName }}) ObjectAllKeyExists(keys ...string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
+	return exp.NewLiteralExpression("? \\?& ?", idExp, keys)
+}
+{{end}}
+
 
 func (x *{{ $QueryType }}) {{ .Field.GoName -}}() *{{ .OpsTypeName }} {
 	return &{{- .OpsTypeName -}}{tableName: x.tableName}

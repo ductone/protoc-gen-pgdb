@@ -13,6 +13,7 @@ type importTracker struct {
 	Bytes                bool
 	Fmt                  bool
 	GoquExp              bool
+	JSON                 bool
 	ProtobufEncodingJSON bool
 	ProtobufProto        bool
 	Strings              bool

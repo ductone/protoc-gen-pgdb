@@ -95,7 +95,7 @@ func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *impo
 		ReceiverType: ctx.Name(m).String(),
 		DbType:       getDbType(ctx, m),
 		QueryType:    getQueryType(ctx, m),
-		QueryFields:  module.getSafeFields(ctx, m, nsgFields),
+		QueryFields:  module.getSafeFields(ctx, m, nsgFields, ix),
 		UnsafeType:   getUnsafeType(ctx, m),
 		UnsafeFields: nsgFields,
 		ColumnType:   getColumnType(ctx, m),
@@ -128,7 +128,7 @@ func safeOpCheck(indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool,
 	return false
 }
 
-func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*fieldContext) []*safeFieldContext {
+func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*fieldContext, ix *importTracker) []*safeFieldContext {
 	rv := make([]*safeFieldContext, 0, len(fields))
 	// todo(pquerna): not ideal, little weird way to do this.
 	allIndexes := module.getMessageIndexes(ctx, m, &importTracker{})
@@ -154,12 +154,16 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 			fieldName = ctx.Name(f.Field).String()
 		}
 
+		ops := safeOpsForIndexTypes(indexTypes)
+		if ops.ObjectContains {
+			ix.JSON = true
+		}
 		rv = append(rv, &safeFieldContext{
 			InputType:   inputType,
 			OpsTypeName: ctx.Name(m).String() + fieldName + "SafeOperators",
 			Field:       f,
 			ColName:     f.DB.Name,
-			Op:          safeOpsForIndexTypes(indexTypes),
+			Op:          ops,
 		})
 	}
 	return rv

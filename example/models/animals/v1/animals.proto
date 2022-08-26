@@ -25,6 +25,11 @@ message Pet {
     sk_const: "example"
   };
   option (pgdb.v1.msg).enabled = true;
+  option (pgdb.v1.msg).indexes = {
+    name: "profile"
+    nethod: INDEX_METHOD_BTREE_GIN,
+    columns: ["tenant_id", "profile"]
+  };
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {
     full_text_type: FULL_TEXT_TYPE_EXACT
