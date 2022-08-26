@@ -4,6 +4,7 @@
 {{ $QueryType := .QueryType }}
 
 type {{ .DbType }} struct {
+	tableName string
 }
 
 type {{ .QueryType }} struct {
@@ -19,15 +20,23 @@ type {{ .ColumnType }} struct {
 }
 
 func (x *{{ .ReceiverType -}}) DB() *{{- .DbType}} {
-	return &{{- .DbType -}}{}
+	return &{{- .DbType -}}{tableName: x.DBReflect().Descriptor().TableName()}
+}
+
+func (x *{{- .DbType -}}) TableName() string {
+	return x.tableName
 }
 
 func (x *{{- .DbType -}}) Query() *{{- .QueryType }} {
-	return &{{- .QueryType -}}{}
+	return &{{- .QueryType -}}{tableName: x.tableName}
 }
 
 func (x *{{- .DbType -}}) Columns() *{{- .ColumnType }} {
-	return &{{- .ColumnType -}}{}
+	return &{{- .ColumnType -}}{tableName: x.tableName}
+}
+
+func (x *{{ .DbType }}) WithTable(t string) *{{- .DbType }} {
+	return &{{- .DbType -}}{tableName: t}
 }
 
 func (x *{{ $QueryType }}) WithTable(t string) *{{- $QueryType }} {
