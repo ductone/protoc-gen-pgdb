@@ -132,14 +132,14 @@ func  (x *{{ .OpsTypeName }}) ObjectContains(obj interface{}) (exp.Expression, e
 	}
 
 	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
-	return exp.NewLiteralExpression("? @> ?::jsonb", idExp, string(data)), nil
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 {{end}}
 
 {{if .Op.ObjectPathExists }}
 func  (x *{{ .OpsTypeName }}) ObjectPathExists(path string) (exp.Expression) {
 	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
-	return exp.NewLiteralExpression("? @\\? ?", idExp, path)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 {{end}}
 
@@ -160,14 +160,14 @@ func  (x *{{ .OpsTypeName }}) ObjectKeyExists(key string) (exp.Expression) {
 {{if .Op.ObjectAnyKeyExists }}
 func  (x *{{ .OpsTypeName }}) ObjectAnyKeyExists(keys ...string) (exp.Expression) {
 	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
-	return exp.NewLiteralExpression("? \\?| ?", idExp, keys)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 {{end}}
 
 {{if .Op.ObjectAllKeyExists }}
 func  (x *{{ .OpsTypeName }}) ObjectAllKeyExists(keys ...string) (exp.Expression) {
 	idExp := exp.NewIdentifierExpression("", x.tableName, "{{- .ColName -}}")
-	return exp.NewLiteralExpression("? \\?& ?", idExp, keys)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 {{end}}
 

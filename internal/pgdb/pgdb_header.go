@@ -9,6 +9,7 @@ import (
 
 type importTracker struct {
 	PGDBV1 bool
+	XPQ    bool
 
 	Bytes                bool
 	Fmt                  bool

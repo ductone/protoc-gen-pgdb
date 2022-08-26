@@ -158,6 +158,9 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		if ops.ObjectContains {
 			ix.JSON = true
 		}
+		if ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists {
+			ix.XPQ = true
+		}
 		rv = append(rv, &safeFieldContext{
 			InputType:   inputType,
 			OpsTypeName: ctx.Name(m).String() + fieldName + "SafeOperators",
