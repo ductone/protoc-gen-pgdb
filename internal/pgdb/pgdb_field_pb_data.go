@@ -11,3 +11,7 @@ func (pbdc *pbDataConvert) CodeForValue() (string, error) {
 func (pbdc *pbDataConvert) VarForValue() (string, error) {
 	return pbdc.VarName, nil
 }
+
+func (pbdc *pbDataConvert) GoType() (string, error) {
+	return "[]byte", nil
+}

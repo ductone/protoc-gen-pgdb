@@ -1,9 +1,9 @@
 
 type {{.MessageType}} struct {
-    self {{.ReceiverType}}
+    self *{{.ReceiverType}}
 }
 
-func (dbr {{.ReceiverType}}) DBReflect() pgdb_v1.Message {
+func (dbr *{{.ReceiverType}}) DBReflect() pgdb_v1.Message {
     return &{{.MessageType}}{
         self: dbr,
     }

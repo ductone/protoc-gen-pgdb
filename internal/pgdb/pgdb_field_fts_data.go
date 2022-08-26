@@ -21,6 +21,10 @@ type searchFieldContext struct {
 	Ext     *pgdb_v1.FieldOptions
 }
 
+func (tidc *ftsDataConvert) GoType() (string, error) {
+	return "string", nil
+}
+
 func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 	fdc.SearchFields = []*searchFieldContext{}
 	for _, field := range fdc.m.Fields() {

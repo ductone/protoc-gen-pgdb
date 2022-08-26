@@ -110,6 +110,12 @@ issues:
       linters:
         - revive
 
+    - path: "pgdb/v1/xpq/string_array.go"
+      linters:
+        - nonamedreturns
+        - nakedret
+        - gocritic
+
     - path: "_test\\.go"
       linters:
         - goconst
