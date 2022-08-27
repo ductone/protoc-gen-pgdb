@@ -53,6 +53,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		F:        f,
 		varName:  vn.String(),
 	}
+	nullable := false
 	// https://developers.google.com/protocol-buffers/docs/proto3#scalar
 	switch pt {
 	case pgs.DoubleT:
@@ -94,6 +95,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		convertDef.FullTextType = ext.FullTextType
 		convertDef.FullTextWeight = ext.FullTextWeight
 	case pgs.MessageT:
+		nullable = true
 		// TODO(pquerna): handle nested messages defined locally and in other modules
 		switch f.Descriptor().GetTypeName() {
 		case ".google.protobuf.Any":
@@ -132,6 +134,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		}
 
 	case pgs.BytesT:
+		nullable = true
 		// single bytes and repeated bytes we store the same way
 		convertDef.PostgresTypeName = "bytea"
 		convertDef.TypeConversion = gtBytes
@@ -157,8 +160,9 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		GoName:    ctx.Name(f).String(),
 		Field:     f,
 		DB: pgdb_v1.Column{
-			Name: pgColName,
-			Type: dbTypeRef.Name,
+			Name:     pgColName,
+			Type:     dbTypeRef.Name,
+			Nullable: nullable,
 		},
 		DataType: dbTypeRef,
 		Convert:  convertDef,
@@ -180,8 +184,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	tenantIdField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Column{
-			Name: "tenant_id",
-			Type: vcDataType.Name,
+			Name:     "tenant_id",
+			Type:     vcDataType.Name,
+			Nullable: false,
 		},
 		GoName:   "TenantId",
 		DataType: vcDataType,
@@ -196,8 +201,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	pkField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Column{
-			Name: "pk",
-			Type: vcDataType.Name,
+			Name:     "pk",
+			Type:     vcDataType.Name,
+			Nullable: false,
 		},
 		GoName:   "PK",
 		DataType: vcDataType,
@@ -213,8 +219,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	skField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Column{
-			Name: "sk",
-			Type: vcDataType.Name,
+			Name:     "sk",
+			Type:     vcDataType.Name,
+			Nullable: false,
 		},
 		GoName:   "SK",
 		DataType: vcDataType,
@@ -233,8 +240,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	ftsDataField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Column{
-			Name: "fts_data",
-			Type: "tsvector",
+			Name:     "fts_data",
+			Type:     "tsvector",
+			Nullable: true,
 		},
 		GoName:   "FTSData",
 		DataType: nil,
@@ -248,8 +256,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	pbDataField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Column{
-			Name: "pb_data",
-			Type: byteaDataType.Name,
+			Name:     "pb_data",
+			Type:     byteaDataType.Name,
+			Nullable: false,
 		},
 		GoName:   "PBData",
 		DataType: byteaDataType,

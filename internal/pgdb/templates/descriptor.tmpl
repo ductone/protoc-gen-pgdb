@@ -15,6 +15,7 @@ func (d *{{.ReceiverType}}) Fields() []*pgdb_v1.Column {
     {
       Name: "{{ .DB.Name }}",
       Type: "{{ .DB.Type }}",
+      Nullable: {{ .DB.Nullable }},
     },
   {{ end }}
   }
