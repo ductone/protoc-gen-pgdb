@@ -198,6 +198,22 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	}
 
 	vn = vn.Next()
+	pkskField := &fieldContext{
+		IsVirtual: true,
+		DB: pgdb_v1.Column{
+			Name:               "pksk",
+			Type:               vcDataType.Name,
+			Nullable:           false,
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pk || '|' || sk) STORED",
+		},
+		GoName:   "PKSK",
+		DataType: vcDataType,
+		Convert: &pkskDataConvert{
+			ctx: ctx,
+		},
+	}
+
+	vn = vn.Next()
 	pkField := &fieldContext{
 		IsVirtual: true,
 		DB: pgdb_v1.Column{
@@ -266,5 +282,5 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			VarName: vn.String(),
 		},
 	}
-	return []*fieldContext{tenantIdField, pkField, skField, ftsDataField, pbDataField}, nil
+	return []*fieldContext{tenantIdField, pkskField, pkField, skField, ftsDataField, pbDataField}, nil
 }

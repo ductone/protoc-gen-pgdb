@@ -24,7 +24,10 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.QueryOptions) (exp.Record, err
 
     rv := exp.Record{
         {{- range .Fields }}
-        "{{.DB.Name}}": {{.Convert.VarForValue}},
+        {{- $VarForValue := .Convert.VarForValue -}}
+            {{- if $VarForValue -}}
+                "{{.DB.Name}}": {{ $VarForValue }},
+            {{- end -}}
         {{ end -}}
    }
    return rv, nil

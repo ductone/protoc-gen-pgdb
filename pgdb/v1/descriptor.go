@@ -10,9 +10,10 @@ type Descriptor interface {
 }
 
 type Column struct {
-	Name     string
-	Type     string
-	Nullable bool
+	Name               string
+	Type               string
+	Nullable           bool
+	OverrideExpression string
 }
 
 type Index struct {
@@ -24,5 +25,7 @@ type Index struct {
 	IsDropped bool
 	Method    MessageOptions_Index_IndexMethod
 	Columns   []string
-	Where     string
+	// OverrideExpression if set, this string is used to render indexes contents, instead of the Columns list.
+	OverrideExpression string
+	WherePredicate     string
 }

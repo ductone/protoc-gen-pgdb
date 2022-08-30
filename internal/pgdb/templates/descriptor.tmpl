@@ -16,6 +16,7 @@ func (d *{{.ReceiverType}}) Fields() []*pgdb_v1.Column {
       Name: "{{ .DB.Name }}",
       Type: "{{ .DB.Type }}",
       Nullable: {{ .DB.Nullable }},
+      OverrideExpression: "{{ .DB.OverrideExpression }}",
     },
   {{ end }}
   }
@@ -39,7 +40,7 @@ func (d *{{.ReceiverType}}) Indexes() []*pgdb_v1.Index {
       IsUnique: {{ .DB.IsUnique }},
       IsDropped: {{ .DB.IsDropped }},
       Columns: []string{ {{- range .DB.Columns -}} "{{- . -}}", {{- end -}} },
-      Where: "{{ .DB.Where }}",
+      OverrideExpression: "{{ .DB.OverrideExpression }}",
     },
   {{ end }}
   }
