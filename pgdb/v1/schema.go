@@ -18,15 +18,15 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 
 	_, _ = buf.WriteString(strings.Join(slice.Convert(desc.Fields(), func(field *Column) string {
 		sbuf := &bytes.Buffer{}
-		sbuf.WriteString("  ")
+		_, _ = sbuf.WriteString("  ")
 		pgWriteString(sbuf, field.Name)
-		sbuf.WriteString(" ")
+		_, _ = sbuf.WriteString(" ")
 		if field.OverrideExpression != "" {
-			sbuf.WriteString(field.OverrideExpression)
+			_, _ = sbuf.WriteString(field.OverrideExpression)
 		} else {
-			sbuf.WriteString(field.Type)
+			_, _ = sbuf.WriteString(field.Type)
 			if !field.Nullable {
-				sbuf.WriteString(" NOT NULL")
+				_, _ = sbuf.WriteString(" NOT NULL")
 			}
 		}
 		return sbuf.String()
