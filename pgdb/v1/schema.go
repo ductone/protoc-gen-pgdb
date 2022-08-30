@@ -87,6 +87,8 @@ func IndexSchema(msg DBReflectMessage) ([]string, error) {
 		pgWriteString(buf, desc.TableName())
 		_, _ = buf.WriteString("\nUSING\n  ")
 		switch idx.Method {
+		case MessageOptions_Index_INDEX_METHOD_UNSPECIFIED:
+			panic("MessageOptions_Index_INDEX_METHOD_UNSPECIFIED found on " + idx.Name)
 		case MessageOptions_Index_INDEX_METHOD_BTREE:
 			_, _ = buf.WriteString("BTREE")
 		case MessageOptions_Index_INDEX_METHOD_GIN:
