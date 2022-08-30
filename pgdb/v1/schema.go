@@ -12,34 +12,30 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	dbr := msg.DBReflect()
 	desc := dbr.Descriptor()
 	buf := &bytes.Buffer{}
-	_, _ = buf.WriteString("CREATE TABLE ")
+	_, _ = buf.WriteString("CREATE TABLE\n  ")
 	pgWriteString(buf, desc.TableName())
-	_, _ = buf.WriteString(" (\n")
-	first := true
-	for _, field := range desc.Fields() {
-		if first {
-			first = false
-		} else {
-			buf.WriteString(",\n")
-		}
-		pgWriteString(buf, field.Name)
-		buf.WriteString(" ")
+	_, _ = buf.WriteString("\n(\n")
+
+	_, _ = buf.WriteString(strings.Join(slice.Convert(desc.Fields(), func(field *Column) string {
+		sbuf := &bytes.Buffer{}
+		sbuf.WriteString("  ")
+		pgWriteString(sbuf, field.Name)
+		sbuf.WriteString(" ")
 		if field.OverrideExpression != "" {
-			buf.WriteString(field.OverrideExpression)
+			sbuf.WriteString(field.OverrideExpression)
 		} else {
-			buf.WriteString(field.Type)
+			sbuf.WriteString(field.Type)
 			if !field.Nullable {
-				buf.WriteString(" NOT NULL")
+				sbuf.WriteString(" NOT NULL")
 			}
 		}
-	}
-	buf.WriteString("\n")
+		return sbuf.String()
+	}), ",\n"))
 	for _, idx := range desc.Indexes() {
 		if !idx.IsPrimary {
 			continue
 		}
-		buf.WriteString(",\n")
-
+		buf.WriteString(",\n  ")
 		buf.WriteString("PRIMARY KEY (")
 		buf.WriteString(strings.Join(slice.Convert(idx.Columns, func(in string) string {
 			return `"` + in + `"`
