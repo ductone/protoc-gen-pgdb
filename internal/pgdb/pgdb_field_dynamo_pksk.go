@@ -82,3 +82,19 @@ func (dkdc *dynamoKeyDataConvert) CodeForValue() (string, error) {
 func (dkdc *dynamoKeyDataConvert) VarForValue() (string, error) {
 	return dkdc.VarName, nil
 }
+
+type pkskDataConvert struct {
+	ctx pgsgo.Context
+}
+
+func (psdc *pkskDataConvert) GoType() (string, error) {
+	return fieldConvertString, nil
+}
+
+func (psdc *pkskDataConvert) CodeForValue() (string, error) {
+	return "", nil
+}
+
+func (psdc *pkskDataConvert) VarForValue() (string, error) {
+	return "", nil
+}

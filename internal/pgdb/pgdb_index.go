@@ -49,14 +49,23 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 	}
 
 	rv.DB.Method = idx.Nethod
+	tenantIdField, err := getTenantIDField(m)
+	if err != nil {
+		panic(err)
+	}
 	for _, fieldName := range idx.Columns {
 		f := fieldByName(m, fieldName)
 		rv.SourceFields = append(rv.SourceFields, ctx.Name(f).String())
-		pgColName, err := getColumnName(f, nil)
-		if err != nil {
-			panic(err)
+
+		if fieldName == tenantIdField {
+			rv.DB.Columns = append(rv.DB.Columns, "tenant_id")
+		} else {
+			pgColName, err := getColumnName(f, nil)
+			if err != nil {
+				panic(err)
+			}
+			rv.DB.Columns = append(rv.DB.Columns, pgColName)
 		}
-		rv.DB.Columns = append(rv.DB.Columns, pgColName)
 	}
 	return rv
 }
@@ -73,7 +82,17 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			IsPrimary: true,
 			IsUnique:  true,
 			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
-			Columns:   []string{"tenant_id", "pk", "sk"},
+			Columns:   []string{"tenant_id", "pksk"},
+		},
+		SourceFields: []string{"TenantId", "PKSK"},
+	}
+
+	pkskIndex := &indexContext{
+		DB: pgdb_v1.Index{
+			Name:     primaryIndexName,
+			IsUnique: true,
+			Method:   pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:  []string{"tenant_id", "pk", "sk"},
 		},
 		SourceFields: []string{"TenantId", "PK", "SK"},
 	}
@@ -91,5 +110,5 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		SourceFields: []string{"FTSData"},
 	}
 
-	return []*indexContext{primaryIndex, ftsIndex}, nil
+	return []*indexContext{primaryIndex, pkskIndex, ftsIndex}, nil
 }
