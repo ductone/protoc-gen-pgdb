@@ -52,3 +52,7 @@ func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 func (fdc *ftsDataConvert) VarForValue() (string, error) {
 	return fdc.VarName, nil
 }
+
+func (fdc *ftsDataConvert) VarForAppend() (string, error) {
+	return "", nil
+}

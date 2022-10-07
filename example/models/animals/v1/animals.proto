@@ -28,7 +28,10 @@ message Pet {
   option (pgdb.v1.msg).indexes = {
     name: "profile"
     nethod: INDEX_METHOD_BTREE_GIN,
-    columns: ["tenant_id", "profile"]
+    columns: [
+      "tenant_id",
+      "profile"
+    ]
   };
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {
@@ -97,4 +100,31 @@ message ScalarValue {
   repeated bool repeated_bool = 35;
   repeated string repeated_string = 36;
   repeated bytes repeated_bytes = 37;
+}
+
+message EBook {
+  int64 size = 1;
+}
+
+message PaperBook {
+  int32 pages = 2;
+}
+
+message Book {
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "id"
+    ]
+    sk_const: "example"
+  };
+  option (pgdb.v1.msg).enabled = true;
+  string tenant_id = 1;
+  string id = 2 [(pgdb.v1.options) = {
+    full_text_type: FULL_TEXT_TYPE_EXACT
+  }];
+  oneof medium {
+    PaperBook paper = 3;
+    EBook ebook = 4;
+  }
 }

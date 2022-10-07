@@ -10,16 +10,22 @@ func (d *{{.ReceiverType}}) TableName() string {
 }
 
 func (d *{{.ReceiverType}}) Fields() []*pgdb_v1.Column {
-  return []*pgdb_v1.Column{
+  rv := []*pgdb_v1.Column{
   {{ range .Fields }}
-    {
-      Name: "{{ .DB.Name }}",
-      Type: "{{ .DB.Type }}",
-      Nullable: {{ .DB.Nullable }},
-      OverrideExpression: "{{ .DB.OverrideExpression }}",
-    },
+    {{- if .DB -}}
+      {
+        Name: "{{ .DB.Name }}",
+        Type: "{{ .DB.Type }}",
+        Nullable: {{ .DB.Nullable }},
+        OverrideExpression: "{{ .DB.OverrideExpression }}",
+      },
+    {{- end -}}
   {{ end }}
   }
+  {{ range .Fields }}
+
+  {{ end }}
+  return rv
 }
 
 func (d *{{.ReceiverType}}) DataField() *pgdb_v1.Column {

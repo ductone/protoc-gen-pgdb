@@ -79,6 +79,10 @@ func (dkdc *dynamoKeyDataConvert) CodeForValue() (string, error) {
 	return templateExecToString("field_dynamo_pksk.tmpl", dkdc)
 }
 
+func (dkdc *dynamoKeyDataConvert) VarForAppend() (string, error) {
+	return "", nil
+}
+
 func (dkdc *dynamoKeyDataConvert) VarForValue() (string, error) {
 	return dkdc.VarName, nil
 }
@@ -96,5 +100,9 @@ func (psdc *pkskDataConvert) CodeForValue() (string, error) {
 }
 
 func (psdc *pkskDataConvert) VarForValue() (string, error) {
+	return "", nil
+}
+
+func (dkdc *pkskDataConvert) VarForAppend() (string, error) {
 	return "", nil
 }

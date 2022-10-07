@@ -63,6 +63,12 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 	if err != nil {
 		panic(err)
 	}
+	rv = append(rv, module.getMessageFieldsInner(ctx, fields, vn, tenantIdField, ix, goPrefix)...)
+	return rv
+}
+
+func (module *Module) getMessageFieldsInner(ctx pgsgo.Context, fields []pgs.Field, vn *varNamer, tenantIdField string, ix *importTracker, goPrefix string) []*fieldContext {
+	rv := make([]*fieldContext, 0, len(fields))
 	for _, field := range fields {
 		// tenant_id done via common fields
 		if tenantIdField == field.Name().LowerSnakeCase().String() {

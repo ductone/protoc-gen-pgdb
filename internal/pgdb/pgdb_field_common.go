@@ -44,6 +44,7 @@ const (
 	gtPbWktDuration  goTypeConversion = 13
 	gtPbWktStruct    goTypeConversion = 14
 	gtPbGenericMsg   goTypeConversion = 15
+	gtPbNestedMsg    goTypeConversion = 16
 )
 
 type formatContext struct {
@@ -84,6 +85,8 @@ func (fc *fieldConvert) GoType() (string, error) {
 		return "time.Time", nil
 	case gtPbWktDuration:
 		return "time.Duration", nil
+	case gtPbNestedMsg:
+		return string(fc.ctx.Type(fc.F)), nil
 	default:
 		panic(fmt.Errorf("pgdb: Implement fieldConvert.GoType for %v", fc.TypeConversion))
 	}
@@ -172,8 +175,13 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		if fc.IsArray {
 			fc.ix.Bytes = true
 		}
-
 		return templateExecToString("proto_format_jsonb.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			IsArray:   fc.IsArray,
+		})
+	case gtPbNestedMsg:
+		return templateExecToString("proto_format_nested.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 			IsArray:   fc.IsArray,
@@ -184,6 +192,16 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 }
 
 func (fc *fieldConvert) VarForValue() (string, error) {
+	if fc.TypeConversion == gtPbNestedMsg {
+		return "", nil
+	}
+	return fc.varName, nil
+}
+
+func (fc *fieldConvert) VarForAppend() (string, error) {
+	if fc.TypeConversion != gtPbNestedMsg {
+		return "", nil
+	}
 	return fc.varName, nil
 }
 

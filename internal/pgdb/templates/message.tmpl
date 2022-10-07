@@ -13,27 +13,33 @@ func (m *{{.MessageType}}) Descriptor() pgdb_v1.Descriptor {
     return instance{{.DescriptorType}}
 }
 
-func (m *{{.MessageType}}) Record(opts ...pgdb_v1.QueryOptions) (exp.Record, error) {
-    {{- if .WantRecordStringBuilder -}}
+func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+    opt := pgdb_v1.NewRecordOptions(opts)
+    {{ if .WantRecordStringBuilder }}
 	var sb strings.Builder
-    {{- end -}}
+    {{ end }}
 
-    {{- range .Fields }}
+    var rv exp.Record
+
+    {{ range .Fields }}
         {{.Convert.CodeForValue}}
-    {{ end -}}
+        {{ $VarForValue := .Convert.VarForValue }}
+        {{ if $VarForValue }}
+            rv[opt.Prefix + "{{.DB.Name}}"] =  {{ $VarForValue }}
+        {{ end }}
 
-    rv := exp.Record{
-        {{- range .Fields }}
-        {{- $VarForValue := .Convert.VarForValue -}}
-            {{- if $VarForValue -}}
-                "{{.DB.Name}}": {{ $VarForValue }},
-            {{- end -}}
-        {{ end -}}
-   }
+        {{ $VarForAppend := .Convert.VarForAppend }}
+        {{ if $VarForAppend }}
+        for k, v := range {{ $VarForAppend }} {
+            rv[opt.Prefix + k] = v
+        }
+        {{ end }}
+    {{ end }}
+
    return rv, nil
 }
 
-func (m *{{.MessageType}}) ConflictUpdateExpression(opts ...pgdb_v1.QueryOptions) (exp.ConflictUpdateExpression, error) {
+func (m *{{.MessageType}}) ConflictUpdateExpression(opts ...pgdb_v1.RecordOptionsFunc) (exp.ConflictUpdateExpression, error) {
     return nil, nil
 }
 

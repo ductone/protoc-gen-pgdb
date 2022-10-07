@@ -18,7 +18,7 @@ type fieldContext struct {
 	IsVirtual bool
 	GoName    string
 	Field     pgs.Field
-	DB        pgdb_v1.Column
+	DB        *pgdb_v1.Column
 	DataType  *pgtype.DataType
 	Convert   FiledConverter
 }
@@ -27,6 +27,7 @@ type FiledConverter interface {
 	GoType() (string, error)
 	CodeForValue() (string, error)
 	VarForValue() (string, error)
+	VarForAppend() (string, error)
 }
 
 func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker, goPrefix string) *fieldContext {
@@ -121,8 +122,13 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT:
 				// explict option to just not store this in postgres
 				return nil
-			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND:
-				// getMessageFields(ctx)
+			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND, pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
+				if isArray {
+					panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
+						pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+				}
+				// module.getMessageFieldsInner(ctx, f, ix, nextPrefix)
+				convertDef.TypeConversion = gtPbNestedMsg
 			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
 				convertDef.IsArray = isArray
 				convertDef.PostgresTypeName = pgTypeJSONB
@@ -149,24 +155,28 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 			pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 	}
 
-	dbTypeRef, ok := pgDataTypeForName(convertDef.PostgresTypeName)
-	if !ok {
-		panic(fmt.Errorf("pgdb: unsupported field type: %v: %s (of type %s): pgDataTypeForName(%s) NOT FOUND",
-			pt, f.FullyQualifiedName(), f.Descriptor().GetType(), convertDef.PostgresTypeName))
-	}
-
 	rv := &fieldContext{
 		IsVirtual: false,
 		GoName:    ctx.Name(f).String(),
 		Field:     f,
-		DB: pgdb_v1.Column{
+		Convert:   convertDef,
+	}
+
+	if convertDef.TypeConversion != gtPbNestedMsg {
+		dbTypeRef, ok := pgDataTypeForName(convertDef.PostgresTypeName)
+		if !ok {
+			panic(fmt.Errorf("pgdb: unsupported field type: %v: %s (of type %s): pgDataTypeForName(%s) NOT FOUND",
+				pt, f.FullyQualifiedName(), f.Descriptor().GetType(), convertDef.PostgresTypeName))
+		}
+
+		rv.DB = &pgdb_v1.Column{
 			Name:     pgColName,
 			Type:     dbTypeRef.Name,
 			Nullable: nullable,
-		},
-		DataType: dbTypeRef,
-		Convert:  convertDef,
+		}
+		rv.DataType = dbTypeRef
 	}
+
 	return rv
 }
 
@@ -183,7 +193,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	byteaDataType, _ := pgDataTypeForName("bytea")
 	tenantIdField := &fieldContext{
 		IsVirtual: true,
-		DB: pgdb_v1.Column{
+		DB: &pgdb_v1.Column{
 			Name:     "tenant_id",
 			Type:     vcDataType.Name,
 			Nullable: false,
@@ -200,7 +210,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	vn = vn.Next()
 	pkskField := &fieldContext{
 		IsVirtual: true,
-		DB: pgdb_v1.Column{
+		DB: &pgdb_v1.Column{
 			Name:               "pksk",
 			Type:               vcDataType.Name,
 			Nullable:           false,
@@ -216,7 +226,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	vn = vn.Next()
 	pkField := &fieldContext{
 		IsVirtual: true,
-		DB: pgdb_v1.Column{
+		DB: &pgdb_v1.Column{
 			Name:     "pk",
 			Type:     vcDataType.Name,
 			Nullable: false,
@@ -234,7 +244,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	vn = vn.Next()
 	skField := &fieldContext{
 		IsVirtual: true,
-		DB: pgdb_v1.Column{
+		DB: &pgdb_v1.Column{
 			Name:     "sk",
 			Type:     vcDataType.Name,
 			Nullable: false,
@@ -255,7 +265,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	vn = vn.Next()
 	ftsDataField := &fieldContext{
 		IsVirtual: true,
-		DB: pgdb_v1.Column{
+		DB: &pgdb_v1.Column{
 			Name:     "fts_data",
 			Type:     "tsvector",
 			Nullable: true,
@@ -271,7 +281,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	vn = vn.Next()
 	pbDataField := &fieldContext{
 		IsVirtual: true,
-		DB: pgdb_v1.Column{
+		DB: &pgdb_v1.Column{
 			Name:     "pb_data",
 			Type:     byteaDataType.Name,
 			Nullable: false,
