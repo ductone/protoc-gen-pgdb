@@ -39,6 +39,26 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
    return rv, nil
 }
 
+func (m *{{.MessageType}}) SearchData(opts ...pgdb_v1.RecordOptionsFunc) ([]*pgdb_v1.SearchContent) {
+    rv := []*pgdb_v1.SearchContent{
+    {{ range .SearchFields }}
+        {
+            Type:   pgdb_v1.FieldOptions_{{- .Ext.FullTextType.String -}},
+            Weight: pgdb_v1.FieldOptions_{{- .Ext.FullTextWeight.String -}},
+            Value:  {{ .VarName }},
+        },
+    {{ end }}
+    }
+
+    {{ range .Fields }}
+        {{ if .Nested }}
+        rv = append(rv, m.{{- .GoName -}}.SearchContent()...)
+        {{ end }}
+    {{ end }}
+    return rv
+}
+
+
 func (m *{{.MessageType}}) ConflictUpdateExpression(opts ...pgdb_v1.RecordOptionsFunc) (exp.ConflictUpdateExpression, error) {
     return nil, nil
 }

@@ -18,6 +18,7 @@ type fieldContext struct {
 	IsVirtual bool
 	GoName    string
 	Field     pgs.Field
+	Nested    bool
 	DB        *pgdb_v1.Column
 	DataType  *pgtype.DataType
 	Convert   FiledConverter
@@ -175,6 +176,8 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 			Nullable: nullable,
 		}
 		rv.DataType = dbTypeRef
+	} else {
+		rv.Nested = true
 	}
 
 	return rv

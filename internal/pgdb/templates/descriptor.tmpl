@@ -23,7 +23,9 @@ func (d *{{.ReceiverType}}) Fields() []*pgdb_v1.Column {
   {{ end }}
   }
   {{ range .Fields }}
-
+    {{ if .Nested }}
+    rv = append(rv, m.{{- .GoName -}}.Fields()...)
+    {{ end }}
   {{ end }}
   return rv
 }

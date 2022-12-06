@@ -13,6 +13,7 @@ type messageTemplateContext struct {
 	MessageType             string
 	DescriptorType          string
 	Fields                  []*fieldContext
+	SearchFields            []*searchFieldContext
 	Indexes                 []*indexContext
 	WantRecordStringBuilder bool
 }
@@ -27,6 +28,7 @@ func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File,
 		MessageType:             getMessageType(ctx, m),
 		DescriptorType:          getDescriptorType(ctx, m),
 		Fields:                  module.getMessageFields(ctx, m, ix, "m.self"),
+		SearchFields:            getSearchFields(ctx, m),
 		Indexes:                 module.getMessageIndexes(ctx, m, ix),
 		WantRecordStringBuilder: true, // unconditionally used by pk/sk builder
 	}

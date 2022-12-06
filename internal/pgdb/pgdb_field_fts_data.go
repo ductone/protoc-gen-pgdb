@@ -25,6 +25,25 @@ func (tidc *ftsDataConvert) GoType() (string, error) {
 	return "string", nil
 }
 
+func getSearchFields(ctx pgsgo.Context, m pgs.Message) []*searchFieldContext {
+	rv := []*searchFieldContext{}
+	for _, field := range m.Fields() {
+		ext := &pgdb_v1.FieldOptions{}
+		_, err := field.Extension(pgdb_v1.E_Options, ext)
+		if err != nil {
+			panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err))
+		}
+		if ext.FullTextType != pgdb_v1.FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED {
+			rv = append(rv, &searchFieldContext{
+				Ext:     ext,
+				Field:   field,
+				VarName: "m.self." + ctx.Name(field).String(),
+			})
+		}
+	}
+	return rv
+}
+
 func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 	fdc.SearchFields = []*searchFieldContext{}
 	for _, field := range fdc.m.Fields() {
