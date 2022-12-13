@@ -302,14 +302,3 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	}
 	return []*fieldContext{tenantIdField, pkskField, pkField, skField, ftsDataField, pbDataField}, nil
 }
-
-func getNesteFieldNames(fields []*fieldContext) []string {
-	rv := make([]string, 0)
-	for _, f := range fields {
-		if !f.Nested {
-			continue
-		}
-		rv = append(rv, f.GoName)
-	}
-	return rv
-}

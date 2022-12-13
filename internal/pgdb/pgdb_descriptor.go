@@ -8,12 +8,12 @@ import (
 )
 
 type descriptorTemplateContext struct {
-	Type             string
-	ReceiverType     string
-	TableName        string
-	Fields           []*fieldContext
-	NestedFieldNames []string
-	Indexes          []*indexContext
+	Type         string
+	ReceiverType string
+	TableName    string
+	Fields       []*fieldContext
+	NestedFields []*nestedFieldContext
+	Indexes      []*indexContext
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -25,19 +25,53 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 	}
 
 	fields := module.getMessageFields(ctx, m, ix, "m.self")
-	nestedFieldNames := getNesteFieldNames(fields)
+	mestedFields := getNesteFields(ctx, fields)
 
 	c := &descriptorTemplateContext{
-		Type:             mt,
-		ReceiverType:     mt,
-		Fields:           fields,
-		NestedFieldNames: nestedFieldNames,
-		Indexes:          module.getMessageIndexes(ctx, m, ix),
-		TableName:        tableName,
+		Type:         mt,
+		ReceiverType: mt,
+		Fields:       fields,
+		NestedFields: mestedFields,
+		Indexes:      module.getMessageIndexes(ctx, m, ix),
+		TableName:    tableName,
 	}
 	return templates["descriptor.tmpl"].Execute(w, c)
 }
 
 func getDescriptorType(ctx pgsgo.Context, m pgs.Message) string {
 	return "pgdbDescriptor" + ctx.Name(m).String()
+}
+
+type nestedFieldContext struct {
+	GoName   string
+	TypeName string
+}
+
+func getNesteFieldNames(fields []*fieldContext) []string {
+	rv := make([]string, 0)
+	for _, f := range fields {
+		if !f.Nested {
+			continue
+		}
+		rv = append(rv, f.GoName)
+	}
+	return rv
+}
+
+func getNesteFields(ctx pgsgo.Context, fields []*fieldContext) []*nestedFieldContext {
+	rv := make([]*nestedFieldContext, 0)
+	for _, f := range fields {
+		if !f.Nested {
+			continue
+		}
+
+		rv = append(rv, &nestedFieldContext{
+			GoName:   f.GoName,
+			TypeName: ctx.Type(f.Field).String(),
+		})
+		if false == false {
+			continue
+		}
+	}
+	return rv
 }

@@ -23,8 +23,8 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
   {{ end }}
   }
 
-  {{ range .NestedFieldNames }}
-    rv = append(rv, m.{{- . -}}.Fields()...)
+  {{ range .NestedFields }}
+    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect().Descriptor().Fields()...)
   {{ end }}
   return rv
 }
@@ -54,8 +54,8 @@ func (d *{{.ReceiverType}}) Indexes() []*pgdb_v1.Index {
   {{ end }}
   }
 
-  {{ range .NestedFieldNames }}
-    rv = append(rv, m.{{- . -}}.Indexes()...)
+  {{ range .NestedFields }}
+    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect().Descriptor().Indexes()...)
   {{ end }}
   return rv
 }

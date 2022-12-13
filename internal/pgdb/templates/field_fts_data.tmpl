@@ -1,3 +1,4 @@
+{{ $VarName := .VarName }}
 {{.VarName}}tmp := []*pgdb_v1.SearchContent{
     {{ range .SearchFields }}
 		{
@@ -8,7 +9,7 @@
     {{ end }}
 	}
     {{ range .NestedFieldNames }}
-		rv = append(rv, m.self.{{- . -}}.SearchContent()...)
+		{{$VarName}}tmp = append({{$VarName}}tmp, m.self.{{- . -}}.SearchContent()...)
     {{ end }}
 
 {{.VarName}} := pgdb_v1.FullTextSearchVectors({{.VarName}}tmp)
