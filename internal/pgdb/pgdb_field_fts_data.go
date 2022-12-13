@@ -59,11 +59,10 @@ func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 		// NOTE: this mirrors logic in pgdb_field.go to find nested fields :(
 		pt := field.Type().ProtoType()
 		if pt == pgs.MessageT {
-			if !strings.HasPrefix(field.Descriptor().GetTypeName(), ".google.protobuf") {
-				switch ext.MessageBehavoir {
-				case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND, pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
-					fdc.NestedFieldNames = append(fdc.NestedFieldNames, fdc.ctx.Name(field).String())
-				}
+			if !strings.HasPrefix(field.Descriptor().GetTypeName(), ".google.protobuf") &&
+				(ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND ||
+					ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED) {
+				fdc.NestedFieldNames = append(fdc.NestedFieldNames, fdc.ctx.Name(field).String())
 			}
 		}
 

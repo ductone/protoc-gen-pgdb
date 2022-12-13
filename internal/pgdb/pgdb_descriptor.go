@@ -69,9 +69,6 @@ func getNesteFields(ctx pgsgo.Context, fields []*fieldContext) []*nestedFieldCon
 			GoName:   f.GoName,
 			TypeName: ctx.Type(f.Field).String(),
 		})
-		if false == false {
-			continue
-		}
 	}
 	return rv
 }
