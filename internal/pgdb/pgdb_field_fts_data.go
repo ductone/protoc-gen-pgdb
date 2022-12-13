@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"fmt"
+	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
@@ -9,10 +10,11 @@ import (
 )
 
 type ftsDataConvert struct {
-	ctx          pgsgo.Context
-	VarName      string
-	m            pgs.Message
-	SearchFields []*searchFieldContext
+	ctx              pgsgo.Context
+	VarName          string
+	m                pgs.Message
+	SearchFields     []*searchFieldContext
+	NestedFieldNames []string
 }
 
 type searchFieldContext struct {
@@ -46,12 +48,25 @@ func getSearchFields(ctx pgsgo.Context, m pgs.Message) []*searchFieldContext {
 
 func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 	fdc.SearchFields = []*searchFieldContext{}
+	fdc.NestedFieldNames = []string{}
 	for _, field := range fdc.m.Fields() {
 		ext := &pgdb_v1.FieldOptions{}
 		_, err := field.Extension(pgdb_v1.E_Options, ext)
 		if err != nil {
 			panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err))
 		}
+
+		// NOTE: this mirrors logic in pgdb_field.go to find nested fields :(
+		pt := field.Type().ProtoType()
+		if pt == pgs.MessageT {
+			if !strings.HasPrefix(field.Descriptor().GetTypeName(), ".google.protobuf") {
+				switch ext.MessageBehavoir {
+				case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND, pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
+					fdc.NestedFieldNames = append(fdc.NestedFieldNames, fdc.ctx.Name(field).String())
+				}
+			}
+		}
+
 		if ext.FullTextType != pgdb_v1.FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED {
 			fdc.SearchFields = append(fdc.SearchFields, &searchFieldContext{
 				Ext:     ext,

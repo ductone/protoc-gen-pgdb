@@ -16,6 +16,7 @@ type qbContext struct {
 	QueryFields  []*safeFieldContext
 	UnsafeType   string
 	UnsafeFields []*fieldContext
+	NestedFields []string
 	ColumnType   string
 	ColumnFields []*fieldContext
 }
@@ -91,11 +92,13 @@ func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.
 
 func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *importTracker) *qbContext {
 	nsgFields := module.getMessageFields(ctx, m, ix, "m.self")
+
 	return &qbContext{
 		ReceiverType: ctx.Name(m).String(),
 		DbType:       getDbType(ctx, m),
 		QueryType:    getQueryType(ctx, m),
 		QueryFields:  module.getSafeFields(ctx, m, nsgFields, ix),
+		NestedFields: getNesteFieldNames(nsgFields),
 		UnsafeType:   getUnsafeType(ctx, m),
 		UnsafeFields: nsgFields,
 		ColumnType:   getColumnType(ctx, m),

@@ -7,10 +7,8 @@
 		},
     {{ end }}
 	}
-    {{ range .Fields }}
-		{{ if .Nested }}
-		rv = append(rv, d.{{- .GoName -}}.SearchContent()...)
-    	{{ end }}
+    {{ range .NestedFieldNames }}
+		rv = append(rv, m.self.{{- . -}}.SearchContent()...)
     {{ end }}
 
 {{.VarName}} := pgdb_v1.FullTextSearchVectors({{.VarName}}tmp)

@@ -10,6 +10,7 @@ import (
 
 type indexContext struct {
 	DB           pgdb_v1.Index
+	Nested       bool
 	SourceFields []string
 }
 
@@ -30,6 +31,8 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 	for _, index := range ext.Indexes {
 		rv = append(rv, module.extraIndexes(ctx, m, ix, index))
 	}
+
+	// TODO(pquerna): find any nested indexes from nested messages
 	return rv
 }
 

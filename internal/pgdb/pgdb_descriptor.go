@@ -8,11 +8,12 @@ import (
 )
 
 type descriptorTemplateContext struct {
-	Type         string
-	ReceiverType string
-	TableName    string
-	Fields       []*fieldContext
-	Indexes      []*indexContext
+	Type             string
+	ReceiverType     string
+	TableName        string
+	Fields           []*fieldContext
+	NestedFieldNames []string
+	Indexes          []*indexContext
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -23,12 +24,16 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		return err
 	}
 
+	fields := module.getMessageFields(ctx, m, ix, "m.self")
+	nestedFieldNames := getNesteFieldNames(fields)
+
 	c := &descriptorTemplateContext{
-		Type:         mt,
-		ReceiverType: mt,
-		Fields:       module.getMessageFields(ctx, m, ix, "m.self"),
-		Indexes:      module.getMessageIndexes(ctx, m, ix),
-		TableName:    tableName,
+		Type:             mt,
+		ReceiverType:     mt,
+		Fields:           fields,
+		NestedFieldNames: nestedFieldNames,
+		Indexes:          module.getMessageIndexes(ctx, m, ix),
+		TableName:        tableName,
 	}
 	return templates["descriptor.tmpl"].Execute(w, c)
 }
