@@ -32,7 +32,6 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 		rv = append(rv, module.extraIndexes(ctx, m, ix, index))
 	}
 
-	// TODO(pquerna): find any nested indexes from nested messages
 	return rv
 }
 
