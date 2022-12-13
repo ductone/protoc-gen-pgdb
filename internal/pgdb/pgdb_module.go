@@ -72,12 +72,12 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 
 	for _, m := range in.Messages() {
 		fext := pgdb_v1.MessageOptions{}
-		ok, err := m.Extension(pgdb_v1.E_Msg, &fext)
+		_, err := m.Extension(pgdb_v1.E_Msg, &fext)
 		if err != nil {
 			return fmt.Errorf("pgdb: applyTemplate: failed to extract Message extension from '%s': %w", m.FullyQualifiedName(), err)
 		}
-		// TODO(pquerna): how to handle nested messages that may not directly have sql enabled?
-		if !ok {
+
+		if fext.Disabled {
 			continue
 		}
 

@@ -192,6 +192,16 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 	vn := &varNamer{prefix: "cfv", offset: 0}
 	_ = vn
 	vcDataType, _ := pgDataTypeForName("varchar")
+	fext := pgdb_v1.MessageOptions{}
+	_, err := m.Extension(pgdb_v1.E_Msg, &fext)
+	if err != nil {
+		panic(err)
+	}
+
+	// nested only currently don't have any of the common fields.
+	if fext.NestedOnly {
+		return nil, nil
+	}
 
 	byteaDataType, _ := pgDataTypeForName("bytea")
 	tenantIdField := &fieldContext{
