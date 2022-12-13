@@ -48,7 +48,7 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: v1.19
-      - uses: imjasonh/setup-ko@v0.5
+      - uses: imjasonh/setup-ko@v0.6
       - run: ko publish --bare ./ --platform linux/amd64,linux/arm64 -t $(git rev-parse --short "$GITHUB_SHA")
   lint-and-breaking-change-detection:
     runs-on: ubuntu-latest
