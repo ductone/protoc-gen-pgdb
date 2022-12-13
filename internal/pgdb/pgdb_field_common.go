@@ -93,7 +93,7 @@ func (fc *fieldConvert) GoType() (string, error) {
 }
 
 func (fc *fieldConvert) CodeForValue() (string, error) {
-	selfName := fc.goPrefix + "." + fc.ctx.Name(fc.F).String()
+	selfName := fc.goPrefix + ".Get" + fc.ctx.Name(fc.F).String() + "()"
 	switch fc.TypeConversion {
 	case gtFloat32:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{

@@ -52,7 +52,7 @@ func (m *{{.MessageType}}) SearchData(opts ...pgdb_v1.RecordOptionsFunc) ([]*pgd
 
     {{ range .Fields }}
         {{ if .Nested }}
-        rv = append(rv, m.{{- .GoName -}}.SearchContent()...)
+        rv = append(rv, m.self.Get{{- .GoName -}}().DBReflect().SearchData()...)
         {{ end }}
     {{ end }}
     return rv

@@ -12,5 +12,6 @@ type Message interface {
 	Descriptor() Descriptor
 
 	Record(opts ...RecordOptionsFunc) (exp.Record, error)
+	SearchData(opts ...RecordOptionsFunc) []*SearchContent
 	ConflictUpdateExpression(opts ...RecordOptionsFunc) (exp.ConflictUpdateExpression, error)
 }
