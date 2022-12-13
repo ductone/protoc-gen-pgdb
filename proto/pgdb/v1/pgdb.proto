@@ -6,19 +6,21 @@ import "google/protobuf/descriptor.proto";
 
 option go_package = "github.com/ductone/protoc-gen-pgdb/pgdb/v1";
 
-// TODO(pquerna): register here https://github.com/protocolbuffers/protobuf/blob/master/docs/options.md
+// TODO(pquerna): register here
+// https://github.com/protocolbuffers/protobuf/blob/master/docs/options.md
 extend google.protobuf.MessageOptions {
   MessageOptions msg = 6010;
 }
 
 message MessageOptions {
-  bool enabled = 1;
+  bool disabled = 1;
   message Index {
     enum IndexMethod {
       INDEX_METHOD_UNSPECIFIED = 0;
       INDEX_METHOD_BTREE = 1;
       INDEX_METHOD_GIN = 2;
-      // Requires loading of BTREE_GIN extension: https://www.postgresql.org/docs/current/btree-gin.html
+      // Requires loading of BTREE_GIN extension:
+      // https://www.postgresql.org/docs/current/btree-gin.html
       INDEX_METHOD_BTREE_GIN = 3;
     }
     string name = 1;
@@ -28,8 +30,12 @@ message MessageOptions {
     bool dropped = 4;
   }
   repeated Index indexes = 2;
-  // defaults to `tenant_id`.  Must be set if an object does not have a `tenant_id` field.
+  // defaults to `tenant_id`.  Must be set if an object does not have a
+  // `tenant_id` field.
   string tenant_id_field = 3;
+  // if this message is only used in nested messages, a subset of methods
+  // will be generated.
+  bool nested_only = 4;
 }
 
 extend google.protobuf.FieldOptions {

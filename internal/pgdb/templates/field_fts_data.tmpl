@@ -1,4 +1,5 @@
-{{.VarName}} := pgdb_v1.FullTextSearchVectors([]pgdb_v1.SearchContent{
+{{ $VarName := .VarName }}
+{{.VarName}}tmp := []*pgdb_v1.SearchContent{
     {{ range .SearchFields }}
 		{
 			Type:   pgdb_v1.FieldOptions_{{- .Ext.FullTextType.String -}},
@@ -6,4 +7,9 @@
 			Value:  {{ .VarName }},
 		},
     {{ end }}
-    })
+	}
+    {{ range .NestedFieldNames }}
+		{{$VarName}}tmp = append({{$VarName}}tmp, m.self.Get{{- . -}}().DBReflect().SearchData()...)
+    {{ end }}
+
+{{.VarName}} := pgdb_v1.FullTextSearchVectors({{.VarName}}tmp)

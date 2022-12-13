@@ -2,13 +2,15 @@ syntax = "proto3";
 
 package dynamo.v1;
 
-option go_package = "github.com/pquerna/protoc-gen-dynamo/dynamo/v1";
-
 import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/pquerna/protoc-gen-dynamo/dynamo/v1";
 
 // TODO(pquerna): register here
 // https://github.com/protocolbuffers/protobuf/blob/master/docs/options.md
-extend google.protobuf.MessageOptions { DynamoMessageOptions msg = 6000; }
+extend google.protobuf.MessageOptions {
+  DynamoMessageOptions msg = 6000;
+}
 
 message DynamoMessageOptions {
   // Disables generation for this message
@@ -26,7 +28,9 @@ message Key {
   string sk_const = 3;
 }
 
-extend google.protobuf.FieldOptions { DynamoFieldOptions field = 6000; }
+extend google.protobuf.FieldOptions {
+  DynamoFieldOptions field = 6000;
+}
 
 message DynamoFieldOptions {
   bool expose = 1;

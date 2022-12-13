@@ -10,6 +10,7 @@ import (
 
 type indexContext struct {
 	DB           pgdb_v1.Index
+	Nested       bool
 	SourceFields []string
 }
 
@@ -30,6 +31,7 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 	for _, index := range ext.Indexes {
 		rv = append(rv, module.extraIndexes(ctx, m, ix, index))
 	}
+
 	return rv
 }
 
@@ -71,6 +73,17 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 }
 
 func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error) {
+	fext := pgdb_v1.MessageOptions{}
+	_, err := m.Extension(pgdb_v1.E_Msg, &fext)
+	if err != nil {
+		panic(err)
+	}
+
+	// nested only currently don't have any of the common fields.
+	if fext.NestedOnly {
+		return nil, nil
+	}
+
 	primaryIndexName, err := getIndexName(m, "pksk")
 	if err != nil {
 		return nil, err

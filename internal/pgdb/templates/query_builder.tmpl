@@ -180,16 +180,17 @@ func  (x *{{ .OpsTypeName }}) ObjectAllKeyExists(keys ...string) (exp.Expression
 }
 {{end}}
 
-
 func (x *{{ $QueryType }}) {{ .Field.GoName -}}() *{{ .OpsTypeName }} {
 	return &{{- .OpsTypeName -}}{tableName: x.tableName}
 }
 {{ end }}
 
 {{ range .UnsafeFields }}
+{{ if .DB -}}
 func (x *{{ $UnsafeType }}) {{ .GoName -}}() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "{{- .DB.Name -}}")
 }
+{{- end }}
 {{ end }}
 
 func (x *{{ $ColumnType }}) WithTable(t string) *{{- $ColumnType }} {
@@ -197,7 +198,9 @@ func (x *{{ $ColumnType }}) WithTable(t string) *{{- $ColumnType }} {
 }
 
 {{ range .ColumnFields }}
+{{ if .DB -}}
 func (x *{{ $ColumnType }}) {{ .GoName -}}() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "{{- .DB.Name -}}")
 }
+{{- end }}
 {{ end }}

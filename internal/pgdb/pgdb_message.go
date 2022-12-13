@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
@@ -13,22 +14,37 @@ type messageTemplateContext struct {
 	MessageType             string
 	DescriptorType          string
 	Fields                  []*fieldContext
+	SearchFields            []*searchFieldContext
 	Indexes                 []*indexContext
 	WantRecordStringBuilder bool
 }
 
 func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
+	ext := pgdb_v1.MessageOptions{}
+	_, err := m.Extension(pgdb_v1.E_Msg, &ext)
+	if err != nil {
+		panic(fmt.Errorf("pgdb: getFieldIndexes: failed to extract Message extension from '%s': %w", m.FullyQualifiedName(), err))
+	}
+
 	ix.PGDBV1 = true
 	ix.GoquExp = true
 	ix.ProtobufProto = true
-	ix.Strings = true
+	wantRecordStringBuilder := false
+	if !ext.NestedOnly {
+		// used by pk/sk builder
+		wantRecordStringBuilder = true
+		ix.Strings = true
+	}
+	fields := module.getMessageFields(ctx, m, ix, "m.self")
+
 	c := &messageTemplateContext{
 		ReceiverType:            ctx.Name(m).String(),
 		MessageType:             getMessageType(ctx, m),
 		DescriptorType:          getDescriptorType(ctx, m),
-		Fields:                  module.getMessageFields(ctx, m, ix, "m.self"),
+		Fields:                  fields,
+		SearchFields:            getSearchFields(ctx, m),
 		Indexes:                 module.getMessageIndexes(ctx, m, ix),
-		WantRecordStringBuilder: true, // unconditionally used by pk/sk builder
+		WantRecordStringBuilder: wantRecordStringBuilder,
 	}
 	return templates["message.tmpl"].Execute(w, c)
 }
@@ -52,7 +68,7 @@ func (fn *varNamer) String() string {
 
 func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {
 	fields := m.Fields()
-	rv := make([]*fieldContext, 0, len(fields)+lenCommonFields)
+	rv := make([]*fieldContext, 0, len(fields))
 	cf, err := getCommonFields(ctx, m)
 	if err != nil {
 		panic(err)
@@ -63,6 +79,12 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 	if err != nil {
 		panic(err)
 	}
+	rv = append(rv, module.getMessageFieldsInner(ctx, fields, vn, tenantIdField, ix, goPrefix)...)
+	return rv
+}
+
+func (module *Module) getMessageFieldsInner(ctx pgsgo.Context, fields []pgs.Field, vn *varNamer, tenantIdField string, ix *importTracker, goPrefix string) []*fieldContext {
+	rv := make([]*fieldContext, 0, len(fields))
 	for _, field := range fields {
 		// tenant_id done via common fields
 		if tenantIdField == field.Name().LowerSnakeCase().String() {

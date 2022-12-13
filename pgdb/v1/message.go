@@ -11,6 +11,7 @@ type DBReflectMessage interface {
 type Message interface {
 	Descriptor() Descriptor
 
-	Record(opts ...QueryOptions) (exp.Record, error)
-	ConflictUpdateExpression(opts ...QueryOptions) (exp.ConflictUpdateExpression, error)
+	Record(opts ...RecordOptionsFunc) (exp.Record, error)
+	SearchData(opts ...RecordOptionsFunc) []*SearchContent
+	ConflictUpdateExpression(opts ...RecordOptionsFunc) (exp.ConflictUpdateExpression, error)
 }

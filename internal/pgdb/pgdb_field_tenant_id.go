@@ -37,6 +37,10 @@ func (tidc *tenantIdDataConvert) VarForValue() (string, error) {
 	return tidc.VarName, nil
 }
 
+func (tidc *tenantIdDataConvert) VarForAppend() (string, error) {
+	return "", nil
+}
+
 func getTenantIDField(msg pgs.Message) (string, error) {
 	fieldName := "tenant_id"
 	ext := pgdb_v1.MessageOptions{}

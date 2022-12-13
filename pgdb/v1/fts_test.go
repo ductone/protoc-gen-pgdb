@@ -18,7 +18,7 @@ func TestSearchBigQueryDoc(t *testing.T) {
 
 	// example compound document, a "ID", a "display name", and a "description"
 	someObjectID := "2DmNjwzqyfzisCFmt0OrPvwJ3gT"
-	vector := FullTextSearchVectors([]SearchContent{
+	vector := FullTextSearchVectors([]*SearchContent{
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_EXACT,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
@@ -56,7 +56,7 @@ func TestSearchEmpty(t *testing.T) {
 	defer pg.Stop()
 
 	// an empty doc, containing just spaces and punctuation
-	vector := FullTextSearchVectors([]SearchContent{
+	vector := FullTextSearchVectors([]*SearchContent{
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
@@ -108,7 +108,7 @@ func FuzzFullTextSearchVectors(f *testing.F) {
 		f.Add(tc) // Use f.Add to provide a seed corpus
 	}
 	f.Fuzz(func(t *testing.T, orig string) {
-		_ = FullTextSearchVectors([]SearchContent{
+		_ = FullTextSearchVectors([]*SearchContent{
 			{
 				Type:   FieldOptions_FULL_TEXT_TYPE_EXACT,
 				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,

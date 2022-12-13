@@ -20,7 +20,7 @@ type SearchContent struct {
 // FullTextSearchVectors converts a set of input documents
 // into a ::tsvector. Note: this function may generally ignore errors in input text, to be robust to
 // untrusted inputs, and will do its "best", for some value of "best".
-func FullTextSearchVectors(docs []SearchContent, additionalFilters ...jargon.Filter) exp.Expression {
+func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Filter) exp.Expression {
 	edgeGramFilter := edgegramStream(3)
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)

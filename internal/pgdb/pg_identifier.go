@@ -38,6 +38,7 @@ func getTableName(m pgs.Message) (string, error) {
 
 func getColumnName(f pgs.Field, parents []pgs.Field) (string, error) {
 	buf := strings.Builder{}
+	// TOOD(pquerna): figure out prefix?
 	_, _ = buf.WriteString("pb")
 	for _, pf := range parents {
 		_, _ = buf.WriteString("$")
