@@ -2,9 +2,12 @@ package v1
 
 import (
 	"bytes"
+	"context"
 	"strings"
 
+	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
+	"github.com/jackc/pgx/v4"
 )
 
 func CreateSchema(msg DBReflectMessage) ([]string, error) {
@@ -122,4 +125,52 @@ func pgWriteString(buf *bytes.Buffer, input string) {
 	// TODO(pquerna): not completely correct escaping
 	_, _ = buf.WriteString(input)
 	_, _ = buf.WriteString(`"`)
+}
+
+type sqlScanner interface {
+	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
+}
+
+func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
+	dbr := msg.DBReflect()
+	desc := dbr.Descriptor()
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("information_schema.columns")
+	qb = qb.Select("column_name")
+	qb = qb.Where(goqu.L("table_name = ?", desc.TableName()))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	haveCols := make(map[string]struct{})
+	for rows.Next() {
+		var columnName string
+		err = rows.Scan(&columnName)
+		if err != nil {
+			return nil, err
+		}
+		if !strings.HasPrefix(columnName, "pb") {
+			continue
+		}
+		haveCols[columnName] = struct{}{}
+	}
+	/*
+		SELECT
+			*
+		FROM
+			information_schema.columns
+		WHERE
+			table_name = 'pb_pet_models_animals_v1_8a3723d5'
+		ORDER BY
+			ordinal_position;
+
+	*/
+	return nil, nil
 }
