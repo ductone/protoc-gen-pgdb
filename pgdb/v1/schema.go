@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 )
 
@@ -59,7 +58,6 @@ func IndexSchema(msg DBReflectMessage) ([]string, error) {
 	indexes := desc.Indexes()
 	rv := make([]string, 0, len(indexes))
 	for _, idx := range indexes {
-		spew.Dump(idx)
 		buf := &bytes.Buffer{}
 		if idx.IsPrimary {
 			// we only support doing primary indexes in the create table, and don't support changing them, so bye bye.

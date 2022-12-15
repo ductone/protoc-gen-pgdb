@@ -278,10 +278,13 @@ func findBinPath(binDir string) (string, error) {
 		}
 	}
 
-	// Look for a PostgreSQL in one of the folders Ubuntu uses
 	folders := []string{
 		binDir,
-		"/usr/lib/postgresql/",
+		// Look for a PostgreSQL in one of the folders Ubuntu uses
+		"/usr/lib/postgresql",
+		// homebrew!
+		"/usr/local/bin",
+		"/opt/homebrew/bin",
 	}
 	for _, folder := range folders {
 		f, err := os.Stat(folder)
