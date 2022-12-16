@@ -2,9 +2,13 @@ package v1
 
 import (
 	"bytes"
+	"context"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
+	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
+	"github.com/jackc/pgx/v4"
 )
 
 func CreateSchema(msg DBReflectMessage) ([]string, error) {
@@ -15,21 +19,13 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	pgWriteString(buf, desc.TableName())
 	_, _ = buf.WriteString("\n(\n")
 
-	_, _ = buf.WriteString(strings.Join(slice.Convert(desc.Fields(), func(field *Column) string {
-		sbuf := &bytes.Buffer{}
-		_, _ = sbuf.WriteString("  ")
-		pgWriteString(sbuf, field.Name)
-		_, _ = sbuf.WriteString(" ")
-		if field.OverrideExpression != "" {
-			_, _ = sbuf.WriteString(field.OverrideExpression)
-		} else {
-			_, _ = sbuf.WriteString(field.Type)
-			if !field.Nullable {
-				_, _ = sbuf.WriteString(" NOT NULL")
-			}
-		}
-		return sbuf.String()
-	}), ",\n"))
+	_, _ = buf.WriteString(
+		strings.Join(
+			slice.Convert(desc.Fields(), col2spec),
+			",\n",
+		),
+	)
+
 	for _, idx := range desc.Indexes() {
 		if !idx.IsPrimary {
 			continue
@@ -43,7 +39,7 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	}
 	buf.WriteString(")\n")
 	rv := []string{buf.String()}
-	buf.Reset()
+
 	more, err := IndexSchema(msg)
 	if err != nil {
 		return nil, err
@@ -58,68 +54,118 @@ func IndexSchema(msg DBReflectMessage) ([]string, error) {
 	indexes := desc.Indexes()
 	rv := make([]string, 0, len(indexes))
 	for _, idx := range indexes {
-		buf := &bytes.Buffer{}
 		if idx.IsPrimary {
 			// we only support doing primary indexes in the create table, and don't support changing them, so bye bye.
 			continue
 		}
-		if idx.IsDropped {
-			_, _ = buf.WriteString("DROP INDEX")
-			// WARNING: unique indexes cannot be dropped
-			// concurrently.  Maybe unsafe?
-			if !idx.IsUnique {
-				buf.WriteString(" CONCURRENTLY")
-			}
-			buf.WriteString(" IF EXISTS ")
-			pgWriteString(buf, idx.Name)
-			rv = append(rv, buf.String())
-			continue
-		}
-		_, _ = buf.WriteString("CREATE")
-		if idx.IsUnique {
-			_, _ = buf.WriteString(" UNIQUE")
-		}
-		_, _ = buf.WriteString(" INDEX CONCURRENTLY IF NOT EXISTS\n  ")
-		pgWriteString(buf, idx.Name)
-		_, _ = buf.WriteString("\nON\n  ")
-		pgWriteString(buf, desc.TableName())
-		_, _ = buf.WriteString("\nUSING\n  ")
-		switch idx.Method {
-		case MessageOptions_Index_INDEX_METHOD_UNSPECIFIED:
-			panic("MessageOptions_Index_INDEX_METHOD_UNSPECIFIED found on " + idx.Name)
-		case MessageOptions_Index_INDEX_METHOD_BTREE:
-			_, _ = buf.WriteString("BTREE")
-		case MessageOptions_Index_INDEX_METHOD_GIN:
-			_, _ = buf.WriteString("GIN")
-		case MessageOptions_Index_INDEX_METHOD_BTREE_GIN:
-			// btree gin just means we can index
-			// col types in a multi-col index that aren't
-			// noramlly supporte dy gin, eg, varchar,
-			// but its not actually a new index type!
-			_, _ = buf.WriteString("GIN")
-		}
-		_, _ = buf.WriteString("\n(\n")
-		if idx.OverrideExpression != "" {
-			_, _ = buf.WriteString(idx.OverrideExpression)
-		} else {
-			buf.WriteString(strings.Join(slice.Convert(idx.Columns, func(in string) string {
-				return `  "` + in + `"`
-			}), ", \n"))
-		}
-		_, _ = buf.WriteString("\n)\n")
-		if idx.WherePredicate != "" {
-			_, _ = buf.WriteString("WHERE ")
-			_, _ = buf.WriteString(idx.WherePredicate)
-			_, _ = buf.WriteString("\n")
-		}
-		rv = append(rv, buf.String())
+		rv = append(rv, index2sql(desc, idx))
 	}
 	return rv, nil
 }
 
-func pgWriteString(buf *bytes.Buffer, input string) {
-	_, _ = buf.WriteString(`"`)
-	// TODO(pquerna): not completely correct escaping
-	_, _ = buf.WriteString(input)
-	_, _ = buf.WriteString(`"`)
+type sqlScanner interface {
+	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
+}
+
+func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("information_schema.columns")
+	qb = qb.Select("column_name")
+	qb = qb.Where(goqu.L("table_name = ?", desc.TableName()))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	haveCols := make(map[string]struct{})
+	for rows.Next() {
+		var columnName string
+		err = rows.Scan(&columnName)
+		if err != nil {
+			return nil, err
+		}
+		haveCols[columnName] = struct{}{}
+	}
+	return haveCols, nil
+}
+
+func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_indexes")
+	qb = qb.Select("indexname")
+	qb = qb.Where(goqu.L("tablename = ?", desc.TableName()))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	indexes := make(map[string]struct{})
+	for rows.Next() {
+		var indexName string
+		err = rows.Scan(&indexName)
+		if err != nil {
+			return nil, err
+		}
+		indexes[indexName] = struct{}{}
+	}
+	return indexes, nil
+}
+
+func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
+	rv := make([]string, 0)
+	dbr := msg.DBReflect()
+	desc := dbr.Descriptor()
+
+	haveCols, err := readColumns(ctx, db, desc)
+	if err != nil {
+		return nil, err
+	}
+	spew.Dump(haveCols)
+
+	for _, field := range desc.Fields() {
+		if _, ok := haveCols[field.Name]; ok {
+			continue
+		}
+		query := col2alter(desc, field)
+		rv = append(rv, query)
+	}
+
+	indexes, err := readIndexes(ctx, db, desc)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, idx := range desc.Indexes() {
+		if idx.IsPrimary {
+			continue
+		}
+
+		_, exists := indexes[idx.Name]
+		query := index2sql(desc, idx)
+
+		// if it should be dropped, and its still here, byeeee
+		if idx.IsDropped && exists {
+			rv = append(rv, query)
+			continue
+		}
+
+		// doesn't exist, but should, lets go!
+		if !exists {
+			rv = append(rv, query)
+			continue
+		}
+	}
+	return rv, nil
 }
