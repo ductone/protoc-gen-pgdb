@@ -19,9 +19,12 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	pgWriteString(buf, desc.TableName())
 	_, _ = buf.WriteString("\n(\n")
 
-	_, _ = buf.WriteString(strings.Join(slice.Convert(desc.Fields(), func(field *Column) string {
-		return col2spec(field)
-	}), ",\n"))
+	_, _ = buf.WriteString(
+		strings.Join(
+			slice.Convert(desc.Fields(), col2spec),
+			",\n",
+		),
+	)
 
 	for _, idx := range desc.Indexes() {
 		if !idx.IsPrimary {
