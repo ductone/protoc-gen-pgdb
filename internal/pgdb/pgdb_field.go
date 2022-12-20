@@ -11,6 +11,7 @@ import (
 
 const (
 	pgTypeJSONB = "jsonb"
+	pgTypeInt4  = "int4"
 )
 
 type fieldContext struct {
@@ -68,7 +69,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtFloat32
 	case pgs.Int32T, pgs.SInt32, pgs.SFixed32:
-		convertDef.PostgresTypeName = "int4"
+		convertDef.PostgresTypeName = pgTypeInt4
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtInt32
 	case pgs.Int64T, pgs.SInt64, pgs.SFixed64:
@@ -144,7 +145,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		convertDef.PostgresTypeName = "bytea"
 		convertDef.TypeConversion = gtBytes
 	case pgs.EnumT:
-		convertDef.PostgresTypeName = "int4"
+		convertDef.PostgresTypeName = pgTypeInt4
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtEnum
 	case pgs.GroupT:
