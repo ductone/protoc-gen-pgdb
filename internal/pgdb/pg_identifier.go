@@ -36,14 +36,10 @@ func getTableName(m pgs.Message) (string, error) {
 	return proposed, nil
 }
 
-func getColumnName(f pgs.Field, parents []pgs.Field) (string, error) {
+func getColumnName(f pgs.Field) (string, error) {
 	buf := strings.Builder{}
 	// TOOD(pquerna): figure out prefix?
 	_, _ = buf.WriteString("pb")
-	for _, pf := range parents {
-		_, _ = buf.WriteString("$")
-		_, _ = buf.WriteString(pf.Name().LowerSnakeCase().String())
-	}
 	_, _ = buf.WriteString("$")
 	_, _ = buf.WriteString(f.Name().LowerSnakeCase().String())
 
@@ -53,16 +49,29 @@ func getColumnName(f pgs.Field, parents []pgs.Field) (string, error) {
 	}
 	buf.Reset()
 	_, _ = buf.WriteString("pb")
-	for _, pf := range parents {
-		_, _ = buf.WriteString("_")
-		_, _ = buf.WriteString(strconv.FormatInt(int64(*pf.Descriptor().Number), 10))
-	}
 	_, _ = buf.WriteString("_")
 	_, _ = buf.WriteString(strconv.FormatInt(int64(*f.Descriptor().Number), 10))
 	if len(buf.String()) < postgresNameLen {
 		return buf.String(), nil
 	}
 	panic(fmt.Errorf("pgdb: getColumnName: can't find short enough name for %v", f.FullyQualifiedName()))
+}
+
+func getColumnOneOfName(f pgs.OneOf) (string, error) {
+	buf := strings.Builder{}
+	// TOOD(pquerna): figure out prefix?
+	_, _ = buf.WriteString("pb")
+	_, _ = buf.WriteString("$")
+	_, _ = buf.WriteString(f.Name().LowerSnakeCase().String())
+	_, _ = buf.WriteString("_oneof")
+
+	// if the field name is too long, convert to number version
+	if len(buf.String()) < postgresNameLen {
+		return buf.String(), nil
+	}
+
+	// oneofs don't have numeric indexes.  we could hash the oneof name, but lets see if this is actually ever needed.
+	panic(fmt.Errorf("pgdb: getColumnOneOfName: can't find short enough name for %v", f.FullyQualifiedName()))
 }
 
 func getIndexName(m pgs.Message, name string) (string, error) {
@@ -94,9 +103,13 @@ func min(a, b int) int {
 var initCachedConnInfo sync.Once
 var cachedConnInfo *pgtype.ConnInfo
 
-func pgDataTypeForName(input string) (*pgtype.DataType, bool) {
+func pgDataTypeForName(input string) *pgtype.DataType {
 	initCachedConnInfo.Do(func() {
 		cachedConnInfo = pgtype.NewConnInfo()
 	})
-	return cachedConnInfo.DataTypeForName(input)
+	rv, ok := cachedConnInfo.DataTypeForName(input)
+	if !ok {
+		panic("faild to find postgres type for '" + input + "'")
+	}
+	return rv
 }

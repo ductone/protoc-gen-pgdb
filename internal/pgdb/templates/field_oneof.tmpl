@@ -1,0 +1,11 @@
+{{ $VarName := .VarName }}
+{{ $OneOfName := .GoName }}
+
+{{ $VarName  }} := uint32(0)
+
+switch m.self.Get{{- $OneOfName -}}().(type) {
+{{ range .Fields }}
+case *{{- .GoType -}}:
+    {{ $VarName }} = {{ .FieldNumber }}
+{{ end }}
+}
