@@ -62,7 +62,7 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		if fieldName == tenantIdField {
 			rv.DB.Columns = append(rv.DB.Columns, "tenant_id")
 		} else {
-			pgColName, err := getColumnName(f, nil)
+			pgColName, err := getColumnName(f)
 			if err != nil {
 				panic(err)
 			}

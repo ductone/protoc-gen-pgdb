@@ -2359,6 +2359,11 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Type:               "text",
 			Nullable:           false,
 			OverrideExpression: "",
+		}, {
+			Name:               "pb$medium_oneof",
+			Type:               "int4",
+			Nullable:           false,
+			OverrideExpression: "",
 		},
 	}
 
@@ -2507,6 +2512,20 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	for k, v := range v3 {
 		rv[opt.Prefix+k] = v
 	}
+
+	oneof1 := uint32(0)
+
+	switch m.self.GetMedium().(type) {
+
+	case *Book_Paper:
+		oneof1 = 3
+
+	case *Book_Ebook:
+		oneof1 = 4
+
+	}
+
+	rv[opt.Prefix+"pb$medium_oneof"] = oneof1
 
 	return rv, nil
 }
@@ -2883,6 +2902,10 @@ func (x *BookDBQueryUnsafe) Id() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "pb$id")
 }
 
+func (x *BookDBQueryUnsafe) Medium() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb$medium_oneof")
+}
+
 func (x *BookDBColumns) WithTable(t string) *BookDBColumns {
 	return &BookDBColumns{tableName: t}
 }
@@ -2913,4 +2936,8 @@ func (x *BookDBColumns) PBData() exp.Expression {
 
 func (x *BookDBColumns) Id() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "pb$id")
+}
+
+func (x *BookDBColumns) Medium() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb$medium_oneof")
 }

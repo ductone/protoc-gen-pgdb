@@ -41,8 +41,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	isArray := f.Type().ProtoLabel() == pgs.Repeated
 	pt := f.Type().ProtoType()
 
-	// TODO(pquerna): nested fields/messages
-	pgColName, err := getColumnName(f, nil)
+	pgColName, err := getColumnName(f)
 	if err != nil {
 		panic(fmt.Errorf("pgdb: getColumnName failed for: %v: %s (of type %s)",
 			pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
@@ -163,12 +162,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	}
 
 	if convertDef.TypeConversion != gtPbNestedMsg {
-		dbTypeRef, ok := pgDataTypeForName(convertDef.PostgresTypeName)
-		if !ok {
-			panic(fmt.Errorf("pgdb: unsupported field type: %v: %s (of type %s): pgDataTypeForName(%s) NOT FOUND",
-				pt, f.FullyQualifiedName(), f.Descriptor().GetType(), convertDef.PostgresTypeName))
-		}
-
+		dbTypeRef := pgDataTypeForName(convertDef.PostgresTypeName)
 		rv.DB = &pgdb_v1.Column{
 			Name:     pgColName,
 			Type:     dbTypeRef.Name,
@@ -185,7 +179,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) {
 	vn := &varNamer{prefix: "cfv", offset: 0}
 	_ = vn
-	vcDataType, _ := pgDataTypeForName("varchar")
+	vcDataType := pgDataTypeForName("varchar")
 	fext := pgdb_v1.MessageOptions{}
 	_, err := m.Extension(pgdb_v1.E_Msg, &fext)
 	if err != nil {
@@ -197,7 +191,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 		return nil, nil
 	}
 
-	byteaDataType, _ := pgDataTypeForName("bytea")
+	byteaDataType := pgDataTypeForName("bytea")
 	tenantIdField := &fieldContext{
 		IsVirtual: true,
 		DB: &pgdb_v1.Column{

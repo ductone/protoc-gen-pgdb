@@ -80,6 +80,15 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 		panic(err)
 	}
 	rv = append(rv, module.getMessageFieldsInner(ctx, fields, vn, tenantIdField, ix, goPrefix)...)
+
+	vn = &varNamer{prefix: "oneof", offset: 0}
+	for _, oneof := range m.RealOneOfs() {
+		vn = vn.Next()
+		fieldRep := module.getOneOf(ctx, oneof, vn, ix, goPrefix)
+		if fieldRep != nil {
+			rv = append(rv, fieldRep)
+		}
+	}
 	return rv
 }
 
