@@ -1,5 +1,7 @@
-var {{ .VarName }} *time.Duration
+var {{ .VarName }} exp.LiteralExpression
 if {{ .InputName }}.IsValid() {
     {{.VarName -}}tmp := {{ .InputName }}.AsDuration()
-    {{ .VarName }} = &{{- .VarName -}}tmp
+    {{ .VarName }} = exp.NewLiteralExpression("? microsecond", {{.VarName -}}tmp.Microseconds())
+} else {
+    {{ .VarName }} = exp.NewLiteralExpression("NULL")
 }

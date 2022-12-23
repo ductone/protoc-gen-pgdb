@@ -7,13 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/stretchr/testify/require"
-	"google.golang.org/protobuf/types/known/durationpb"
+	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -32,7 +31,7 @@ func TestSchema(t *testing.T) {
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
-		//		fmt.Printf("%s\n", line)
+		fmt.Printf("%s\n", line)
 		require.NoErrorf(t, err, "TestCreateSchema: failed to execute sql: '\n%s\n'", line)
 	}
 
@@ -78,7 +77,9 @@ func TestSchema(t *testing.T) {
 
 	qb := goqu.Dialect("postgres")
 
-	q := qb.Insert(tableName).Prepared(true).Rows(
+	delete(record, "pb$pb_data")
+
+	q := qb.Insert(tableName).Prepared(false).Rows(
 		record,
 	)
 
@@ -103,7 +104,8 @@ func TestSchema(t *testing.T) {
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)
-	spew.Dump(query, params)
+	// spew.Dump(query, params)
+	// spew.Dump(record)
 	fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
 	require.NoError(t, err)
 }

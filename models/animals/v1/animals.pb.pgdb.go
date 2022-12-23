@@ -304,10 +304,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	rv[ro.ColumnName("system_builtin")] = v7
 
-	var v8 *time.Duration
+	var v8 exp.LiteralExpression
 	if m.self.GetElapsed().IsValid() {
 		v8tmp := m.self.GetElapsed().AsDuration()
-		v8 = &v8tmp
+		v8 = exp.NewLiteralExpression("? microsecond", v8tmp.Microseconds())
+	} else {
+		v8 = exp.NewLiteralExpression("NULL")
 	}
 
 	rv[ro.ColumnName("elapsed")] = v8
@@ -316,7 +318,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if err != nil {
 		return nil, err
 	}
-	v9 := exp.NewLiteralExpression("?::json", string(v9tmp))
+	v9 := exp.NewLiteralExpression("?::jsonb", string(v9tmp))
 
 	rv[ro.ColumnName("profile")] = v9
 
