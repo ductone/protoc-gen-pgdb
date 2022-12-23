@@ -216,7 +216,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			Name:               "pksk",
 			Type:               vcDataType.Name,
 			Nullable:           false,
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pk || '|' || sk) STORED",
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		},
 		GoName:   "PKSK",
 		DataType: vcDataType,

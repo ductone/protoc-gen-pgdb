@@ -26,99 +26,101 @@ func (d *pgdbDescriptorPet) TableName() string {
 }
 
 func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
 	rv := []*pgdb_v1.Column{
 		{
-			Name:               "tenant_id",
+			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pksk",
+			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           false,
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pk || '|' || sk) STORED",
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		}, {
-			Name:               "pk",
-			Type:               "varchar",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               "sk",
+			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "fts_data",
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           false,
+			OverrideExpression: "",
+		}, {
+			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb_data",
+			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$id",
+			Name:               df.ColumnName("id"),
 			Type:               "text",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$created_at",
+			Name:               df.ColumnName("created_at"),
 			Type:               "timestamptz",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$updated_at",
+			Name:               df.ColumnName("updated_at"),
 			Type:               "timestamptz",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$deleted_at",
+			Name:               df.ColumnName("deleted_at"),
 			Type:               "timestamptz",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$display_name",
+			Name:               df.ColumnName("display_name"),
 			Type:               "text",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$description",
+			Name:               df.ColumnName("description"),
 			Type:               "text",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$system_builtin",
+			Name:               df.ColumnName("system_builtin"),
 			Type:               "bool",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$elapsed",
+			Name:               df.ColumnName("elapsed"),
 			Type:               "interval",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$profile",
+			Name:               df.ColumnName("profile"),
 			Type:               "jsonb",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$cuteness",
+			Name:               df.ColumnName("cuteness"),
 			Type:               "float4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$price",
+			Name:               df.ColumnName("price"),
 			Type:               "float8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb_14",
+			Name:               df.ColumnName("14"),
 			Type:               "bool",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$extra_profiles",
+			Name:               df.ColumnName("extra_profiles"),
 			Type:               "jsonb",
 			Nullable:           true,
 			OverrideExpression: "",
@@ -136,39 +138,41 @@ func (d *pgdbDescriptorPet) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
-func (d *pgdbDescriptorPet) Indexes() []*pgdb_v1.Index {
+func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
 	rv := []*pgdb_v1.Index{
 		{
-			Name:               "pbidx_pksk_pet_models_animals_v1_4fc115ea",
+			Name:               io.IndexName("pksk_pet_models_animals_v1_4fc115ea"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          true,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "pksk"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
 		}, {
-			Name:               "pbidx_pksk_pet_models_animals_v1_4fc115ea",
+			Name:               io.IndexName("pksk_pet_models_animals_v1_4fc115ea"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "pk", "sk"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
 		}, {
-			Name:               "pbidx_fts_data_pet_models_animals_v1_6d64344b",
+			Name:               io.IndexName("fts_data_pet_models_animals_v1_6d64344b"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
 			IsUnique:           false,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "fts_data"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 		}, {
-			Name:               "pbidx_profile_pet_models_animals_v1_6b04a2a2",
+			Name:               io.IndexName("profile_pet_models_animals_v1_6b04a2a2"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
 			IsUnique:           false,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "pb$profile"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("profile")},
 			OverrideExpression: "",
 		},
 	}
@@ -191,15 +195,16 @@ func (m *pgdbMessagePet) Descriptor() pgdb_v1.Descriptor {
 }
 
 func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
-	opt := pgdb_v1.NewRecordOptions(opts)
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
 
 	var sb strings.Builder
 
-	var rv exp.Record
+	rv := exp.Record{}
 
 	cfv0 := string(m.self.TenantId)
 
-	rv[opt.Prefix+"tenant_id"] = cfv0
+	rv[ro.ColumnName("tenant_id")] = cfv0
 
 	sb.Reset()
 
@@ -215,7 +220,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	cfv2 := sb.String()
 
-	rv[opt.Prefix+"pk"] = cfv2
+	rv[ro.ColumnName("pk")] = cfv2
 
 	sb.Reset()
 
@@ -223,7 +228,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	cfv3 := sb.String()
 
-	rv[opt.Prefix+"sk"] = cfv3
+	rv[ro.ColumnName("sk")] = cfv3
 
 	cfv4tmp := []*pgdb_v1.SearchContent{
 
@@ -248,18 +253,20 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
-	rv[opt.Prefix+"fts_data"] = cfv4
+	rv[ro.ColumnName("fts_data")] = cfv4
 
-	cfv5, err := proto.Marshal(m.self)
+	cfv5tmp, err := proto.Marshal(m.self)
 	if err != nil {
 		return nil, err
 	}
 
-	rv[opt.Prefix+"pb_data"] = cfv5
+	cfv5 := exp.NewLiteralExpression("?", string(cfv5tmp))
+
+	rv[ro.ColumnName("pb_data")] = cfv5
 
 	v1 := string(m.self.GetId())
 
-	rv[opt.Prefix+"pb$id"] = v1
+	rv[ro.ColumnName("id")] = v1
 
 	var v2 *time.Time
 	if m.self.GetCreatedAt().IsValid() {
@@ -267,7 +274,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v2 = &v2tmp
 	}
 
-	rv[opt.Prefix+"pb$created_at"] = v2
+	rv[ro.ColumnName("created_at")] = v2
 
 	var v3 *time.Time
 	if m.self.GetUpdatedAt().IsValid() {
@@ -275,7 +282,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v3 = &v3tmp
 	}
 
-	rv[opt.Prefix+"pb$updated_at"] = v3
+	rv[ro.ColumnName("updated_at")] = v3
 
 	var v4 *time.Time
 	if m.self.GetDeletedAt().IsValid() {
@@ -283,19 +290,19 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v4 = &v4tmp
 	}
 
-	rv[opt.Prefix+"pb$deleted_at"] = v4
+	rv[ro.ColumnName("deleted_at")] = v4
 
 	v5 := string(m.self.GetDisplayName())
 
-	rv[opt.Prefix+"pb$display_name"] = v5
+	rv[ro.ColumnName("display_name")] = v5
 
 	v6 := string(m.self.GetDescription())
 
-	rv[opt.Prefix+"pb$description"] = v6
+	rv[ro.ColumnName("description")] = v6
 
 	v7 := bool(m.self.GetSystemBuiltin())
 
-	rv[opt.Prefix+"pb$system_builtin"] = v7
+	rv[ro.ColumnName("system_builtin")] = v7
 
 	var v8 *time.Duration
 	if m.self.GetElapsed().IsValid() {
@@ -303,27 +310,27 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v8 = &v8tmp
 	}
 
-	rv[opt.Prefix+"pb$elapsed"] = v8
+	rv[ro.ColumnName("elapsed")] = v8
 
 	v9tmp, err := protojson.Marshal(m.self.GetProfile())
 	if err != nil {
 		return nil, err
 	}
-	v9 := string(v9tmp)
+	v9 := exp.NewLiteralExpression("?::json", string(v9tmp))
 
-	rv[opt.Prefix+"pb$profile"] = v9
+	rv[ro.ColumnName("profile")] = v9
 
 	v10 := float32(m.self.GetCuteness())
 
-	rv[opt.Prefix+"pb$cuteness"] = v10
+	rv[ro.ColumnName("cuteness")] = v10
 
 	v11 := float64(m.self.GetPrice())
 
-	rv[opt.Prefix+"pb$price"] = v11
+	rv[ro.ColumnName("price")] = v11
 
 	v12 := bool(m.self.GetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame())
 
-	rv[opt.Prefix+"pb_14"] = v12
+	rv[ro.ColumnName("14")] = v12
 
 	v13first := true
 	v13buf := bytes.Buffer{}
@@ -342,7 +349,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	}
 	v13 := v13buf.String()
 
-	rv[opt.Prefix+"pb$extra_profiles"] = v13
+	rv[ro.ColumnName("extra_profiles")] = v13
 
 	return rv, nil
 }
@@ -421,55 +428,56 @@ func (x *PetDBQueryBuilder) Unsafe() *PetDBQueryUnsafe {
 }
 
 type PetTenantIdSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *PetTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
 }
 
 func (x *PetTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Neq(v)
 }
 
 func (x *PetTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gt(v)
 }
 
 func (x *PetTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gte(v)
 }
 
 func (x *PetTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lt(v)
 }
 
 func (x *PetTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lte(v)
 }
 
 func (x *PetTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").In(v)
 }
 
 func (x *PetTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotIn(v)
 }
 
 func (x *PetTenantIdSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNull()
 }
 
 func (x *PetTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNotNull()
 }
 
 func (x *PetTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *PetTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *PetTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -486,213 +494,217 @@ func (x *PetTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expressi
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *PetTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *PetTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *PetTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *PetTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *PetTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *PetDBQueryBuilder) TenantId() *PetTenantIdSafeOperators {
-	return &PetTenantIdSafeOperators{tableName: x.tableName}
+	return &PetTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type PetPKSKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *PetPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Eq(v)
 }
 
 func (x *PetPKSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Neq(v)
 }
 
 func (x *PetPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gt(v)
 }
 
 func (x *PetPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gte(v)
 }
 
 func (x *PetPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lt(v)
 }
 
 func (x *PetPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lte(v)
 }
 
 func (x *PetPKSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").In(v)
 }
 
 func (x *PetPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotIn(v)
 }
 
 func (x *PetPKSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNull()
 }
 
 func (x *PetPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNotNull()
 }
 
 func (x *PetPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *PetPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *PetDBQueryBuilder) PKSK() *PetPKSKSafeOperators {
-	return &PetPKSKSafeOperators{tableName: x.tableName}
+	return &PetPKSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type PetPKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *PetPKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
 }
 
 func (x *PetPKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Neq(v)
 }
 
 func (x *PetPKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gt(v)
 }
 
 func (x *PetPKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gte(v)
 }
 
 func (x *PetPKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lt(v)
 }
 
 func (x *PetPKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lte(v)
 }
 
 func (x *PetPKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").In(v)
 }
 
 func (x *PetPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotIn(v)
 }
 
 func (x *PetPKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNull()
 }
 
 func (x *PetPKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNotNull()
 }
 
 func (x *PetPKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *PetPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *PetDBQueryBuilder) PK() *PetPKSafeOperators {
-	return &PetPKSafeOperators{tableName: x.tableName}
+	return &PetPKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type PetSKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *PetSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Eq(v)
 }
 
 func (x *PetSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Neq(v)
 }
 
 func (x *PetSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gt(v)
 }
 
 func (x *PetSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gte(v)
 }
 
 func (x *PetSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lt(v)
 }
 
 func (x *PetSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lte(v)
 }
 
 func (x *PetSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").In(v)
 }
 
 func (x *PetSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotIn(v)
 }
 
 func (x *PetSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNull()
 }
 
 func (x *PetSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNotNull()
 }
 
 func (x *PetSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *PetSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *PetDBQueryBuilder) SK() *PetSKSafeOperators {
-	return &PetSKSafeOperators{tableName: x.tableName}
+	return &PetSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type PetFTSDataSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *PetFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fts_data").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
 }
 
 func (x *PetFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -709,45 +721,46 @@ func (x *PetFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expressio
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *PetFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *PetFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *PetFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *PetFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *PetFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *PetDBQueryBuilder) FTSData() *PetFTSDataSafeOperators {
-	return &PetFTSDataSafeOperators{tableName: x.tableName}
+	return &PetFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type PetProfileSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *PetProfileSafeOperators) Eq(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$profile").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile").Eq(v)
 }
 
 func (x *PetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -764,37 +777,37 @@ func (x *PetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expressio
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, "pb$profile")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *PetProfileSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "pb$profile")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *PetProfileSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "pb$profile")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *PetProfileSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "pb$profile")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *PetProfileSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "pb$profile")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *PetProfileSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "pb$profile")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *PetDBQueryBuilder) Profile() *PetProfileSafeOperators {
-	return &PetProfileSafeOperators{tableName: x.tableName}
+	return &PetProfileSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 func (x *PetDBQueryUnsafe) TenantId() exp.IdentifierExpression {
@@ -822,55 +835,55 @@ func (x *PetDBQueryUnsafe) PBData() exp.IdentifierExpression {
 }
 
 func (x *PetDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$id")
+	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
 func (x *PetDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$created_at")
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
 
 func (x *PetDBQueryUnsafe) UpdatedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$updated_at")
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
 }
 
 func (x *PetDBQueryUnsafe) DeletedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$deleted_at")
+	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
 }
 
 func (x *PetDBQueryUnsafe) DisplayName() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$display_name")
+	return exp.NewIdentifierExpression("", x.tableName, "display_name")
 }
 
 func (x *PetDBQueryUnsafe) Description() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$description")
+	return exp.NewIdentifierExpression("", x.tableName, "description")
 }
 
 func (x *PetDBQueryUnsafe) SystemBuiltin() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$system_builtin")
+	return exp.NewIdentifierExpression("", x.tableName, "system_builtin")
 }
 
 func (x *PetDBQueryUnsafe) Elapsed() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$elapsed")
+	return exp.NewIdentifierExpression("", x.tableName, "elapsed")
 }
 
 func (x *PetDBQueryUnsafe) Profile() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$profile")
+	return exp.NewIdentifierExpression("", x.tableName, "profile")
 }
 
 func (x *PetDBQueryUnsafe) Cuteness() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$cuteness")
+	return exp.NewIdentifierExpression("", x.tableName, "cuteness")
 }
 
 func (x *PetDBQueryUnsafe) Price() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$price")
+	return exp.NewIdentifierExpression("", x.tableName, "price")
 }
 
 func (x *PetDBQueryUnsafe) VeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb_14")
+	return exp.NewIdentifierExpression("", x.tableName, "14")
 }
 
 func (x *PetDBQueryUnsafe) ExtraProfiles() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$extra_profiles")
+	return exp.NewIdentifierExpression("", x.tableName, "extra_profiles")
 }
 
 func (x *PetDBColumns) WithTable(t string) *PetDBColumns {
@@ -902,55 +915,55 @@ func (x *PetDBColumns) PBData() exp.Expression {
 }
 
 func (x *PetDBColumns) Id() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$id")
+	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
 func (x *PetDBColumns) CreatedAt() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$created_at")
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
 
 func (x *PetDBColumns) UpdatedAt() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$updated_at")
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
 }
 
 func (x *PetDBColumns) DeletedAt() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$deleted_at")
+	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
 }
 
 func (x *PetDBColumns) DisplayName() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$display_name")
+	return exp.NewIdentifierExpression("", x.tableName, "display_name")
 }
 
 func (x *PetDBColumns) Description() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$description")
+	return exp.NewIdentifierExpression("", x.tableName, "description")
 }
 
 func (x *PetDBColumns) SystemBuiltin() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$system_builtin")
+	return exp.NewIdentifierExpression("", x.tableName, "system_builtin")
 }
 
 func (x *PetDBColumns) Elapsed() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$elapsed")
+	return exp.NewIdentifierExpression("", x.tableName, "elapsed")
 }
 
 func (x *PetDBColumns) Profile() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$profile")
+	return exp.NewIdentifierExpression("", x.tableName, "profile")
 }
 
 func (x *PetDBColumns) Cuteness() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$cuteness")
+	return exp.NewIdentifierExpression("", x.tableName, "cuteness")
 }
 
 func (x *PetDBColumns) Price() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$price")
+	return exp.NewIdentifierExpression("", x.tableName, "price")
 }
 
 func (x *PetDBColumns) VeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb_14")
+	return exp.NewIdentifierExpression("", x.tableName, "14")
 }
 
 func (x *PetDBColumns) ExtraProfiles() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$extra_profiles")
+	return exp.NewIdentifierExpression("", x.tableName, "extra_profiles")
 }
 
 type pgdbDescriptorScalarValue struct{}
@@ -964,189 +977,191 @@ func (d *pgdbDescriptorScalarValue) TableName() string {
 }
 
 func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
 	rv := []*pgdb_v1.Column{
 		{
-			Name:               "tenant_id",
+			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pksk",
+			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           false,
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pk || '|' || sk) STORED",
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		}, {
-			Name:               "pk",
-			Type:               "varchar",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               "sk",
+			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "fts_data",
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           false,
+			OverrideExpression: "",
+		}, {
+			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb_data",
+			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$id",
+			Name:               df.ColumnName("id"),
 			Type:               "text",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$double",
+			Name:               df.ColumnName("double"),
 			Type:               "float8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$float",
+			Name:               df.ColumnName("float"),
 			Type:               "float4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$int_32",
+			Name:               df.ColumnName("int_32"),
 			Type:               "int4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$int_64",
+			Name:               df.ColumnName("int_64"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$uint_32",
+			Name:               df.ColumnName("uint_32"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$uint_64",
+			Name:               df.ColumnName("uint_64"),
 			Type:               "numeric",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$sint_32",
+			Name:               df.ColumnName("sint_32"),
 			Type:               "int4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$sint_64",
+			Name:               df.ColumnName("sint_64"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$fixed_32",
+			Name:               df.ColumnName("fixed_32"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$fixed_64",
+			Name:               df.ColumnName("fixed_64"),
 			Type:               "numeric",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$sfixed_32",
+			Name:               df.ColumnName("sfixed_32"),
 			Type:               "int4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$sfixed_64",
+			Name:               df.ColumnName("sfixed_64"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$bool",
+			Name:               df.ColumnName("bool"),
 			Type:               "bool",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$string",
+			Name:               df.ColumnName("string"),
 			Type:               "text",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$bytes",
+			Name:               df.ColumnName("bytes"),
 			Type:               "bytea",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_double",
+			Name:               df.ColumnName("repeated_double"),
 			Type:               "float8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_float",
+			Name:               df.ColumnName("repeated_float"),
 			Type:               "float4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_int32",
+			Name:               df.ColumnName("repeated_int32"),
 			Type:               "int4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_int64",
+			Name:               df.ColumnName("repeated_int64"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_uint32",
+			Name:               df.ColumnName("repeated_uint32"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_uint64",
+			Name:               df.ColumnName("repeated_uint64"),
 			Type:               "numeric",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_sint32",
+			Name:               df.ColumnName("repeated_sint32"),
 			Type:               "int4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_sint64",
+			Name:               df.ColumnName("repeated_sint64"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_fixed32",
+			Name:               df.ColumnName("repeated_fixed32"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_fixed64",
+			Name:               df.ColumnName("repeated_fixed64"),
 			Type:               "numeric",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_sfixed32",
+			Name:               df.ColumnName("repeated_sfixed32"),
 			Type:               "int4",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_sfixed64",
+			Name:               df.ColumnName("repeated_sfixed64"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_bool",
+			Name:               df.ColumnName("repeated_bool"),
 			Type:               "bool",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_string",
+			Name:               df.ColumnName("repeated_string"),
 			Type:               "text",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$repeated_bytes",
+			Name:               df.ColumnName("repeated_bytes"),
 			Type:               "bytea",
 			Nullable:           true,
 			OverrideExpression: "",
@@ -1164,31 +1179,33 @@ func (d *pgdbDescriptorScalarValue) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
-func (d *pgdbDescriptorScalarValue) Indexes() []*pgdb_v1.Index {
+func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
 	rv := []*pgdb_v1.Index{
 		{
-			Name:               "pbidx_pksk_scalar_value_models_animals_v1_19369260",
+			Name:               io.IndexName("pksk_scalar_value_models_animals_v1_19369260"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          true,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "pksk"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
 		}, {
-			Name:               "pbidx_pksk_scalar_value_models_animals_v1_19369260",
+			Name:               io.IndexName("pksk_scalar_value_models_animals_v1_19369260"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "pk", "sk"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
 		}, {
-			Name:               "pbidx_fts_data_scalar_value_models_animals_v1_6f51bd7b",
+			Name:               io.IndexName("fts_data_scalar_value_models_animals_v1_6f51bd7b"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
 			IsUnique:           false,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "fts_data"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 		},
 	}
@@ -1211,15 +1228,16 @@ func (m *pgdbMessageScalarValue) Descriptor() pgdb_v1.Descriptor {
 }
 
 func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
-	opt := pgdb_v1.NewRecordOptions(opts)
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
 
 	var sb strings.Builder
 
-	var rv exp.Record
+	rv := exp.Record{}
 
 	cfv0 := string(m.self.TenantId)
 
-	rv[opt.Prefix+"tenant_id"] = cfv0
+	rv[ro.ColumnName("tenant_id")] = cfv0
 
 	sb.Reset()
 
@@ -1231,7 +1249,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	cfv2 := sb.String()
 
-	rv[opt.Prefix+"pk"] = cfv2
+	rv[ro.ColumnName("pk")] = cfv2
 
 	sb.Reset()
 
@@ -1239,184 +1257,186 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	cfv3 := sb.String()
 
-	rv[opt.Prefix+"sk"] = cfv3
+	rv[ro.ColumnName("sk")] = cfv3
 
 	cfv4 := exp.NewLiteralExpression("NULL")
 
-	rv[opt.Prefix+"fts_data"] = cfv4
+	rv[ro.ColumnName("fts_data")] = cfv4
 
-	cfv5, err := proto.Marshal(m.self)
+	cfv5tmp, err := proto.Marshal(m.self)
 	if err != nil {
 		return nil, err
 	}
 
-	rv[opt.Prefix+"pb_data"] = cfv5
+	cfv5 := exp.NewLiteralExpression("?", string(cfv5tmp))
+
+	rv[ro.ColumnName("pb_data")] = cfv5
 
 	v1 := string(m.self.GetId())
 
-	rv[opt.Prefix+"pb$id"] = v1
+	rv[ro.ColumnName("id")] = v1
 
 	v2 := float64(m.self.GetDouble())
 
-	rv[opt.Prefix+"pb$double"] = v2
+	rv[ro.ColumnName("double")] = v2
 
 	v3 := float32(m.self.GetFloat())
 
-	rv[opt.Prefix+"pb$float"] = v3
+	rv[ro.ColumnName("float")] = v3
 
 	v4 := int32(m.self.GetInt32())
 
-	rv[opt.Prefix+"pb$int_32"] = v4
+	rv[ro.ColumnName("int_32")] = v4
 
 	v5 := int64(m.self.GetInt64())
 
-	rv[opt.Prefix+"pb$int_64"] = v5
+	rv[ro.ColumnName("int_64")] = v5
 
 	v6 := uint32(m.self.GetUint32())
 
-	rv[opt.Prefix+"pb$uint_32"] = v6
+	rv[ro.ColumnName("uint_32")] = v6
 
 	v7 := uint64(m.self.GetUint64())
 
-	rv[opt.Prefix+"pb$uint_64"] = v7
+	rv[ro.ColumnName("uint_64")] = v7
 
 	v8 := int32(m.self.GetSint32())
 
-	rv[opt.Prefix+"pb$sint_32"] = v8
+	rv[ro.ColumnName("sint_32")] = v8
 
 	v9 := int64(m.self.GetSint64())
 
-	rv[opt.Prefix+"pb$sint_64"] = v9
+	rv[ro.ColumnName("sint_64")] = v9
 
 	v10 := uint32(m.self.GetFixed32())
 
-	rv[opt.Prefix+"pb$fixed_32"] = v10
+	rv[ro.ColumnName("fixed_32")] = v10
 
 	v11 := uint64(m.self.GetFixed64())
 
-	rv[opt.Prefix+"pb$fixed_64"] = v11
+	rv[ro.ColumnName("fixed_64")] = v11
 
 	v12 := int32(m.self.GetSfixed32())
 
-	rv[opt.Prefix+"pb$sfixed_32"] = v12
+	rv[ro.ColumnName("sfixed_32")] = v12
 
 	v13 := int64(m.self.GetSfixed64())
 
-	rv[opt.Prefix+"pb$sfixed_64"] = v13
+	rv[ro.ColumnName("sfixed_64")] = v13
 
 	v14 := bool(m.self.GetBool())
 
-	rv[opt.Prefix+"pb$bool"] = v14
+	rv[ro.ColumnName("bool")] = v14
 
 	v15 := string(m.self.GetString_())
 
-	rv[opt.Prefix+"pb$string"] = v15
+	rv[ro.ColumnName("string")] = v15
 
 	v16 := m.self.GetBytes()
 
-	rv[opt.Prefix+"pb$bytes"] = v16
+	rv[ro.ColumnName("bytes")] = v16
 
 	v17 := make([]float64, 0, len(m.self.GetRepeatedDouble()))
 	for _, arrTmp := range m.self.GetRepeatedDouble() {
 		v17 = append(v17, float64(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_double"] = v17
+	rv[ro.ColumnName("repeated_double")] = v17
 
 	v18 := make([]float32, 0, len(m.self.GetRepeatedFloat()))
 	for _, arrTmp := range m.self.GetRepeatedFloat() {
 		v18 = append(v18, float32(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_float"] = v18
+	rv[ro.ColumnName("repeated_float")] = v18
 
 	v19 := make([]int32, 0, len(m.self.GetRepeatedInt32()))
 	for _, arrTmp := range m.self.GetRepeatedInt32() {
 		v19 = append(v19, int32(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_int32"] = v19
+	rv[ro.ColumnName("repeated_int32")] = v19
 
 	v20 := make([]int64, 0, len(m.self.GetRepeatedInt64()))
 	for _, arrTmp := range m.self.GetRepeatedInt64() {
 		v20 = append(v20, int64(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_int64"] = v20
+	rv[ro.ColumnName("repeated_int64")] = v20
 
 	v21 := make([]uint32, 0, len(m.self.GetRepeatedUint32()))
 	for _, arrTmp := range m.self.GetRepeatedUint32() {
 		v21 = append(v21, uint32(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_uint32"] = v21
+	rv[ro.ColumnName("repeated_uint32")] = v21
 
 	v22 := make([]uint64, 0, len(m.self.GetRepeatedUint64()))
 	for _, arrTmp := range m.self.GetRepeatedUint64() {
 		v22 = append(v22, uint64(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_uint64"] = v22
+	rv[ro.ColumnName("repeated_uint64")] = v22
 
 	v23 := make([]int32, 0, len(m.self.GetRepeatedSint32()))
 	for _, arrTmp := range m.self.GetRepeatedSint32() {
 		v23 = append(v23, int32(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_sint32"] = v23
+	rv[ro.ColumnName("repeated_sint32")] = v23
 
 	v24 := make([]int64, 0, len(m.self.GetRepeatedSint64()))
 	for _, arrTmp := range m.self.GetRepeatedSint64() {
 		v24 = append(v24, int64(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_sint64"] = v24
+	rv[ro.ColumnName("repeated_sint64")] = v24
 
 	v25 := make([]uint32, 0, len(m.self.GetRepeatedFixed32()))
 	for _, arrTmp := range m.self.GetRepeatedFixed32() {
 		v25 = append(v25, uint32(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_fixed32"] = v25
+	rv[ro.ColumnName("repeated_fixed32")] = v25
 
 	v26 := make([]uint64, 0, len(m.self.GetRepeatedFixed64()))
 	for _, arrTmp := range m.self.GetRepeatedFixed64() {
 		v26 = append(v26, uint64(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_fixed64"] = v26
+	rv[ro.ColumnName("repeated_fixed64")] = v26
 
 	v27 := make([]int32, 0, len(m.self.GetRepeatedSfixed32()))
 	for _, arrTmp := range m.self.GetRepeatedSfixed32() {
 		v27 = append(v27, int32(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_sfixed32"] = v27
+	rv[ro.ColumnName("repeated_sfixed32")] = v27
 
 	v28 := make([]int64, 0, len(m.self.GetRepeatedSfixed64()))
 	for _, arrTmp := range m.self.GetRepeatedSfixed64() {
 		v28 = append(v28, int64(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_sfixed64"] = v28
+	rv[ro.ColumnName("repeated_sfixed64")] = v28
 
 	v29 := make([]bool, 0, len(m.self.GetRepeatedBool()))
 	for _, arrTmp := range m.self.GetRepeatedBool() {
 		v29 = append(v29, bool(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_bool"] = v29
+	rv[ro.ColumnName("repeated_bool")] = v29
 
 	v30 := make([]string, 0, len(m.self.GetRepeatedString()))
 	for _, arrTmp := range m.self.GetRepeatedString() {
 		v30 = append(v30, string(arrTmp))
 	}
 
-	rv[opt.Prefix+"pb$repeated_string"] = v30
+	rv[ro.ColumnName("repeated_string")] = v30
 
 	v31 := m.self.GetRepeatedBytes()
 
-	rv[opt.Prefix+"pb$repeated_bytes"] = v31
+	rv[ro.ColumnName("repeated_bytes")] = v31
 
 	return rv, nil
 }
@@ -1476,235 +1496,240 @@ func (x *ScalarValueDBQueryBuilder) Unsafe() *ScalarValueDBQueryUnsafe {
 }
 
 type ScalarValueTenantIdSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *ScalarValueTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Neq(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gt(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gte(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lt(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lte(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").In(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotIn(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNull()
 }
 
 func (x *ScalarValueTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNotNull()
 }
 
 func (x *ScalarValueTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *ScalarValueTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *ScalarValueDBQueryBuilder) TenantId() *ScalarValueTenantIdSafeOperators {
-	return &ScalarValueTenantIdSafeOperators{tableName: x.tableName}
+	return &ScalarValueTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type ScalarValuePKSKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *ScalarValuePKSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Eq(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Neq(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gt(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gte(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lt(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lte(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").In(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotIn(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNull()
 }
 
 func (x *ScalarValuePKSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNotNull()
 }
 
 func (x *ScalarValuePKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *ScalarValuePKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *ScalarValueDBQueryBuilder) PKSK() *ScalarValuePKSKSafeOperators {
-	return &ScalarValuePKSKSafeOperators{tableName: x.tableName}
+	return &ScalarValuePKSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type ScalarValuePKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *ScalarValuePKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
 }
 
 func (x *ScalarValuePKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Neq(v)
 }
 
 func (x *ScalarValuePKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gt(v)
 }
 
 func (x *ScalarValuePKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gte(v)
 }
 
 func (x *ScalarValuePKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lt(v)
 }
 
 func (x *ScalarValuePKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lte(v)
 }
 
 func (x *ScalarValuePKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").In(v)
 }
 
 func (x *ScalarValuePKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotIn(v)
 }
 
 func (x *ScalarValuePKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNull()
 }
 
 func (x *ScalarValuePKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNotNull()
 }
 
 func (x *ScalarValuePKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *ScalarValuePKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *ScalarValueDBQueryBuilder) PK() *ScalarValuePKSafeOperators {
-	return &ScalarValuePKSafeOperators{tableName: x.tableName}
+	return &ScalarValuePKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type ScalarValueSKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *ScalarValueSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Eq(v)
 }
 
 func (x *ScalarValueSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Neq(v)
 }
 
 func (x *ScalarValueSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gt(v)
 }
 
 func (x *ScalarValueSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gte(v)
 }
 
 func (x *ScalarValueSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lt(v)
 }
 
 func (x *ScalarValueSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lte(v)
 }
 
 func (x *ScalarValueSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").In(v)
 }
 
 func (x *ScalarValueSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotIn(v)
 }
 
 func (x *ScalarValueSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNull()
 }
 
 func (x *ScalarValueSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNotNull()
 }
 
 func (x *ScalarValueSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *ScalarValueSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *ScalarValueDBQueryBuilder) SK() *ScalarValueSKSafeOperators {
-	return &ScalarValueSKSafeOperators{tableName: x.tableName}
+	return &ScalarValueSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type ScalarValueFTSDataSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *ScalarValueFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fts_data").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
 }
 
 func (x *ScalarValueFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -1721,37 +1746,37 @@ func (x *ScalarValueFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.E
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *ScalarValueFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *ScalarValueFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *ScalarValueFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *ScalarValueFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *ScalarValueFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *ScalarValueDBQueryBuilder) FTSData() *ScalarValueFTSDataSafeOperators {
-	return &ScalarValueFTSDataSafeOperators{tableName: x.tableName}
+	return &ScalarValueFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 func (x *ScalarValueDBQueryUnsafe) TenantId() exp.IdentifierExpression {
@@ -1779,127 +1804,127 @@ func (x *ScalarValueDBQueryUnsafe) PBData() exp.IdentifierExpression {
 }
 
 func (x *ScalarValueDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$id")
+	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Double() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$double")
+	return exp.NewIdentifierExpression("", x.tableName, "double")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Float() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$float")
+	return exp.NewIdentifierExpression("", x.tableName, "float")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Int32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$int_32")
+	return exp.NewIdentifierExpression("", x.tableName, "int_32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Int64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$int_64")
+	return exp.NewIdentifierExpression("", x.tableName, "int_64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Uint32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$uint_32")
+	return exp.NewIdentifierExpression("", x.tableName, "uint_32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Uint64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$uint_64")
+	return exp.NewIdentifierExpression("", x.tableName, "uint_64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Sint32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$sint_32")
+	return exp.NewIdentifierExpression("", x.tableName, "sint_32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Sint64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$sint_64")
+	return exp.NewIdentifierExpression("", x.tableName, "sint_64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Fixed32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$fixed_32")
+	return exp.NewIdentifierExpression("", x.tableName, "fixed_32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Fixed64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$fixed_64")
+	return exp.NewIdentifierExpression("", x.tableName, "fixed_64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Sfixed32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$sfixed_32")
+	return exp.NewIdentifierExpression("", x.tableName, "sfixed_32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Sfixed64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$sfixed_64")
+	return exp.NewIdentifierExpression("", x.tableName, "sfixed_64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Bool() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$bool")
+	return exp.NewIdentifierExpression("", x.tableName, "bool")
 }
 
 func (x *ScalarValueDBQueryUnsafe) String_() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$string")
+	return exp.NewIdentifierExpression("", x.tableName, "string")
 }
 
 func (x *ScalarValueDBQueryUnsafe) Bytes() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$bytes")
+	return exp.NewIdentifierExpression("", x.tableName, "bytes")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedDouble() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_double")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_double")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedFloat() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_float")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_float")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedInt32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_int32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_int32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedInt64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_int64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_int64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedUint32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_uint32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_uint32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedUint64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_uint64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_uint64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedSint32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_sint32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_sint32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedSint64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_sint64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_sint64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedFixed32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_fixed32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_fixed32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedFixed64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_fixed64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_fixed64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedSfixed32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_sfixed32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_sfixed32")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedSfixed64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_sfixed64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_sfixed64")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedBool() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_bool")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_bool")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedString() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_string")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_string")
 }
 
 func (x *ScalarValueDBQueryUnsafe) RepeatedBytes() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_bytes")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_bytes")
 }
 
 func (x *ScalarValueDBColumns) WithTable(t string) *ScalarValueDBColumns {
@@ -1931,127 +1956,127 @@ func (x *ScalarValueDBColumns) PBData() exp.Expression {
 }
 
 func (x *ScalarValueDBColumns) Id() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$id")
+	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
 func (x *ScalarValueDBColumns) Double() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$double")
+	return exp.NewIdentifierExpression("", x.tableName, "double")
 }
 
 func (x *ScalarValueDBColumns) Float() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$float")
+	return exp.NewIdentifierExpression("", x.tableName, "float")
 }
 
 func (x *ScalarValueDBColumns) Int32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$int_32")
+	return exp.NewIdentifierExpression("", x.tableName, "int_32")
 }
 
 func (x *ScalarValueDBColumns) Int64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$int_64")
+	return exp.NewIdentifierExpression("", x.tableName, "int_64")
 }
 
 func (x *ScalarValueDBColumns) Uint32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$uint_32")
+	return exp.NewIdentifierExpression("", x.tableName, "uint_32")
 }
 
 func (x *ScalarValueDBColumns) Uint64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$uint_64")
+	return exp.NewIdentifierExpression("", x.tableName, "uint_64")
 }
 
 func (x *ScalarValueDBColumns) Sint32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$sint_32")
+	return exp.NewIdentifierExpression("", x.tableName, "sint_32")
 }
 
 func (x *ScalarValueDBColumns) Sint64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$sint_64")
+	return exp.NewIdentifierExpression("", x.tableName, "sint_64")
 }
 
 func (x *ScalarValueDBColumns) Fixed32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$fixed_32")
+	return exp.NewIdentifierExpression("", x.tableName, "fixed_32")
 }
 
 func (x *ScalarValueDBColumns) Fixed64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$fixed_64")
+	return exp.NewIdentifierExpression("", x.tableName, "fixed_64")
 }
 
 func (x *ScalarValueDBColumns) Sfixed32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$sfixed_32")
+	return exp.NewIdentifierExpression("", x.tableName, "sfixed_32")
 }
 
 func (x *ScalarValueDBColumns) Sfixed64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$sfixed_64")
+	return exp.NewIdentifierExpression("", x.tableName, "sfixed_64")
 }
 
 func (x *ScalarValueDBColumns) Bool() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$bool")
+	return exp.NewIdentifierExpression("", x.tableName, "bool")
 }
 
 func (x *ScalarValueDBColumns) String_() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$string")
+	return exp.NewIdentifierExpression("", x.tableName, "string")
 }
 
 func (x *ScalarValueDBColumns) Bytes() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$bytes")
+	return exp.NewIdentifierExpression("", x.tableName, "bytes")
 }
 
 func (x *ScalarValueDBColumns) RepeatedDouble() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_double")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_double")
 }
 
 func (x *ScalarValueDBColumns) RepeatedFloat() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_float")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_float")
 }
 
 func (x *ScalarValueDBColumns) RepeatedInt32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_int32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_int32")
 }
 
 func (x *ScalarValueDBColumns) RepeatedInt64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_int64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_int64")
 }
 
 func (x *ScalarValueDBColumns) RepeatedUint32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_uint32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_uint32")
 }
 
 func (x *ScalarValueDBColumns) RepeatedUint64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_uint64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_uint64")
 }
 
 func (x *ScalarValueDBColumns) RepeatedSint32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_sint32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_sint32")
 }
 
 func (x *ScalarValueDBColumns) RepeatedSint64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_sint64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_sint64")
 }
 
 func (x *ScalarValueDBColumns) RepeatedFixed32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_fixed32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_fixed32")
 }
 
 func (x *ScalarValueDBColumns) RepeatedFixed64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_fixed64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_fixed64")
 }
 
 func (x *ScalarValueDBColumns) RepeatedSfixed32() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_sfixed32")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_sfixed32")
 }
 
 func (x *ScalarValueDBColumns) RepeatedSfixed64() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_sfixed64")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_sfixed64")
 }
 
 func (x *ScalarValueDBColumns) RepeatedBool() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_bool")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_bool")
 }
 
 func (x *ScalarValueDBColumns) RepeatedString() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_string")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_string")
 }
 
 func (x *ScalarValueDBColumns) RepeatedBytes() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$repeated_bytes")
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_bytes")
 }
 
 type pgdbDescriptorEBook struct{}
@@ -2065,9 +2090,11 @@ func (d *pgdbDescriptorEBook) TableName() string {
 }
 
 func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
 	rv := []*pgdb_v1.Column{
 		{
-			Name:               "pb$size",
+			Name:               df.ColumnName("size"),
 			Type:               "int8",
 			Nullable:           false,
 			OverrideExpression: "",
@@ -2085,7 +2112,9 @@ func (d *pgdbDescriptorEBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
-func (d *pgdbDescriptorEBook) Indexes() []*pgdb_v1.Index {
+func (d *pgdbDescriptorEBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
 	rv := []*pgdb_v1.Index{}
 
 	return rv
@@ -2106,13 +2135,14 @@ func (m *pgdbMessageEBook) Descriptor() pgdb_v1.Descriptor {
 }
 
 func (m *pgdbMessageEBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
-	opt := pgdb_v1.NewRecordOptions(opts)
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
 
-	var rv exp.Record
+	rv := exp.Record{}
 
 	v1 := int64(m.self.GetSize())
 
-	rv[opt.Prefix+"pb$size"] = v1
+	rv[ro.ColumnName("size")] = v1
 
 	return rv, nil
 }
@@ -2172,7 +2202,7 @@ func (x *EBookDBQueryBuilder) Unsafe() *EBookDBQueryUnsafe {
 }
 
 func (x *EBookDBQueryUnsafe) Size() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$size")
+	return exp.NewIdentifierExpression("", x.tableName, "size")
 }
 
 func (x *EBookDBColumns) WithTable(t string) *EBookDBColumns {
@@ -2180,7 +2210,7 @@ func (x *EBookDBColumns) WithTable(t string) *EBookDBColumns {
 }
 
 func (x *EBookDBColumns) Size() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$size")
+	return exp.NewIdentifierExpression("", x.tableName, "size")
 }
 
 type pgdbDescriptorPaperBook struct{}
@@ -2194,9 +2224,11 @@ func (d *pgdbDescriptorPaperBook) TableName() string {
 }
 
 func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
 	rv := []*pgdb_v1.Column{
 		{
-			Name:               "pb$pages",
+			Name:               df.ColumnName("pages"),
 			Type:               "int4",
 			Nullable:           false,
 			OverrideExpression: "",
@@ -2214,7 +2246,9 @@ func (d *pgdbDescriptorPaperBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
-func (d *pgdbDescriptorPaperBook) Indexes() []*pgdb_v1.Index {
+func (d *pgdbDescriptorPaperBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
 	rv := []*pgdb_v1.Index{}
 
 	return rv
@@ -2235,13 +2269,14 @@ func (m *pgdbMessagePaperBook) Descriptor() pgdb_v1.Descriptor {
 }
 
 func (m *pgdbMessagePaperBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
-	opt := pgdb_v1.NewRecordOptions(opts)
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
 
-	var rv exp.Record
+	rv := exp.Record{}
 
 	v1 := int32(m.self.GetPages())
 
-	rv[opt.Prefix+"pb$pages"] = v1
+	rv[ro.ColumnName("pages")] = v1
 
 	return rv, nil
 }
@@ -2301,7 +2336,7 @@ func (x *PaperBookDBQueryBuilder) Unsafe() *PaperBookDBQueryUnsafe {
 }
 
 func (x *PaperBookDBQueryUnsafe) Pages() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$pages")
+	return exp.NewIdentifierExpression("", x.tableName, "pages")
 }
 
 func (x *PaperBookDBColumns) WithTable(t string) *PaperBookDBColumns {
@@ -2309,7 +2344,7 @@ func (x *PaperBookDBColumns) WithTable(t string) *PaperBookDBColumns {
 }
 
 func (x *PaperBookDBColumns) Pages() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$pages")
+	return exp.NewIdentifierExpression("", x.tableName, "pages")
 }
 
 type pgdbDescriptorBook struct{}
@@ -2323,53 +2358,55 @@ func (d *pgdbDescriptorBook) TableName() string {
 }
 
 func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
 	rv := []*pgdb_v1.Column{
 		{
-			Name:               "tenant_id",
+			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pksk",
+			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           false,
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pk || '|' || sk) STORED",
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		}, {
-			Name:               "pk",
-			Type:               "varchar",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               "sk",
+			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "fts_data",
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           false,
+			OverrideExpression: "",
+		}, {
+			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb_data",
+			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$id",
+			Name:               df.ColumnName("id"),
 			Type:               "text",
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
-			Name:               "pb$medium_oneof",
+			Name:               df.ColumnName("medium_oneof"),
 			Type:               "int4",
 			Nullable:           false,
 			OverrideExpression: "",
 		},
 	}
 
-	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Fields()...)
+	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("3$")...)...)
 
-	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Fields()...)
+	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("4$")...)...)
 
 	return rv
 }
@@ -2382,38 +2419,40 @@ func (d *pgdbDescriptorBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
-func (d *pgdbDescriptorBook) Indexes() []*pgdb_v1.Index {
+func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
 	rv := []*pgdb_v1.Index{
 		{
-			Name:               "pbidx_pksk_book_models_animals_v1_a25b591a",
+			Name:               io.IndexName("pksk_book_models_animals_v1_a25b591a"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          true,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "pksk"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
 		}, {
-			Name:               "pbidx_pksk_book_models_animals_v1_a25b591a",
+			Name:               io.IndexName("pksk_book_models_animals_v1_a25b591a"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "pk", "sk"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
 		}, {
-			Name:               "pbidx_fts_data_book_models_animals_v1_6cf7b95a",
+			Name:               io.IndexName("fts_data_book_models_animals_v1_6cf7b95a"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
 			IsUnique:           false,
 			IsDropped:          false,
-			Columns:            []string{"tenant_id", "fts_data"},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 		},
 	}
 
-	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Indexes()...)
+	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("3$")...)...)
 
-	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Indexes()...)
+	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("4$")...)...)
 
 	return rv
 }
@@ -2433,15 +2472,16 @@ func (m *pgdbMessageBook) Descriptor() pgdb_v1.Descriptor {
 }
 
 func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
-	opt := pgdb_v1.NewRecordOptions(opts)
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
 
 	var sb strings.Builder
 
-	var rv exp.Record
+	rv := exp.Record{}
 
 	cfv0 := string(m.self.TenantId)
 
-	rv[opt.Prefix+"tenant_id"] = cfv0
+	rv[ro.ColumnName("tenant_id")] = cfv0
 
 	sb.Reset()
 
@@ -2457,7 +2497,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	cfv2 := sb.String()
 
-	rv[opt.Prefix+"pk"] = cfv2
+	rv[ro.ColumnName("pk")] = cfv2
 
 	sb.Reset()
 
@@ -2465,7 +2505,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	cfv3 := sb.String()
 
-	rv[opt.Prefix+"sk"] = cfv3
+	rv[ro.ColumnName("sk")] = cfv3
 
 	cfv4tmp := []*pgdb_v1.SearchContent{
 
@@ -2482,18 +2522,20 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
-	rv[opt.Prefix+"fts_data"] = cfv4
+	rv[ro.ColumnName("fts_data")] = cfv4
 
-	cfv5, err := proto.Marshal(m.self)
+	cfv5tmp, err := proto.Marshal(m.self)
 	if err != nil {
 		return nil, err
 	}
 
-	rv[opt.Prefix+"pb_data"] = cfv5
+	cfv5 := exp.NewLiteralExpression("?", string(cfv5tmp))
+
+	rv[ro.ColumnName("pb_data")] = cfv5
 
 	v1 := string(m.self.GetId())
 
-	rv[opt.Prefix+"pb$id"] = v1
+	rv[ro.ColumnName("id")] = v1
 
 	v2, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper())
 	if err != nil {
@@ -2501,7 +2543,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	}
 
 	for k, v := range v2 {
-		rv[opt.Prefix+k] = v
+		rv[ro.ColumnName(k)] = v
 	}
 
 	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook())
@@ -2510,7 +2552,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	}
 
 	for k, v := range v3 {
-		rv[opt.Prefix+k] = v
+		rv[ro.ColumnName(k)] = v
 	}
 
 	oneof1 := uint32(0)
@@ -2525,7 +2567,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	}
 
-	rv[opt.Prefix+"pb$medium_oneof"] = oneof1
+	rv[ro.ColumnName("medium_oneof")] = oneof1
 
 	return rv, nil
 }
@@ -2596,235 +2638,240 @@ func (x *BookDBQueryBuilder) Unsafe() *BookDBQueryUnsafe {
 }
 
 type BookTenantIdSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *BookTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
 }
 
 func (x *BookTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Neq(v)
 }
 
 func (x *BookTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gt(v)
 }
 
 func (x *BookTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gte(v)
 }
 
 func (x *BookTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lt(v)
 }
 
 func (x *BookTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lte(v)
 }
 
 func (x *BookTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").In(v)
 }
 
 func (x *BookTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotIn(v)
 }
 
 func (x *BookTenantIdSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNull()
 }
 
 func (x *BookTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNotNull()
 }
 
 func (x *BookTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *BookTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *BookDBQueryBuilder) TenantId() *BookTenantIdSafeOperators {
-	return &BookTenantIdSafeOperators{tableName: x.tableName}
+	return &BookTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type BookPKSKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *BookPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Eq(v)
 }
 
 func (x *BookPKSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Neq(v)
 }
 
 func (x *BookPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gt(v)
 }
 
 func (x *BookPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gte(v)
 }
 
 func (x *BookPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lt(v)
 }
 
 func (x *BookPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lte(v)
 }
 
 func (x *BookPKSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").In(v)
 }
 
 func (x *BookPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotIn(v)
 }
 
 func (x *BookPKSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNull()
 }
 
 func (x *BookPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNotNull()
 }
 
 func (x *BookPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *BookPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *BookDBQueryBuilder) PKSK() *BookPKSKSafeOperators {
-	return &BookPKSKSafeOperators{tableName: x.tableName}
+	return &BookPKSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type BookPKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *BookPKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
 }
 
 func (x *BookPKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Neq(v)
 }
 
 func (x *BookPKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gt(v)
 }
 
 func (x *BookPKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gte(v)
 }
 
 func (x *BookPKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lt(v)
 }
 
 func (x *BookPKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lte(v)
 }
 
 func (x *BookPKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").In(v)
 }
 
 func (x *BookPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotIn(v)
 }
 
 func (x *BookPKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNull()
 }
 
 func (x *BookPKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNotNull()
 }
 
 func (x *BookPKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *BookPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *BookDBQueryBuilder) PK() *BookPKSafeOperators {
-	return &BookPKSafeOperators{tableName: x.tableName}
+	return &BookPKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type BookSKSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *BookSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Eq(v)
 }
 
 func (x *BookSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Neq(v)
 }
 
 func (x *BookSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gt(v)
 }
 
 func (x *BookSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gte(v)
 }
 
 func (x *BookSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lt(v)
 }
 
 func (x *BookSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lte(v)
 }
 
 func (x *BookSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").In(v)
 }
 
 func (x *BookSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotIn(v)
 }
 
 func (x *BookSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNull()
 }
 
 func (x *BookSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNotNull()
 }
 
 func (x *BookSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Between(exp.NewRangeVal(start, end))
 }
 
 func (x *BookSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *BookDBQueryBuilder) SK() *BookSKSafeOperators {
-	return &BookSKSafeOperators{tableName: x.tableName}
+	return &BookSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type BookFTSDataSafeOperators struct {
+	prefix    string
 	tableName string
 }
 
 func (x *BookFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fts_data").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
 }
 
 func (x *BookFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -2841,37 +2888,37 @@ func (x *BookFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expressi
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *BookFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *BookFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *BookFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *BookFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *BookFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, "fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *BookDBQueryBuilder) FTSData() *BookFTSDataSafeOperators {
-	return &BookFTSDataSafeOperators{tableName: x.tableName}
+	return &BookFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 func (x *BookDBQueryUnsafe) TenantId() exp.IdentifierExpression {
@@ -2899,11 +2946,11 @@ func (x *BookDBQueryUnsafe) PBData() exp.IdentifierExpression {
 }
 
 func (x *BookDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$id")
+	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
 func (x *BookDBQueryUnsafe) Medium() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$medium_oneof")
+	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
 }
 
 func (x *BookDBColumns) WithTable(t string) *BookDBColumns {
@@ -2935,9 +2982,9 @@ func (x *BookDBColumns) PBData() exp.Expression {
 }
 
 func (x *BookDBColumns) Id() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$id")
+	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
 func (x *BookDBColumns) Medium() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb$medium_oneof")
+	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
 }

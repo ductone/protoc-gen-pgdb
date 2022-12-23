@@ -14,24 +14,25 @@ func (m *{{.MessageType}}) Descriptor() pgdb_v1.Descriptor {
 }
 
 func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
-    opt := pgdb_v1.NewRecordOptions(opts)
+    ro := pgdb_v1.NewRecordOptions(opts)
+    _ = ro
     {{ if .WantRecordStringBuilder }}
 	var sb strings.Builder
     {{ end }}
 
-    var rv exp.Record
+    rv := exp.Record{}
 
     {{ range .Fields }}
         {{.Convert.CodeForValue}}
         {{ $VarForValue := .Convert.VarForValue }}
         {{ if $VarForValue }}
-            rv[opt.Prefix + "{{.DB.Name}}"] =  {{ $VarForValue }}
+            rv[ro.ColumnName("{{.DB.Name}}")] =  {{ $VarForValue }}
         {{ end }}
 
         {{ $VarForAppend := .Convert.VarForAppend }}
         {{ if $VarForAppend }}
         for k, v := range {{ $VarForAppend }} {
-            rv[opt.Prefix + k] = v
+            rv[ro.ColumnName(k)] = v
         }
         {{ end }}
     {{ end }}

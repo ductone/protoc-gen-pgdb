@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"io"
+	"strconv"
 
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
@@ -45,6 +46,7 @@ func getDescriptorType(ctx pgsgo.Context, m pgs.Message) string {
 type nestedFieldContext struct {
 	GoName   string
 	TypeName string
+	Prefix   string
 }
 
 func getNesteFieldNames(fields []*fieldContext) []string {
@@ -67,6 +69,7 @@ func getNesteFields(ctx pgsgo.Context, fields []*fieldContext) []*nestedFieldCon
 
 		rv = append(rv, &nestedFieldContext{
 			GoName:   f.GoName,
+			Prefix:   strconv.FormatInt(int64(*f.Field.Descriptor().Number), 10) + "$",
 			TypeName: ctx.Type(f.Field).String(),
 		})
 	}

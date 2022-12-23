@@ -10,11 +10,13 @@ func (d *{{.ReceiverType}}) TableName() string {
 }
 
 func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+  df := pgdb_v1.NewDescriptorFieldOption(opts)
+  _ = df
   rv := []*pgdb_v1.Column{
   {{ range .Fields }}
     {{- if .DB -}}
       {
-        Name: "{{ .DB.Name }}",
+        Name: df.ColumnName("{{ .DB.Name }}"),
         Type: "{{ .DB.Type }}",
         Nullable: {{ .DB.Nullable }},
         OverrideExpression: "{{ .DB.OverrideExpression }}",
@@ -24,7 +26,7 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
   }
 
   {{ range .NestedFields }}
-    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect().Descriptor().Fields()...)
+    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect().Descriptor().Fields(df.Nested("{{ .Prefix }}")...)...)
   {{ end }}
   return rv
 }
@@ -37,17 +39,19 @@ func (d *{{.ReceiverType}}) SearchField() *pgdb_v1.Column {
   return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
-func (d *{{.ReceiverType}}) Indexes() []*pgdb_v1.Index {
+func (d *{{.ReceiverType}}) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+  io := pgdb_v1.NewIndexOptions(opts)
+  _ = io
   rv := []*pgdb_v1.Index{
   {{ range .Indexes }}
     {{- if .DB -}}
     {
-      Name: "{{ .DB.Name }}",
+      Name: io.IndexName("{{ .DB.Name }}"),
       Method: pgdb_v1.MessageOptions_Index_{{- .DB.Method.String -}},
       IsPrimary: {{ .DB.IsPrimary }},
       IsUnique: {{ .DB.IsUnique }},
       IsDropped: {{ .DB.IsDropped }},
-      Columns: []string{ {{- range .DB.Columns -}} "{{- . -}}", {{- end -}} },
+      Columns: []string{ {{- range .DB.Columns -}} io.ColumnName("{{- . -}}"), {{- end -}} },
       OverrideExpression: "{{ .DB.OverrideExpression }}",
     },
     {{- end -}}
@@ -55,7 +59,7 @@ func (d *{{.ReceiverType}}) Indexes() []*pgdb_v1.Index {
   }
 
   {{ range .NestedFields }}
-    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect().Descriptor().Indexes()...)
+    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect().Descriptor().Indexes(io.Nested("{{ .Prefix }}")...)...)
   {{ end }}
   return rv
 }

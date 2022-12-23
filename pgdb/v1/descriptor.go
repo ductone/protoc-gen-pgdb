@@ -6,15 +6,40 @@ type Descriptor interface {
 	Fields(opts ...DescriptorFieldOptionFunc) []*Column
 	DataField() *Column
 	SearchField() *Column
-	Indexes() []*Index
+	Indexes(opts ...IndexOptionsFunc) []*Index
 }
 
 type DescriptorFieldOption struct {
-	Prefix         string
-	ExcludeVirtual bool
+	Prefix string
 }
 
 type DescriptorFieldOptionFunc func(option *DescriptorFieldOption)
+
+func DescriptorFieldPrefix(prefix string) DescriptorFieldOptionFunc {
+	return func(option *DescriptorFieldOption) {
+		option.Prefix = prefix
+	}
+}
+
+func NewDescriptorFieldOption(opts []DescriptorFieldOptionFunc) *DescriptorFieldOption {
+	option := &DescriptorFieldOption{
+		Prefix: "pb$",
+	}
+	for _, opt := range opts {
+		opt(option)
+	}
+	return option
+}
+
+func (r *DescriptorFieldOption) ColumnName(in string) string {
+	return r.Prefix + in
+}
+
+func (r *DescriptorFieldOption) Nested(prefix string) []DescriptorFieldOptionFunc {
+	return []DescriptorFieldOptionFunc{
+		DescriptorFieldPrefix(r.Prefix + prefix),
+	}
+}
 
 type Column struct {
 	Name               string
