@@ -19,6 +19,7 @@ type importTracker struct {
 	ProtobufProto        bool
 	Strings              bool
 	Time                 bool
+	PgType               bool
 }
 
 type headerTemplateContext struct {

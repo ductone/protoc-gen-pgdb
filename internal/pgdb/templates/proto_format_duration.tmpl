@@ -1,7 +1,5 @@
-var {{ .VarName }} exp.LiteralExpression
+{{ .VarName }} := &pgtype.Interval{}
 if {{ .InputName }}.IsValid() {
-    {{.VarName -}}tmp := {{ .InputName }}.AsDuration()
-    {{ .VarName }} = exp.NewLiteralExpression("? microsecond", {{.VarName -}}tmp.Microseconds())
-} else {
-    {{ .VarName }} = exp.NewLiteralExpression("NULL")
+    {{ .VarName }}.Valid = true
+    {{ .VarName }}.Microseconds = int64({{ .InputName }}.AsDuration()) / 1000
 }

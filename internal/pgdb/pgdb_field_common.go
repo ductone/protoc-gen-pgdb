@@ -166,6 +166,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			InputName: selfName,
 		})
 	case gtPbWktDuration:
+		fc.ix.PgType = true
 		return templateExecToString("proto_format_duration.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,

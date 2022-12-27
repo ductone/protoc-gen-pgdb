@@ -11,6 +11,7 @@ import (
 	"github.com/doug-martin/goqu/v9/exp"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq"
+	"github.com/jackc/pgx/v5/pgtype"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
@@ -304,12 +305,10 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	rv[ro.ColumnName("system_builtin")] = v7
 
-	var v8 exp.LiteralExpression
+	v8 := &pgtype.Interval{}
 	if m.self.GetElapsed().IsValid() {
-		v8tmp := m.self.GetElapsed().AsDuration()
-		v8 = exp.NewLiteralExpression("? microsecond", v8tmp.Microseconds())
-	} else {
-		v8 = exp.NewLiteralExpression("NULL")
+		v8.Valid = true
+		v8.Microseconds = int64(m.self.GetElapsed().AsDuration()) / 1000
 	}
 
 	rv[ro.ColumnName("elapsed")] = v8
@@ -349,7 +348,8 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		}
 		_, _ = v13buf.Write(v13tmp)
 	}
-	v13 := v13buf.String()
+	_, _ = v13buf.WriteString("]")
+	v13 := exp.NewLiteralExpression("?::jsonb", v13buf.String())
 
 	rv[ro.ColumnName("extra_profiles")] = v13
 

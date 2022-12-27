@@ -44,16 +44,22 @@ func TestSchema(t *testing.T) {
 	// it is both a col, and an index!
 	_, err = pg.DB.Exec(ctx, `ALTER TABLE pb_pet_models_animals_v1_8a3723d5 DROP COLUMN "pb$profile"`)
 	require.NoError(t, err)
-	m, err = pgdb_v1.Migrations(ctx, pg.DB, msg)
+	migrations, err := pgdb_v1.Migrations(ctx, pg.DB, msg)
 	require.NoError(t, err)
 
-	require.Len(t, m, 2)
+	require.Len(t, migrations, 2)
 	// fmt.Printf("-----\n%s\n", m[0])
-	require.Contains(t, m[0], "ALTER TABLE")
-	require.Contains(t, m[0], "pb$profile")
+	require.Contains(t, migrations[0], "ALTER TABLE")
+	require.Contains(t, migrations[0], "pb$profile")
 	// fmt.Printf("-----\n%s\n", m[1])
-	require.Contains(t, m[1], "CREATE INDEX CONCURRENTLY IF NOT EXISTS")
-	require.Contains(t, m[1], "pb$profile")
+	require.Contains(t, migrations[1], "CREATE INDEX CONCURRENTLY IF NOT EXISTS")
+	require.Contains(t, migrations[1], "pb$profile")
+
+	for _, line := range migrations {
+		_, err := pg.DB.Exec(ctx, line)
+		fmt.Printf("%s\n", line)
+		require.NoErrorf(t, err, "TestCreateSchema: failed to execute sql: '\n%s\n'", line)
+	}
 
 	insertMsg := &Pet{
 		TenantId:      "t1",
