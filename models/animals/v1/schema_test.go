@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
@@ -35,6 +36,10 @@ func TestSchema(t *testing.T) {
 		require.NoErrorf(t, err, "TestCreateSchema: failed to execute sql: '\n%s\n'", line)
 	}
 
+	schema, err = pgdb_v1.CreateSchema(&Book{})
+	for _, line := range schema {
+		fmt.Printf("%s\n", line)
+	}
 	// make sure we should have zero migrations after schema create
 	m, err := pgdb_v1.Migrations(ctx, pg.DB, msg)
 	require.NoError(t, err)
@@ -81,11 +86,12 @@ func TestSchema(t *testing.T) {
 	record, err := dbr.Record()
 	require.NoError(t, err)
 
+	spew.Dump(record["pb$pb_data"])
+	//	delete(record, "pb$pb_data")
+	//	record["pb$pb_data"] = []byte("hello")
+
 	qb := goqu.Dialect("postgres")
-
-	delete(record, "pb$pb_data")
-
-	q := qb.Insert(tableName).Prepared(false).Rows(
+	q := qb.Insert(tableName).Prepared(true).Rows(
 		record,
 	)
 
@@ -110,7 +116,7 @@ func TestSchema(t *testing.T) {
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)
-	// spew.Dump(query, params)
+	spew.Dump(query, params)
 	// spew.Dump(record)
 	fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
 	require.NoError(t, err)

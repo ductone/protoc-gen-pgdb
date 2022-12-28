@@ -1,6 +1,6 @@
-{{.VarName}}tmp, err := proto.Marshal(m.self)
+{{.VarName}}, err := proto.Marshal(m.self)
 if err != nil {
     return nil, err
 }
 
-{{.VarName}} := exp.NewLiteralExpression("?", string({{- .VarName -}}tmp))
+// {{.VarName}} := exp.NewLiteralExpression("?", {{- .VarName -}}tmp)

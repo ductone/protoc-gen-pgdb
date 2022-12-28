@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jackc/pgtype"
+	"github.com/jackc/pgx/v5/pgtype"
 	pgs "github.com/lyft/protoc-gen-star"
 )
 
@@ -97,13 +97,13 @@ func min(a, b int) int {
 }
 
 var initCachedConnInfo sync.Once
-var cachedConnInfo *pgtype.ConnInfo
+var cachedConnInfo *pgtype.Map
 
-func pgDataTypeForName(input string) *pgtype.DataType {
+func pgDataTypeForName(input string) *pgtype.Type {
 	initCachedConnInfo.Do(func() {
-		cachedConnInfo = pgtype.NewConnInfo()
+		cachedConnInfo = pgtype.NewMap()
 	})
-	rv, ok := cachedConnInfo.DataTypeForName(input)
+	rv, ok := cachedConnInfo.TypeForName(input)
 	if !ok {
 		panic("faild to find postgres type for '" + input + "'")
 	}

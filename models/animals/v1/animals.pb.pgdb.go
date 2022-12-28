@@ -256,12 +256,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	rv[ro.ColumnName("fts_data")] = cfv4
 
-	cfv5tmp, err := proto.Marshal(m.self)
+	cfv5, err := proto.Marshal(m.self)
 	if err != nil {
 		return nil, err
 	}
 
-	cfv5 := exp.NewLiteralExpression("?", string(cfv5tmp))
+	// cfv5 := exp.NewLiteralExpression("?",cfv5tmp)
 
 	rv[ro.ColumnName("pb_data")] = cfv5
 
@@ -1265,12 +1265,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	rv[ro.ColumnName("fts_data")] = cfv4
 
-	cfv5tmp, err := proto.Marshal(m.self)
+	cfv5, err := proto.Marshal(m.self)
 	if err != nil {
 		return nil, err
 	}
 
-	cfv5 := exp.NewLiteralExpression("?", string(cfv5tmp))
+	// cfv5 := exp.NewLiteralExpression("?",cfv5tmp)
 
 	rv[ro.ColumnName("pb_data")] = cfv5
 
@@ -2526,12 +2526,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	rv[ro.ColumnName("fts_data")] = cfv4
 
-	cfv5tmp, err := proto.Marshal(m.self)
+	cfv5, err := proto.Marshal(m.self)
 	if err != nil {
 		return nil, err
 	}
 
-	cfv5 := exp.NewLiteralExpression("?", string(cfv5tmp))
+	// cfv5 := exp.NewLiteralExpression("?",cfv5tmp)
 
 	rv[ro.ColumnName("pb_data")] = cfv5
 

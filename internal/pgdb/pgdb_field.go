@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	"github.com/jackc/pgtype"
+	"github.com/jackc/pgx/v5/pgtype"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
@@ -21,7 +21,7 @@ type fieldContext struct {
 	Field     pgs.Field
 	Nested    bool
 	DB        *pgdb_v1.Column
-	DataType  *pgtype.DataType
+	DataType  *pgtype.Type
 	Convert   FiledConverter
 }
 

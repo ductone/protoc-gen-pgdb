@@ -8,7 +8,9 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v5"
+
+	_ "github.com/doug-martin/goqu/v9/dialect/postgres"
 )
 
 func CreateSchema(msg DBReflectMessage) ([]string, error) {
@@ -64,7 +66,7 @@ func IndexSchema(msg DBReflectMessage) ([]string, error) {
 }
 
 type sqlScanner interface {
-	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
 }
 
 func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
