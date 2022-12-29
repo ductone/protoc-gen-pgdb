@@ -2,9 +2,10 @@ package pgdb
 
 import (
 	"fmt"
+	"strconv"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	"github.com/jackc/pgtype"
+	"github.com/jackc/pgx/v5/pgtype"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
@@ -21,7 +22,7 @@ type fieldContext struct {
 	Field     pgs.Field
 	Nested    bool
 	DB        *pgdb_v1.Column
-	DataType  *pgtype.DataType
+	DataType  *pgtype.Type
 	Convert   FiledConverter
 }
 
@@ -38,6 +39,8 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	if err != nil {
 		panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err))
 	}
+
+	ix.AddProtoEntity(f)
 
 	isArray := f.Type().ProtoLabel() == pgs.Repeated
 	pt := f.Type().ProtoType()
@@ -129,6 +132,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 						pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 				}
 				convertDef.TypeConversion = gtPbNestedMsg
+				convertDef.NestedPrefix = strconv.FormatInt(int64(*f.Descriptor().Number), 10) + "$"
 			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
 				convertDef.IsArray = isArray
 				convertDef.PostgresTypeName = pgTypeJSONB
@@ -216,7 +220,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			Name:               "pksk",
 			Type:               vcDataType.Name,
 			Nullable:           false,
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pk || '|' || sk) STORED",
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		},
 		GoName:   "PKSK",
 		DataType: vcDataType,
@@ -280,6 +284,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			VarName: vn.String(),
 		},
 	}
+
 	vn = vn.Next()
 	pbDataField := &fieldContext{
 		IsVirtual: true,

@@ -10,12 +10,12 @@ import (
 
 type fieldConvert struct {
 	// starts as "m.self.", nested messages append
-	goPrefix    string
-	ctx         pgsgo.Context
-	ix          *importTracker
-	F           pgs.Field
-	varName     string
-	PostgesName string
+	goPrefix     string
+	ctx          pgsgo.Context
+	ix           *importTracker
+	F            pgs.Field
+	varName      string
+	NestedPrefix string
 	// https://www.postgresql.org/docs/current/datatype-numeric.html
 	PostgresTypeName string
 	IsArray          bool
@@ -48,10 +48,11 @@ const (
 )
 
 type formatContext struct {
-	VarName   string
-	InputName string
-	CastType  string
-	IsArray   bool
+	VarName      string
+	InputName    string
+	CastType     string
+	IsArray      bool
+	NestedPrefix string
 }
 
 const fieldConvertString = "string"
@@ -166,6 +167,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			InputName: selfName,
 		})
 	case gtPbWktDuration:
+		fc.ix.PgType = true
 		return templateExecToString("proto_format_duration.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
@@ -182,9 +184,10 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		})
 	case gtPbNestedMsg:
 		return templateExecToString("proto_format_nested.tmpl", &formatContext{
-			VarName:   fc.varName,
-			InputName: selfName,
-			IsArray:   fc.IsArray,
+			VarName:      fc.varName,
+			InputName:    selfName,
+			IsArray:      fc.IsArray,
+			NestedPrefix: fc.NestedPrefix,
 		})
 	default:
 		panic(fmt.Errorf("pgdb: Implement CodeForValue for %v", fc.TypeConversion))

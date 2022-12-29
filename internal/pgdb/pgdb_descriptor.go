@@ -2,22 +2,31 @@ package pgdb
 
 import (
 	"io"
+	"strconv"
 
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
 
 type descriptorTemplateContext struct {
-	Type         string
-	ReceiverType string
-	TableName    string
-	Fields       []*fieldContext
-	NestedFields []*nestedFieldContext
-	Indexes      []*indexContext
+	Type            string
+	ReceiverType    string
+	TableName       string
+	Fields          []*fieldContext
+	NestedFields    []*nestedFieldContext
+	Indexes         []*indexContext
+	VersioningField string
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
 	ix.PGDBV1 = true
+	fext := pgdb_v1.MessageOptions{}
+	_, err := m.Extension(pgdb_v1.E_Msg, &fext)
+	if err != nil {
+		panic(err)
+	}
+
 	mt := getDescriptorType(ctx, m)
 	tableName, err := getTableName(m)
 	if err != nil {
@@ -27,14 +36,25 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 	fields := module.getMessageFields(ctx, m, ix, "m.self")
 	mestedFields := getNesteFields(ctx, fields)
 
-	c := &descriptorTemplateContext{
-		Type:         mt,
-		ReceiverType: mt,
-		Fields:       fields,
-		NestedFields: mestedFields,
-		Indexes:      module.getMessageIndexes(ctx, m, ix),
-		TableName:    tableName,
+	var vf string
+
+	if !fext.NestedOnly {
+		vf, err = getVersioningField(m)
+		if err != nil {
+			return err
+		}
 	}
+
+	c := &descriptorTemplateContext{
+		Type:            mt,
+		ReceiverType:    mt,
+		Fields:          fields,
+		NestedFields:    mestedFields,
+		Indexes:         module.getMessageIndexes(ctx, m, ix),
+		TableName:       tableName,
+		VersioningField: vf,
+	}
+
 	return templates["descriptor.tmpl"].Execute(w, c)
 }
 
@@ -45,6 +65,7 @@ func getDescriptorType(ctx pgsgo.Context, m pgs.Message) string {
 type nestedFieldContext struct {
 	GoName   string
 	TypeName string
+	Prefix   string
 }
 
 func getNesteFieldNames(fields []*fieldContext) []string {
@@ -67,6 +88,7 @@ func getNesteFields(ctx pgsgo.Context, fields []*fieldContext) []*nestedFieldCon
 
 		rv = append(rv, &nestedFieldContext{
 			GoName:   f.GoName,
+			Prefix:   strconv.FormatInt(int64(*f.Field.Descriptor().Number), 10) + "$",
 			TypeName: ctx.Type(f.Field).String(),
 		})
 	}

@@ -13,5 +13,4 @@ type Message interface {
 
 	Record(opts ...RecordOptionsFunc) (exp.Record, error)
 	SearchData(opts ...RecordOptionsFunc) []*SearchContent
-	ConflictUpdateExpression(opts ...RecordOptionsFunc) (exp.ConflictUpdateExpression, error)
 }

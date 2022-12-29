@@ -8,9 +8,14 @@ import (
 {{ if .Imports.Strings }} "strings" {{ end }}
 {{ if .Imports.Time }} "time" {{ end }}
 
+{{ range .Imports.ProtoImports }}
+    {{ . }}
+{{ end }}
+
 {{ if .Imports.PGDBV1 }} pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1" {{ end }}
 {{ if .Imports.XPQ }} "github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq" {{ end }}
 {{ if .Imports.GoquExp }} "github.com/doug-martin/goqu/v9/exp" {{ end }}
 {{ if .Imports.ProtobufProto }} "google.golang.org/protobuf/proto" {{ end }}
 {{ if .Imports.ProtobufEncodingJSON }}"google.golang.org/protobuf/encoding/protojson" {{ end }}
+{{ if .Imports.PgType }} "github.com/jackc/pgx/v5/pgtype" {{ end }}
 )

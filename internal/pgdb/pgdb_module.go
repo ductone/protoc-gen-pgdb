@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/davecgh/go-spew/spew"
@@ -67,7 +68,10 @@ func (m *Module) processFile(ctx pgsgo.Context, f pgs.File) {
 }
 
 func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffer, in pgs.File) error {
-	ix := &importTracker{}
+	ix := &importTracker{
+		ctx:   ctx,
+		input: in,
+	}
 	buf := &bytes.Buffer{}
 
 	for _, m := range in.Messages() {
@@ -104,6 +108,12 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 	_, err = io.Copy(outputBuffer, buf)
 	if err != nil {
 		return err
+	}
+
+	if ok, _ := strconv.ParseBool(os.Getenv("PGDB_DUMP_FILE")); ok {
+		tdr := os.TempDir()
+		_ = os.WriteFile(filepath.Join(tdr, "t.go"), outputBuffer.Bytes(), 0600)
+		_, _ = os.Stderr.WriteString(filepath.Join(tdr, "t.go") + "\n")
 	}
 	return nil
 }

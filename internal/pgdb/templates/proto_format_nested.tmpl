@@ -1,4 +1,4 @@
-{{ .VarName -}}, err := pgdb_v1.MarshalNestedRecord({{.InputName}})
+{{ .VarName -}}, err := pgdb_v1.MarshalNestedRecord({{.InputName}}, ro.Nested("{{ .NestedPrefix }}")...)
 if err != nil {
     return nil, err
 }

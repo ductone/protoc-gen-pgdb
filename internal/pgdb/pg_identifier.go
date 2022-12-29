@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jackc/pgtype"
+	"github.com/jackc/pgx/v5/pgtype"
 	pgs "github.com/lyft/protoc-gen-star"
 )
 
@@ -20,7 +20,9 @@ const (
 	//
 	// The system uses no more than NAMEDATALEN-1 bytes of an identifier; longer names can be written in commands, but they will be
 	// truncated. By default, NAMEDATALEN is 64 so the maximum identifier length is 63 bytes.
-	postgresNameLen = 63
+	//
+	// we subtract 15 more just to have more buffer for prefixes that are calculated at runtime (eg, nested fields).
+	postgresNameLen = (63 - 15)
 )
 
 func getTableName(m pgs.Message) (string, error) {
@@ -39,8 +41,6 @@ func getTableName(m pgs.Message) (string, error) {
 func getColumnName(f pgs.Field) (string, error) {
 	buf := strings.Builder{}
 	// TOOD(pquerna): figure out prefix?
-	_, _ = buf.WriteString("pb")
-	_, _ = buf.WriteString("$")
 	_, _ = buf.WriteString(f.Name().LowerSnakeCase().String())
 
 	// if the field name is too long, convert to number version
@@ -48,8 +48,7 @@ func getColumnName(f pgs.Field) (string, error) {
 		return buf.String(), nil
 	}
 	buf.Reset()
-	_, _ = buf.WriteString("pb")
-	_, _ = buf.WriteString("_")
+
 	_, _ = buf.WriteString(strconv.FormatInt(int64(*f.Descriptor().Number), 10))
 	if len(buf.String()) < postgresNameLen {
 		return buf.String(), nil
@@ -59,9 +58,6 @@ func getColumnName(f pgs.Field) (string, error) {
 
 func getColumnOneOfName(f pgs.OneOf) (string, error) {
 	buf := strings.Builder{}
-	// TOOD(pquerna): figure out prefix?
-	_, _ = buf.WriteString("pb")
-	_, _ = buf.WriteString("$")
 	_, _ = buf.WriteString(f.Name().LowerSnakeCase().String())
 	_, _ = buf.WriteString("_oneof")
 
@@ -79,7 +75,7 @@ func getIndexName(m pgs.Message, name string) (string, error) {
 
 	pkgName := m.Package().ProtoName().LowerSnakeCase().String()
 	msgName := m.Name().LowerSnakeCase().String()
-	proposed := strings.Join([]string{"pbidx", name, msgName, pkgName}, "_")
+	proposed := strings.Join([]string{name, msgName, pkgName}, "_")
 	shortHash := fqnHash[0:8]
 	// shorten to <63 with enough room to append short hash
 	proposed = proposed[0:min(postgresNameLen-(len(shortHash)+1), len(proposed))]
@@ -101,13 +97,13 @@ func min(a, b int) int {
 }
 
 var initCachedConnInfo sync.Once
-var cachedConnInfo *pgtype.ConnInfo
+var cachedConnInfo *pgtype.Map
 
-func pgDataTypeForName(input string) *pgtype.DataType {
+func pgDataTypeForName(input string) *pgtype.Type {
 	initCachedConnInfo.Do(func() {
-		cachedConnInfo = pgtype.NewConnInfo()
+		cachedConnInfo = pgtype.NewMap()
 	})
-	rv, ok := cachedConnInfo.DataTypeForName(input)
+	rv, ok := cachedConnInfo.TypeForName(input)
 	if !ok {
 		panic("faild to find postgres type for '" + input + "'")
 	}

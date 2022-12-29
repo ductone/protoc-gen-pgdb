@@ -5,10 +5,11 @@ import (
 	"context"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v5"
+
+	_ "github.com/doug-martin/goqu/v9/dialect/postgres"
 )
 
 func CreateSchema(msg DBReflectMessage) ([]string, error) {
@@ -26,17 +27,17 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 		),
 	)
 
-	for _, idx := range desc.Indexes() {
-		if !idx.IsPrimary {
-			continue
-		}
+	if idx := desc.IndexPrimaryKey(); idx != nil {
 		buf.WriteString(",\n  ")
-		buf.WriteString("PRIMARY KEY (")
+		buf.WriteString("CONSTRAINT ")
+		buf.WriteString(idx.Name)
+		buf.WriteString(" PRIMARY KEY (")
 		buf.WriteString(strings.Join(slice.Convert(idx.Columns, func(in string) string {
 			return `"` + in + `"`
 		}), ","))
 		buf.WriteString(")\n")
 	}
+
 	buf.WriteString(")\n")
 	rv := []string{buf.String()}
 
@@ -64,7 +65,7 @@ func IndexSchema(msg DBReflectMessage) ([]string, error) {
 }
 
 type sqlScanner interface {
-	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
 }
 
 func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
@@ -132,7 +133,7 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	if err != nil {
 		return nil, err
 	}
-	spew.Dump(haveCols)
+	// spew.Dump(haveCols)
 
 	for _, field := range desc.Fields() {
 		if _, ok := haveCols[field.Name]; ok {

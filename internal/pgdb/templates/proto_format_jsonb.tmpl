@@ -15,11 +15,12 @@ for _, arrTmp := range {{.InputName}} {
     }
     _, _ = {{ .VarName }}buf.Write({{ .VarName -}}tmp)
 }
-{{ .VarName }} := {{ .VarName }}buf.String()
+_, _ = {{ .VarName }}buf.WriteString("]")
+{{ .VarName }} := exp.NewLiteralExpression("?::jsonb", {{ .VarName }}buf.String())
 {{ else }}
 {{ .VarName -}}tmp, err := protojson.Marshal({{.InputName}})
 if err != nil {
     return nil, err
 }
-{{ .VarName }} := string({{- .VarName -}}tmp)
+{{ .VarName }} := exp.NewLiteralExpression("?::jsonb", string({{- .VarName -}}tmp))
 {{ end }}

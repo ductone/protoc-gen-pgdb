@@ -18,8 +18,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jackc/pgx/v4"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type PG struct {
@@ -183,7 +183,7 @@ func start(config *PGConfig) (*PG, error) {
 	err = retry(ctx, func() error {
 		// when debugging, you might want to look at this loop!
 		//		spew.Dump("attempting to connect ", dsn)
-		db, err := pgxpool.Connect(ctx, dsn)
+		db, err := pgxpool.New(ctx, dsn)
 		if err != nil {
 			return err
 		}
@@ -206,7 +206,13 @@ func start(config *PGConfig) (*PG, error) {
 
 	// Connect to it properly
 	dsn = makeDSN(sockDir, "test", isRoot)
-	db, err := pgxpool.Connect(backgroundContext, dsn)
+	pgConfig, err := pgxpool.ParseConfig(dsn)
+	if err != nil {
+		return nil, abort("invalid dsn", cmd, stderr, stdout, err)
+	}
+	pgConfig.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
+
+	db, err := pgxpool.NewWithConfig(backgroundContext, pgConfig)
 	if err != nil {
 		return nil, abort("Failed to connect to test DB", cmd, stderr, stdout, err)
 	}
