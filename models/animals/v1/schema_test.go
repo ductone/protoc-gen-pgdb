@@ -8,8 +8,6 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/doug-martin/goqu/v9"
-	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/stretchr/testify/require"
@@ -18,7 +16,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func TestSchema(t *testing.T) {
+func TestSchemaPet(t *testing.T) {
 	ctx := context.Background()
 	pg, err := pgtest.Start()
 	require.NoError(t, err)
@@ -27,21 +25,15 @@ func TestSchema(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	msg := &Pet{}
-	schema, err := pgdb_v1.CreateSchema(msg)
+	schema, err := pgdb_v1.CreateSchema(&Pet{})
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
-		fmt.Printf("%s\n", line)
-		require.NoErrorf(t, err, "TestCreateSchema: failed to execute sql: '\n%s\n'", line)
+		require.NoErrorf(t, err, "TestSchemaPet: failed to execute sql: '\n%s\n'", line)
 	}
 
-	schema, err = pgdb_v1.CreateSchema(&Book{})
-	for _, line := range schema {
-		fmt.Printf("%s\n", line)
-	}
 	// make sure we should have zero migrations after schema create
-	m, err := pgdb_v1.Migrations(ctx, pg.DB, msg)
+	m, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{})
 	require.NoError(t, err)
 	require.Len(t, m, 0)
 
@@ -49,7 +41,7 @@ func TestSchema(t *testing.T) {
 	// it is both a col, and an index!
 	_, err = pg.DB.Exec(ctx, `ALTER TABLE pb_pet_models_animals_v1_8a3723d5 DROP COLUMN "pb$profile"`)
 	require.NoError(t, err)
-	migrations, err := pgdb_v1.Migrations(ctx, pg.DB, msg)
+	migrations, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{})
 	require.NoError(t, err)
 
 	require.Len(t, migrations, 2)
@@ -62,8 +54,7 @@ func TestSchema(t *testing.T) {
 
 	for _, line := range migrations {
 		_, err := pg.DB.Exec(ctx, line)
-		fmt.Printf("%s\n", line)
-		require.NoErrorf(t, err, "TestCreateSchema: failed to execute sql: '\n%s\n'", line)
+		require.NoErrorf(t, err, "TestSchemaPet: failed to execute migration sql: '\n%s\n'", line)
 	}
 
 	insertMsg := &Pet{
@@ -80,39 +71,38 @@ func TestSchema(t *testing.T) {
 		Price:         9000.0,
 	}
 
-	dbr := insertMsg.DBReflect()
-	tableName := dbr.Descriptor().TableName()
+	query, params, err := pgdb_v1.Insert(insertMsg)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, query, params...)
+	spew.Dump(query, params)
+	// spew.Dump(record)
+	fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
+	require.NoError(t, err)
+}
 
-	record, err := dbr.Record()
+func TestSchemaBook(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	spew.Dump(record["pb$pb_data"])
-	//	delete(record, "pb$pb_data")
-	//	record["pb$pb_data"] = []byte("hello")
-
-	qb := goqu.Dialect("postgres")
-	q := qb.Insert(tableName).Prepared(true).Rows(
-		record,
-	)
-
-	if false {
-		q = q.OnConflict(goqu.DoUpdate(`"pb$tenant_id", "pb$pk", "pb$sk"`,
-			exp.Record{
-				"pb$tenant_id": exp.NewIdentifierExpression("", "EXCLUDED", "pb$tenant_id"),
-				"pb$pk":        exp.NewIdentifierExpression("", "EXCLUDED", "pb$pk"),
-				// "sk":         goqu.L("EXCLUDED.sk"),
-				// "gsi1pk":     goqu.L("EXCLUDED.gsi1pk"),
-				// "gsi1sk":     goqu.L("EXCLUDED.gsi1sk"),
-				// "created_at": goqu.L("EXCLUDED.created_at"),
-				// "updated_at": goqu.L("EXCLUDED.updated_at"),
-				// "deleted_at": goqu.L("EXCLUDED.deleted_at"),
-				// "search":     goqu.L("EXCLUDED.search"),
-				// "data":       goqu.L("EXCLUDED.data"),
-			},
-		).Where(exp.NewIdentifierExpression("", "EXCLUDED", "pb$updated_at").Gte(insertMsg.DB().Columns().UpdatedAt())))
+	schema, err := pgdb_v1.CreateSchema(&Book{})
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		fmt.Fprintf(os.Stderr, "---------\n%s\n\n", line)
+		require.NoErrorf(t, err, "TestSchemaBook: failed to execute sql: '\n%s\n'", line)
 	}
 
-	query, params, err := q.ToSQL()
+	query, params, err := pgdb_v1.Insert(&Book{
+		TenantId: "t1",
+		Id:       "b1",
+		Medium: &Book_Ebook{
+			Ebook: &EBook{Size: 4000},
+		},
+	})
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)

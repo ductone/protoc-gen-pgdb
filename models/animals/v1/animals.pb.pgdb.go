@@ -381,10 +381,6 @@ func (m *pgdbMessagePet) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v
 	return rv
 }
 
-func (m *pgdbMessagePet) ConflictUpdateExpression(opts ...pgdb_v1.RecordOptionsFunc) (exp.ConflictUpdateExpression, error) {
-	return nil, nil
-}
-
 type PetDB struct {
 	tableName string
 }
@@ -1449,10 +1445,6 @@ func (m *pgdbMessageScalarValue) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 	return rv
 }
 
-func (m *pgdbMessageScalarValue) ConflictUpdateExpression(opts ...pgdb_v1.RecordOptionsFunc) (exp.ConflictUpdateExpression, error) {
-	return nil, nil
-}
-
 type ScalarValueDB struct {
 	tableName string
 }
@@ -2155,10 +2147,6 @@ func (m *pgdbMessageEBook) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb
 	return rv
 }
 
-func (m *pgdbMessageEBook) ConflictUpdateExpression(opts ...pgdb_v1.RecordOptionsFunc) (exp.ConflictUpdateExpression, error) {
-	return nil, nil
-}
-
 type EBookDB struct {
 	tableName string
 }
@@ -2287,10 +2275,6 @@ func (m *pgdbMessagePaperBook) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*
 	rv := []*pgdb_v1.SearchContent{}
 
 	return rv
-}
-
-func (m *pgdbMessagePaperBook) ConflictUpdateExpression(opts ...pgdb_v1.RecordOptionsFunc) (exp.ConflictUpdateExpression, error) {
-	return nil, nil
 }
 
 type PaperBookDB struct {
@@ -2539,7 +2523,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	rv[ro.ColumnName("id")] = v1
 
-	v2, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper())
+	v2, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper(), ro.Chain("paper")...)
 	if err != nil {
 		return nil, err
 	}
@@ -2548,7 +2532,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		rv[ro.ColumnName(k)] = v
 	}
 
-	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook())
+	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook(), ro.Chain("ebook")...)
 	if err != nil {
 		return nil, err
 	}
@@ -2589,10 +2573,6 @@ func (m *pgdbMessageBook) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 	rv = append(rv, m.self.GetEbook().DBReflect().SearchData()...)
 
 	return rv
-}
-
-func (m *pgdbMessageBook) ConflictUpdateExpression(opts ...pgdb_v1.RecordOptionsFunc) (exp.ConflictUpdateExpression, error) {
-	return nil, nil
 }
 
 type BookDB struct {

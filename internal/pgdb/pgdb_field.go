@@ -129,6 +129,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 						pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 				}
 				convertDef.TypeConversion = gtPbNestedMsg
+				convertDef.PostgesName = pgColName
 			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
 				convertDef.IsArray = isArray
 				convertDef.PostgresTypeName = pgTypeJSONB

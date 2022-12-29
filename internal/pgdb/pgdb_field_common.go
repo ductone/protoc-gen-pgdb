@@ -48,10 +48,11 @@ const (
 )
 
 type formatContext struct {
-	VarName   string
-	InputName string
-	CastType  string
-	IsArray   bool
+	VarName           string
+	InputName         string
+	CastType          string
+	IsArray           bool
+	NestedChainPrefix string
 }
 
 const fieldConvertString = "string"
@@ -183,9 +184,10 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		})
 	case gtPbNestedMsg:
 		return templateExecToString("proto_format_nested.tmpl", &formatContext{
-			VarName:   fc.varName,
-			InputName: selfName,
-			IsArray:   fc.IsArray,
+			VarName:           fc.varName,
+			InputName:         selfName,
+			IsArray:           fc.IsArray,
+			NestedChainPrefix: fc.PostgesName,
 		})
 	default:
 		panic(fmt.Errorf("pgdb: Implement CodeForValue for %v", fc.TypeConversion))

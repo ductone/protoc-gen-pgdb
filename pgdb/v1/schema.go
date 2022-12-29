@@ -33,7 +33,9 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 			continue
 		}
 		buf.WriteString(",\n  ")
-		buf.WriteString("PRIMARY KEY (")
+		buf.WriteString("CONSTRAINT ")
+		buf.WriteString(idx.Name)
+		buf.WriteString(" PRIMARY KEY (")
 		buf.WriteString(strings.Join(slice.Convert(idx.Columns, func(in string) string {
 			return `"` + in + `"`
 		}), ","))

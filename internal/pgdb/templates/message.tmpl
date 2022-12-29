@@ -58,10 +58,3 @@ func (m *{{.MessageType}}) SearchData(opts ...pgdb_v1.RecordOptionsFunc) ([]*pgd
     {{ end }}
     return rv
 }
-
-
-func (m *{{.MessageType}}) ConflictUpdateExpression(opts ...pgdb_v1.RecordOptionsFunc) (exp.ConflictUpdateExpression, error) {
-    return nil, nil
-}
-
-

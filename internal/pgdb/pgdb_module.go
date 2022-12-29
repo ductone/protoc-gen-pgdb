@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/davecgh/go-spew/spew"
@@ -104,6 +105,12 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 	_, err = io.Copy(outputBuffer, buf)
 	if err != nil {
 		return err
+	}
+
+	if ok, _ := strconv.ParseBool(os.Getenv("PGDB_DUMP_FILE")); ok {
+		tdr := os.TempDir()
+		os.WriteFile(filepath.Join(tdr, "t.go"), outputBuffer.Bytes(), 0644)
+		os.Stderr.WriteString(filepath.Join(tdr, "t.go") + "\n")
 	}
 	return nil
 }
