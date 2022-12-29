@@ -28,10 +28,7 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 		),
 	)
 
-	for _, idx := range desc.Indexes() {
-		if !idx.IsPrimary {
-			continue
-		}
+	if idx := desc.IndexPrimaryKey(); idx != nil {
 		buf.WriteString(",\n  ")
 		buf.WriteString("CONSTRAINT ")
 		buf.WriteString(idx.Name)
@@ -41,6 +38,7 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 		}), ","))
 		buf.WriteString(")\n")
 	}
+
 	buf.WriteString(")\n")
 	rv := []string{buf.String()}
 

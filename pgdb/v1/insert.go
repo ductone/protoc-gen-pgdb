@@ -33,21 +33,12 @@ func Insert(msg DBReflectMessage) (string, []any, error) {
 		}
 	}
 
-	primaryIndexName := ""
-	for _, index := range desc.Indexes() {
-		if !index.IsPrimary {
-			continue
-		}
-		primaryIndexName = index.Name
-		// 	ON CONSTRAINT <constraint_name>
-		break
-	}
-
-	if primaryIndexName == "" {
+	primaryIndex := desc.IndexPrimaryKey()
+	if primaryIndex == nil {
 		return "", nil, errors.New("pgdb_v1.Insert: malformed message: primary index missing")
 	}
 
-	q = q.OnConflict(goqu.DoUpdate(`ON CONSTRAINT `+primaryIndexName,
+	q = q.OnConflict(goqu.DoUpdate(`ON CONSTRAINT "`+primaryIndex.Name+`"`,
 		conflictRecords,
 	).Where(
 		exp.NewIdentifierExpression("", "excluded", "pb$updated_at").Gte(

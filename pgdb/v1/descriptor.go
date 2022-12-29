@@ -3,10 +3,13 @@ package v1
 // Descriptor is the same for all instances of a Message.
 type Descriptor interface {
 	TableName() string
+
 	Fields(opts ...DescriptorFieldOptionFunc) []*Column
 	DataField() *Column
 	SearchField() *Column
+
 	Indexes(opts ...IndexOptionsFunc) []*Index
+	IndexPrimaryKey(opts ...IndexOptionsFunc) *Index
 }
 
 type DescriptorFieldOption struct {

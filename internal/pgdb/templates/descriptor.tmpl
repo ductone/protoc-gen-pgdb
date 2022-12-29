@@ -39,6 +39,34 @@ func (d *{{.ReceiverType}}) SearchField() *pgdb_v1.Column {
   return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
+func (d *{{.ReceiverType}}) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+  io := pgdb_v1.NewIndexOptions(opts)
+  _ = io
+
+  {{ $NilReturn := true }}
+  {{ range .Indexes }}
+    {{- if .DB -}}
+      {{- if .DB.IsPrimary -}}
+      {{ $NilReturn = false }}
+      return &pgdb_v1.Index{
+        Name: io.IndexName("{{ .DB.Name }}"),
+        Method: pgdb_v1.MessageOptions_Index_{{- .DB.Method.String -}},
+        IsPrimary: {{ .DB.IsPrimary }},
+        IsUnique: {{ .DB.IsUnique }},
+        IsDropped: {{ .DB.IsDropped }},
+        Columns: []string{ {{- range .DB.Columns -}} io.ColumnName("{{- . -}}"), {{- end -}} },
+        OverrideExpression: "{{ .DB.OverrideExpression }}",
+      }
+      {{- end -}}
+    {{- end -}}
+  {{ end }}
+
+{{ if $NilReturn  }}
+  return nil
+{{ end }}
+}
+
+
 func (d *{{.ReceiverType}}) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
   io := pgdb_v1.NewIndexOptions(opts)
   _ = io

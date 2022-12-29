@@ -139,6 +139,22 @@ func (d *pgdbDescriptorPet) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
+func (d *pgdbDescriptorPet) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_pet_models_animals_v1_4fc115ea"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
 func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
@@ -1177,6 +1193,22 @@ func (d *pgdbDescriptorScalarValue) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
+func (d *pgdbDescriptorScalarValue) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_scalar_value_models_animals_v1_19369260"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
 func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
@@ -2106,6 +2138,14 @@ func (d *pgdbDescriptorEBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
+func (d *pgdbDescriptorEBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
 func (d *pgdbDescriptorEBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
@@ -2234,6 +2274,14 @@ func (d *pgdbDescriptorPaperBook) DataField() *pgdb_v1.Column {
 
 func (d *pgdbDescriptorPaperBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorPaperBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
 }
 
 func (d *pgdbDescriptorPaperBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
@@ -2403,6 +2451,22 @@ func (d *pgdbDescriptorBook) DataField() *pgdb_v1.Column {
 
 func (d *pgdbDescriptorBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_book_models_animals_v1_a25b591a"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
 }
 
 func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
