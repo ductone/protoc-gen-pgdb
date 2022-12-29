@@ -5,7 +5,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 	"github.com/jackc/pgx/v5"
@@ -134,7 +133,7 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	if err != nil {
 		return nil, err
 	}
-	spew.Dump(haveCols)
+	// spew.Dump(haveCols)
 
 	for _, field := range desc.Fields() {
 		if _, ok := haveCols[field.Name]; ok {

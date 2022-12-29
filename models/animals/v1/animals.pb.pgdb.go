@@ -2641,22 +2641,22 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	rv[ro.ColumnName("created_at")] = v2
 
-	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper(), ro.Chain("paper")...)
+	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper(), ro.Nested("50$")...)
 	if err != nil {
 		return nil, err
 	}
 
 	for k, v := range v3 {
-		rv[ro.ColumnName(k)] = v
+		rv[k] = v
 	}
 
-	v4, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook(), ro.Chain("ebook")...)
+	v4, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook(), ro.Nested("51$")...)
 	if err != nil {
 		return nil, err
 	}
 
 	for k, v := range v4 {
-		rv[ro.ColumnName(k)] = v
+		rv[k] = v
 	}
 
 	oneof1 := uint32(0)

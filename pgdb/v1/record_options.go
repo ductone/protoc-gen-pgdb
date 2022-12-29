@@ -13,11 +13,12 @@ func RecordOptionPrefix(prefix string) RecordOptionsFunc {
 }
 
 func NewRecordOptions(opts []RecordOptionsFunc) *RecordOption {
-	option := &RecordOption{
-		Prefix: "pb$",
-	}
+	option := &RecordOption{}
 	for _, opt := range opts {
 		opt(option)
+	}
+	if option.Prefix == "" {
+		option.Prefix = "pb$"
 	}
 	return option
 }
@@ -26,7 +27,7 @@ func (r *RecordOption) ColumnName(in string) string {
 	return r.Prefix + in
 }
 
-func (r *RecordOption) Chain(prefix string) []RecordOptionsFunc {
+func (r *RecordOption) Nested(prefix string) []RecordOptionsFunc {
 	return []RecordOptionsFunc{
 		RecordOptionPrefix(r.Prefix + prefix),
 	}

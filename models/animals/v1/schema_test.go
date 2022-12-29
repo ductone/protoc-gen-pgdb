@@ -2,12 +2,9 @@ package v1
 
 import (
 	"context"
-	"fmt"
-	"os"
 	"testing"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/stretchr/testify/require"
@@ -74,9 +71,9 @@ func TestSchemaPet(t *testing.T) {
 	query, params, err := pgdb_v1.Insert(insertMsg)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, query, params...)
-	spew.Dump(query, params)
+	// spew.Dump(query, params)
 	// spew.Dump(record)
-	fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
+	// fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
 	require.NoError(t, err)
 }
 
@@ -92,7 +89,7 @@ func TestSchemaBook(t *testing.T) {
 	schema, err := pgdb_v1.CreateSchema(&Book{})
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
-		fmt.Fprintf(os.Stderr, "---------\n%s\n\n", line)
+		// fmt.Fprintf(os.Stderr, "---------\n%s\n\n", line)
 		require.NoErrorf(t, err, "TestSchemaBook: failed to execute sql: '\n%s\n'", line)
 	}
 
@@ -106,8 +103,8 @@ func TestSchemaBook(t *testing.T) {
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)
-	spew.Dump(query, params)
+	// spew.Dump(query, params)
 	// spew.Dump(record)
-	fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
+	// fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
 	require.NoError(t, err)
 }

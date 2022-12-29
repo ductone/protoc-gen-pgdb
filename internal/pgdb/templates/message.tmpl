@@ -32,7 +32,7 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
         {{ $VarForAppend := .Convert.VarForAppend }}
         {{ if $VarForAppend }}
         for k, v := range {{ $VarForAppend }} {
-            rv[ro.ColumnName(k)] = v
+            rv[k] = v
         }
         {{ end }}
     {{ end }}
