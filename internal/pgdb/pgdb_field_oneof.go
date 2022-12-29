@@ -14,6 +14,13 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 		panic(fmt.Errorf("pgdb: getColumnOneOfName failed for: %s: %w",
 			oneof.FullyQualifiedName(), err))
 	}
+	ix.AddProtoEntity(oneof)
+	for _, of := range oneof.Fields() {
+		ix.AddProtoEntity(of)
+		for _, f := range of.Imports() {
+			ix.AddProtoEntity(f)
+		}
+	}
 
 	dbTypeRef := pgDataTypeForName("int4")
 	rv := &fieldContext{

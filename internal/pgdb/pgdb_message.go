@@ -69,6 +69,7 @@ func (fn *varNamer) String() string {
 func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
+	ix.ProtobufEncodingJSON = true
 	cf, err := getCommonFields(ctx, m)
 	if err != nil {
 		panic(err)

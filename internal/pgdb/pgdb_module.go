@@ -68,7 +68,10 @@ func (m *Module) processFile(ctx pgsgo.Context, f pgs.File) {
 }
 
 func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffer, in pgs.File) error {
-	ix := &importTracker{}
+	ix := &importTracker{
+		ctx:   ctx,
+		input: in,
+	}
 	buf := &bytes.Buffer{}
 
 	for _, m := range in.Messages() {

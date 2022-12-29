@@ -40,6 +40,8 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err))
 	}
 
+	ix.AddProtoEntity(f)
+
 	isArray := f.Type().ProtoLabel() == pgs.Repeated
 	pt := f.Type().ProtoType()
 
@@ -282,6 +284,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 			VarName: vn.String(),
 		},
 	}
+
 	vn = vn.Next()
 	pbDataField := &fieldContext{
 		IsVirtual: true,

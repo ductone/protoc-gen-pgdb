@@ -8,7 +8,7 @@ import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "pgdb/v1/pgdb.proto";
 
-option go_package = "github.com/ductone/protoc-gen-pgdb/pgdb/example/models/animals/v1";
+option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1";
 
 enum FurType {
   FUR_TYPE_UNSPECIFIED = 0;
