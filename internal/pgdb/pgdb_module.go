@@ -112,8 +112,8 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 
 	if ok, _ := strconv.ParseBool(os.Getenv("PGDB_DUMP_FILE")); ok {
 		tdr := os.TempDir()
-		os.WriteFile(filepath.Join(tdr, "t.go"), outputBuffer.Bytes(), 0644)
-		os.Stderr.WriteString(filepath.Join(tdr, "t.go") + "\n")
+		_ = os.WriteFile(filepath.Join(tdr, "t.go"), outputBuffer.Bytes(), 0644)
+		_, _ = os.Stderr.WriteString(filepath.Join(tdr, "t.go") + "\n")
 	}
 	return nil
 }

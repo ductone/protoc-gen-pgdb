@@ -27,7 +27,7 @@ func Insert(msg DBReflectMessage) (string, []any, error) {
 		record,
 	)
 	conflictRecords := exp.Record{}
-	for k, _ := range record {
+	for k := range record {
 		switch k {
 		case "pb$pksk":
 			continue

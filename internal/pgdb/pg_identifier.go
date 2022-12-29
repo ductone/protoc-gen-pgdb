@@ -21,7 +21,7 @@ const (
 	// The system uses no more than NAMEDATALEN-1 bytes of an identifier; longer names can be written in commands, but they will be
 	// truncated. By default, NAMEDATALEN is 64 so the maximum identifier length is 63 bytes.
 	//
-	// we subtract 15 more just to have more buffer for prefixes that are calculated at runtime (eg, nested fields)
+	// we subtract 15 more just to have more buffer for prefixes that are calculated at runtime (eg, nested fields).
 	postgresNameLen = (63 - 15)
 )
 

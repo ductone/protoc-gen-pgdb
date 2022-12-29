@@ -10,5 +10,4 @@ func MarshalNestedRecord(msg DBReflectMessage, opts ...RecordOptionsFunc) (exp.R
 		return nil, err
 	}
 	return recs, nil
-
 }

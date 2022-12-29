@@ -87,6 +87,7 @@ func TestSchemaBook(t *testing.T) {
 	require.NoError(t, err)
 
 	schema, err := pgdb_v1.CreateSchema(&Book{})
+	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
 		// fmt.Fprintf(os.Stderr, "---------\n%s\n\n", line)
