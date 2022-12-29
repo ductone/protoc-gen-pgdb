@@ -1,9 +1,9 @@
 version: v1
 plugins:
   - name: go
-    out: .
+    out: example
     opt: paths=source_relative
   - name: pgdb
-    out: .
+    out: example
     opt: paths=source_relative
     path: ./build/protoc-gen-pgdb
