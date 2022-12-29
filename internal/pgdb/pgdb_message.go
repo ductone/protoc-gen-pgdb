@@ -75,10 +75,21 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 	}
 	rv = append(rv, cf...)
 	vn := &varNamer{prefix: "v", offset: 0}
-	tenantIdField, err := getTenantIDField(m)
+
+	tenantIdField := ""
+	fext := pgdb_v1.MessageOptions{}
+	_, err = m.Extension(pgdb_v1.E_Msg, &fext)
 	if err != nil {
 		panic(err)
 	}
+
+	if !fext.NestedOnly {
+		tenantIdField, err = getTenantIDField(m)
+		if err != nil {
+			panic(err)
+		}
+	}
+
 	rv = append(rv, module.getMessageFieldsInner(ctx, fields, vn, tenantIdField, ix, goPrefix)...)
 
 	vn = &varNamer{prefix: "oneof", offset: 0}

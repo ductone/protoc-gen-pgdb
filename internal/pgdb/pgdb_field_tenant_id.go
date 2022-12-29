@@ -51,5 +51,7 @@ func getTenantIDField(msg pgs.Message) (string, error) {
 	if ext.TenantIdField != "" {
 		fieldName = ext.TenantIdField
 	}
+	// panics if tenant id not found
+	_ = fieldByName(msg, fieldName)
 	return fieldName, nil
 }

@@ -7,6 +7,7 @@ type Descriptor interface {
 	Fields(opts ...DescriptorFieldOptionFunc) []*Column
 	DataField() *Column
 	SearchField() *Column
+	VersioningField() *Column
 
 	Indexes(opts ...IndexOptionsFunc) []*Index
 	IndexPrimaryKey(opts ...IndexOptionsFunc) *Index

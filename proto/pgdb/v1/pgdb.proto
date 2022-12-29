@@ -33,6 +33,7 @@ message MessageOptions {
   // defaults to `tenant_id`.  Must be set if an object does not have a
   // `tenant_id` field.
   string tenant_id_field = 3;
+
   // if this message is only used in nested messages, a subset of methods
   // will be generated.
   bool nested_only = 4;

@@ -17,6 +17,11 @@ func Insert(msg DBReflectMessage) (string, []any, error) {
 		return "", nil, err
 	}
 
+	versionField := desc.VersioningField()
+	if _, ok := record[versionField.Name]; !ok {
+		return "", nil, errors.New("pgdb_v1: updated_at missing from message; unable to upsert without " + versionField.Name)
+	}
+
 	qb := goqu.Dialect("postgres")
 	q := qb.Insert(tableName).Prepared(true).Rows(
 		record,
@@ -41,8 +46,8 @@ func Insert(msg DBReflectMessage) (string, []any, error) {
 	q = q.OnConflict(goqu.DoUpdate(`ON CONSTRAINT "`+primaryIndex.Name+`"`,
 		conflictRecords,
 	).Where(
-		exp.NewIdentifierExpression("", "excluded", "pb$updated_at").Gte(
-			exp.NewLiteralExpression("?::timestamptz", record["pb$updated_at"]),
+		exp.NewIdentifierExpression("", "excluded", versionField.Name).Gte(
+			exp.NewLiteralExpression("?::timestamptz", record[versionField.Name]),
 		),
 	))
 

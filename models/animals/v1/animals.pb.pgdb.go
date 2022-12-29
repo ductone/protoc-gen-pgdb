@@ -139,6 +139,10 @@ func (d *pgdbDescriptorPet) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
+func (d *pgdbDescriptorPet) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Name: "pb$updated_at", Type: "timestamptz"}
+}
+
 func (d *pgdbDescriptorPet) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
@@ -1179,6 +1183,11 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Type:               "bytea",
 			Nullable:           true,
 			OverrideExpression: "",
+		}, {
+			Name:               df.ColumnName("created_at"),
+			Type:               "timestamptz",
+			Nullable:           true,
+			OverrideExpression: "",
 		},
 	}
 
@@ -1191,6 +1200,10 @@ func (d *pgdbDescriptorScalarValue) DataField() *pgdb_v1.Column {
 
 func (d *pgdbDescriptorScalarValue) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorScalarValue) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Name: "pb$created_at", Type: "timestamptz"}
 }
 
 func (d *pgdbDescriptorScalarValue) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -1467,6 +1480,14 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	v31 := m.self.GetRepeatedBytes()
 
 	rv[ro.ColumnName("repeated_bytes")] = v31
+
+	var v32 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v32tmp := m.self.GetCreatedAt().AsTime()
+		v32 = &v32tmp
+	}
+
+	rv[ro.ColumnName("created_at")] = v32
 
 	return rv, nil
 }
@@ -1953,6 +1974,10 @@ func (x *ScalarValueDBQueryUnsafe) RepeatedBytes() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "repeated_bytes")
 }
 
+func (x *ScalarValueDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
 func (x *ScalarValueDBColumns) WithTable(t string) *ScalarValueDBColumns {
 	return &ScalarValueDBColumns{tableName: t}
 }
@@ -2105,6 +2130,10 @@ func (x *ScalarValueDBColumns) RepeatedBytes() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "repeated_bytes")
 }
 
+func (x *ScalarValueDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
 type pgdbDescriptorEBook struct{}
 
 var (
@@ -2136,6 +2165,10 @@ func (d *pgdbDescriptorEBook) DataField() *pgdb_v1.Column {
 
 func (d *pgdbDescriptorEBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorEBook) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Name: "pb$", Type: "timestamptz"}
 }
 
 func (d *pgdbDescriptorEBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -2274,6 +2307,10 @@ func (d *pgdbDescriptorPaperBook) DataField() *pgdb_v1.Column {
 
 func (d *pgdbDescriptorPaperBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorPaperBook) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Name: "pb$", Type: "timestamptz"}
 }
 
 func (d *pgdbDescriptorPaperBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -2431,6 +2468,11 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
+			Name:               df.ColumnName("created_at"),
+			Type:               "timestamptz",
+			Nullable:           true,
+			OverrideExpression: "",
+		}, {
 			Name:               df.ColumnName("medium_oneof"),
 			Type:               "int4",
 			Nullable:           false,
@@ -2438,9 +2480,9 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		},
 	}
 
-	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("3$")...)...)
+	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
 
-	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("4$")...)...)
+	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
 
 	return rv
 }
@@ -2451,6 +2493,10 @@ func (d *pgdbDescriptorBook) DataField() *pgdb_v1.Column {
 
 func (d *pgdbDescriptorBook) SearchField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorBook) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Name: "pb$created_at", Type: "timestamptz"}
 }
 
 func (d *pgdbDescriptorBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -2500,9 +2546,9 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 		},
 	}
 
-	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("3$")...)...)
+	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("50$")...)...)
 
-	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("4$")...)...)
+	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("51$")...)...)
 
 	return rv
 }
@@ -2587,16 +2633,15 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	rv[ro.ColumnName("id")] = v1
 
-	v2, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper(), ro.Chain("paper")...)
-	if err != nil {
-		return nil, err
+	var v2 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v2tmp := m.self.GetCreatedAt().AsTime()
+		v2 = &v2tmp
 	}
 
-	for k, v := range v2 {
-		rv[ro.ColumnName(k)] = v
-	}
+	rv[ro.ColumnName("created_at")] = v2
 
-	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook(), ro.Chain("ebook")...)
+	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper(), ro.Chain("paper")...)
 	if err != nil {
 		return nil, err
 	}
@@ -2605,15 +2650,24 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		rv[ro.ColumnName(k)] = v
 	}
 
+	v4, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook(), ro.Chain("ebook")...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v4 {
+		rv[ro.ColumnName(k)] = v
+	}
+
 	oneof1 := uint32(0)
 
 	switch m.self.GetMedium().(type) {
 
 	case *Book_Paper:
-		oneof1 = 3
+		oneof1 = 50
 
 	case *Book_Ebook:
-		oneof1 = 4
+		oneof1 = 51
 
 	}
 
@@ -2995,6 +3049,10 @@ func (x *BookDBQueryUnsafe) Id() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
+func (x *BookDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
 func (x *BookDBQueryUnsafe) Medium() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
 }
@@ -3029,6 +3087,10 @@ func (x *BookDBColumns) PBData() exp.Expression {
 
 func (x *BookDBColumns) Id() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *BookDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
 
 func (x *BookDBColumns) Medium() exp.Expression {

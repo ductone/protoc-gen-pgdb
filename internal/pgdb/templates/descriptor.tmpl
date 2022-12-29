@@ -39,6 +39,10 @@ func (d *{{.ReceiverType}}) SearchField() *pgdb_v1.Column {
   return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
 }
 
+func (d *{{.ReceiverType}}) VersioningField() *pgdb_v1.Column {
+  return &pgdb_v1.Column{Name: "pb${{- .VersioningField -}}", Type: "timestamptz"}
+}
+
 func (d *{{.ReceiverType}}) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
   io := pgdb_v1.NewIndexOptions(opts)
   _ = io
