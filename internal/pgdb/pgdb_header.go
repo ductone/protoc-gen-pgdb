@@ -42,7 +42,7 @@ func (ix *importTracker) AddProtoEntity(entity pgs.Entity) {
 	key := fmt.Sprintf(`%s "%s"`, ix.ctx.PackageName(entity), string(ix.ctx.ImportPath(entity)))
 	tmp[key] = struct{}{}
 	ix.ProtoImports = make([]string, 0, len(tmp))
-	for k, _ := range tmp {
+	for k := range tmp {
 		ix.ProtoImports = append(ix.ProtoImports, k)
 	}
 	sort.Strings(ix.ProtoImports)
