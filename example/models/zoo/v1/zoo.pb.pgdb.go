@@ -70,6 +70,11 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
+			Name:               df.ColumnName("fur"),
+			Type:               "int4",
+			Nullable:           false,
+			OverrideExpression: "",
+		}, {
 			Name:               df.ColumnName("medium_oneof"),
 			Type:               "int4",
 			Nullable:           false,
@@ -222,8 +227,6 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		return nil, err
 	}
 
-	// cfv5 := exp.NewLiteralExpression("?",cfv5tmp)
-
 	rv[ro.ColumnName("pb_data")] = cfv5
 
 	v1 := string(m.self.GetId())
@@ -255,6 +258,10 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	for k, v := range v4 {
 		rv[k] = v
 	}
+
+	v5 := int32(m.self.GetFur())
+
+	rv[ro.ColumnName("fur")] = v5
 
 	oneof1 := uint32(0)
 
@@ -650,6 +657,10 @@ func (x *ShopDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
 
+func (x *ShopDBQueryUnsafe) Fur() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "fur")
+}
+
 func (x *ShopDBQueryUnsafe) Medium() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
 }
@@ -688,6 +699,10 @@ func (x *ShopDBColumns) Id() exp.Expression {
 
 func (x *ShopDBColumns) CreatedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *ShopDBColumns) Fur() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fur")
 }
 
 func (x *ShopDBColumns) Medium() exp.Expression {

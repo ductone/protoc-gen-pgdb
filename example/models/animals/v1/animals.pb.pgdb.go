@@ -281,8 +281,6 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		return nil, err
 	}
 
-	// cfv5 := exp.NewLiteralExpression("?",cfv5tmp)
-
 	rv[ro.ColumnName("pb_data")] = cfv5
 
 	v1 := string(m.self.GetId())
@@ -1310,8 +1308,6 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if err != nil {
 		return nil, err
 	}
-
-	// cfv5 := exp.NewLiteralExpression("?",cfv5tmp)
 
 	rv[ro.ColumnName("pb_data")] = cfv5
 
@@ -2624,8 +2620,6 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	if err != nil {
 		return nil, err
 	}
-
-	// cfv5 := exp.NewLiteralExpression("?",cfv5tmp)
 
 	rv[ro.ColumnName("pb_data")] = cfv5
 
