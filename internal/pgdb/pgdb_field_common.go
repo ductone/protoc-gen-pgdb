@@ -217,16 +217,19 @@ type stringFormatContext struct {
 	VarName  string
 }
 
-func typeToString(pt pgs.ProtoType, varName string) (string, error) {
+func typeToString(ix *importTracker, pt pgs.ProtoType, varName string) (string, error) {
 	c := stringFormatContext{
 		VarName: varName,
 	}
 	switch pt {
 	case pgs.DoubleT, pgs.FloatT:
+		ix.Strconv = true
 		c.IsFloat = true
 	case pgs.Int64T, pgs.SFixed64, pgs.SInt64, pgs.Int32T, pgs.SFixed32, pgs.SInt32, pgs.EnumT:
+		ix.Strconv = true
 		c.IsInt = true
 	case pgs.UInt64T, pgs.Fixed64T, pgs.UInt32T, pgs.Fixed32T:
+		ix.Strconv = true
 		c.IsUint = true
 	case pgs.StringT:
 		c.IsString = true

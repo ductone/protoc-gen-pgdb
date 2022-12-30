@@ -4,6 +4,7 @@ package v1
 import (
 	"encoding/json"
 	"strings"
+
 	"time"
 
 	v1 "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1"
