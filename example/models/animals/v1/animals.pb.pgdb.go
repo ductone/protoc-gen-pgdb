@@ -1182,6 +1182,11 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Nullable:           true,
 			OverrideExpression: "",
 		}, {
+			Name:               df.ColumnName("repeated_enum"),
+			Type:               "int4",
+			Nullable:           false,
+			OverrideExpression: "",
+		}, {
 			Name:               df.ColumnName("created_at"),
 			Type:               "timestamptz",
 			Nullable:           true,
@@ -1477,13 +1482,20 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	rv[ro.ColumnName("repeated_bytes")] = v31
 
-	var v32 *time.Time
-	if m.self.GetCreatedAt().IsValid() {
-		v32tmp := m.self.GetCreatedAt().AsTime()
-		v32 = &v32tmp
+	v32 := make([]int32, 0, len(m.self.GetRepeatedEnum()))
+	for _, arrTmp := range m.self.GetRepeatedEnum() {
+		v32 = append(v32, int32(arrTmp))
 	}
 
-	rv[ro.ColumnName("created_at")] = v32
+	rv[ro.ColumnName("repeated_enum")] = v32
+
+	var v33 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v33tmp := m.self.GetCreatedAt().AsTime()
+		v33 = &v33tmp
+	}
+
+	rv[ro.ColumnName("created_at")] = v33
 
 	return rv, nil
 }
@@ -1970,6 +1982,10 @@ func (x *ScalarValueDBQueryUnsafe) RepeatedBytes() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "repeated_bytes")
 }
 
+func (x *ScalarValueDBQueryUnsafe) RepeatedEnum() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_enum")
+}
+
 func (x *ScalarValueDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
@@ -2124,6 +2140,10 @@ func (x *ScalarValueDBColumns) RepeatedString() exp.Expression {
 
 func (x *ScalarValueDBColumns) RepeatedBytes() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "repeated_bytes")
+}
+
+func (x *ScalarValueDBColumns) RepeatedEnum() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "repeated_enum")
 }
 
 func (x *ScalarValueDBColumns) CreatedAt() exp.Expression {

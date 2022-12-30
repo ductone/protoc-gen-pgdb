@@ -159,6 +159,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "int32",
+			IsArray:   fc.IsArray,
 		})
 	case gtPbWktTimestamp:
 		fc.ix.Time = true
