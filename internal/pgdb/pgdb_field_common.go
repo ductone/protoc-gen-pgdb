@@ -29,23 +29,25 @@ type goTypeConversion int64
 
 const (
 	//nolint:deadcode,varcheck // i like unsued unspecified
-	gtUnspecified    goTypeConversion = 0
-	gtFloat32        goTypeConversion = 1
-	gtFloat64        goTypeConversion = 2
-	gtInt32          goTypeConversion = 3
-	gtInt64          goTypeConversion = 4
-	gtUint32         goTypeConversion = 5
-	gtUint64         goTypeConversion = 6
-	gtBool           goTypeConversion = 7
-	gtString         goTypeConversion = 8
-	gtBytes          goTypeConversion = 9
-	gtEnum           goTypeConversion = 10
-	gtPbWktAny       goTypeConversion = 11
-	gtPbWktTimestamp goTypeConversion = 12
-	gtPbWktDuration  goTypeConversion = 13
-	gtPbWktStruct    goTypeConversion = 14
-	gtPbGenericMsg   goTypeConversion = 15
-	gtPbNestedMsg    goTypeConversion = 16
+	gtUnspecified      goTypeConversion = 0
+	gtFloat32          goTypeConversion = 1
+	gtFloat64          goTypeConversion = 2
+	gtInt32            goTypeConversion = 3
+	gtInt64            goTypeConversion = 4
+	gtUint32           goTypeConversion = 5
+	gtUint64           goTypeConversion = 6
+	gtBool             goTypeConversion = 7
+	gtString           goTypeConversion = 8
+	gtBytes            goTypeConversion = 9
+	gtEnum             goTypeConversion = 10
+	gtPbWktAny         goTypeConversion = 11
+	gtPbWktTimestamp   goTypeConversion = 12
+	gtPbWktDuration    goTypeConversion = 13
+	gtPbWktStruct      goTypeConversion = 14
+	gtPbGenericMsg     goTypeConversion = 15
+	gtPbNestedMsg      goTypeConversion = 16
+	gtPbWktBoolValue   goTypeConversion = 17
+	gtPbWktStringValue goTypeConversion = 18
 )
 
 type formatContext struct {
@@ -87,6 +89,10 @@ func (fc *fieldConvert) GoType() (string, error) {
 		return "time.Time", nil
 	case gtPbWktDuration:
 		return "time.Duration", nil
+	case gtPbWktBoolValue:
+		return "invalid", nil
+	case gtPbWktStringValue:
+		return "invalid", nil
 	case gtPbNestedMsg:
 		return string(fc.ctx.Type(fc.F)), nil
 	default:
@@ -171,6 +177,11 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 	case gtPbWktDuration:
 		fc.ix.PgType = true
 		return templateExecToString("proto_format_duration.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+		})
+	case gtPbWktStringValue, gtPbWktBoolValue:
+		return templateExecToString("proto_format_wrapper.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
 		})

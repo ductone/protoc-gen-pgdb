@@ -1,0 +1,8 @@
+var {{ .VarName }} exp.LiteralExpression
+
+if {{ .InputName }} != nil {
+    {{ .VarName }} = exp.NewLiteralExpression("?", {{ .InputName }}.GetValue())
+} else {
+    {{ .VarName }} = exp.NewLiteralExpression("NULL")
+}
+

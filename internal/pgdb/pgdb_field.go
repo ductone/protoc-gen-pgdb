@@ -120,6 +120,14 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 				convertDef.IsArray = isArray
 				convertDef.PostgresTypeName = pgTypeJSONB
 				convertDef.TypeConversion = gtPbWktStruct
+			case ".google.protobuf.BoolValue":
+				convertDef.IsArray = isArray
+				convertDef.PostgresTypeName = "bool"
+				convertDef.TypeConversion = gtPbWktBoolValue
+			case ".google.protobuf.StringValue":
+				convertDef.IsArray = isArray
+				convertDef.PostgresTypeName = "text"
+				convertDef.TypeConversion = gtPbWktStringValue
 			default:
 				if isArray {
 					panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
