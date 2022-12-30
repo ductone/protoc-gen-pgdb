@@ -28,12 +28,13 @@ func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File,
 
 	ix.PGDBV1 = true
 	ix.GoquExp = true
-	ix.ProtobufProto = true
 	wantRecordStringBuilder := false
 	if !ext.NestedOnly {
 		// used by pk/sk builder
 		wantRecordStringBuilder = true
 		ix.Strings = true
+		// used by pb_data
+		ix.ProtobufProto = true
 	}
 	fields := module.getMessageFields(ctx, m, ix, "m.self")
 
