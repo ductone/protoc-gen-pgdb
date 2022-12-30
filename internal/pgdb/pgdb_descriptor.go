@@ -34,7 +34,7 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 	}
 
 	fields := module.getMessageFields(ctx, m, ix, "m.self")
-	mestedFields := getNesteFields(ctx, fields)
+	mestedFields := getNesteFields(ctx, fields, ix)
 
 	var vf string
 
@@ -79,13 +79,13 @@ func getNesteFieldNames(fields []*fieldContext) []string {
 	return rv
 }
 
-func getNesteFields(ctx pgsgo.Context, fields []*fieldContext) []*nestedFieldContext {
+func getNesteFields(ctx pgsgo.Context, fields []*fieldContext, ix *importTracker) []*nestedFieldContext {
 	rv := make([]*nestedFieldContext, 0)
 	for _, f := range fields {
 		if !f.Nested {
 			continue
 		}
-
+		ix.AddProtoEntity(f.Field)
 		rv = append(rv, &nestedFieldContext{
 			GoName:   f.GoName,
 			Prefix:   strconv.FormatInt(int64(*f.Field.Descriptor().Number), 10) + "$",

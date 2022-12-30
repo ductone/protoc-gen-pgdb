@@ -102,6 +102,12 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 			rv = append(rv, fieldRep)
 		}
 	}
+	// for _, field := range rv {
+	// 	if field.Field == nil {
+	// 		continue
+	// 	}
+	// 	ix.AddProtoEntity(field.Field)
+	// }
 	return rv
 }
 
