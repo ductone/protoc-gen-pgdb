@@ -40,7 +40,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err))
 	}
 
-	isArray := f.Type().ProtoLabel() == pgs.Repeated
+	isArray := f.Type().ProtoLabel() == pgs.Repeated && !f.Type().IsMap()
 	pt := f.Type().ProtoType()
 
 	pgColName, err := getColumnName(f)
