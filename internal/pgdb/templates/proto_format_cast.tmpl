@@ -1,7 +1,7 @@
 {{ if .IsArray }}
 {{ .VarName }} := make([]{{.CastType}}, 0, len({{.InputName}}))
-for _, arrTmp := range {{.InputName}} {
-    {{ .VarName }} = append({{ .VarName }}, {{.CastType}}(arrTmp))
+for _, {{ .VarName -}}arrTmp := range {{.InputName}} {
+    {{ .VarName }} = append({{ .VarName }}, {{.CastType}}({{ .VarName -}}arrTmp))
 }
 {{ else }}
 {{ .VarName }} := {{.CastType}}({{.InputName}})

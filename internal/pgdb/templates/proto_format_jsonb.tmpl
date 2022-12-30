@@ -3,8 +3,8 @@
 {{ .VarName }}first := true
 {{ .VarName }}buf := bytes.Buffer{}
 _, _ = {{ .VarName }}buf.WriteString("[")
-for _, arrTmp := range {{.InputName}} {
-    {{ .VarName -}}tmp, err := protojson.Marshal(arrTmp)
+for _, {{ .VarName -}}arrTmp := range {{.InputName}} {
+    {{ .VarName -}}tmp, err := protojson.Marshal({{ .VarName -}}arrTmp)
     if err != nil {
         return nil, err
     }
