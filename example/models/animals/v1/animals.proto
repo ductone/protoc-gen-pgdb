@@ -18,51 +18,40 @@ enum FurType {
 
 message Pet {
   option (dynamo.v1.msg).key = {
-    pk_fields: [
-      "tenant_id",
-      "id"
-    ]
-    sk_const: "example"
+    pk_fields : [ "tenant_id", "id" ]
+    sk_const : "example"
   };
   option (pgdb.v1.msg).indexes = {
-    name: "profile"
-    nethod: INDEX_METHOD_BTREE_GIN,
-    columns: [
-      "tenant_id",
-      "profile"
-    ]
+    name : "profile"
+    nethod : INDEX_METHOD_BTREE_GIN,
+    columns : [ "tenant_id", "profile" ]
   };
   string tenant_id = 1;
-  string id = 2 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_EXACT
-  }];
+  string id = 2 [ (pgdb.v1.options) = {full_text_type : FULL_TEXT_TYPE_EXACT} ];
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp updated_at = 4;
   google.protobuf.Timestamp deleted_at = 5;
-  string display_name = 6 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_ENGLISH
-    full_text_weight: FULL_TEXT_WEIGHT_HIGH
-  }];
-  string description = 7 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_ENGLISH
-  }];
+  string display_name = 6 [ (pgdb.v1.options) = {
+    full_text_type : FULL_TEXT_TYPE_ENGLISH
+    full_text_weight : FULL_TEXT_WEIGHT_HIGH
+  } ];
+  string description = 7
+      [ (pgdb.v1.options) = {full_text_type : FULL_TEXT_TYPE_ENGLISH} ];
   bool system_builtin = 9;
   google.protobuf.Duration elapsed = 10;
   google.protobuf.Struct profile = 11;
   float cuteness = 12;
   double price = 13;
-  bool very_long_naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame = 14;
+  bool
+      very_long_naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame =
+          14;
   repeated google.protobuf.Struct extra_profiles = 15;
 }
 
 message ScalarValue {
   option (dynamo.v1.msg).key = {
-    pk_fields: [
-      "tenant_id"
-    ],
-    sk_fields: [
-      "id"
-    ],
+    pk_fields : [ "tenant_id" ],
+    sk_fields : [ "id" ],
   };
   string tenant_id = 1;
   string id = 2;
@@ -98,6 +87,7 @@ message ScalarValue {
   repeated bool repeated_bool = 35;
   repeated string repeated_string = 36;
   repeated bytes repeated_bytes = 37;
+  repeated FurType repeated_enum = 38;
 
   google.protobuf.Timestamp created_at = 40;
 }
@@ -114,16 +104,11 @@ message PaperBook {
 
 message Book {
   option (dynamo.v1.msg).key = {
-    pk_fields: [
-      "tenant_id",
-      "id"
-    ]
-    sk_const: "example"
+    pk_fields : [ "tenant_id", "id" ]
+    sk_const : "example"
   };
   string tenant_id = 1;
-  string id = 2 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_EXACT
-  }];
+  string id = 2 [ (pgdb.v1.options) = {full_text_type : FULL_TEXT_TYPE_EXACT} ];
   google.protobuf.Timestamp created_at = 3;
   oneof medium {
     PaperBook paper = 50;
