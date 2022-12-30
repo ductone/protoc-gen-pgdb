@@ -185,7 +185,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	return rv
 }
 
-func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) {
+func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fieldContext, error) {
 	vn := &varNamer{prefix: "cfv", offset: 0}
 	_ = vn
 	vcDataType := pgDataTypeForName("varchar")
@@ -244,6 +244,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 		GoName:   "PK",
 		DataType: vcDataType,
 		Convert: &dynamoKeyDataConvert{
+			ix:      ix,
 			ctx:     ctx,
 			VarName: vn.String(),
 			Message: m,
@@ -262,6 +263,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message) ([]*fieldContext, error) 
 		GoName:   "SK",
 		DataType: vcDataType,
 		Convert: &dynamoKeyDataConvert{
+			ix:      ix,
 			ctx:     ctx,
 			VarName: vn.String(),
 			Message: m,

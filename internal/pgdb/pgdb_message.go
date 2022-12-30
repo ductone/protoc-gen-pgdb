@@ -71,7 +71,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
 	ix.ProtobufEncodingJSON = true
-	cf, err := getCommonFields(ctx, m)
+	cf, err := getCommonFields(ctx, m, ix)
 	if err != nil {
 		panic(err)
 	}

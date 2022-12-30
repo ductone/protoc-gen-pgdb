@@ -16,6 +16,7 @@ const (
 )
 
 type dynamoKeyDataConvert struct {
+	ix      *importTracker
 	ctx     pgsgo.Context
 	VarName string
 	Message pgs.Message
@@ -68,7 +69,7 @@ func (dkdc *dynamoKeyDataConvert) CodeForValue() (string, error) {
 
 	for _, fieldName := range keyFields {
 		field := fieldByName(dkdc.Message, fieldName)
-		formatter, err := typeToString(field.Type().ProtoType(), "m.self."+dkdc.ctx.Name(field).String())
+		formatter, err := typeToString(dkdc.ix, field.Type().ProtoType(), "m.self."+dkdc.ctx.Name(field).String())
 		if err != nil {
 			panic(err)
 		}
