@@ -14,16 +14,10 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 		panic(fmt.Errorf("pgdb: getColumnOneOfName failed for: %s: %w",
 			oneof.FullyQualifiedName(), err))
 	}
-	ix.AddProtoEntity(oneof)
-	for _, of := range oneof.Fields() {
-		ix.AddProtoEntity(of)
-		for _, f := range of.Imports() {
-			ix.AddProtoEntity(f)
-		}
-	}
 
 	dbTypeRef := pgDataTypeForName("int4")
 	rv := &fieldContext{
+
 		IsVirtual: false,
 		GoName:    ctx.Name(oneof).String(),
 		DB: &pgdb_v1.Column{
@@ -34,6 +28,7 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 		DataType: dbTypeRef,
 		Convert: &oneofDataConvert{
 			ctx:     ctx,
+			ix:      ix,
 			oneof:   oneof,
 			VarName: vn.String(),
 		},
@@ -44,6 +39,7 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 
 type oneofDataConvert struct {
 	ctx     pgsgo.Context
+	ix      *importTracker
 	VarName string
 	oneof   pgs.OneOf
 }
@@ -70,6 +66,8 @@ func (fdc *oneofDataConvert) CodeForValue() (string, error) {
 		GoName:  fdc.ctx.Name(fdc.oneof).String(),
 	}
 	for _, field := range fdc.oneof.Fields() {
+		fdc.ix.AddProtoEntity(field)
+
 		c.Fields = append(c.Fields, &oneofMemberField{
 			FieldNumber: uint32(*field.Descriptor().Number),
 			GoType:      fdc.ctx.OneofOption(field).String(),
