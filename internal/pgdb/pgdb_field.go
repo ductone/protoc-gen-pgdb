@@ -101,48 +101,53 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		convertDef.FullTextWeight = ext.FullTextWeight
 	case pgs.MessageT:
 		nullable = true
-		// TODO(pquerna): handle nested messages defined locally and in other modules
-		switch f.Descriptor().GetTypeName() {
-		case ".google.protobuf.Any":
-			if isArray {
-				panic(fmt.Errorf("pgdb: unsupported field type: %v: %s: repeated Any not supported", pt, f.FullyQualifiedName()))
-			}
-			convertDef.PostgresTypeName = pgTypeJSONB
-			convertDef.TypeConversion = gtPbWktAny
-		case ".google.protobuf.Timestamp":
-			convertDef.PostgresTypeName = "timestamptz"
-			convertDef.IsArray = isArray
-			convertDef.TypeConversion = gtPbWktTimestamp
-		case ".google.protobuf.Duration":
-			convertDef.PostgresTypeName = "interval"
-			convertDef.IsArray = isArray
-			convertDef.TypeConversion = gtPbWktDuration
-		case ".google.protobuf.Struct":
-			convertDef.IsArray = isArray
-			convertDef.PostgresTypeName = pgTypeJSONB
-			convertDef.TypeConversion = gtPbWktStruct
-		default:
-			switch ext.MessageBehavoir {
-			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT:
-				// explict option to just not store this in postgres
-				return nil
-			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND, pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
+		switch ext.MessageBehavoir {
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
+			switch f.Descriptor().GetTypeName() {
+			case ".google.protobuf.Any":
+				if isArray {
+					panic(fmt.Errorf("pgdb: unsupported field type: %v: %s: repeated Any not supported", pt, f.FullyQualifiedName()))
+				}
+				convertDef.PostgresTypeName = pgTypeJSONB
+				convertDef.TypeConversion = gtPbWktAny
+			case ".google.protobuf.Timestamp":
+				convertDef.PostgresTypeName = "timestamptz"
+				convertDef.IsArray = isArray
+				convertDef.TypeConversion = gtPbWktTimestamp
+			case ".google.protobuf.Duration":
+				convertDef.PostgresTypeName = "interval"
+				convertDef.IsArray = isArray
+				convertDef.TypeConversion = gtPbWktDuration
+			case ".google.protobuf.Struct":
+				convertDef.IsArray = isArray
+				convertDef.PostgresTypeName = pgTypeJSONB
+				convertDef.TypeConversion = gtPbWktStruct
+			default:
 				if isArray {
 					panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
 						pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 				}
 				convertDef.TypeConversion = gtPbNestedMsg
 				convertDef.NestedPrefix = strconv.FormatInt(int64(*f.Descriptor().Number), 10) + "$"
-			case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
-				convertDef.IsArray = isArray
-				convertDef.PostgresTypeName = pgTypeJSONB
-				convertDef.TypeConversion = gtPbGenericMsg
-			default:
-				panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
+			}
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT:
+			// explict option to just not store this in postgres
+			return nil
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND:
+			if isArray {
+				panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
 					pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 			}
+			convertDef.TypeConversion = gtPbNestedMsg
+			convertDef.NestedPrefix = strconv.FormatInt(int64(*f.Descriptor().Number), 10) + "$"
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
+			convertDef.IsArray = isArray
+			convertDef.PostgresTypeName = pgTypeJSONB
+			convertDef.TypeConversion = gtPbGenericMsg
+		default:
+			panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
+				pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 		}
-
 	case pgs.BytesT:
 		nullable = true
 		// single bytes and repeated bytes we store the same way
