@@ -1188,6 +1188,11 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Nullable:           false,
 			OverrideExpression: "",
 		}, {
+			Name:               df.ColumnName("string_map"),
+			Type:               "jsonb",
+			Nullable:           true,
+			OverrideExpression: "",
+		}, {
 			Name:               df.ColumnName("created_at"),
 			Type:               "timestamptz",
 			Nullable:           true,
@@ -1490,13 +1495,21 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	rv[ro.ColumnName("repeated_enum")] = v32
 
-	var v33 *time.Time
+	v33tmp, err := json.Marshal(m.self.GetStringMap())
+	if err != nil {
+		return nil, err
+	}
+	v33 := exp.NewLiteralExpression("?::jsonb", string(v33tmp))
+
+	rv[ro.ColumnName("string_map")] = v33
+
+	var v34 *time.Time
 	if m.self.GetCreatedAt().IsValid() {
-		v33tmp := m.self.GetCreatedAt().AsTime()
-		v33 = &v33tmp
+		v34tmp := m.self.GetCreatedAt().AsTime()
+		v34 = &v34tmp
 	}
 
-	rv[ro.ColumnName("created_at")] = v33
+	rv[ro.ColumnName("created_at")] = v34
 
 	return rv, nil
 }
@@ -1987,6 +2000,10 @@ func (x *ScalarValueDBQueryUnsafe) RepeatedEnum() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "repeated_enum")
 }
 
+func (x *ScalarValueDBQueryUnsafe) StringMap() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "string_map")
+}
+
 func (x *ScalarValueDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
@@ -2145,6 +2162,10 @@ func (x *ScalarValueDBColumns) RepeatedBytes() exp.Expression {
 
 func (x *ScalarValueDBColumns) RepeatedEnum() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "repeated_enum")
+}
+
+func (x *ScalarValueDBColumns) StringMap() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "string_map")
 }
 
 func (x *ScalarValueDBColumns) CreatedAt() exp.Expression {

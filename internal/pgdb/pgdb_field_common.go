@@ -6,6 +6,7 @@ import (
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	"google.golang.org/protobuf/types/descriptorpb"
 )
 
 type fieldConvert struct {
@@ -174,15 +175,35 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			InputName: selfName,
 		})
 	case gtPbWktStruct, gtPbWktAny, gtPbGenericMsg:
-		fc.ix.ProtobufEncodingJSON = true
-		if fc.IsArray {
-			fc.ix.Bytes = true
+		useProtoJSON := false
+
+		ft := fc.F.Type()
+		pt := ft.ProtoType()
+
+		if pt.Proto() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
+			if !ft.IsMap() {
+				useProtoJSON = true
+			}
 		}
-		return templateExecToString("proto_format_jsonb.tmpl", &formatContext{
-			VarName:   fc.varName,
-			InputName: selfName,
-			IsArray:   fc.IsArray,
-		})
+
+		if useProtoJSON {
+			fc.ix.ProtobufEncodingJSON = true
+			if fc.IsArray {
+				fc.ix.Bytes = true
+			}
+			return templateExecToString("proto_format_json_proto.tmpl", &formatContext{
+				VarName:   fc.varName,
+				InputName: selfName,
+				IsArray:   fc.IsArray,
+			})
+		} else {
+			fc.ix.JSON = true
+			return templateExecToString("proto_format_json_std.tmpl", &formatContext{
+				VarName:   fc.varName,
+				InputName: selfName,
+				IsArray:   fc.IsArray,
+			})
+		}
 	case gtPbNestedMsg:
 		return templateExecToString("proto_format_nested.tmpl", &formatContext{
 			VarName:      fc.varName,

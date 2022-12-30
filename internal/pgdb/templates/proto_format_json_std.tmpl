@@ -1,0 +1,5 @@
+{{ .VarName -}}tmp, err := json.Marshal({{.InputName}})
+if err != nil {
+    return nil, err
+}
+{{ .VarName }} := exp.NewLiteralExpression("?::jsonb", string({{- .VarName -}}tmp))
