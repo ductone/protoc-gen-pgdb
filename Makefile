@@ -4,7 +4,7 @@ MAKEFLAGS += --no-builtin-variables
 .PHONY: build
 build:
 	mkdir -p build
-	go build -mod=vendor -v -o build/ . 
+	go build -mod=readonly -v -o build/ .
 
 .PHONY: generate
 generate:

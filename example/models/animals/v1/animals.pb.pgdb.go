@@ -1197,6 +1197,16 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Type:               "timestamptz",
 			Nullable:           true,
 			OverrideExpression: "",
+		}, {
+			Name:               df.ColumnName("str_ptr"),
+			Type:               "text",
+			Nullable:           true,
+			OverrideExpression: "",
+		}, {
+			Name:               df.ColumnName("bool_ptr"),
+			Type:               "bool",
+			Nullable:           true,
+			OverrideExpression: "",
 		},
 	}
 
@@ -1510,6 +1520,26 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	}
 
 	rv[ro.ColumnName("created_at")] = v34
+
+	var v35 exp.LiteralExpression
+
+	if m.self.GetStrPtr() != nil {
+		v35 = exp.NewLiteralExpression("?", m.self.GetStrPtr().GetValue())
+	} else {
+		v35 = exp.NewLiteralExpression("NULL")
+	}
+
+	rv[ro.ColumnName("str_ptr")] = v35
+
+	var v36 exp.LiteralExpression
+
+	if m.self.GetBoolPtr() != nil {
+		v36 = exp.NewLiteralExpression("?", m.self.GetBoolPtr().GetValue())
+	} else {
+		v36 = exp.NewLiteralExpression("NULL")
+	}
+
+	rv[ro.ColumnName("bool_ptr")] = v36
 
 	return rv, nil
 }
@@ -2008,6 +2038,14 @@ func (x *ScalarValueDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
 
+func (x *ScalarValueDBQueryUnsafe) StrPtr() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "str_ptr")
+}
+
+func (x *ScalarValueDBQueryUnsafe) BoolPtr() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "bool_ptr")
+}
+
 func (x *ScalarValueDBColumns) WithTable(t string) *ScalarValueDBColumns {
 	return &ScalarValueDBColumns{tableName: t}
 }
@@ -2170,6 +2208,14 @@ func (x *ScalarValueDBColumns) StringMap() exp.Expression {
 
 func (x *ScalarValueDBColumns) CreatedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *ScalarValueDBColumns) StrPtr() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "str_ptr")
+}
+
+func (x *ScalarValueDBColumns) BoolPtr() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "bool_ptr")
 }
 
 type pgdbDescriptorEBook struct{}

@@ -6,6 +6,7 @@ import "dynamo/v1/dynamo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 import "pgdb/v1/pgdb.proto";
 
 option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1";
@@ -93,6 +94,8 @@ message ScalarValue {
       [ (pgdb.v1.options) = {message_behavoir : MESSAGE_BEHAVOIR_JSONB} ];
 
   google.protobuf.Timestamp created_at = 40;
+  google.protobuf.StringValue str_ptr = 100;
+  google.protobuf.BoolValue bool_ptr = 101;
 }
 
 message EBook {
