@@ -13,6 +13,7 @@ import (
 const (
 	pgTypeJSONB = "jsonb"
 	pgTypeInt4  = "int4"
+	pgTypeBool  = "bool"
 )
 
 type fieldContext struct {
@@ -87,7 +88,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtUint64
 	case pgs.BoolT:
-		convertDef.PostgresTypeName = "bool"
+		convertDef.PostgresTypeName = pgTypeBool
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtBool
 	case pgs.StringT:
@@ -122,7 +123,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 				convertDef.TypeConversion = gtPbWktStruct
 			case ".google.protobuf.BoolValue":
 				convertDef.IsArray = isArray
-				convertDef.PostgresTypeName = "bool"
+				convertDef.PostgresTypeName = pgTypeBool
 				convertDef.TypeConversion = gtPbWktBoolValue
 			case ".google.protobuf.StringValue":
 				convertDef.IsArray = isArray

@@ -149,7 +149,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
-			CastType:  "bool",
+			CastType:  pgTypeBool,
 			IsArray:   fc.IsArray,
 		})
 	case gtString:
