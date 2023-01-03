@@ -8,12 +8,6 @@ import (
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
 
-type tnc struct {
-	pgsgo.Context
-
-	typeMapper map[pgs.Name]pgs.FilePath
-}
-
 func (c *importTracker) Type(f pgs.Field) pgsgo.TypeName {
 	ft := f.Type()
 
