@@ -75,7 +75,7 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 	}
 	buf := &bytes.Buffer{}
 
-	for _, m := range in.Messages() {
+	for _, m := range in.AllMessages() {
 		fext := pgdb_v1.MessageOptions{}
 		_, err := m.Extension(pgdb_v1.E_Msg, &fext)
 		if err != nil {

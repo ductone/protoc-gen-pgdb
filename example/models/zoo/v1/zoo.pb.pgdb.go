@@ -87,6 +87,8 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 
 	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
 
+	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect().Descriptor().Fields(df.Nested("5$")...)...)
+
 	return rv
 }
 
@@ -152,6 +154,8 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("50$")...)...)
 
 	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("51$")...)...)
+
+	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect().Descriptor().Indexes(io.Nested("5$")...)...)
 
 	return rv
 }
@@ -219,6 +223,8 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	cfv4tmp = append(cfv4tmp, m.self.GetEbook().DBReflect().SearchData()...)
 
+	cfv4tmp = append(cfv4tmp, m.self.GetMgr().DBReflect().SearchData()...)
+
 	cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
 	rv[ro.ColumnName("fts_data")] = cfv4
@@ -264,6 +270,15 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	rv[ro.ColumnName("fur")] = v5
 
+	v6, err := pgdb_v1.MarshalNestedRecord(m.self.GetMgr(), ro.Nested("5$")...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v6 {
+		rv[k] = v
+	}
+
 	oneof1 := uint32(0)
 
 	switch m.self.GetMedium().(type) {
@@ -294,6 +309,8 @@ func (m *pgdbMessageShop) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 	rv = append(rv, m.self.GetPaper().DBReflect().SearchData()...)
 
 	rv = append(rv, m.self.GetEbook().DBReflect().SearchData()...)
+
+	rv = append(rv, m.self.GetMgr().DBReflect().SearchData()...)
 
 	return rv
 }
@@ -708,4 +725,146 @@ func (x *ShopDBColumns) Fur() exp.Expression {
 
 func (x *ShopDBColumns) Medium() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
+}
+
+type pgdbDescriptorShop_Manager struct{}
+
+var (
+	instancepgdbDescriptorShop_Manager pgdb_v1.Descriptor = &pgdbDescriptorShop_Manager{}
+)
+
+func (d *pgdbDescriptorShop_Manager) TableName() string {
+	return "pb_manager_models_zoo_v1_6ccf2214"
+}
+
+func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+	rv := []*pgdb_v1.Column{
+		{
+			Name:               df.ColumnName("id"),
+			Type:               "int4",
+			Nullable:           false,
+			OverrideExpression: "",
+		},
+	}
+
+	return rv
+}
+
+func (d *pgdbDescriptorShop_Manager) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorShop_Manager) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorShop_Manager) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorShop_Manager) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorShop_Manager) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := []*pgdb_v1.Index{}
+
+	return rv
+}
+
+type pgdbMessageShop_Manager struct {
+	self *Shop_Manager
+}
+
+func (dbr *Shop_Manager) DBReflect() pgdb_v1.Message {
+	return &pgdbMessageShop_Manager{
+		self: dbr,
+	}
+}
+
+func (m *pgdbMessageShop_Manager) Descriptor() pgdb_v1.Descriptor {
+	return instancepgdbDescriptorShop_Manager
+}
+
+func (m *pgdbMessageShop_Manager) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+
+	rv := exp.Record{}
+
+	v1 := int32(m.self.GetId())
+
+	rv[ro.ColumnName("id")] = v1
+
+	return rv, nil
+}
+
+func (m *pgdbMessageShop_Manager) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+type Shop_ManagerDB struct {
+	tableName string
+}
+
+type Shop_ManagerDBQueryBuilder struct {
+	tableName string
+}
+
+type Shop_ManagerDBQueryUnsafe struct {
+	tableName string
+}
+
+type Shop_ManagerDBColumns struct {
+	tableName string
+}
+
+func (x *Shop_Manager) DB() *Shop_ManagerDB {
+	return &Shop_ManagerDB{tableName: x.DBReflect().Descriptor().TableName()}
+}
+
+func (x *Shop_ManagerDB) TableName() string {
+	return x.tableName
+}
+
+func (x *Shop_ManagerDB) Query() *Shop_ManagerDBQueryBuilder {
+	return &Shop_ManagerDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *Shop_ManagerDB) Columns() *Shop_ManagerDBColumns {
+	return &Shop_ManagerDBColumns{tableName: x.tableName}
+}
+
+func (x *Shop_ManagerDB) WithTable(t string) *Shop_ManagerDB {
+	return &Shop_ManagerDB{tableName: t}
+}
+
+func (x *Shop_ManagerDBQueryBuilder) WithTable(t string) *Shop_ManagerDBQueryBuilder {
+	return &Shop_ManagerDBQueryBuilder{tableName: t}
+}
+
+func (x *Shop_ManagerDBQueryBuilder) Unsafe() *Shop_ManagerDBQueryUnsafe {
+	return &Shop_ManagerDBQueryUnsafe{tableName: x.tableName}
+}
+
+func (x *Shop_ManagerDBQueryUnsafe) Id() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *Shop_ManagerDBColumns) WithTable(t string) *Shop_ManagerDBColumns {
+	return &Shop_ManagerDBColumns{tableName: t}
+}
+
+func (x *Shop_ManagerDBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
