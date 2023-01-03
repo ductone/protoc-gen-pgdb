@@ -222,17 +222,17 @@ func fetchTags(page, pageSize int, site string) (wrapper, error) {
 		return empty, readErr
 	}
 
-	wrapper := wrapper{}
-	jsonErr := json.Unmarshal(body, &wrapper)
+	rv := wrapper{}
+	jsonErr := json.Unmarshal(body, &rv)
 	if jsonErr != nil {
 		return empty, jsonErr
 	}
 
-	if len(wrapper.ErrorName) > 0 || len(wrapper.ErrorMessage) > 0 {
-		return wrapper, fmt.Errorf("%s: %s", wrapper.ErrorName, wrapper.ErrorMessage)
+	if len(rv.ErrorName) > 0 || len(rv.ErrorMessage) > 0 {
+		return rv, fmt.Errorf("%s: %s", rv.ErrorName, rv.ErrorMessage)
 	}
 
-	return wrapper, nil
+	return rv, nil
 }
 
 type item struct {

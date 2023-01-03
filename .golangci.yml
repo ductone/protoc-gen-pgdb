@@ -13,6 +13,7 @@ linters-settings:
     enable-all: true
     disable:
       - fieldalignment # too strict
+      - shadow # err shadowing is too painful
 
   nakedret:
     max-func-lines: 0
