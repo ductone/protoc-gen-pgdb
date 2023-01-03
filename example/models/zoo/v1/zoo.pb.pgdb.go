@@ -7,7 +7,7 @@ import (
 
 	"time"
 
-	v1 "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1"
+	animals_v1 "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1"
 
 	"github.com/doug-martin/goqu/v9/exp"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
@@ -83,9 +83,9 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		},
 	}
 
-	rv = append(rv, ((*v1.PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
+	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
 
-	rv = append(rv, ((*v1.EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
+	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
 
 	return rv
 }
@@ -149,9 +149,9 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 		},
 	}
 
-	rv = append(rv, ((*v1.PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("50$")...)...)
+	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("50$")...)...)
 
-	rv = append(rv, ((*v1.EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("51$")...)...)
+	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("51$")...)...)
 
 	return rv
 }

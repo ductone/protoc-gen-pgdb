@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package models.city.v1;
+
+import "dynamo/v1/dynamo.proto";
+import "google/protobuf/timestamp.proto";
+import "models/animals/v1/animals.proto";
+import "models/zoo/v1/zoo.proto";
+import "pgdb/v1/pgdb.proto";
+
+option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/city/v1";
+
+message Attractions {
+  option (dynamo.v1.msg).key = {
+    pk_fields : [ "tenant_id" ]
+    sk_fields : [ "id", "numid" ]
+  };
+  string tenant_id = 1;
+  string id = 2 [ (pgdb.v1.options) = {full_text_type : FULL_TEXT_TYPE_EXACT} ];
+  int32 numid = 3;
+  google.protobuf.Timestamp created_at = 4;
+  oneof what {
+    models.animals.v1.Pet pet = 10;
+    models.zoo.v1.Shop zoo_shop = 11;
+  }
+}

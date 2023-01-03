@@ -10,7 +10,7 @@ import (
 {{ if .Imports.Time }} "time" {{ end }}
 
 {{ range .Imports.ProtoImports }}
-    {{ .Import }}
+    {{ .Alias }}  "{{ .Import }}"
 {{ end }}
 
 {{ if .Imports.PGDBV1 }} pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1" {{ end }}

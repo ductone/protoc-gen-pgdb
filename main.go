@@ -9,6 +9,7 @@ import (
 func main() {
 	pgs.Init(pgs.DebugEnv("DEBUG_PG_PGDB")).
 		RegisterModule(pgdb.New()).
+		RegisterPostProcessor(pgsgo.GoImports()).
 		RegisterPostProcessor(pgsgo.GoFmt()).
 		Render()
 }

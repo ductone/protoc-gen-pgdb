@@ -13,7 +13,7 @@ linters-settings:
     enable-all: true
     disable:
       - fieldalignment # too strict
-      - shadow # complains too much about shadowing errors. All research points to this being fine.
+      - shadow # err shadowing is too painful
 
   nakedret:
     max-func-lines: 0
@@ -51,13 +51,9 @@ linters-settings:
   tenv:
     all: true
 
-  varcheck:
-    exported-fields: false # this appears to improperly detect exported variables as unused when they are used from a package with the same name
-
 linters:
   disable-all: true
   enable:
-    - deadcode # Finds unused code
     - errcheck # Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases
     - gosimple # Linter for Go source code that specializes in simplifying a code
     - govet # Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
@@ -65,7 +61,6 @@ linters:
     - staticcheck # Staticcheck is a go vet on steroids, applying a ton of static analysis checks
     - typecheck # Like the front-end of a Go compiler, parses and type-checks Go code
     - unused # Checks Go code for unused constants, variables, functions and types
-    - varcheck # Finds unused global variables and constants
     - asasalint # Check for pass []any as any in variadic func(...any)
     - asciicheck # Simple linter to check that your code does not contain non-ASCII identifiers
     - bidichk # Checks for dangerous unicode character sequences
@@ -77,7 +72,6 @@ linters:
     - exportloopref # checks for pointers to enclosing loop variables
     - forbidigo # Forbids identifiers
     - gochecknoinits # Checks that no init functions are present in Go code
-    - goconst # Finds repeated strings that could be replaced by a constant
     - gocritic # Provides diagnostics that check for bugs, performance and style issues.
     - godot # Check if comments end in a period
     - goimports # In addition to fixing imports, goimports also formats your code in the same style as gofmt.

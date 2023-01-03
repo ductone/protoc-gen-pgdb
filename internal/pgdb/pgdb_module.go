@@ -69,8 +69,9 @@ func (m *Module) processFile(ctx pgsgo.Context, f pgs.File) {
 
 func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffer, in pgs.File) error {
 	ix := &importTracker{
-		ctx:   ctx,
-		input: in,
+		ctx:        ctx,
+		input:      in,
+		typeMapper: make(map[pgs.Name]pgs.FilePath),
 	}
 	buf := &bytes.Buffer{}
 

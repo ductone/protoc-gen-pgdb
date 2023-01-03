@@ -145,7 +145,6 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 				panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
 					pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 			}
-			ix.AddProtoEntity(f)
 			convertDef.TypeConversion = gtPbNestedMsg
 			convertDef.NestedPrefix = strconv.FormatInt(int64(*f.Descriptor().Number), 10) + "$"
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
