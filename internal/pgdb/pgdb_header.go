@@ -1,11 +1,9 @@
 package pgdb
 
 import (
-	"fmt"
 	"io"
 	"sort"
 
-	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
@@ -25,52 +23,29 @@ type importTracker struct {
 	Time                 bool
 	PgType               bool
 
-	ctx          pgsgo.Context
-	input        pgs.File
-	ProtoImports []ImportAlias
+	ctx   pgsgo.Context
+	input pgs.File
+
+	typeMapper map[pgs.Name]pgs.FilePath
 }
 
 type ImportAlias struct {
 	Import string
-	Dummy  string
+	Alias  string
 }
 
-func (ix *importTracker) AddProtoEntity(entity pgs.Field) {
-	elist := []pgs.Entity{entity}
-	elist = append(elist, slice.Convert(entity.Imports(), func(file pgs.File) pgs.Entity {
-		return file
-	})...)
-
-	tmp := make(map[ImportAlias]struct{})
-	for _, v := range ix.ProtoImports {
-		tmp[v] = struct{}{}
+func (ix *importTracker) ProtoImports() []ImportAlias {
+	rv := make([]ImportAlias, 0, len(ix.typeMapper))
+	for k, v := range ix.typeMapper {
+		rv = append(rv, ImportAlias{
+			Import: v.String(),
+			Alias:  k.String(),
+		})
 	}
-
-	for _, entity := range elist {
-		// TOD(pquerna): is there a better method to do this?
-		if ix.ctx.ImportPath(entity) == ix.ctx.ImportPath(ix.input) {
-			// os.Stderr.WriteString(fmt.Sprintf("[%p] [skip] AddProtoEntity: %s == %s\n", ix, ix.ctx.ImportPath(entity), ix.ctx.ImportPath(ix.input)))
-			// os.Stderr.WriteString(fmt.Sprintf("[%p] [skip]     for %s -> %s\n", ix, entity.FullyQualifiedName(), string(ix.ctx.ImportPath(entity))))
-
-			continue
-		}
-		// os.Stderr.WriteString(fmt.Sprintf("[add] AddProtoEntity: %s != %s\n", ix.ctx.ImportPath(entity), ix.ctx.ImportPath(ix.input)))
-		key := fmt.Sprintf(`%s "%s"`, ix.ctx.PackageName(entity), string(ix.ctx.ImportPath(entity)))
-		ia := ImportAlias{
-			Import: key,
-			//			Dummy:  string(ix.ctx.Type(entity)),
-		}
-		tmp[ia] = struct{}{}
-	}
-
-	ix.ProtoImports = make([]ImportAlias, 0, len(tmp))
-	for k := range tmp {
-		ix.ProtoImports = append(ix.ProtoImports, k)
-	}
-
-	sort.Slice(ix.ProtoImports, func(i, j int) bool {
-		return ix.ProtoImports[i].Import > ix.ProtoImports[j].Import
+	sort.Slice(rv, func(i, j int) bool {
+		return rv[i].Alias > rv[j].Alias
 	})
+	return rv
 }
 
 type headerTemplateContext struct {

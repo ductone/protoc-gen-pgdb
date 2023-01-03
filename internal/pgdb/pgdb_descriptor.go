@@ -85,11 +85,10 @@ func getNesteFields(ctx pgsgo.Context, fields []*fieldContext, ix *importTracker
 		if !f.Nested {
 			continue
 		}
-		ix.AddProtoEntity(f.Field)
 		rv = append(rv, &nestedFieldContext{
 			GoName:   f.GoName,
 			Prefix:   strconv.FormatInt(int64(*f.Field.Descriptor().Number), 10) + "$",
-			TypeName: ctx.Type(f.Field).String(),
+			TypeName: ix.Type(f.Field).String(),
 		})
 	}
 	return rv

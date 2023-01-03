@@ -66,8 +66,6 @@ func (fdc *oneofDataConvert) CodeForValue() (string, error) {
 		GoName:  fdc.ctx.Name(fdc.oneof).String(),
 	}
 	for _, field := range fdc.oneof.Fields() {
-		fdc.ix.AddProtoEntity(field)
-
 		c.Fields = append(c.Fields, &oneofMemberField{
 			FieldNumber: uint32(*field.Descriptor().Number),
 			GoType:      fdc.ctx.OneofOption(field).String(),
