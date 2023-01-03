@@ -22,4 +22,9 @@ message Shop {
     models.animals.v1.EBook ebook = 51;
   }
   models.animals.v1.FurType fur = 4;
+  message Manager {
+    option (pgdb.v1.msg).nested_only = true;
+    int32 id = 1;
+  }
+  Manager mgr = 5;
 }
