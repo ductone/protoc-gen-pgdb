@@ -14,7 +14,8 @@ type Descriptor interface {
 }
 
 type DescriptorFieldOption struct {
-	Prefix string
+	Prefix   string
+	IsNested bool
 }
 
 type DescriptorFieldOptionFunc func(option *DescriptorFieldOption)
@@ -22,6 +23,12 @@ type DescriptorFieldOptionFunc func(option *DescriptorFieldOption)
 func DescriptorFieldPrefix(prefix string) DescriptorFieldOptionFunc {
 	return func(option *DescriptorFieldOption) {
 		option.Prefix = prefix
+	}
+}
+
+func DescriptorFieldNested(b bool) DescriptorFieldOptionFunc {
+	return func(option *DescriptorFieldOption) {
+		option.IsNested = b
 	}
 }
 
@@ -42,6 +49,7 @@ func (r *DescriptorFieldOption) ColumnName(in string) string {
 func (r *DescriptorFieldOption) Nested(prefix string) []DescriptorFieldOptionFunc {
 	return []DescriptorFieldOptionFunc{
 		DescriptorFieldPrefix(r.Prefix + prefix),
+		DescriptorFieldNested(true),
 	}
 }
 

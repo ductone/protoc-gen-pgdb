@@ -29,63 +29,108 @@ func (d *pgdbDescriptorShop) TableName() string {
 func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
-	rv := []*pgdb_v1.Column{
-		{
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           true,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("id"),
-			Type:               "text",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("created_at"),
-			Type:               "timestamptz",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("fur"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("medium_oneof"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		},
+		})
+
 	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("fur"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("medium_oneof"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
 
 	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
 
 	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
+
+	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect().Descriptor().Fields(df.Nested("52$")...)...)
 
 	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect().Descriptor().Fields(df.Nested("5$")...)...)
 
@@ -123,8 +168,11 @@ func (d *pgdbDescriptorShop) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *
 func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
-	rv := []*pgdb_v1.Index{
-		{
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("pksk_shop_models_zoo_v1_a0f13ce7"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          true,
@@ -132,7 +180,13 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("pksk_shop_models_zoo_v1_a0f13ce7"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
@@ -140,7 +194,13 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("fts_data_shop_models_zoo_v1_1b685f12"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
@@ -148,12 +208,15 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
-		},
+		})
+
 	}
 
 	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("50$")...)...)
 
 	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("51$")...)...)
+
+	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect().Descriptor().Indexes(io.Nested("52$")...)...)
 
 	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect().Descriptor().Indexes(io.Nested("5$")...)...)
 
@@ -182,59 +245,85 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	rv := exp.Record{}
 
-	cfv0 := string(m.self.TenantId)
+	if !ro.IsNested {
 
-	rv[ro.ColumnName("tenant_id")] = cfv0
+		cfv0 := string(m.self.TenantId)
 
-	sb.Reset()
+		rv[ro.ColumnName("tenant_id")] = cfv0
 
-	_, _ = sb.WriteString("models_zoo_v1_shop")
-
-	_, _ = sb.WriteString(":")
-
-	_, _ = sb.WriteString(m.self.TenantId)
-
-	_, _ = sb.WriteString(":")
-
-	_, _ = sb.WriteString(m.self.Id)
-
-	cfv2 := sb.String()
-
-	rv[ro.ColumnName("pk")] = cfv2
-
-	sb.Reset()
-
-	_, _ = sb.WriteString("example")
-
-	cfv3 := sb.String()
-
-	rv[ro.ColumnName("sk")] = cfv3
-
-	cfv4tmp := []*pgdb_v1.SearchContent{
-
-		{
-			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
-			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-			Value:  m.self.Id,
-		},
 	}
 
-	cfv4tmp = append(cfv4tmp, m.self.GetPaper().DBReflect().SearchData()...)
+	if !ro.IsNested {
 
-	cfv4tmp = append(cfv4tmp, m.self.GetEbook().DBReflect().SearchData()...)
-
-	cfv4tmp = append(cfv4tmp, m.self.GetMgr().DBReflect().SearchData()...)
-
-	cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
-
-	rv[ro.ColumnName("fts_data")] = cfv4
-
-	cfv5, err := proto.Marshal(m.self)
-	if err != nil {
-		return nil, err
 	}
 
-	rv[ro.ColumnName("pb_data")] = cfv5
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_zoo_v1_shop")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.TenantId)
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.Id)
+
+		cfv2 := sb.String()
+
+		rv[ro.ColumnName("pk")] = cfv2
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("example")
+
+		cfv3 := sb.String()
+
+		rv[ro.ColumnName("sk")] = cfv3
+
+	}
+
+	if !ro.IsNested {
+
+		cfv4tmp := []*pgdb_v1.SearchContent{
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+				Value:  m.self.Id,
+			},
+		}
+
+		cfv4tmp = append(cfv4tmp, m.self.GetPaper().DBReflect().SearchData()...)
+
+		cfv4tmp = append(cfv4tmp, m.self.GetEbook().DBReflect().SearchData()...)
+
+		cfv4tmp = append(cfv4tmp, m.self.GetAnything().DBReflect().SearchData()...)
+
+		cfv4tmp = append(cfv4tmp, m.self.GetMgr().DBReflect().SearchData()...)
+
+		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+
+		rv[ro.ColumnName("fts_data")] = cfv4
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		rv[ro.ColumnName("pb_data")] = cfv5
+
+	}
 
 	v1 := string(m.self.GetId())
 
@@ -266,16 +355,25 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		rv[k] = v
 	}
 
-	v5 := int32(m.self.GetFur())
-
-	rv[ro.ColumnName("fur")] = v5
-
-	v6, err := pgdb_v1.MarshalNestedRecord(m.self.GetMgr(), ro.Nested("5$")...)
+	v5, err := pgdb_v1.MarshalNestedRecord(m.self.GetAnything(), ro.Nested("52$")...)
 	if err != nil {
 		return nil, err
 	}
 
-	for k, v := range v6 {
+	for k, v := range v5 {
+		rv[k] = v
+	}
+
+	v6 := int32(m.self.GetFur())
+
+	rv[ro.ColumnName("fur")] = v6
+
+	v7, err := pgdb_v1.MarshalNestedRecord(m.self.GetMgr(), ro.Nested("5$")...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v7 {
 		rv[k] = v
 	}
 
@@ -288,6 +386,9 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	case *Shop_Ebook:
 		oneof1 = 51
+
+	case *Shop_Anything:
+		oneof1 = 52
 
 	}
 
@@ -309,6 +410,8 @@ func (m *pgdbMessageShop) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 	rv = append(rv, m.self.GetPaper().DBReflect().SearchData()...)
 
 	rv = append(rv, m.self.GetEbook().DBReflect().SearchData()...)
+
+	rv = append(rv, m.self.GetAnything().DBReflect().SearchData()...)
 
 	rv = append(rv, m.self.GetMgr().DBReflect().SearchData()...)
 
@@ -740,14 +843,15 @@ func (d *pgdbDescriptorShop_Manager) TableName() string {
 func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
-	rv := []*pgdb_v1.Column{
-		{
-			Name:               df.ColumnName("id"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		},
-	}
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("id"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
 
 	return rv
 }
@@ -775,7 +879,7 @@ func (d *pgdbDescriptorShop_Manager) IndexPrimaryKey(opts ...pgdb_v1.IndexOption
 func (d *pgdbDescriptorShop_Manager) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
-	rv := []*pgdb_v1.Index{}
+	rv := make([]*pgdb_v1.Index, 0)
 
 	return rv
 }

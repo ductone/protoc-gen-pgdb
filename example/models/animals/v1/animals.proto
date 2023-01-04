@@ -70,7 +70,10 @@ message ScalarValue {
   sfixed32 sfixed32 = 13;
   sfixed64 sfixed64 = 14;
   bool bool = 15;
-  string string = 16;
+  string string = 16 [ (pgdb.v1.options) = {
+    full_text_type : FULL_TEXT_TYPE_ENGLISH
+    full_text_weight : FULL_TEXT_WEIGHT_HIGH
+  } ];
   bytes bytes = 17;
 
   repeated double repeated_double = 23;
