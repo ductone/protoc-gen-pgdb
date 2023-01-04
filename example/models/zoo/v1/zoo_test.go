@@ -1,0 +1,62 @@
+package v1
+
+import (
+	"context"
+	"strings"
+	"testing"
+
+	v1 "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1"
+	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+	"github.com/stretchr/testify/require"
+	"google.golang.org/protobuf/types/known/timestamppb"
+)
+
+func TestSchemaZooShop(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	require.NoError(t, err)
+
+	schema, err := pgdb_v1.CreateSchema(&Shop{})
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "TestSchemaZooShop: failed to execute sql: '\n%s\n'", line)
+		// os.Stderr.WriteString(line)
+		// os.Stderr.WriteString("\n------\n")
+	}
+	ct := schema[0]
+	require.Contains(t, ct, "CREATE TABLE")
+	require.Equal(t, 2,
+		strings.Count(ct, "$pksk"),
+		"Create table should contain only one pksk field + index: %s", ct,
+	)
+	require.Equal(t, 1,
+		strings.Count(ct, "fts_data"),
+		"Create table should contain only one fts_data field: %s", ct,
+	)
+
+	s := &Shop{
+		TenantId:  "t1",
+		Id:        "s1",
+		CreatedAt: timestamppb.Now(),
+		Fur:       v1.FurType_FUR_TYPE_LOTS,
+		Medium: &Shop_Anything{
+			Anything: &v1.ScalarValue{
+				String_: "unique",
+			},
+		},
+	}
+	found := false
+	searchData := s.DBReflect().SearchData()
+	for _, sd := range searchData {
+		if sd.Value == "unique" {
+			found = true
+		}
+	}
+	require.True(t, found, "expected string in FTS data: %v", searchData)
+}

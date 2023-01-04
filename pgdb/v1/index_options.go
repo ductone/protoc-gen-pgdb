@@ -3,6 +3,7 @@ package v1
 type IndexOption struct {
 	IndexPrefix  string
 	ColumnPrefix string
+	IsNested     bool
 }
 
 type IndexOptionsFunc func(option *IndexOption)
@@ -15,6 +16,12 @@ func IndexOptionIndexPrefix(prefix string) IndexOptionsFunc {
 func IndexOptionColumnPrefix(prefix string) IndexOptionsFunc {
 	return func(option *IndexOption) {
 		option.ColumnPrefix = prefix
+	}
+}
+
+func IndexOptionIsNested(b bool) IndexOptionsFunc {
+	return func(option *IndexOption) {
+		option.IsNested = b
 	}
 }
 
@@ -41,5 +48,6 @@ func (r *IndexOption) Nested(prefix string) []IndexOptionsFunc {
 	return []IndexOptionsFunc{
 		IndexOptionIndexPrefix(r.IndexPrefix + prefix),
 		IndexOptionColumnPrefix(r.ColumnPrefix + prefix),
+		IndexOptionIsNested(true),
 	}
 }

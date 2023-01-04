@@ -23,6 +23,9 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
     rv := exp.Record{}
 
     {{ range .Fields }}
+        {{ if .ExcludeNested }}
+        if !ro.IsNested {
+        {{ end }}
         {{.Convert.CodeForValue}}
         {{ $VarForValue := .Convert.VarForValue }}
         {{ if $VarForValue }}
@@ -34,6 +37,9 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
         for k, v := range {{ $VarForAppend }} {
             rv[k] = v
         }
+        {{ end }}
+        {{ if .ExcludeNested }}
+            }
         {{ end }}
     {{ end }}
 

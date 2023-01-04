@@ -20,6 +20,7 @@ message Shop {
   oneof medium {
     models.animals.v1.PaperBook paper = 50;
     models.animals.v1.EBook ebook = 51;
+    models.animals.v1.ScalarValue anything = 52;
   }
   models.animals.v1.FurType fur = 4;
   message Manager {

@@ -9,9 +9,9 @@ import (
 )
 
 type indexContext struct {
-	DB           pgdb_v1.Index
-	Nested       bool
-	SourceFields []string
+	DB            pgdb_v1.Index
+	ExcludeNested bool
+	SourceFields  []string
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -90,6 +90,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 	}
 
 	primaryIndex := &indexContext{
+		ExcludeNested: true,
 		DB: pgdb_v1.Index{
 			Name:      primaryIndexName,
 			IsPrimary: true,
@@ -101,6 +102,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 	}
 
 	pkskIndex := &indexContext{
+		ExcludeNested: true,
 		DB: pgdb_v1.Index{
 			Name:     primaryIndexName,
 			IsUnique: true,
@@ -115,6 +117,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		return nil, err
 	}
 	ftsIndex := &indexContext{
+		ExcludeNested: true,
 		DB: pgdb_v1.Index{
 			Name:    ftsIndexName,
 			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,

@@ -18,13 +18,14 @@ const (
 
 type fieldContext struct {
 	// denotes a realized/virtual field that comes from multiple fields. in this case, F is nil.
-	IsVirtual bool
-	GoName    string
-	Field     pgs.Field
-	Nested    bool
-	DB        *pgdb_v1.Column
-	DataType  *pgtype.Type
-	Convert   FiledConverter
+	IsVirtual     bool
+	ExcludeNested bool
+	GoName        string
+	Field         pgs.Field
+	Nested        bool
+	DB            *pgdb_v1.Column
+	DataType      *pgtype.Type
+	Convert       FiledConverter
 }
 
 type FiledConverter interface {
@@ -210,7 +211,8 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 	byteaDataType := pgDataTypeForName("bytea")
 	tenantIdField := &fieldContext{
-		IsVirtual: true,
+		ExcludeNested: true,
+		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
 			Name:     "tenant_id",
 			Type:     vcDataType.Name,
@@ -227,7 +229,8 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 	vn = vn.Next()
 	pkskField := &fieldContext{
-		IsVirtual: true,
+		ExcludeNested: true,
+		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
 			Name:               "pksk",
 			Type:               vcDataType.Name,
@@ -243,7 +246,8 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 	vn = vn.Next()
 	pkField := &fieldContext{
-		IsVirtual: true,
+		ExcludeNested: true,
+		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
 			Name:     "pk",
 			Type:     vcDataType.Name,
@@ -262,7 +266,8 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 	vn = vn.Next()
 	skField := &fieldContext{
-		IsVirtual: true,
+		ExcludeNested: true,
+		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
 			Name:     "sk",
 			Type:     vcDataType.Name,
@@ -284,7 +289,8 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 	// tsDataType, _ := pgDataTypeForName("tsvector")
 	vn = vn.Next()
 	ftsDataField := &fieldContext{
-		IsVirtual: true,
+		ExcludeNested: true,
+		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
 			Name:     "fts_data",
 			Type:     "tsvector",
@@ -301,7 +307,8 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 	vn = vn.Next()
 	pbDataField := &fieldContext{
-		IsVirtual: true,
+		ExcludeNested: true,
+		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
 			Name:     "pb_data",
 			Type:     byteaDataType.Name,

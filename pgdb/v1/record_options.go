@@ -1,7 +1,8 @@
 package v1
 
 type RecordOption struct {
-	Prefix string
+	Prefix   string
+	IsNested bool
 }
 
 type RecordOptionsFunc func(option *RecordOption)
@@ -9,6 +10,12 @@ type RecordOptionsFunc func(option *RecordOption)
 func RecordOptionPrefix(prefix string) RecordOptionsFunc {
 	return func(option *RecordOption) {
 		option.Prefix = prefix
+	}
+}
+
+func RecordOptionIsNested(b bool) RecordOptionsFunc {
+	return func(option *RecordOption) {
+		option.IsNested = b
 	}
 }
 
@@ -30,5 +37,6 @@ func (r *RecordOption) ColumnName(in string) string {
 func (r *RecordOption) Nested(prefix string) []RecordOptionsFunc {
 	return []RecordOptionsFunc{
 		RecordOptionPrefix(r.Prefix + prefix),
+		RecordOptionIsNested(true),
 	}
 }

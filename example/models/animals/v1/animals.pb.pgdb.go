@@ -30,104 +30,165 @@ func (d *pgdbDescriptorPet) TableName() string {
 func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
-	rv := []*pgdb_v1.Column{
-		{
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           true,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("id"),
-			Type:               "text",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("created_at"),
-			Type:               "timestamptz",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("updated_at"),
-			Type:               "timestamptz",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("deleted_at"),
-			Type:               "timestamptz",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("display_name"),
-			Type:               "text",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("description"),
-			Type:               "text",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("system_builtin"),
-			Type:               "bool",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("elapsed"),
-			Type:               "interval",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("profile"),
-			Type:               "jsonb",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("cuteness"),
-			Type:               "float4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("price"),
-			Type:               "float8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("14"),
-			Type:               "bool",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("extra_profiles"),
-			Type:               "jsonb",
-			Nullable:           true,
-			OverrideExpression: "",
-		},
+		})
+
 	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("deleted_at"),
+		Type:               "timestamptz",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("display_name"),
+		Type:               "text",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("description"),
+		Type:               "text",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("system_builtin"),
+		Type:               "bool",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("elapsed"),
+		Type:               "interval",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("profile"),
+		Type:               "jsonb",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("cuteness"),
+		Type:               "float4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("price"),
+		Type:               "float8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("14"),
+		Type:               "bool",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("extra_profiles"),
+		Type:               "jsonb",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
 
 	return rv
 }
@@ -163,8 +224,11 @@ func (d *pgdbDescriptorPet) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *p
 func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
-	rv := []*pgdb_v1.Index{
-		{
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("pksk_pet_models_animals_v1_4fc115ea"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          true,
@@ -172,7 +236,13 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("pksk_pet_models_animals_v1_4fc115ea"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
@@ -180,7 +250,13 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("fts_data_pet_models_animals_v1_6d64344b"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
@@ -188,16 +264,19 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
-		}, {
-			Name:               io.IndexName("profile_pet_models_animals_v1_6b04a2a2"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("profile")},
-			OverrideExpression: "",
-		},
+		})
+
 	}
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("profile_pet_models_animals_v1_6b04a2a2"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("profile")},
+		OverrideExpression: "",
+	})
 
 	return rv
 }
@@ -224,65 +303,89 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	rv := exp.Record{}
 
-	cfv0 := string(m.self.TenantId)
+	if !ro.IsNested {
 
-	rv[ro.ColumnName("tenant_id")] = cfv0
+		cfv0 := string(m.self.TenantId)
 
-	sb.Reset()
+		rv[ro.ColumnName("tenant_id")] = cfv0
 
-	_, _ = sb.WriteString("models_animals_v1_pet")
-
-	_, _ = sb.WriteString(":")
-
-	_, _ = sb.WriteString(m.self.TenantId)
-
-	_, _ = sb.WriteString(":")
-
-	_, _ = sb.WriteString(m.self.Id)
-
-	cfv2 := sb.String()
-
-	rv[ro.ColumnName("pk")] = cfv2
-
-	sb.Reset()
-
-	_, _ = sb.WriteString("example")
-
-	cfv3 := sb.String()
-
-	rv[ro.ColumnName("sk")] = cfv3
-
-	cfv4tmp := []*pgdb_v1.SearchContent{
-
-		{
-			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
-			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-			Value:  m.self.Id,
-		},
-
-		{
-			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
-			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-			Value:  m.self.DisplayName,
-		},
-
-		{
-			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
-			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-			Value:  m.self.Description,
-		},
 	}
 
-	cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+	if !ro.IsNested {
 
-	rv[ro.ColumnName("fts_data")] = cfv4
-
-	cfv5, err := proto.Marshal(m.self)
-	if err != nil {
-		return nil, err
 	}
 
-	rv[ro.ColumnName("pb_data")] = cfv5
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_animals_v1_pet")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.TenantId)
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.Id)
+
+		cfv2 := sb.String()
+
+		rv[ro.ColumnName("pk")] = cfv2
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("example")
+
+		cfv3 := sb.String()
+
+		rv[ro.ColumnName("sk")] = cfv3
+
+	}
+
+	if !ro.IsNested {
+
+		cfv4tmp := []*pgdb_v1.SearchContent{
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+				Value:  m.self.Id,
+			},
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  m.self.DisplayName,
+			},
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+				Value:  m.self.Description,
+			},
+		}
+
+		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+
+		rv[ro.ColumnName("fts_data")] = cfv4
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		rv[ro.ColumnName("pb_data")] = cfv5
+
+	}
 
 	v1 := string(m.self.GetId())
 
@@ -996,219 +1099,326 @@ func (d *pgdbDescriptorScalarValue) TableName() string {
 func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
-	rv := []*pgdb_v1.Column{
-		{
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           true,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("id"),
-			Type:               "text",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("double"),
-			Type:               "float8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("float"),
-			Type:               "float4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("int_32"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("int_64"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("uint_32"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("uint_64"),
-			Type:               "numeric",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("sint_32"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("sint_64"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("fixed_32"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("fixed_64"),
-			Type:               "numeric",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("sfixed_32"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("sfixed_64"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("bool"),
-			Type:               "bool",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("string"),
-			Type:               "text",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("bytes"),
-			Type:               "bytea",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_double"),
-			Type:               "float8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_float"),
-			Type:               "float4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_int32"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_int64"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_uint32"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_uint64"),
-			Type:               "numeric",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_sint32"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_sint64"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_fixed32"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_fixed64"),
-			Type:               "numeric",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_sfixed32"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_sfixed64"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_bool"),
-			Type:               "bool",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_string"),
-			Type:               "text",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_bytes"),
-			Type:               "bytea",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("repeated_enum"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("string_map"),
-			Type:               "jsonb",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("created_at"),
-			Type:               "timestamptz",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("str_ptr"),
-			Type:               "text",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("bool_ptr"),
-			Type:               "bool",
-			Nullable:           true,
-			OverrideExpression: "",
-		},
+		})
+
 	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("double"),
+		Type:               "float8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("float"),
+		Type:               "float4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("int_32"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("int_64"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("uint_32"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("uint_64"),
+		Type:               "numeric",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("sint_32"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("sint_64"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("fixed_32"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("fixed_64"),
+		Type:               "numeric",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("sfixed_32"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("sfixed_64"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("bool"),
+		Type:               "bool",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("string"),
+		Type:               "text",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("bytes"),
+		Type:               "bytea",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_double"),
+		Type:               "float8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_float"),
+		Type:               "float4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_int32"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_int64"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_uint32"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_uint64"),
+		Type:               "numeric",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_sint32"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_sint64"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_fixed32"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_fixed64"),
+		Type:               "numeric",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_sfixed32"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_sfixed64"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_bool"),
+		Type:               "bool",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_string"),
+		Type:               "text",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_bytes"),
+		Type:               "bytea",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("repeated_enum"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("string_map"),
+		Type:               "jsonb",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("str_ptr"),
+		Type:               "text",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("bool_ptr"),
+		Type:               "bool",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
 
 	return rv
 }
@@ -1244,8 +1454,11 @@ func (d *pgdbDescriptorScalarValue) IndexPrimaryKey(opts ...pgdb_v1.IndexOptions
 func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
-	rv := []*pgdb_v1.Index{
-		{
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("pksk_scalar_value_models_animals_v1_19369260"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          true,
@@ -1253,7 +1466,13 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("pksk_scalar_value_models_animals_v1_19369260"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
@@ -1261,7 +1480,13 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("fts_data_scalar_value_models_animals_v1_6f51bd7b"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
@@ -1269,7 +1494,8 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
-		},
+		})
+
 	}
 
 	return rv
@@ -1297,40 +1523,73 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	rv := exp.Record{}
 
-	cfv0 := string(m.self.TenantId)
+	if !ro.IsNested {
 
-	rv[ro.ColumnName("tenant_id")] = cfv0
+		cfv0 := string(m.self.TenantId)
 
-	sb.Reset()
+		rv[ro.ColumnName("tenant_id")] = cfv0
 
-	_, _ = sb.WriteString("models_animals_v1_scalar_value")
-
-	_, _ = sb.WriteString(":")
-
-	_, _ = sb.WriteString(m.self.TenantId)
-
-	cfv2 := sb.String()
-
-	rv[ro.ColumnName("pk")] = cfv2
-
-	sb.Reset()
-
-	_, _ = sb.WriteString(m.self.Id)
-
-	cfv3 := sb.String()
-
-	rv[ro.ColumnName("sk")] = cfv3
-
-	cfv4 := exp.NewLiteralExpression("NULL")
-
-	rv[ro.ColumnName("fts_data")] = cfv4
-
-	cfv5, err := proto.Marshal(m.self)
-	if err != nil {
-		return nil, err
 	}
 
-	rv[ro.ColumnName("pb_data")] = cfv5
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_animals_v1_scalar_value")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.TenantId)
+
+		cfv2 := sb.String()
+
+		rv[ro.ColumnName("pk")] = cfv2
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString(m.self.Id)
+
+		cfv3 := sb.String()
+
+		rv[ro.ColumnName("sk")] = cfv3
+
+	}
+
+	if !ro.IsNested {
+
+		cfv4tmp := []*pgdb_v1.SearchContent{
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  m.self.String_,
+			},
+		}
+
+		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+
+		rv[ro.ColumnName("fts_data")] = cfv4
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		rv[ro.ColumnName("pb_data")] = cfv5
+
+	}
 
 	v1 := string(m.self.GetId())
 
@@ -1545,7 +1804,14 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 }
 
 func (m *pgdbMessageScalarValue) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
-	rv := []*pgdb_v1.SearchContent{}
+	rv := []*pgdb_v1.SearchContent{
+
+		{
+			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  m.self.String_,
+		},
+	}
 
 	return rv
 }
@@ -2231,14 +2497,15 @@ func (d *pgdbDescriptorEBook) TableName() string {
 func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
-	rv := []*pgdb_v1.Column{
-		{
-			Name:               df.ColumnName("size"),
-			Type:               "int8",
-			Nullable:           false,
-			OverrideExpression: "",
-		},
-	}
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("size"),
+		Type:               "int8",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
 
 	return rv
 }
@@ -2266,7 +2533,7 @@ func (d *pgdbDescriptorEBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) 
 func (d *pgdbDescriptorEBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
-	rv := []*pgdb_v1.Index{}
+	rv := make([]*pgdb_v1.Index, 0)
 
 	return rv
 }
@@ -2373,14 +2640,15 @@ func (d *pgdbDescriptorPaperBook) TableName() string {
 func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
-	rv := []*pgdb_v1.Column{
-		{
-			Name:               df.ColumnName("pages"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		},
-	}
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("pages"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
 
 	return rv
 }
@@ -2408,7 +2676,7 @@ func (d *pgdbDescriptorPaperBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFu
 func (d *pgdbDescriptorPaperBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
-	rv := []*pgdb_v1.Index{}
+	rv := make([]*pgdb_v1.Index, 0)
 
 	return rv
 }
@@ -2515,54 +2783,95 @@ func (d *pgdbDescriptorBook) TableName() string {
 func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
-	rv := []*pgdb_v1.Column{
-		{
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           true,
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           false,
 			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("id"),
-			Type:               "text",
-			Nullable:           false,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("created_at"),
-			Type:               "timestamptz",
-			Nullable:           true,
-			OverrideExpression: "",
-		}, {
-			Name:               df.ColumnName("medium_oneof"),
-			Type:               "int4",
-			Nullable:           false,
-			OverrideExpression: "",
-		},
+		})
+
 	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           true,
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("medium_oneof"),
+		Type:               "int4",
+		Nullable:           false,
+		OverrideExpression: "",
+	})
 
 	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
 
@@ -2602,8 +2911,11 @@ func (d *pgdbDescriptorBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *
 func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
-	rv := []*pgdb_v1.Index{
-		{
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("pksk_book_models_animals_v1_a25b591a"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          true,
@@ -2611,7 +2923,13 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("pksk_book_models_animals_v1_a25b591a"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
@@ -2619,7 +2937,13 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
-		}, {
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
 			Name:               io.IndexName("fts_data_book_models_animals_v1_6cf7b95a"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
@@ -2627,7 +2951,8 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
-		},
+		})
+
 	}
 
 	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("50$")...)...)
@@ -2659,57 +2984,81 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	rv := exp.Record{}
 
-	cfv0 := string(m.self.TenantId)
+	if !ro.IsNested {
 
-	rv[ro.ColumnName("tenant_id")] = cfv0
+		cfv0 := string(m.self.TenantId)
 
-	sb.Reset()
+		rv[ro.ColumnName("tenant_id")] = cfv0
 
-	_, _ = sb.WriteString("models_animals_v1_book")
-
-	_, _ = sb.WriteString(":")
-
-	_, _ = sb.WriteString(m.self.TenantId)
-
-	_, _ = sb.WriteString(":")
-
-	_, _ = sb.WriteString(m.self.Id)
-
-	cfv2 := sb.String()
-
-	rv[ro.ColumnName("pk")] = cfv2
-
-	sb.Reset()
-
-	_, _ = sb.WriteString("example")
-
-	cfv3 := sb.String()
-
-	rv[ro.ColumnName("sk")] = cfv3
-
-	cfv4tmp := []*pgdb_v1.SearchContent{
-
-		{
-			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
-			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-			Value:  m.self.Id,
-		},
 	}
 
-	cfv4tmp = append(cfv4tmp, m.self.GetPaper().DBReflect().SearchData()...)
+	if !ro.IsNested {
 
-	cfv4tmp = append(cfv4tmp, m.self.GetEbook().DBReflect().SearchData()...)
-
-	cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
-
-	rv[ro.ColumnName("fts_data")] = cfv4
-
-	cfv5, err := proto.Marshal(m.self)
-	if err != nil {
-		return nil, err
 	}
 
-	rv[ro.ColumnName("pb_data")] = cfv5
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_animals_v1_book")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.TenantId)
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.Id)
+
+		cfv2 := sb.String()
+
+		rv[ro.ColumnName("pk")] = cfv2
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("example")
+
+		cfv3 := sb.String()
+
+		rv[ro.ColumnName("sk")] = cfv3
+
+	}
+
+	if !ro.IsNested {
+
+		cfv4tmp := []*pgdb_v1.SearchContent{
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+				Value:  m.self.Id,
+			},
+		}
+
+		cfv4tmp = append(cfv4tmp, m.self.GetPaper().DBReflect().SearchData()...)
+
+		cfv4tmp = append(cfv4tmp, m.self.GetEbook().DBReflect().SearchData()...)
+
+		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+
+		rv[ro.ColumnName("fts_data")] = cfv4
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		rv[ro.ColumnName("pb_data")] = cfv5
+
+	}
 
 	v1 := string(m.self.GetId())
 
