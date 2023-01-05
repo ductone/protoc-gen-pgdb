@@ -158,7 +158,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		}
 	case pgs.BytesT:
 		nullable = true
-		// single bytes and repeated bytes we store the same way
+		convertDef.IsArray = isArray
 		convertDef.PostgresTypeName = "bytea"
 		convertDef.TypeConversion = gtBytes
 	case pgs.EnumT:
@@ -170,6 +170,11 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	default:
 		panic(fmt.Errorf("pgdb: unsupported field type: %v: %s (of type %s)",
 			pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+	}
+
+	if isArray {
+		ix.XPQ = true
+		convertDef.PostgresTypeName = "_" + convertDef.PostgresTypeName
 	}
 
 	rv := &fieldContext{

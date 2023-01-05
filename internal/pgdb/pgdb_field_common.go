@@ -160,7 +160,12 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			IsArray:   fc.IsArray,
 		})
 	case gtBytes:
-		return fc.varName + " := " + selfName, nil
+		return templateExecToString("proto_format_cast.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  "[]byte",
+			IsArray:   fc.IsArray,
+		})
 	case gtEnum:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
