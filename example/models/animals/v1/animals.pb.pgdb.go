@@ -2,8 +2,6 @@
 package v1
 
 import (
-	"bytes"
-
 	"encoding/json"
 	"strings"
 
@@ -185,7 +183,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("extra_profiles"),
-		Type:               "jsonb",
+		Type:               "_jsonb",
 		Nullable:           true,
 		OverrideExpression: "",
 	})
@@ -455,23 +453,14 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	rv[ro.ColumnName("14")] = v12
 
-	v13first := true
-	v13buf := bytes.Buffer{}
-	_, _ = v13buf.WriteString("[")
+	v13 := make(xpq.Array[string], 0, len(m.self.GetExtraProfiles()))
 	for _, v13arrTmp := range m.self.GetExtraProfiles() {
 		v13tmp, err := protojson.Marshal(v13arrTmp)
 		if err != nil {
 			return nil, err
 		}
-		if v13first {
-			v13first = false
-		} else {
-			_, _ = v13buf.WriteString(", ")
-		}
-		_, _ = v13buf.Write(v13tmp)
+		v13 = append(v13, string(v13tmp))
 	}
-	_, _ = v13buf.WriteString("]")
-	v13 := exp.NewLiteralExpression("?::jsonb", v13buf.String())
 
 	rv[ro.ColumnName("extra_profiles")] = v13
 
@@ -1282,112 +1271,112 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_double"),
-		Type:               "float8",
+		Type:               "_float8",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_float"),
-		Type:               "float4",
+		Type:               "_float4",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_int32"),
-		Type:               "int4",
+		Type:               "_int4",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_int64"),
-		Type:               "int8",
+		Type:               "_int8",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_uint32"),
-		Type:               "int8",
+		Type:               "_int8",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_uint64"),
-		Type:               "numeric",
+		Type:               "_numeric",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sint32"),
-		Type:               "int4",
+		Type:               "_int4",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sint64"),
-		Type:               "int8",
+		Type:               "_int8",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_fixed32"),
-		Type:               "int8",
+		Type:               "_int8",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_fixed64"),
-		Type:               "numeric",
+		Type:               "_numeric",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sfixed32"),
-		Type:               "int4",
+		Type:               "_int4",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sfixed64"),
-		Type:               "int8",
+		Type:               "_int8",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_bool"),
-		Type:               "bool",
+		Type:               "_bool",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_string"),
-		Type:               "text",
+		Type:               "_text",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_bytes"),
-		Type:               "bytea",
+		Type:               "_bytea",
 		Nullable:           true,
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_enum"),
-		Type:               "int4",
+		Type:               "_int4",
 		Nullable:           false,
 		OverrideExpression: "",
 	})
@@ -1651,113 +1640,116 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	rv[ro.ColumnName("string")] = v15
 
-	v16 := m.self.GetBytes()
+	v16 := []byte(m.self.GetBytes())
 
 	rv[ro.ColumnName("bytes")] = v16
 
-	v17 := make([]float64, 0, len(m.self.GetRepeatedDouble()))
+	v17 := make(xpq.Array[float64], 0, len(m.self.GetRepeatedDouble()))
 	for _, v17arrTmp := range m.self.GetRepeatedDouble() {
 		v17 = append(v17, float64(v17arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_double")] = v17
 
-	v18 := make([]float32, 0, len(m.self.GetRepeatedFloat()))
+	v18 := make(xpq.Array[float32], 0, len(m.self.GetRepeatedFloat()))
 	for _, v18arrTmp := range m.self.GetRepeatedFloat() {
 		v18 = append(v18, float32(v18arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_float")] = v18
 
-	v19 := make([]int32, 0, len(m.self.GetRepeatedInt32()))
+	v19 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedInt32()))
 	for _, v19arrTmp := range m.self.GetRepeatedInt32() {
 		v19 = append(v19, int32(v19arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_int32")] = v19
 
-	v20 := make([]int64, 0, len(m.self.GetRepeatedInt64()))
+	v20 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedInt64()))
 	for _, v20arrTmp := range m.self.GetRepeatedInt64() {
 		v20 = append(v20, int64(v20arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_int64")] = v20
 
-	v21 := make([]uint32, 0, len(m.self.GetRepeatedUint32()))
+	v21 := make(xpq.Array[uint32], 0, len(m.self.GetRepeatedUint32()))
 	for _, v21arrTmp := range m.self.GetRepeatedUint32() {
 		v21 = append(v21, uint32(v21arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_uint32")] = v21
 
-	v22 := make([]uint64, 0, len(m.self.GetRepeatedUint64()))
+	v22 := make(xpq.Array[uint64], 0, len(m.self.GetRepeatedUint64()))
 	for _, v22arrTmp := range m.self.GetRepeatedUint64() {
 		v22 = append(v22, uint64(v22arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_uint64")] = v22
 
-	v23 := make([]int32, 0, len(m.self.GetRepeatedSint32()))
+	v23 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedSint32()))
 	for _, v23arrTmp := range m.self.GetRepeatedSint32() {
 		v23 = append(v23, int32(v23arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_sint32")] = v23
 
-	v24 := make([]int64, 0, len(m.self.GetRepeatedSint64()))
+	v24 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedSint64()))
 	for _, v24arrTmp := range m.self.GetRepeatedSint64() {
 		v24 = append(v24, int64(v24arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_sint64")] = v24
 
-	v25 := make([]uint32, 0, len(m.self.GetRepeatedFixed32()))
+	v25 := make(xpq.Array[uint32], 0, len(m.self.GetRepeatedFixed32()))
 	for _, v25arrTmp := range m.self.GetRepeatedFixed32() {
 		v25 = append(v25, uint32(v25arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_fixed32")] = v25
 
-	v26 := make([]uint64, 0, len(m.self.GetRepeatedFixed64()))
+	v26 := make(xpq.Array[uint64], 0, len(m.self.GetRepeatedFixed64()))
 	for _, v26arrTmp := range m.self.GetRepeatedFixed64() {
 		v26 = append(v26, uint64(v26arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_fixed64")] = v26
 
-	v27 := make([]int32, 0, len(m.self.GetRepeatedSfixed32()))
+	v27 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedSfixed32()))
 	for _, v27arrTmp := range m.self.GetRepeatedSfixed32() {
 		v27 = append(v27, int32(v27arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_sfixed32")] = v27
 
-	v28 := make([]int64, 0, len(m.self.GetRepeatedSfixed64()))
+	v28 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedSfixed64()))
 	for _, v28arrTmp := range m.self.GetRepeatedSfixed64() {
 		v28 = append(v28, int64(v28arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_sfixed64")] = v28
 
-	v29 := make([]bool, 0, len(m.self.GetRepeatedBool()))
+	v29 := make(xpq.Array[bool], 0, len(m.self.GetRepeatedBool()))
 	for _, v29arrTmp := range m.self.GetRepeatedBool() {
 		v29 = append(v29, bool(v29arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_bool")] = v29
 
-	v30 := make([]string, 0, len(m.self.GetRepeatedString()))
+	v30 := make(xpq.Array[string], 0, len(m.self.GetRepeatedString()))
 	for _, v30arrTmp := range m.self.GetRepeatedString() {
 		v30 = append(v30, string(v30arrTmp))
 	}
 
 	rv[ro.ColumnName("repeated_string")] = v30
 
-	v31 := m.self.GetRepeatedBytes()
+	v31 := make(xpq.Array[[]byte], 0, len(m.self.GetRepeatedBytes()))
+	for _, v31arrTmp := range m.self.GetRepeatedBytes() {
+		v31 = append(v31, []byte(v31arrTmp))
+	}
 
 	rv[ro.ColumnName("repeated_bytes")] = v31
 
-	v32 := make([]int32, 0, len(m.self.GetRepeatedEnum()))
+	v32 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedEnum()))
 	for _, v32arrTmp := range m.self.GetRepeatedEnum() {
 		v32 = append(v32, int32(v32arrTmp))
 	}

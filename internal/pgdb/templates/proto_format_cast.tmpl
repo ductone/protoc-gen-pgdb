@@ -1,5 +1,5 @@
 {{ if .IsArray }}
-{{ .VarName }} := make([]{{.CastType}}, 0, len({{.InputName}}))
+{{ .VarName }} := make(xpq.Array[{{.CastType}}], 0, len({{.InputName}}))
 for _, {{ .VarName -}}arrTmp := range {{.InputName}} {
     {{ .VarName }} = append({{ .VarName }}, {{.CastType}}({{ .VarName -}}arrTmp))
 }

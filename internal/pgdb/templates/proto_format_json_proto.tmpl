@@ -1,22 +1,13 @@
 {{/* Due to this: https://github.com/jackc/pgtype/issues/45 we cast json bytes to a string */}}
 {{ if .IsArray }}
-{{ .VarName }}first := true
-{{ .VarName }}buf := bytes.Buffer{}
-_, _ = {{ .VarName }}buf.WriteString("[")
+{{ .VarName }} := make(xpq.Array[string], 0, len({{.InputName}}))
 for _, {{ .VarName -}}arrTmp := range {{.InputName}} {
     {{ .VarName -}}tmp, err := protojson.Marshal({{ .VarName -}}arrTmp)
     if err != nil {
         return nil, err
     }
-    if ({{ .VarName }}first) {
-        {{ .VarName }}first = false
-    } else {
-        _, _ = {{ .VarName }}buf.WriteString(", ")
-    }
-    _, _ = {{ .VarName }}buf.Write({{ .VarName -}}tmp)
+    {{ .VarName }} = append({{ .VarName }}, string({{ .VarName -}}tmp))
 }
-_, _ = {{ .VarName }}buf.WriteString("]")
-{{ .VarName }} := exp.NewLiteralExpression("?::jsonb", {{ .VarName }}buf.String())
 {{ else }}
 {{ .VarName -}}tmp, err := protojson.Marshal({{.InputName}})
 if err != nil {
