@@ -15,7 +15,7 @@ type sqlable interface {
 }
 
 func (a Array[T]) Value() (driver.Value, error) {
-	if a == nil || len(a) == 0 {
+	if len(a) == 0 {
 		return "{}", nil
 	}
 	sb := &strings.Builder{}
@@ -35,7 +35,7 @@ func (a Array[T]) Value() (driver.Value, error) {
 		case int32:
 			_, _ = sb.WriteString(strconv.FormatInt(int64(v), 10))
 		case int64:
-			_, _ = sb.WriteString(strconv.FormatInt(int64(v), 10))
+			_, _ = sb.WriteString(strconv.FormatInt(v, 10))
 		case uint8:
 			_, _ = sb.WriteString(strconv.FormatUint(uint64(v), 10))
 		case uint16:
@@ -43,7 +43,7 @@ func (a Array[T]) Value() (driver.Value, error) {
 		case uint32:
 			_, _ = sb.WriteString(strconv.FormatUint(uint64(v), 10))
 		case uint64:
-			_, _ = sb.WriteString(strconv.FormatUint(uint64(v), 10))
+			_, _ = sb.WriteString(strconv.FormatUint(v, 10))
 		case float32:
 			_, _ = sb.WriteString(strconv.FormatFloat(float64(v), 'f', -1, 32))
 		case float64:
