@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/doug-martin/goqu/v9"
+	"github.com/doug-martin/goqu/v9/exp"
 	v1 "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
@@ -47,7 +49,8 @@ func TestSchemaZooShop(t *testing.T) {
 		Fur:       v1.FurType_FUR_TYPE_LOTS,
 		Medium: &Shop_Anything{
 			Anything: &v1.ScalarValue{
-				String_: "unique",
+				String_:        "unique",
+				RepeatedString: []string{"xyz", "zyx"},
 			},
 		},
 	}
@@ -59,4 +62,11 @@ func TestSchemaZooShop(t *testing.T) {
 		}
 	}
 	require.True(t, found, "expected string in FTS data: %v", searchData)
+	vectors := pgdb_v1.FullTextSearchVectors(searchData)
+	qb := goqu.Dialect("postgres")
+	sql, _, err := qb.Select(exp.NewAliasExpression(vectors, "vectors")).ToSQL()
+	require.NoError(t, err)
+	require.Contains(t, sql, "unique:")
+	require.Contains(t, sql, "xyz:")
+	require.Contains(t, sql, "zyx:")
 }

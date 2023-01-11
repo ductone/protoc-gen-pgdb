@@ -1561,6 +1561,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
 				Value:  m.self.GetString_(),
 			},
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  m.self.GetRepeatedString(),
+			},
 		}
 
 		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
@@ -1802,6 +1808,12 @@ func (m *pgdbMessageScalarValue) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
 			Value:  m.self.GetString_(),
+		},
+
+		{
+			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  m.self.GetRepeatedString(),
 		},
 	}
 
