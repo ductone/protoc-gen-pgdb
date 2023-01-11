@@ -39,7 +39,7 @@ func getSearchFields(ctx pgsgo.Context, m pgs.Message) []*searchFieldContext {
 			rv = append(rv, &searchFieldContext{
 				Ext:     ext,
 				Field:   field,
-				VarName: "m.self." + ctx.Name(field).String(),
+				VarName: "m.self.Get" + ctx.Name(field).String() + "()",
 			})
 		}
 	}
@@ -70,7 +70,7 @@ func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 			fdc.SearchFields = append(fdc.SearchFields, &searchFieldContext{
 				Ext:     ext,
 				Field:   field,
-				VarName: "m.self." + fdc.ctx.Name(field).String(),
+				VarName: "m.self.Get" + fdc.ctx.Name(field).String() + "()",
 			})
 		}
 	}

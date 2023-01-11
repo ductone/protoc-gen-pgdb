@@ -290,7 +290,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-				Value:  m.self.Id,
+				Value:  m.self.GetId(),
 			},
 		}
 
@@ -372,7 +372,7 @@ func (m *pgdbMessageAttractions) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 		{
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-			Value:  m.self.Id,
+			Value:  m.self.GetId(),
 		},
 	}
 

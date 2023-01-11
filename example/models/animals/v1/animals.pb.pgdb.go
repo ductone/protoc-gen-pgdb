@@ -352,19 +352,19 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-				Value:  m.self.Id,
+				Value:  m.self.GetId(),
 			},
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-				Value:  m.self.DisplayName,
+				Value:  m.self.GetDisplayName(),
 			},
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-				Value:  m.self.Description,
+				Value:  m.self.GetDescription(),
 			},
 		}
 
@@ -473,19 +473,19 @@ func (m *pgdbMessagePet) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v
 		{
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-			Value:  m.self.Id,
+			Value:  m.self.GetId(),
 		},
 
 		{
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-			Value:  m.self.DisplayName,
+			Value:  m.self.GetDisplayName(),
 		},
 
 		{
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-			Value:  m.self.Description,
+			Value:  m.self.GetDescription(),
 		},
 	}
 
@@ -1559,7 +1559,13 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-				Value:  m.self.String_,
+				Value:  m.self.GetString_(),
+			},
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  m.self.GetRepeatedString(),
 			},
 		}
 
@@ -1801,7 +1807,13 @@ func (m *pgdbMessageScalarValue) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 		{
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-			Value:  m.self.String_,
+			Value:  m.self.GetString_(),
+		},
+
+		{
+			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  m.self.GetRepeatedString(),
 		},
 	}
 
@@ -3027,7 +3039,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-				Value:  m.self.Id,
+				Value:  m.self.GetId(),
 			},
 		}
 
@@ -3105,7 +3117,7 @@ func (m *pgdbMessageBook) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 		{
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
-			Value:  m.self.Id,
+			Value:  m.self.GetId(),
 		},
 	}
 

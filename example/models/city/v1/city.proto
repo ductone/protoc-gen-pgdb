@@ -12,11 +12,18 @@ option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/city/v1";
 
 message Attractions {
   option (dynamo.v1.msg).key = {
-    pk_fields : [ "tenant_id" ]
-    sk_fields : [ "id", "numid" ]
+    pk_fields: [
+      "tenant_id"
+    ]
+    sk_fields: [
+      "id",
+      "numid"
+    ]
   };
   string tenant_id = 1;
-  string id = 2 [ (pgdb.v1.options) = {full_text_type : FULL_TEXT_TYPE_EXACT} ];
+  string id = 2 [(pgdb.v1.options) = {
+    full_text_type: FULL_TEXT_TYPE_EXACT
+  }];
   int32 numid = 3;
   google.protobuf.Timestamp created_at = 4;
   oneof what {
