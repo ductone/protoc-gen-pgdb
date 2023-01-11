@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/clipperhouse/jargon"
@@ -14,7 +15,44 @@ import (
 type SearchContent struct {
 	Type   FieldOptions_FullTextType
 	Weight FieldOptions_FullTextWeight
-	Value  string
+	Value  interface{}
+}
+
+func interfaceToValue(in interface{}) string {
+	if in == nil {
+		return ""
+	}
+
+	switch v := in.(type) {
+	case bool:
+		return strconv.FormatBool(v)
+	case int32:
+		if v == 0 {
+			return ""
+		}
+		return strconv.FormatInt(int64(v), 10)
+	case int64:
+		if v == 0 {
+			return ""
+		}
+		return strconv.FormatInt(v, 10)
+	case uint32:
+		if v == 0 {
+			return ""
+		}
+		return strconv.FormatUint(uint64(v), 10)
+	case uint64:
+		if v == 0 {
+			return ""
+		}
+		return strconv.FormatUint(v, 10)
+	case string:
+		return v
+	case []string:
+		return strings.Join(v, " ")
+	default:
+		return ""
+	}
 }
 
 // FullTextSearchVectors converts a set of input documents
@@ -27,7 +65,8 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 	rv := make([]string, 0, 8)
 	pos := 1
 	for _, doc := range docs {
-		ts := jargon.TokenizeString(doc.Value).Filter(filters...)
+		docValue := interfaceToValue(doc.Value)
+		ts := jargon.TokenizeString(docValue).Filter(filters...)
 		for ts.Scan() {
 			// wrap around guard for position
 			if pos > 32767 {
