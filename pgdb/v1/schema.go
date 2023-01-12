@@ -16,7 +16,7 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	dbr := msg.DBReflect()
 	desc := dbr.Descriptor()
 	buf := &bytes.Buffer{}
-	_, _ = buf.WriteString("CREATE TABLE\n  ")
+	_, _ = buf.WriteString("CREATE TABLE IF NOT EXISTS\n  ")
 	pgWriteString(buf, desc.TableName())
 	_, _ = buf.WriteString("\n(\n")
 
@@ -133,7 +133,10 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	if err != nil {
 		return nil, err
 	}
-	// spew.Dump(haveCols)
+
+	if len(haveCols) == 0 {
+		return CreateSchema(msg)
+	}
 
 	for _, field := range desc.Fields() {
 		if _, ok := haveCols[field.Name]; ok {

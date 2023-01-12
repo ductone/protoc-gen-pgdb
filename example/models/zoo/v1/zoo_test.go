@@ -23,7 +23,8 @@ func TestSchemaZooShop(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	schema, err := pgdb_v1.CreateSchema(&Shop{})
+	smsg := &Shop{}
+	schema, err := pgdb_v1.CreateSchema(smsg)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -41,6 +42,19 @@ func TestSchemaZooShop(t *testing.T) {
 		strings.Count(ct, "fts_data"),
 		"Create table should contain only one fts_data field: %s", ct,
 	)
+	_, err = pg.DB.Exec(ctx, "DROP TABLE "+smsg.DBReflect().Descriptor().TableName())
+	require.NoErrorf(t, err, "TestSchemaZooShop: failed to drop")
+
+	schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "TestSchemaZooShop: failed to execute sql: '\n%s\n'", line)
+		// os.Stderr.WriteString(line)
+		// os.Stderr.WriteString("\n------\n")
+	}
+	ct = schema[0]
+	require.Contains(t, ct, "CREATE TABLE")
 
 	s := &Shop{
 		TenantId:  "t1",
