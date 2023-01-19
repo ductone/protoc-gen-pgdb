@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -62,7 +62,7 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 	edgeGramFilter := edgegramStream(3)
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
-	rv := make([]string, 0, 8)
+	rv := make([]lexeme, 0, 8)
 	pos := 1
 	for _, doc := range docs {
 		docValue := interfaceToValue(doc.Value)
@@ -81,7 +81,7 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 			}
 
 			// always add the full word, without stemming (besides stackoverflow normalization)
-			rv = append(rv, pgLexeme(v, pos, doc.Weight))
+			rv = append(rv, lexeme{v, pos, doc.Weight})
 			switch doc.Type {
 			case FieldOptions_FULL_TEXT_TYPE_EXACT:
 				// no additional indexing for exact
@@ -91,14 +91,14 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 					grams, _ := jargon.TokenizeString(v).Filter(edgeGramFilter).Words().ToSlice()
 					gramWeight := lowerWeight(doc.Weight)
 					for _, gram := range grams {
-						rv = append(rv, pgLexeme(gram.String(), pos, gramWeight))
+						rv = append(rv, lexeme{gram.String(), pos, gramWeight})
 					}
 				}
 
 				// we also apply stemming. yay?
 				stemmed, _ := jargon.TokenizeString(v).Filter(stemmer.English).Words().ToSlice()
 				for _, stemmedWord := range stemmed {
-					rv = append(rv, pgLexeme(stemmedWord.String(), pos, doc.Weight))
+					rv = append(rv, lexeme{stemmedWord.String(), pos, doc.Weight})
 				}
 			}
 			pos += len(v)
@@ -113,7 +113,13 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 		return exp.NewLiteralExpression("''::tsvector")
 	}
 
-	return exp.NewLiteralExpression("?::tsvector", strings.Join(rv, " "))
+	sb := strings.Builder{}
+	for _, v := range rv {
+		_, _ = sb.WriteString(pgLexeme(v.value, v.pos, v.weight))
+		_, _ = sb.WriteString(" ")
+	}
+
+	return exp.NewLiteralExpression("?::tsvector", sb.String())
 }
 
 func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
@@ -127,8 +133,24 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 		terms, stemmedTerms)
 }
 
+type lexeme struct {
+	value  string
+	pos    int
+	weight FieldOptions_FullTextWeight
+}
+
+var nonAlphanumericRegex = regexp.MustCompile(`[^\p{L}\p{N} ]+`)
+
 func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string {
-	return fmt.Sprintf("%s:%d%s", value, pos, weightToString(weight))
+	value = nonAlphanumericRegex.ReplaceAllString(value, " ")
+	sb := strings.Builder{}
+	sb.WriteString("'")
+	sb.WriteString(value)
+	sb.WriteString("'")
+	sb.WriteString(":")
+	sb.WriteString(strconv.FormatInt(int64(pos), 10))
+	sb.WriteString(weightToString(weight))
+	return sb.String()
 }
 
 func weightToString(weight FieldOptions_FullTextWeight) string {
