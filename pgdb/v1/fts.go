@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 
 	"github.com/clipperhouse/jargon"
 	"github.com/clipperhouse/jargon/filters/ascii"
@@ -139,10 +139,13 @@ type lexeme struct {
 	weight FieldOptions_FullTextWeight
 }
 
-var nonAlphanumericRegex = regexp.MustCompile(`[^\p{L}\p{N} ]+`)
-
 func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string {
-	value = nonAlphanumericRegex.ReplaceAllString(value, " ")
+	value = strings.Map(func(r rune) rune {
+		if unicode.IsDigit(r) || unicode.IsLetter(r) {
+			return r
+		}
+		return ' '
+	}, value)
 	sb := strings.Builder{}
 	sb.WriteString("'")
 	sb.WriteString(value)
