@@ -126,8 +126,13 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
 
+	jargon.TokenizeString(input)
 	terms, _ := jargon.TokenizeString(input).Filter(filters...).String()
 	stemmedTerms, _ := jargon.TokenizeString(input).Filter(stemmer.English).String()
+
+	terms = cleanToken(terms)
+	stemmedTerms = cleanToken(stemmedTerms)
+
 	return exp.NewLiteralExpression(
 		"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
 		terms, stemmedTerms)
@@ -139,13 +144,19 @@ type lexeme struct {
 	weight FieldOptions_FullTextWeight
 }
 
-func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string {
-	value = strings.Map(func(r rune) rune {
-		if unicode.IsDigit(r) || unicode.IsLetter(r) {
+func cleanToken(in string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsDigit(r) || unicode.IsLetter(r) || unicode.IsSpace(r) {
 			return r
 		}
-		return ' '
-	}, value)
+		return specialReplaceChar
+	}, in)
+}
+
+const specialReplaceChar = '�'
+
+func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string {
+	value = cleanToken(value)
 	sb := strings.Builder{}
 	sb.WriteString("'")
 	sb.WriteString(value)

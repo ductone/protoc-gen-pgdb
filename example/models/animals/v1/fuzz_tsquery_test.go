@@ -10,13 +10,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func FuzzFullTextSerachVector(f *testing.F) {
+func FuzzFullTextSearchQuery(f *testing.F) {
 	ctx := context.Background()
 	pg, err := pgtest.Start()
 	require.NoError(f, err)
 	defer pg.Stop()
 
-	testcases := []string{"Hello, world", " ", "hello:world", `hello\:world`}
+	testcases := []string{"Hello, world", " ", "hello:world", `hello\:world`, `snowman: ☃`}
 	for _, tc := range testcases {
 		f.Add(tc) // Use f.Add to provide a seed corpus
 	}
@@ -24,16 +24,8 @@ func FuzzFullTextSerachVector(f *testing.F) {
 	qb := goqu.Dialect("postgres")
 
 	f.Fuzz(func(t *testing.T, input string) {
-		ftsData := pgdb_v1.FullTextSearchVectors(
-			[]*pgdb_v1.SearchContent{
-				{
-					Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
-					Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-					Value:  input,
-				},
-			},
-		)
-		query, params, err := qb.Select(ftsData).Prepared(true).ToSQL()
+		qexp := pgdb_v1.FullTextSearchQuery(input)
+		query, params, err := qb.Select(qexp).Prepared(true).ToSQL()
 		if err != nil {
 			t.Errorf("Failed to generate query: input: %q  error: %q ", input, err)
 		}
