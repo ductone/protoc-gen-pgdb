@@ -106,17 +106,17 @@ golang.org/x/exp/constraints
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.0.0-20220822230855-b0a4917ee28c
+# golang.org/x/net v0.7.0
 ## explicit; go 1.17
 golang.org/x/net/html
 golang.org/x/net/html/atom
 # golang.org/x/sync v0.0.0-20220923202941-7f9b1623fab7
 ## explicit
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.0.0-20220728004956-3c1f35247d10
+# golang.org/x/sys v0.5.0
 ## explicit; go 1.17
 golang.org/x/sys/execabs
-# golang.org/x/text v0.5.0
+# golang.org/x/text v0.7.0
 ## explicit; go 1.17
 golang.org/x/text/cases
 golang.org/x/text/internal
