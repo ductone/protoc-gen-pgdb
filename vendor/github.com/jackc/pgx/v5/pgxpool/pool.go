@@ -22,10 +22,11 @@ var defaultMaxConnIdleTime = time.Minute * 30
 var defaultHealthCheckPeriod = time.Minute
 
 type connResource struct {
-	conn      *pgx.Conn
-	conns     []Conn
-	poolRows  []poolRow
-	poolRowss []poolRows
+	conn       *pgx.Conn
+	conns      []Conn
+	poolRows   []poolRow
+	poolRowss  []poolRows
+	maxAgeTime time.Time
 }
 
 func (cr *connResource) getConn(p *Pool, res *puddle.Resource[*connResource]) *Conn {
@@ -219,11 +220,15 @@ func NewWithConfig(ctx context.Context, config *Config) (*Pool, error) {
 					}
 				}
 
+				jitterSecs := rand.Float64() * config.MaxConnLifetimeJitter.Seconds()
+				maxAgeTime := time.Now().Add(config.MaxConnLifetime).Add(time.Duration(jitterSecs) * time.Second)
+
 				cr := &connResource{
-					conn:      conn,
-					conns:     make([]Conn, 64),
-					poolRows:  make([]poolRow, 64),
-					poolRowss: make([]poolRows, 64),
+					conn:       conn,
+					conns:      make([]Conn, 64),
+					poolRows:   make([]poolRow, 64),
+					poolRowss:  make([]poolRows, 64),
+					maxAgeTime: maxAgeTime,
 				}
 
 				return cr, nil
@@ -256,12 +261,12 @@ func NewWithConfig(ctx context.Context, config *Config) (*Pool, error) {
 // ParseConfig builds a Config from connString. It parses connString with the same behavior as pgx.ParseConfig with the
 // addition of the following variables:
 //
-// pool_max_conns: integer greater than 0
-// pool_min_conns: integer 0 or greater
-// pool_max_conn_lifetime: duration string
-// pool_max_conn_idle_time: duration string
-// pool_health_check_period: duration string
-// pool_max_conn_lifetime_jitter: duration string
+//   - pool_max_conns: integer greater than 0
+//   - pool_min_conns: integer 0 or greater
+//   - pool_max_conn_lifetime: duration string
+//   - pool_max_conn_idle_time: duration string
+//   - pool_health_check_period: duration string
+//   - pool_max_conn_lifetime_jitter: duration string
 //
 // See Config for definitions of these arguments.
 //
@@ -364,17 +369,7 @@ func (p *Pool) Close() {
 }
 
 func (p *Pool) isExpired(res *puddle.Resource[*connResource]) bool {
-	now := time.Now()
-	// Small optimization to avoid rand. If it's over lifetime AND jitter, immediately
-	// return true.
-	if now.Sub(res.CreationTime()) > p.maxConnLifetime+p.maxConnLifetimeJitter {
-		return true
-	}
-	if p.maxConnLifetimeJitter == 0 {
-		return false
-	}
-	jitterSecs := rand.Float64() * p.maxConnLifetimeJitter.Seconds()
-	return now.Sub(res.CreationTime()) > p.maxConnLifetime+(time.Duration(jitterSecs)*time.Second)
+	return time.Now().After(res.Value().maxAgeTime)
 }
 
 func (p *Pool) triggerHealthCheck() {
