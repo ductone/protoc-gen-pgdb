@@ -15,9 +15,9 @@ func index2sql(desc Descriptor, idx *Index) string {
 		// WARNING: unique indexes cannot be dropped
 		// concurrently.  Maybe unsafe?
 		if !idx.IsUnique {
-			buf.WriteString(" CONCURRENTLY")
+			_, _ = buf.WriteString(" CONCURRENTLY")
 		}
-		buf.WriteString(" IF EXISTS ")
+		_, _ = buf.WriteString(" IF EXISTS ")
 		pgWriteString(buf, idx.Name)
 		return buf.String()
 	}
@@ -49,7 +49,7 @@ func index2sql(desc Descriptor, idx *Index) string {
 	if idx.OverrideExpression != "" {
 		_, _ = buf.WriteString(idx.OverrideExpression)
 	} else {
-		buf.WriteString(strings.Join(slice.Convert(idx.Columns, func(in string) string {
+		_, _ = buf.WriteString(strings.Join(slice.Convert(idx.Columns, func(in string) string {
 			return `  "` + in + `"`
 		}), ", \n"))
 	}
@@ -77,7 +77,7 @@ func col2alter(desc Descriptor, col *Column) string {
 	_, _ = buf.WriteString("\n")
 	_, _ = buf.WriteString("ADD COLUMN IF NOT EXISTS")
 	_, _ = buf.WriteString("\n")
-	buf.WriteString(col2spec(col))
+	_, _ = buf.WriteString(col2spec(col))
 	return buf.String()
 }
 
