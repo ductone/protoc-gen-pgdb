@@ -42,6 +42,11 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err))
 	}
 
+	if ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT {
+		// explict option to just not store this in postgres
+		return nil
+	}
+
 	isArray := f.Type().ProtoLabel() == pgs.Repeated && !f.Type().IsMap()
 	pt := f.Type().ProtoType()
 
