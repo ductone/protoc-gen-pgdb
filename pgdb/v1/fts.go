@@ -158,12 +158,12 @@ const specialReplaceChar = '�'
 func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string {
 	value = cleanToken(value)
 	sb := strings.Builder{}
-	sb.WriteString("'")
-	sb.WriteString(value)
-	sb.WriteString("'")
-	sb.WriteString(":")
-	sb.WriteString(strconv.FormatInt(int64(pos), 10))
-	sb.WriteString(weightToString(weight))
+	_, _ = sb.WriteString("'")
+	_, _ = sb.WriteString(value)
+	_, _ = sb.WriteString("'")
+	_, _ = sb.WriteString(":")
+	_, _ = sb.WriteString(strconv.FormatInt(int64(pos), 10))
+	_, _ = sb.WriteString(weightToString(weight))
 	return sb.String()
 }
 

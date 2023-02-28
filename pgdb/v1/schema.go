@@ -28,17 +28,17 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	)
 
 	if idx := desc.IndexPrimaryKey(); idx != nil {
-		buf.WriteString(",\n  ")
-		buf.WriteString("CONSTRAINT ")
-		buf.WriteString(idx.Name)
-		buf.WriteString(" PRIMARY KEY (")
-		buf.WriteString(strings.Join(slice.Convert(idx.Columns, func(in string) string {
+		_, _ = buf.WriteString(",\n  ")
+		_, _ = buf.WriteString("CONSTRAINT ")
+		_, _ = buf.WriteString(idx.Name)
+		_, _ = buf.WriteString(" PRIMARY KEY (")
+		_, _ = buf.WriteString(strings.Join(slice.Convert(idx.Columns, func(in string) string {
 			return `"` + in + `"`
 		}), ","))
-		buf.WriteString(")\n")
+		_, _ = buf.WriteString(")\n")
 	}
 
-	buf.WriteString(")\n")
+	_, _ = buf.WriteString(")\n")
 	rv := []string{buf.String()}
 
 	more, err := IndexSchema(msg)
