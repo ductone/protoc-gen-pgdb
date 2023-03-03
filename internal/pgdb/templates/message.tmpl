@@ -16,6 +16,8 @@ func (m *{{.MessageType}}) Descriptor() pgdb_v1.Descriptor {
 func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
     ro := pgdb_v1.NewRecordOptions(opts)
     _ = ro
+    nullExp := exp.NewLiteralExpression("NULL")
+    _ = nullExp
     {{ if .WantRecordStringBuilder }}
 	var sb strings.Builder
     {{ end }}
@@ -29,13 +31,21 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
         {{.Convert.CodeForValue}}
         {{ $VarForValue := .Convert.VarForValue }}
         {{ if $VarForValue }}
-            rv[ro.ColumnName("{{.DB.Name}}")] =  {{ $VarForValue }}
+            if ro.Nulled {
+                rv[ro.ColumnName("{{.DB.Name}}")] = nullExp
+            } else {
+                rv[ro.ColumnName("{{.DB.Name}}")] =  {{ $VarForValue }}
+            }
         {{ end }}
 
         {{ $VarForAppend := .Convert.VarForAppend }}
         {{ if $VarForAppend }}
         for k, v := range {{ $VarForAppend }} {
-            rv[k] = v
+            if ro.Nulled {
+                rv[k] = nullExp
+            } else {
+                rv[k] = v
+            }
         }
         {{ end }}
         {{ if .ExcludeNested }}

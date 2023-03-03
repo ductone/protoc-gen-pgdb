@@ -17,7 +17,6 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 
 	dbTypeRef := pgDataTypeForName("int4")
 	rv := &fieldContext{
-
 		IsVirtual: false,
 		GoName:    ctx.Name(oneof).String(),
 		DB: &pgdb_v1.Column{

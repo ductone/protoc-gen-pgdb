@@ -18,6 +18,13 @@ type DescriptorFieldOption struct {
 	IsNested bool
 }
 
+func (dfo DescriptorFieldOption) Nullable(defaultValue bool) bool {
+	if dfo.IsNested {
+		return true
+	}
+	return defaultValue
+}
+
 type DescriptorFieldOptionFunc func(option *DescriptorFieldOption)
 
 func DescriptorFieldPrefix(prefix string) DescriptorFieldOptionFunc {
