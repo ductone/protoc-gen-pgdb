@@ -80,7 +80,7 @@ func TestSchemaZooShop(t *testing.T) {
 	qb := goqu.Dialect("postgres")
 	sql, _, err := qb.Select(exp.NewAliasExpression(vectors, "vectors")).ToSQL()
 	require.NoError(t, err)
-	require.Contains(t, sql, "unique:")
-	require.Contains(t, sql, "xyz:")
-	require.Contains(t, sql, "zyx:")
+	require.Contains(t, sql, "''unique'':")
+	require.Contains(t, sql, "''xyz'':")
+	require.Contains(t, sql, "''zyx'':")
 }

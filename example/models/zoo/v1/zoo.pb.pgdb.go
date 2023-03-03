@@ -37,7 +37,7 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -48,7 +48,7 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		})
 
@@ -59,7 +59,7 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -70,7 +70,7 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -81,7 +81,7 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
-			Nullable:           true,
+			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 		})
 
@@ -92,7 +92,7 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -101,28 +101,28 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("fur"),
 		Type:               "int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("medium_oneof"),
 		Type:               "int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
@@ -240,6 +240,8 @@ func (m *pgdbMessageShop) Descriptor() pgdb_v1.Descriptor {
 func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
 	ro := pgdb_v1.NewRecordOptions(opts)
 	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
 
 	var sb strings.Builder
 
@@ -249,7 +251,11 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv0 := string(m.self.TenantId)
 
-		rv[ro.ColumnName("tenant_id")] = cfv0
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
 
 	}
 
@@ -273,7 +279,11 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv2 := sb.String()
 
-		rv[ro.ColumnName("pk")] = cfv2
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
 
 	}
 
@@ -285,7 +295,11 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv3 := sb.String()
 
-		rv[ro.ColumnName("sk")] = cfv3
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
 
 	}
 
@@ -310,7 +324,11 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
-		rv[ro.ColumnName("fts_data")] = cfv4
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv4
+		}
 
 	}
 
@@ -321,13 +339,21 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 			return nil, err
 		}
 
-		rv[ro.ColumnName("pb_data")] = cfv5
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv5
+		}
 
 	}
 
 	v1 := string(m.self.GetId())
 
-	rv[ro.ColumnName("id")] = v1
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
 
 	var v2 *time.Time
 	if m.self.GetCreatedAt().IsValid() {
@@ -335,46 +361,94 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v2 = &v2tmp
 	}
 
-	rv[ro.ColumnName("created_at")] = v2
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v2
+	}
 
-	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper(), ro.Nested("50$")...)
+	v3tmp := m.self.GetPaper()
+	v3opts := ro.Nested("50$")
+	if v3tmp == nil {
+		v3opts = append(v3opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v3, err := pgdb_v1.MarshalNestedRecord(v3tmp, v3opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	for k, v := range v3 {
-		rv[k] = v
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
 	}
 
-	v4, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook(), ro.Nested("51$")...)
+	v4tmp := m.self.GetEbook()
+	v4opts := ro.Nested("51$")
+	if v4tmp == nil {
+		v4opts = append(v4opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v4, err := pgdb_v1.MarshalNestedRecord(v4tmp, v4opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	for k, v := range v4 {
-		rv[k] = v
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
 	}
 
-	v5, err := pgdb_v1.MarshalNestedRecord(m.self.GetAnything(), ro.Nested("52$")...)
+	v5tmp := m.self.GetAnything()
+	v5opts := ro.Nested("52$")
+	if v5tmp == nil {
+		v5opts = append(v5opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v5, err := pgdb_v1.MarshalNestedRecord(v5tmp, v5opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	for k, v := range v5 {
-		rv[k] = v
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
 	}
 
 	v6 := int32(m.self.GetFur())
 
-	rv[ro.ColumnName("fur")] = v6
+	if ro.Nulled {
+		rv[ro.ColumnName("fur")] = nullExp
+	} else {
+		rv[ro.ColumnName("fur")] = v6
+	}
 
-	v7, err := pgdb_v1.MarshalNestedRecord(m.self.GetMgr(), ro.Nested("5$")...)
+	v7tmp := m.self.GetMgr()
+	v7opts := ro.Nested("5$")
+	if v7tmp == nil {
+		v7opts = append(v7opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v7, err := pgdb_v1.MarshalNestedRecord(v7tmp, v7opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	for k, v := range v7 {
-		rv[k] = v
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
 	}
 
 	oneof1 := uint32(0)
@@ -392,7 +466,11 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	}
 
-	rv[ro.ColumnName("medium_oneof")] = oneof1
+	if ro.Nulled {
+		rv[ro.ColumnName("medium_oneof")] = nullExp
+	} else {
+		rv[ro.ColumnName("medium_oneof")] = oneof1
+	}
 
 	return rv, nil
 }
@@ -849,7 +927,7 @@ func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptio
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
@@ -901,12 +979,18 @@ func (m *pgdbMessageShop_Manager) Descriptor() pgdb_v1.Descriptor {
 func (m *pgdbMessageShop_Manager) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
 	ro := pgdb_v1.NewRecordOptions(opts)
 	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
 
 	rv := exp.Record{}
 
 	v1 := int32(m.self.GetId())
 
-	rv[ro.ColumnName("id")] = v1
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
 
 	return rv, nil
 }

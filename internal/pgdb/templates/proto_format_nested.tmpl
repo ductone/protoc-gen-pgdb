@@ -1,4 +1,10 @@
-{{ .VarName -}}, err := pgdb_v1.MarshalNestedRecord({{.InputName}}, ro.Nested("{{ .NestedPrefix }}")...)
+{{ .VarName -}}tmp := {{.InputName}}
+{{ .VarName -}}opts := ro.Nested("{{ .NestedPrefix }}")
+if {{ .VarName -}}tmp == nil {
+    {{ .VarName -}}opts = append({{ .VarName -}}opts, pgdb_v1.RecordOptionNulled(true))
+}
+
+{{ .VarName -}}, err := pgdb_v1.MarshalNestedRecord({{ .VarName -}}tmp, {{ .VarName -}}opts...)
 if err != nil {
     return nil, err
 }

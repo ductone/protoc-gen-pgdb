@@ -23,7 +23,7 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
       rv = append(rv, &pgdb_v1.Column{
         Name: df.ColumnName("{{ .DB.Name }}"),
         Type: "{{ .DB.Type }}",
-        Nullable: {{ .DB.Nullable }},
+        Nullable: df.Nullable({{ .DB.Nullable }}),
         OverrideExpression: "{{ .DB.OverrideExpression }}",
       })
     {{ end }}
