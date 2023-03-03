@@ -175,7 +175,7 @@ func TestSchemaScalarValue(t *testing.T) {
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
 		// fmt.Fprintf(os.Stderr, "---------\n%s\n\n", line)
-		require.NoErrorf(t, err, "TestSchemaBook: failed to execute sql: '\n%s\n'", line)
+		require.NoErrorf(t, err, "TestSchemaScalarValue: failed to execute sql: '\n%s\n'", line)
 	}
 
 	query, params, err := pgdb_v1.Insert(&ScalarValue{

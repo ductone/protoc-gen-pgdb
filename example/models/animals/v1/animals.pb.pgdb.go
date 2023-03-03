@@ -36,7 +36,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -47,7 +47,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		})
 
@@ -58,7 +58,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -69,7 +69,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -80,7 +80,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
-			Nullable:           true,
+			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 		})
 
@@ -91,7 +91,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -100,91 +100,91 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("updated_at"),
 		Type:               "timestamptz",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("deleted_at"),
 		Type:               "timestamptz",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("display_name"),
 		Type:               "text",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("description"),
 		Type:               "text",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("system_builtin"),
 		Type:               "bool",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("elapsed"),
 		Type:               "interval",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("profile"),
 		Type:               "jsonb",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("cuteness"),
 		Type:               "float4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("price"),
 		Type:               "float8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("14"),
 		Type:               "bool",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("extra_profiles"),
 		Type:               "_jsonb",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
@@ -296,6 +296,8 @@ func (m *pgdbMessagePet) Descriptor() pgdb_v1.Descriptor {
 func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
 	ro := pgdb_v1.NewRecordOptions(opts)
 	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
 
 	var sb strings.Builder
 
@@ -305,7 +307,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 		cfv0 := string(m.self.TenantId)
 
-		rv[ro.ColumnName("tenant_id")] = cfv0
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
 
 	}
 
@@ -329,7 +335,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 		cfv2 := sb.String()
 
-		rv[ro.ColumnName("pk")] = cfv2
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
 
 	}
 
@@ -341,7 +351,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 		cfv3 := sb.String()
 
-		rv[ro.ColumnName("sk")] = cfv3
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
 
 	}
 
@@ -370,7 +384,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
-		rv[ro.ColumnName("fts_data")] = cfv4
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv4
+		}
 
 	}
 
@@ -381,13 +399,21 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 			return nil, err
 		}
 
-		rv[ro.ColumnName("pb_data")] = cfv5
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv5
+		}
 
 	}
 
 	v1 := string(m.self.GetId())
 
-	rv[ro.ColumnName("id")] = v1
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
 
 	var v2 *time.Time
 	if m.self.GetCreatedAt().IsValid() {
@@ -395,7 +421,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v2 = &v2tmp
 	}
 
-	rv[ro.ColumnName("created_at")] = v2
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v2
+	}
 
 	var v3 *time.Time
 	if m.self.GetUpdatedAt().IsValid() {
@@ -403,7 +433,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v3 = &v3tmp
 	}
 
-	rv[ro.ColumnName("updated_at")] = v3
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v3
+	}
 
 	var v4 *time.Time
 	if m.self.GetDeletedAt().IsValid() {
@@ -411,19 +445,35 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v4 = &v4tmp
 	}
 
-	rv[ro.ColumnName("deleted_at")] = v4
+	if ro.Nulled {
+		rv[ro.ColumnName("deleted_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("deleted_at")] = v4
+	}
 
 	v5 := string(m.self.GetDisplayName())
 
-	rv[ro.ColumnName("display_name")] = v5
+	if ro.Nulled {
+		rv[ro.ColumnName("display_name")] = nullExp
+	} else {
+		rv[ro.ColumnName("display_name")] = v5
+	}
 
 	v6 := string(m.self.GetDescription())
 
-	rv[ro.ColumnName("description")] = v6
+	if ro.Nulled {
+		rv[ro.ColumnName("description")] = nullExp
+	} else {
+		rv[ro.ColumnName("description")] = v6
+	}
 
 	v7 := bool(m.self.GetSystemBuiltin())
 
-	rv[ro.ColumnName("system_builtin")] = v7
+	if ro.Nulled {
+		rv[ro.ColumnName("system_builtin")] = nullExp
+	} else {
+		rv[ro.ColumnName("system_builtin")] = v7
+	}
 
 	v8 := &pgtype.Interval{}
 	if m.self.GetElapsed().IsValid() {
@@ -431,7 +481,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v8.Microseconds = int64(m.self.GetElapsed().AsDuration()) / 1000
 	}
 
-	rv[ro.ColumnName("elapsed")] = v8
+	if ro.Nulled {
+		rv[ro.ColumnName("elapsed")] = nullExp
+	} else {
+		rv[ro.ColumnName("elapsed")] = v8
+	}
 
 	v9tmp, err := protojson.Marshal(m.self.GetProfile())
 	if err != nil {
@@ -439,19 +493,35 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	}
 	v9 := exp.NewLiteralExpression("?::jsonb", string(v9tmp))
 
-	rv[ro.ColumnName("profile")] = v9
+	if ro.Nulled {
+		rv[ro.ColumnName("profile")] = nullExp
+	} else {
+		rv[ro.ColumnName("profile")] = v9
+	}
 
 	v10 := float32(m.self.GetCuteness())
 
-	rv[ro.ColumnName("cuteness")] = v10
+	if ro.Nulled {
+		rv[ro.ColumnName("cuteness")] = nullExp
+	} else {
+		rv[ro.ColumnName("cuteness")] = v10
+	}
 
 	v11 := float64(m.self.GetPrice())
 
-	rv[ro.ColumnName("price")] = v11
+	if ro.Nulled {
+		rv[ro.ColumnName("price")] = nullExp
+	} else {
+		rv[ro.ColumnName("price")] = v11
+	}
 
 	v12 := bool(m.self.GetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame())
 
-	rv[ro.ColumnName("14")] = v12
+	if ro.Nulled {
+		rv[ro.ColumnName("14")] = nullExp
+	} else {
+		rv[ro.ColumnName("14")] = v12
+	}
 
 	v13 := make(xpq.Array[string], 0, len(m.self.GetExtraProfiles()))
 	for _, v13arrTmp := range m.self.GetExtraProfiles() {
@@ -462,7 +532,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		v13 = append(v13, string(v13tmp))
 	}
 
-	rv[ro.ColumnName("extra_profiles")] = v13
+	if ro.Nulled {
+		rv[ro.ColumnName("extra_profiles")] = nullExp
+	} else {
+		rv[ro.ColumnName("extra_profiles")] = v13
+	}
 
 	return rv, nil
 }
@@ -1096,7 +1170,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -1107,7 +1181,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		})
 
@@ -1118,7 +1192,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -1129,7 +1203,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -1140,7 +1214,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
-			Nullable:           true,
+			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 		})
 
@@ -1151,7 +1225,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -1160,252 +1234,252 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("double"),
 		Type:               "float8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("float"),
 		Type:               "float4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("int_32"),
 		Type:               "int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("int_64"),
 		Type:               "int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("uint_32"),
 		Type:               "int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("uint_64"),
 		Type:               "numeric",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("sint_32"),
 		Type:               "int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("sint_64"),
 		Type:               "int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("fixed_32"),
 		Type:               "int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("fixed_64"),
 		Type:               "numeric",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("sfixed_32"),
 		Type:               "int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("sfixed_64"),
 		Type:               "int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("bool"),
 		Type:               "bool",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("string"),
 		Type:               "text",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("bytes"),
 		Type:               "bytea",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_double"),
 		Type:               "_float8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_float"),
 		Type:               "_float4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_int32"),
 		Type:               "_int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_int64"),
 		Type:               "_int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_uint32"),
 		Type:               "_int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_uint64"),
 		Type:               "_numeric",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sint32"),
 		Type:               "_int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sint64"),
 		Type:               "_int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_fixed32"),
 		Type:               "_int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_fixed64"),
 		Type:               "_numeric",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sfixed32"),
 		Type:               "_int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sfixed64"),
 		Type:               "_int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_bool"),
 		Type:               "_bool",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_string"),
 		Type:               "_text",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_bytes"),
 		Type:               "_bytea",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_enum"),
 		Type:               "_int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("string_map"),
 		Type:               "jsonb",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("str_ptr"),
 		Type:               "text",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("bool_ptr"),
 		Type:               "bool",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
@@ -1507,6 +1581,8 @@ func (m *pgdbMessageScalarValue) Descriptor() pgdb_v1.Descriptor {
 func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
 	ro := pgdb_v1.NewRecordOptions(opts)
 	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
 
 	var sb strings.Builder
 
@@ -1516,7 +1592,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		cfv0 := string(m.self.TenantId)
 
-		rv[ro.ColumnName("tenant_id")] = cfv0
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
 
 	}
 
@@ -1536,7 +1616,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		cfv2 := sb.String()
 
-		rv[ro.ColumnName("pk")] = cfv2
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
 
 	}
 
@@ -1548,7 +1632,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		cfv3 := sb.String()
 
-		rv[ro.ColumnName("sk")] = cfv3
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
 
 	}
 
@@ -1571,7 +1659,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
-		rv[ro.ColumnName("fts_data")] = cfv4
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv4
+		}
 
 	}
 
@@ -1582,185 +1674,317 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 			return nil, err
 		}
 
-		rv[ro.ColumnName("pb_data")] = cfv5
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv5
+		}
 
 	}
 
 	v1 := string(m.self.GetId())
 
-	rv[ro.ColumnName("id")] = v1
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
 
 	v2 := float64(m.self.GetDouble())
 
-	rv[ro.ColumnName("double")] = v2
+	if ro.Nulled {
+		rv[ro.ColumnName("double")] = nullExp
+	} else {
+		rv[ro.ColumnName("double")] = v2
+	}
 
 	v3 := float32(m.self.GetFloat())
 
-	rv[ro.ColumnName("float")] = v3
+	if ro.Nulled {
+		rv[ro.ColumnName("float")] = nullExp
+	} else {
+		rv[ro.ColumnName("float")] = v3
+	}
 
 	v4 := int32(m.self.GetInt32())
 
-	rv[ro.ColumnName("int_32")] = v4
+	if ro.Nulled {
+		rv[ro.ColumnName("int_32")] = nullExp
+	} else {
+		rv[ro.ColumnName("int_32")] = v4
+	}
 
 	v5 := int64(m.self.GetInt64())
 
-	rv[ro.ColumnName("int_64")] = v5
+	if ro.Nulled {
+		rv[ro.ColumnName("int_64")] = nullExp
+	} else {
+		rv[ro.ColumnName("int_64")] = v5
+	}
 
 	v6 := uint32(m.self.GetUint32())
 
-	rv[ro.ColumnName("uint_32")] = v6
+	if ro.Nulled {
+		rv[ro.ColumnName("uint_32")] = nullExp
+	} else {
+		rv[ro.ColumnName("uint_32")] = v6
+	}
 
 	v7 := uint64(m.self.GetUint64())
 
-	rv[ro.ColumnName("uint_64")] = v7
+	if ro.Nulled {
+		rv[ro.ColumnName("uint_64")] = nullExp
+	} else {
+		rv[ro.ColumnName("uint_64")] = v7
+	}
 
 	v8 := int32(m.self.GetSint32())
 
-	rv[ro.ColumnName("sint_32")] = v8
+	if ro.Nulled {
+		rv[ro.ColumnName("sint_32")] = nullExp
+	} else {
+		rv[ro.ColumnName("sint_32")] = v8
+	}
 
 	v9 := int64(m.self.GetSint64())
 
-	rv[ro.ColumnName("sint_64")] = v9
+	if ro.Nulled {
+		rv[ro.ColumnName("sint_64")] = nullExp
+	} else {
+		rv[ro.ColumnName("sint_64")] = v9
+	}
 
 	v10 := uint32(m.self.GetFixed32())
 
-	rv[ro.ColumnName("fixed_32")] = v10
+	if ro.Nulled {
+		rv[ro.ColumnName("fixed_32")] = nullExp
+	} else {
+		rv[ro.ColumnName("fixed_32")] = v10
+	}
 
 	v11 := uint64(m.self.GetFixed64())
 
-	rv[ro.ColumnName("fixed_64")] = v11
+	if ro.Nulled {
+		rv[ro.ColumnName("fixed_64")] = nullExp
+	} else {
+		rv[ro.ColumnName("fixed_64")] = v11
+	}
 
 	v12 := int32(m.self.GetSfixed32())
 
-	rv[ro.ColumnName("sfixed_32")] = v12
+	if ro.Nulled {
+		rv[ro.ColumnName("sfixed_32")] = nullExp
+	} else {
+		rv[ro.ColumnName("sfixed_32")] = v12
+	}
 
 	v13 := int64(m.self.GetSfixed64())
 
-	rv[ro.ColumnName("sfixed_64")] = v13
+	if ro.Nulled {
+		rv[ro.ColumnName("sfixed_64")] = nullExp
+	} else {
+		rv[ro.ColumnName("sfixed_64")] = v13
+	}
 
 	v14 := bool(m.self.GetBool())
 
-	rv[ro.ColumnName("bool")] = v14
+	if ro.Nulled {
+		rv[ro.ColumnName("bool")] = nullExp
+	} else {
+		rv[ro.ColumnName("bool")] = v14
+	}
 
 	v15 := string(m.self.GetString_())
 
-	rv[ro.ColumnName("string")] = v15
+	if ro.Nulled {
+		rv[ro.ColumnName("string")] = nullExp
+	} else {
+		rv[ro.ColumnName("string")] = v15
+	}
 
 	v16 := []byte(m.self.GetBytes())
 
-	rv[ro.ColumnName("bytes")] = v16
+	if ro.Nulled {
+		rv[ro.ColumnName("bytes")] = nullExp
+	} else {
+		rv[ro.ColumnName("bytes")] = v16
+	}
 
 	v17 := make(xpq.Array[float64], 0, len(m.self.GetRepeatedDouble()))
 	for _, v17arrTmp := range m.self.GetRepeatedDouble() {
 		v17 = append(v17, float64(v17arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_double")] = v17
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_double")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_double")] = v17
+	}
 
 	v18 := make(xpq.Array[float32], 0, len(m.self.GetRepeatedFloat()))
 	for _, v18arrTmp := range m.self.GetRepeatedFloat() {
 		v18 = append(v18, float32(v18arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_float")] = v18
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_float")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_float")] = v18
+	}
 
 	v19 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedInt32()))
 	for _, v19arrTmp := range m.self.GetRepeatedInt32() {
 		v19 = append(v19, int32(v19arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_int32")] = v19
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_int32")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_int32")] = v19
+	}
 
 	v20 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedInt64()))
 	for _, v20arrTmp := range m.self.GetRepeatedInt64() {
 		v20 = append(v20, int64(v20arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_int64")] = v20
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_int64")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_int64")] = v20
+	}
 
 	v21 := make(xpq.Array[uint32], 0, len(m.self.GetRepeatedUint32()))
 	for _, v21arrTmp := range m.self.GetRepeatedUint32() {
 		v21 = append(v21, uint32(v21arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_uint32")] = v21
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_uint32")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_uint32")] = v21
+	}
 
 	v22 := make(xpq.Array[uint64], 0, len(m.self.GetRepeatedUint64()))
 	for _, v22arrTmp := range m.self.GetRepeatedUint64() {
 		v22 = append(v22, uint64(v22arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_uint64")] = v22
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_uint64")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_uint64")] = v22
+	}
 
 	v23 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedSint32()))
 	for _, v23arrTmp := range m.self.GetRepeatedSint32() {
 		v23 = append(v23, int32(v23arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_sint32")] = v23
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_sint32")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_sint32")] = v23
+	}
 
 	v24 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedSint64()))
 	for _, v24arrTmp := range m.self.GetRepeatedSint64() {
 		v24 = append(v24, int64(v24arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_sint64")] = v24
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_sint64")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_sint64")] = v24
+	}
 
 	v25 := make(xpq.Array[uint32], 0, len(m.self.GetRepeatedFixed32()))
 	for _, v25arrTmp := range m.self.GetRepeatedFixed32() {
 		v25 = append(v25, uint32(v25arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_fixed32")] = v25
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_fixed32")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_fixed32")] = v25
+	}
 
 	v26 := make(xpq.Array[uint64], 0, len(m.self.GetRepeatedFixed64()))
 	for _, v26arrTmp := range m.self.GetRepeatedFixed64() {
 		v26 = append(v26, uint64(v26arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_fixed64")] = v26
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_fixed64")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_fixed64")] = v26
+	}
 
 	v27 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedSfixed32()))
 	for _, v27arrTmp := range m.self.GetRepeatedSfixed32() {
 		v27 = append(v27, int32(v27arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_sfixed32")] = v27
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_sfixed32")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_sfixed32")] = v27
+	}
 
 	v28 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedSfixed64()))
 	for _, v28arrTmp := range m.self.GetRepeatedSfixed64() {
 		v28 = append(v28, int64(v28arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_sfixed64")] = v28
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_sfixed64")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_sfixed64")] = v28
+	}
 
 	v29 := make(xpq.Array[bool], 0, len(m.self.GetRepeatedBool()))
 	for _, v29arrTmp := range m.self.GetRepeatedBool() {
 		v29 = append(v29, bool(v29arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_bool")] = v29
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_bool")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_bool")] = v29
+	}
 
 	v30 := make(xpq.Array[string], 0, len(m.self.GetRepeatedString()))
 	for _, v30arrTmp := range m.self.GetRepeatedString() {
 		v30 = append(v30, string(v30arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_string")] = v30
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_string")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_string")] = v30
+	}
 
 	v31 := make(xpq.Array[[]byte], 0, len(m.self.GetRepeatedBytes()))
 	for _, v31arrTmp := range m.self.GetRepeatedBytes() {
 		v31 = append(v31, []byte(v31arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_bytes")] = v31
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_bytes")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_bytes")] = v31
+	}
 
 	v32 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedEnum()))
 	for _, v32arrTmp := range m.self.GetRepeatedEnum() {
 		v32 = append(v32, int32(v32arrTmp))
 	}
 
-	rv[ro.ColumnName("repeated_enum")] = v32
+	if ro.Nulled {
+		rv[ro.ColumnName("repeated_enum")] = nullExp
+	} else {
+		rv[ro.ColumnName("repeated_enum")] = v32
+	}
 
 	v33tmp, err := json.Marshal(m.self.GetStringMap())
 	if err != nil {
@@ -1768,7 +1992,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	}
 	v33 := exp.NewLiteralExpression("?::jsonb", string(v33tmp))
 
-	rv[ro.ColumnName("string_map")] = v33
+	if ro.Nulled {
+		rv[ro.ColumnName("string_map")] = nullExp
+	} else {
+		rv[ro.ColumnName("string_map")] = v33
+	}
 
 	var v34 *time.Time
 	if m.self.GetCreatedAt().IsValid() {
@@ -1776,7 +2004,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v34 = &v34tmp
 	}
 
-	rv[ro.ColumnName("created_at")] = v34
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v34
+	}
 
 	var v35 exp.LiteralExpression
 
@@ -1786,7 +2018,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v35 = exp.NewLiteralExpression("NULL")
 	}
 
-	rv[ro.ColumnName("str_ptr")] = v35
+	if ro.Nulled {
+		rv[ro.ColumnName("str_ptr")] = nullExp
+	} else {
+		rv[ro.ColumnName("str_ptr")] = v35
+	}
 
 	var v36 exp.LiteralExpression
 
@@ -1796,7 +2032,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v36 = exp.NewLiteralExpression("NULL")
 	}
 
-	rv[ro.ColumnName("bool_ptr")] = v36
+	if ro.Nulled {
+		rv[ro.ColumnName("bool_ptr")] = nullExp
+	} else {
+		rv[ro.ColumnName("bool_ptr")] = v36
+	}
 
 	return rv, nil
 }
@@ -2507,7 +2747,7 @@ func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("size"),
 		Type:               "int8",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
@@ -2559,12 +2799,18 @@ func (m *pgdbMessageEBook) Descriptor() pgdb_v1.Descriptor {
 func (m *pgdbMessageEBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
 	ro := pgdb_v1.NewRecordOptions(opts)
 	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
 
 	rv := exp.Record{}
 
 	v1 := int64(m.self.GetSize())
 
-	rv[ro.ColumnName("size")] = v1
+	if ro.Nulled {
+		rv[ro.ColumnName("size")] = nullExp
+	} else {
+		rv[ro.ColumnName("size")] = v1
+	}
 
 	return rv, nil
 }
@@ -2650,7 +2896,7 @@ func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("pages"),
 		Type:               "int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
@@ -2702,12 +2948,18 @@ func (m *pgdbMessagePaperBook) Descriptor() pgdb_v1.Descriptor {
 func (m *pgdbMessagePaperBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
 	ro := pgdb_v1.NewRecordOptions(opts)
 	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
 
 	rv := exp.Record{}
 
 	v1 := int32(m.self.GetPages())
 
-	rv[ro.ColumnName("pages")] = v1
+	if ro.Nulled {
+		rv[ro.ColumnName("pages")] = nullExp
+	} else {
+		rv[ro.ColumnName("pages")] = v1
+	}
 
 	return rv, nil
 }
@@ -2795,7 +3047,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -2806,7 +3058,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 		})
 
@@ -2817,7 +3069,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -2828,7 +3080,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -2839,7 +3091,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
-			Nullable:           true,
+			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 		})
 
@@ -2850,7 +3102,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
-			Nullable:           false,
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 		})
 
@@ -2859,21 +3111,21 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
-		Nullable:           true,
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("medium_oneof"),
 		Type:               "int4",
-		Nullable:           false,
+		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 	})
 
@@ -2983,6 +3235,8 @@ func (m *pgdbMessageBook) Descriptor() pgdb_v1.Descriptor {
 func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
 	ro := pgdb_v1.NewRecordOptions(opts)
 	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
 
 	var sb strings.Builder
 
@@ -2992,7 +3246,11 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv0 := string(m.self.TenantId)
 
-		rv[ro.ColumnName("tenant_id")] = cfv0
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
 
 	}
 
@@ -3016,7 +3274,11 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv2 := sb.String()
 
-		rv[ro.ColumnName("pk")] = cfv2
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
 
 	}
 
@@ -3028,7 +3290,11 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv3 := sb.String()
 
-		rv[ro.ColumnName("sk")] = cfv3
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
 
 	}
 
@@ -3049,7 +3315,11 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
-		rv[ro.ColumnName("fts_data")] = cfv4
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv4
+		}
 
 	}
 
@@ -3060,13 +3330,21 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 			return nil, err
 		}
 
-		rv[ro.ColumnName("pb_data")] = cfv5
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv5
+		}
 
 	}
 
 	v1 := string(m.self.GetId())
 
-	rv[ro.ColumnName("id")] = v1
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
 
 	var v2 *time.Time
 	if m.self.GetCreatedAt().IsValid() {
@@ -3074,24 +3352,48 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v2 = &v2tmp
 	}
 
-	rv[ro.ColumnName("created_at")] = v2
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v2
+	}
 
-	v3, err := pgdb_v1.MarshalNestedRecord(m.self.GetPaper(), ro.Nested("50$")...)
+	v3tmp := m.self.GetPaper()
+	v3opts := ro.Nested("50$")
+	if v3tmp == nil {
+		v3opts = append(v3opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v3, err := pgdb_v1.MarshalNestedRecord(v3tmp, v3opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	for k, v := range v3 {
-		rv[k] = v
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
 	}
 
-	v4, err := pgdb_v1.MarshalNestedRecord(m.self.GetEbook(), ro.Nested("51$")...)
+	v4tmp := m.self.GetEbook()
+	v4opts := ro.Nested("51$")
+	if v4tmp == nil {
+		v4opts = append(v4opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v4, err := pgdb_v1.MarshalNestedRecord(v4tmp, v4opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	for k, v := range v4 {
-		rv[k] = v
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
 	}
 
 	oneof1 := uint32(0)
@@ -3106,7 +3408,11 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	}
 
-	rv[ro.ColumnName("medium_oneof")] = oneof1
+	if ro.Nulled {
+		rv[ro.ColumnName("medium_oneof")] = nullExp
+	} else {
+		rv[ro.ColumnName("medium_oneof")] = oneof1
+	}
 
 	return rv, nil
 }
