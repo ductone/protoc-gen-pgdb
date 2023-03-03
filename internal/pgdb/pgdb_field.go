@@ -64,6 +64,9 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		varName:  vn.String(),
 	}
 	nullable := false
+	if f.InOneOf() {
+		nullable = true
+	}
 	// https://developers.google.com/protocol-buffers/docs/proto3#scalar
 	switch pt {
 	case pgs.DoubleT:
