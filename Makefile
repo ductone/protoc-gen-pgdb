@@ -12,7 +12,7 @@ generate:
 
 .PHONY: test
 test:
-	go test -v ./...
+	go test -v ./... ./example/...
 
 .PHONY: example
 example: build
