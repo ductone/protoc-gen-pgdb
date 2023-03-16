@@ -38,6 +38,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -49,6 +50,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			Default:            "",
 		})
 
 	}
@@ -60,6 +62,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -71,6 +74,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -82,6 +86,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -93,6 +98,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -102,6 +108,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "''",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -109,6 +116,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -116,6 +124,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -123,6 +132,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -130,6 +140,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "''",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -137,6 +148,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "''",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -144,6 +156,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "bool",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "false",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -151,6 +164,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "interval",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -158,6 +172,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "jsonb",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -165,6 +180,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "float4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0.0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -172,6 +188,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "float8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0.0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -179,6 +196,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "bool",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "false",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -186,6 +204,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		Type:               "_jsonb",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	return rv
@@ -1172,6 +1191,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -1183,6 +1203,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			Default:            "",
 		})
 
 	}
@@ -1194,6 +1215,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -1205,6 +1227,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -1216,6 +1239,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -1227,6 +1251,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -1236,6 +1261,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "''",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1243,6 +1269,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "float8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0.0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1250,6 +1277,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "float4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0.0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1257,6 +1285,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1264,6 +1293,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1271,6 +1301,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1278,6 +1309,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "numeric",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1285,6 +1317,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1292,6 +1325,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1299,6 +1333,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1306,6 +1341,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "numeric",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1313,6 +1349,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1320,6 +1357,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1327,6 +1365,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "bool",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "false",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1334,6 +1373,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "''",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1341,6 +1381,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "bytea",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1348,6 +1389,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_float8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_float8",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1355,6 +1397,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_float4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_float4",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1362,6 +1405,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int4",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1369,6 +1413,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int8",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1376,6 +1421,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int8",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1383,6 +1429,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_numeric",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_numeric",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1390,6 +1437,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int4",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1397,6 +1445,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int8",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1404,6 +1453,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int8",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1411,6 +1461,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_numeric",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_numeric",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1418,6 +1469,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int4",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1425,6 +1477,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int8",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1432,6 +1485,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_bool",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_bool",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1439,6 +1493,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_text",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1446,6 +1501,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_bytea",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1453,6 +1509,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "_int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            " array[]::_int4",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1460,6 +1517,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "jsonb",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1467,6 +1525,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1474,6 +1533,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "text",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1481,6 +1541,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Type:               "bool",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	return rv
@@ -2749,6 +2810,7 @@ func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	return rv
@@ -2898,6 +2960,7 @@ func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "0",
 	})
 
 	return rv
@@ -3049,6 +3112,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -3060,6 +3124,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			Default:            "",
 		})
 
 	}
@@ -3071,6 +3136,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -3082,6 +3148,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -3093,6 +3160,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -3104,6 +3172,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
+			Default:            "",
 		})
 
 	}
@@ -3113,6 +3182,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "''",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -3120,6 +3190,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -3127,6 +3198,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
+		Default:            "",
 	})
 
 	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)

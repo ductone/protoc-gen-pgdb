@@ -65,6 +65,7 @@ type Column struct {
 	Type               string
 	Nullable           bool
 	OverrideExpression string
+	Default            string
 }
 
 type Index struct {

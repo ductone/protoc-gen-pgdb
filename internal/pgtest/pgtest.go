@@ -161,6 +161,7 @@ func start(config *PGConfig) (*PG, error) {
 		"-h", "", // Disable TCP listening
 		"-F", // No fsync, just go fast
 	)
+
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		return nil, err
@@ -179,6 +180,7 @@ func start(config *PGConfig) (*PG, error) {
 
 	// Connect to DB
 	dsn := makeDSN(sockDir, "postgres", isRoot)
+
 	// Prepare test database
 	err = retry(ctx, func() error {
 		// when debugging, you might want to look at this loop!
@@ -206,6 +208,10 @@ func start(config *PGConfig) (*PG, error) {
 
 	// Connect to it properly
 	dsn = makeDSN(sockDir, "test", isRoot)
+	if config.IsPersistent {
+		fmt.Printf("pg dsn: %v\n", dsn) //nolint:forbidigo
+	}
+
 	pgConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		return nil, abort("invalid dsn", cmd, stderr, stdout, err)
@@ -237,7 +243,6 @@ func (p *PG) Stop() {
 	if p == nil {
 		return
 	}
-
 	if !p.persistent {
 		defer func() {
 			// Always try to remove it

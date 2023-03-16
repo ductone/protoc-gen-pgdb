@@ -93,6 +93,9 @@ func col2spec(col *Column) string {
 		if !col.Nullable {
 			_, _ = sbuf.WriteString(" NOT NULL")
 		}
+		if col.Default != "" {
+			_, _ = sbuf.WriteString(" DEFAULT " + col.Default)
+		}
 	}
 	return sbuf.String()
 }
