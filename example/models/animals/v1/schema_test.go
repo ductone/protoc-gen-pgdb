@@ -178,7 +178,13 @@ func TestSchemaScalarValue(t *testing.T) {
 		require.NoErrorf(t, err, "TestSchemaScalarValue: failed to execute sql: '\n%s\n'", line)
 	}
 
-	query, params, err := pgdb_v1.Insert(&ScalarValue{
+	query, params, err := pgdb_v1.Insert(&ScalarValue{})
+	require.NoError(t, err)
+
+	_, err = pg.DB.Exec(ctx, query, params...)
+	require.NoError(t, err)
+
+	query, params, err = pgdb_v1.Insert(&ScalarValue{
 		TenantId:       "t1",
 		Id:             "b1",
 		RepeatedString: []string{"hello", "world"},

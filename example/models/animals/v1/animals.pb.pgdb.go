@@ -1387,113 +1387,113 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_double"),
 		Type:               "_float8",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_float8",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_float"),
 		Type:               "_float4",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_float4",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_int32"),
 		Type:               "_int4",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int4",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_int64"),
 		Type:               "_int8",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int8",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_uint32"),
 		Type:               "_int8",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int8",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_uint64"),
 		Type:               "_numeric",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_numeric",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sint32"),
 		Type:               "_int4",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int4",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sint64"),
 		Type:               "_int8",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int8",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_fixed32"),
 		Type:               "_int8",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int8",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_fixed64"),
 		Type:               "_numeric",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_numeric",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sfixed32"),
 		Type:               "_int4",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int4",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_sfixed64"),
 		Type:               "_int8",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int8",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_bool"),
 		Type:               "_bool",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_bool",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_string"),
 		Type:               "_text",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_text",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1507,9 +1507,9 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("repeated_enum"),
 		Type:               "_int4",
-		Nullable:           df.Nullable(false),
+		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
-		Default:            " array[]::_int4",
+		Default:            "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{

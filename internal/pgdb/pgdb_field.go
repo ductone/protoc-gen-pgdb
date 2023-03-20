@@ -63,7 +63,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		F:        f,
 		varName:  vn.String(),
 	}
-	nullable := f.InOneOf()
+	nullable := true
 	defaultValue := ""
 	// https://developers.google.com/protocol-buffers/docs/proto3#scalar
 	switch pt {
@@ -73,38 +73,45 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtFloat64
 		defaultValue = "0.0"
+		nullable = false
 	case pgs.FloatT:
 		// aka float32
 		convertDef.PostgresTypeName = "float4"
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtFloat32
 		defaultValue = "0.0"
+		nullable = false
 	case pgs.Int32T, pgs.SInt32, pgs.SFixed32:
 		convertDef.PostgresTypeName = pgTypeInt4
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtInt32
 		defaultValue = "0"
+		nullable = false
 	case pgs.Int64T, pgs.SInt64, pgs.SFixed64:
 		convertDef.PostgresTypeName = "int8"
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtInt64
 		defaultValue = "0"
+		nullable = false
 	case pgs.UInt32T, pgs.Fixed32T:
 		convertDef.PostgresTypeName = "int8"
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtUint32
 		defaultValue = "0"
+		nullable = false
 	case pgs.UInt64T, pgs.Fixed64T:
 		// not ideal, but postgres only has signed types for int8.
 		convertDef.PostgresTypeName = "numeric"
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtUint64
 		defaultValue = "0"
+		nullable = false
 	case pgs.BoolT:
 		convertDef.PostgresTypeName = pgTypeBool
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtBool
 		defaultValue = "false"
+		nullable = false
 	case pgs.StringT:
 		// TODO(pquerna): annotations for max size
 		convertDef.PostgresTypeName = "text"
@@ -113,8 +120,8 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		convertDef.FullTextType = ext.FullTextType
 		convertDef.FullTextWeight = ext.FullTextWeight
 		defaultValue = "''"
+		nullable = false
 	case pgs.MessageT:
-		nullable = true
 		switch ext.MessageBehavoir {
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
 			switch f.Descriptor().GetTypeName() {
@@ -144,6 +151,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 				convertDef.IsArray = isArray
 				convertDef.PostgresTypeName = "text"
 				convertDef.TypeConversion = gtPbWktStringValue
+
 			default:
 				if isArray {
 					panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
@@ -171,15 +179,16 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 				pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 		}
 	case pgs.BytesT:
-		nullable = true
 		convertDef.IsArray = isArray
 		convertDef.PostgresTypeName = "bytea"
 		convertDef.TypeConversion = gtBytes
 	case pgs.EnumT:
-		defaultValue = "0" // spicy, assumes a "UNSPECIFIED = 0" in the enum...
 		convertDef.PostgresTypeName = pgTypeInt4
 		convertDef.IsArray = isArray
 		convertDef.TypeConversion = gtEnum
+		defaultValue = "0" // NOTE: assumes a "UNSPECIFIED = 0" in the enum...
+		nullable = false
+
 	case pgs.GroupT:
 		panic(fmt.Errorf("pgdb: unsupported field type: Group: %s", f.FullyQualifiedName()))
 	default:
@@ -188,11 +197,10 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	}
 
 	if isArray {
+		nullable = true
+		defaultValue = ""
 		ix.XPQ = true
 		convertDef.PostgresTypeName = "_" + convertDef.PostgresTypeName
-		if defaultValue != "" {
-			defaultValue = fmt.Sprintf(" array[]::%s", convertDef.PostgresTypeName)
-		}
 	}
 
 	rv := &fieldContext{
