@@ -10,6 +10,7 @@ type Descriptor interface {
 	DataField() *Column
 	SearchField() *Column
 	VersioningField() *Column
+	TenantField() *Column
 
 	Indexes(opts ...IndexOptionsFunc) []*Index
 	IndexPrimaryKey(opts ...IndexOptionsFunc) *Index
