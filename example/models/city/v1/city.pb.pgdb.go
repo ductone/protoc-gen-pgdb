@@ -500,6 +500,10 @@ type AttractionsTenantIdSafeOperators struct {
 	tableName string
 }
 
+func (x *AttractionsTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+}
+
 func (x *AttractionsTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
 }
@@ -555,6 +559,10 @@ func (x *AttractionsDBQueryBuilder) TenantId() *AttractionsTenantIdSafeOperators
 type AttractionsPKSKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *AttractionsPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
 func (x *AttractionsPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -614,6 +622,10 @@ type AttractionsPKSafeOperators struct {
 	tableName string
 }
 
+func (x *AttractionsPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+}
+
 func (x *AttractionsPKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
 }
@@ -669,6 +681,10 @@ func (x *AttractionsDBQueryBuilder) PK() *AttractionsPKSafeOperators {
 type AttractionsSKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *AttractionsSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
 }
 
 func (x *AttractionsSKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -728,6 +744,10 @@ type AttractionsFTSDataSafeOperators struct {
 	tableName string
 }
 
+func (x *AttractionsFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
 func (x *AttractionsFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
 }
@@ -779,44 +799,134 @@ func (x *AttractionsDBQueryBuilder) FTSData() *AttractionsFTSDataSafeOperators {
 	return &AttractionsFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *AttractionsDBQueryUnsafe) TenantId() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+type AttractionsTenantIdQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *AttractionsDBQueryUnsafe) PKSK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+func (x *AttractionsDBQueryUnsafe) TenantId() *AttractionsTenantIdQueryType {
+	return &AttractionsTenantIdQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *AttractionsDBQueryUnsafe) PK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk")
+func (x *AttractionsTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 }
 
-func (x *AttractionsDBQueryUnsafe) SK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk")
+type AttractionsPKSKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *AttractionsDBQueryUnsafe) FTSData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+func (x *AttractionsDBQueryUnsafe) PKSK() *AttractionsPKSKQueryType {
+	return &AttractionsPKSKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *AttractionsDBQueryUnsafe) PBData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+func (x *AttractionsPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
-func (x *AttractionsDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "id")
+type AttractionsPKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *AttractionsDBQueryUnsafe) Numid() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "numid")
+func (x *AttractionsDBQueryUnsafe) PK() *AttractionsPKQueryType {
+	return &AttractionsPKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *AttractionsDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+func (x *AttractionsPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
 }
 
-func (x *AttractionsDBQueryUnsafe) What() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "what_oneof")
+type AttractionsSKQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsDBQueryUnsafe) SK() *AttractionsSKQueryType {
+	return &AttractionsSKQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *AttractionsSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+}
+
+type AttractionsFTSDataQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsDBQueryUnsafe) FTSData() *AttractionsFTSDataQueryType {
+	return &AttractionsFTSDataQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *AttractionsFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
+type AttractionsPBDataQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsDBQueryUnsafe) PBData() *AttractionsPBDataQueryType {
+	return &AttractionsPBDataQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *AttractionsPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pb_data")
+}
+
+type AttractionsIdQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsDBQueryUnsafe) Id() *AttractionsIdQueryType {
+	return &AttractionsIdQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *AttractionsIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
+}
+
+type AttractionsNumidQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsDBQueryUnsafe) Numid() *AttractionsNumidQueryType {
+	return &AttractionsNumidQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *AttractionsNumidQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"numid")
+}
+
+type AttractionsCreatedAtQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsDBQueryUnsafe) CreatedAt() *AttractionsCreatedAtQueryType {
+	return &AttractionsCreatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *AttractionsCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"created_at")
+}
+
+type AttractionsWhatQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsDBQueryUnsafe) What() *AttractionsWhatQueryType {
+	return &AttractionsWhatQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *AttractionsWhatQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
 }
 
 func (x *AttractionsDBColumns) WithTable(t string) *AttractionsDBColumns {

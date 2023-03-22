@@ -29,6 +29,7 @@ func TestSchemaPet(t *testing.T) {
 		require.NoErrorf(t, err, "TestSchemaPet: failed to execute sql: '\n%s\n'", line)
 	}
 
+	(&Pet{}).DB().Query()
 	// make sure we should have zero migrations after schema create
 	m, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{})
 	require.NoError(t, err)

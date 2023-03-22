@@ -53,6 +53,10 @@ type {{ .OpsTypeName }} struct {
 	tableName string
 }
 
+func  (x *{{ .OpsTypeName }}) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}")
+}
+
 {{if .Op.Eq }}
 func  (x *{{ .OpsTypeName }}) Eq(v {{.InputType}}) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").Eq(v)
@@ -188,9 +192,20 @@ func (x *{{ $QueryType }}) {{ .Field.GoName -}}() *{{ .OpsTypeName }} {
 
 {{ range .UnsafeFields }}
 {{ if .DB -}}
-func (x *{{ $UnsafeType }}) {{ .GoName -}}() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "{{- .DB.Name -}}")
+
+type {{ .QueryTypeName }} struct {
+	prefix string
+	tableName string
 }
+
+func (x *{{ $UnsafeType }}) {{ .GoName -}}() *{{ .QueryTypeName }} {
+	return &{{- .QueryTypeName -}}{tableName: x.tableName, prefix: "pb$"}
+}
+
+func  (x *{{ .QueryTypeName }}) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .DB.Name -}}")
+}
+
 {{- end }}
 {{ end }}
 

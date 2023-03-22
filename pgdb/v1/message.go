@@ -14,3 +14,7 @@ type Message interface {
 	Record(opts ...RecordOptionsFunc) (exp.Record, error)
 	SearchData(opts ...RecordOptionsFunc) []*SearchContent
 }
+
+type ColumnExpression interface {
+	Identifier() exp.IdentifierExpression
+}

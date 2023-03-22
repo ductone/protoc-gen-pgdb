@@ -555,6 +555,10 @@ type ShopTenantIdSafeOperators struct {
 	tableName string
 }
 
+func (x *ShopTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+}
+
 func (x *ShopTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
 }
@@ -610,6 +614,10 @@ func (x *ShopDBQueryBuilder) TenantId() *ShopTenantIdSafeOperators {
 type ShopPKSKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *ShopPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
 func (x *ShopPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -669,6 +677,10 @@ type ShopPKSafeOperators struct {
 	tableName string
 }
 
+func (x *ShopPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+}
+
 func (x *ShopPKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
 }
@@ -724,6 +736,10 @@ func (x *ShopDBQueryBuilder) PK() *ShopPKSafeOperators {
 type ShopSKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *ShopSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
 }
 
 func (x *ShopSKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -783,6 +799,10 @@ type ShopFTSDataSafeOperators struct {
 	tableName string
 }
 
+func (x *ShopFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
 func (x *ShopFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
 }
@@ -834,44 +854,134 @@ func (x *ShopDBQueryBuilder) FTSData() *ShopFTSDataSafeOperators {
 	return &ShopFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ShopDBQueryUnsafe) TenantId() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+type ShopTenantIdQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ShopDBQueryUnsafe) PKSK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+func (x *ShopDBQueryUnsafe) TenantId() *ShopTenantIdQueryType {
+	return &ShopTenantIdQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ShopDBQueryUnsafe) PK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk")
+func (x *ShopTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 }
 
-func (x *ShopDBQueryUnsafe) SK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk")
+type ShopPKSKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ShopDBQueryUnsafe) FTSData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+func (x *ShopDBQueryUnsafe) PKSK() *ShopPKSKQueryType {
+	return &ShopPKSKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ShopDBQueryUnsafe) PBData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+func (x *ShopPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
-func (x *ShopDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "id")
+type ShopPKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ShopDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+func (x *ShopDBQueryUnsafe) PK() *ShopPKQueryType {
+	return &ShopPKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ShopDBQueryUnsafe) Fur() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fur")
+func (x *ShopPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
 }
 
-func (x *ShopDBQueryUnsafe) Medium() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
+type ShopSKQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopDBQueryUnsafe) SK() *ShopSKQueryType {
+	return &ShopSKQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ShopSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+}
+
+type ShopFTSDataQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopDBQueryUnsafe) FTSData() *ShopFTSDataQueryType {
+	return &ShopFTSDataQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ShopFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
+type ShopPBDataQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopDBQueryUnsafe) PBData() *ShopPBDataQueryType {
+	return &ShopPBDataQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ShopPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pb_data")
+}
+
+type ShopIdQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopDBQueryUnsafe) Id() *ShopIdQueryType {
+	return &ShopIdQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ShopIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
+}
+
+type ShopCreatedAtQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopDBQueryUnsafe) CreatedAt() *ShopCreatedAtQueryType {
+	return &ShopCreatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ShopCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"created_at")
+}
+
+type ShopFurQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopDBQueryUnsafe) Fur() *ShopFurQueryType {
+	return &ShopFurQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ShopFurQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+}
+
+type ShopMediumQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopDBQueryUnsafe) Medium() *ShopMediumQueryType {
+	return &ShopMediumQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ShopMediumQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"medium_oneof")
 }
 
 func (x *ShopDBColumns) WithTable(t string) *ShopDBColumns {
@@ -1056,8 +1166,17 @@ func (x *Shop_ManagerDBQueryBuilder) Unsafe() *Shop_ManagerDBQueryUnsafe {
 	return &Shop_ManagerDBQueryUnsafe{tableName: x.tableName}
 }
 
-func (x *Shop_ManagerDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "id")
+type Shop_ManagerIdQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *Shop_ManagerDBQueryUnsafe) Id() *Shop_ManagerIdQueryType {
+	return &Shop_ManagerIdQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *Shop_ManagerIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
 }
 
 func (x *Shop_ManagerDBColumns) WithTable(t string) *Shop_ManagerDBColumns {
