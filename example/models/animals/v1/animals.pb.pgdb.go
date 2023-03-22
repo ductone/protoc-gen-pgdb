@@ -211,15 +211,19 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 }
 
 func (d *pgdbDescriptorPet) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorPet) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorPet) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$updated_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorPet) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorPet) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -1743,15 +1747,19 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 }
 
 func (d *pgdbDescriptorScalarValue) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorScalarValue) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorScalarValue) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$created_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorScalarValue) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorScalarValue) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -3410,15 +3418,19 @@ func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 }
 
 func (d *pgdbDescriptorEBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorEBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorEBook) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorEBook) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorEBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -3569,15 +3581,19 @@ func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 }
 
 func (d *pgdbDescriptorPaperBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorPaperBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorPaperBook) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorPaperBook) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorPaperBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -3820,15 +3836,19 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 }
 
 func (d *pgdbDescriptorBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorBook) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$created_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorBook) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {

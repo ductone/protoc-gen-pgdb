@@ -148,15 +148,19 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 }
 
 func (d *pgdbDescriptorShop) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorShop) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorShop) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$created_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorShop) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorShop) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -1056,15 +1060,19 @@ func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptio
 }
 
 func (d *pgdbDescriptorShop_Manager) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorShop_Manager) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorShop_Manager) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorShop_Manager) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorShop_Manager) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {

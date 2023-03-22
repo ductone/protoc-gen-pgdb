@@ -146,15 +146,19 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 }
 
 func (d *pgdbDescriptorAttractions) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_attractions_models_city_v1_e136cbfc", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorAttractions) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_attractions_models_city_v1_e136cbfc", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorAttractions) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$created_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_attractions_models_city_v1_e136cbfc", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorAttractions) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_attractions_models_city_v1_e136cbfc", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorAttractions) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
