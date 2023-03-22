@@ -7,6 +7,8 @@ type Descriptor interface {
 	TableName() string
 
 	Fields(opts ...DescriptorFieldOptionFunc) []*Column
+
+	PKSKField() *Column
 	DataField() *Column
 	SearchField() *Column
 	VersioningField() *Column

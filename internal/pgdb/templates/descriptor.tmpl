@@ -40,12 +40,20 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
   return rv
 }
 
+func (d *{{.ReceiverType}}) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+      Table: "{{.TableName}}",
+			Name:  "pb$pksk",
+			Type:  "varchar",
+		}
+}
+
 func (d *{{.ReceiverType}}) DataField() *pgdb_v1.Column {
-  return &pgdb_v1.Column{Table: "{{.TableName}}", Name: "pb_data", Type: "bytea"}
+  return &pgdb_v1.Column{Table: "{{.TableName}}", Name: "pb$pb_data", Type: "bytea"}
 }
 
 func (d *{{.ReceiverType}}) SearchField() *pgdb_v1.Column {
-  return &pgdb_v1.Column{Table: "{{.TableName}}", Name: "fts_data", Type: "tsvector"}
+  return &pgdb_v1.Column{Table: "{{.TableName}}", Name: "pb$fts_data", Type: "tsvector"}
 }
 
 func (d *{{.ReceiverType}}) VersioningField() *pgdb_v1.Column {
