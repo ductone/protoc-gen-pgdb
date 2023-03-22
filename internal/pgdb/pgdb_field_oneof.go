@@ -31,6 +31,7 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 			oneof:   oneof,
 			VarName: vn.String(),
 		},
+		QueryTypeName: ctx.Name(oneof.Message()).String() + ctx.Name(oneof).String() + "QueryType",
 	}
 
 	return rv

@@ -211,15 +211,19 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 }
 
 func (d *pgdbDescriptorPet) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorPet) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorPet) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$updated_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorPet) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorPet) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -634,6 +638,10 @@ type PetTenantIdSafeOperators struct {
 	tableName string
 }
 
+func (x *PetTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+}
+
 func (x *PetTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
 }
@@ -734,6 +742,10 @@ type PetPKSKSafeOperators struct {
 	tableName string
 }
 
+func (x *PetPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
+}
+
 func (x *PetPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Eq(v)
 }
@@ -789,6 +801,10 @@ func (x *PetDBQueryBuilder) PKSK() *PetPKSKSafeOperators {
 type PetPKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *PetPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
 }
 
 func (x *PetPKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -848,6 +864,10 @@ type PetSKSafeOperators struct {
 	tableName string
 }
 
+func (x *PetSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+}
+
 func (x *PetSKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Eq(v)
 }
@@ -903,6 +923,10 @@ func (x *PetDBQueryBuilder) SK() *PetSKSafeOperators {
 type PetFTSDataSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *PetFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 }
 
 func (x *PetFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -961,6 +985,10 @@ type PetProfileSafeOperators struct {
 	tableName string
 }
 
+func (x *PetProfileSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
+}
+
 func (x *PetProfileSafeOperators) Eq(v any) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile").Eq(v)
 }
@@ -1012,80 +1040,251 @@ func (x *PetDBQueryBuilder) Profile() *PetProfileSafeOperators {
 	return &PetProfileSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *PetDBQueryUnsafe) TenantId() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+type PetTenantIdQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *PetDBQueryUnsafe) PKSK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+func (x *PetDBQueryUnsafe) TenantId() *PetTenantIdQueryType {
+	return &PetTenantIdQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *PetDBQueryUnsafe) PK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk")
+func (x *PetTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 }
 
-func (x *PetDBQueryUnsafe) SK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk")
+type PetPKSKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *PetDBQueryUnsafe) FTSData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+func (x *PetDBQueryUnsafe) PKSK() *PetPKSKQueryType {
+	return &PetPKSKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *PetDBQueryUnsafe) PBData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+func (x *PetPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
-func (x *PetDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "id")
+type PetPKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *PetDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+func (x *PetDBQueryUnsafe) PK() *PetPKQueryType {
+	return &PetPKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *PetDBQueryUnsafe) UpdatedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+func (x *PetPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
 }
 
-func (x *PetDBQueryUnsafe) DeletedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
+type PetSKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *PetDBQueryUnsafe) DisplayName() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "display_name")
+func (x *PetDBQueryUnsafe) SK() *PetSKQueryType {
+	return &PetSKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *PetDBQueryUnsafe) Description() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "description")
+func (x *PetSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
 }
 
-func (x *PetDBQueryUnsafe) SystemBuiltin() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "system_builtin")
+type PetFTSDataQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *PetDBQueryUnsafe) Elapsed() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "elapsed")
+func (x *PetDBQueryUnsafe) FTSData() *PetFTSDataQueryType {
+	return &PetFTSDataQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *PetDBQueryUnsafe) Profile() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "profile")
+func (x *PetFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 }
 
-func (x *PetDBQueryUnsafe) Cuteness() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "cuteness")
+type PetPBDataQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *PetDBQueryUnsafe) Price() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "price")
+func (x *PetDBQueryUnsafe) PBData() *PetPBDataQueryType {
+	return &PetPBDataQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *PetDBQueryUnsafe) VeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "14")
+func (x *PetPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pb_data")
 }
 
-func (x *PetDBQueryUnsafe) ExtraProfiles() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "extra_profiles")
+type PetIdQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) Id() *PetIdQueryType {
+	return &PetIdQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
+}
+
+type PetCreatedAtQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) CreatedAt() *PetCreatedAtQueryType {
+	return &PetCreatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"created_at")
+}
+
+type PetUpdatedAtQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) UpdatedAt() *PetUpdatedAtQueryType {
+	return &PetUpdatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"updated_at")
+}
+
+type PetDeletedAtQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) DeletedAt() *PetDeletedAtQueryType {
+	return &PetDeletedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetDeletedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"deleted_at")
+}
+
+type PetDisplayNameQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) DisplayName() *PetDisplayNameQueryType {
+	return &PetDisplayNameQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetDisplayNameQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"display_name")
+}
+
+type PetDescriptionQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) Description() *PetDescriptionQueryType {
+	return &PetDescriptionQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetDescriptionQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"description")
+}
+
+type PetSystemBuiltinQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) SystemBuiltin() *PetSystemBuiltinQueryType {
+	return &PetSystemBuiltinQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetSystemBuiltinQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"system_builtin")
+}
+
+type PetElapsedQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) Elapsed() *PetElapsedQueryType {
+	return &PetElapsedQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetElapsedQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"elapsed")
+}
+
+type PetProfileQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) Profile() *PetProfileQueryType {
+	return &PetProfileQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetProfileQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
+}
+
+type PetCutenessQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) Cuteness() *PetCutenessQueryType {
+	return &PetCutenessQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetCutenessQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"cuteness")
+}
+
+type PetPriceQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) Price() *PetPriceQueryType {
+	return &PetPriceQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetPriceQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"price")
+}
+
+type PetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaameQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) VeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame() *PetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaameQueryType {
+	return &PetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaameQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaameQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"14")
+}
+
+type PetExtraProfilesQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) ExtraProfiles() *PetExtraProfilesQueryType {
+	return &PetExtraProfilesQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PetExtraProfilesQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"extra_profiles")
 }
 
 func (x *PetDBColumns) WithTable(t string) *PetDBColumns {
@@ -1548,15 +1747,19 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 }
 
 func (d *pgdbDescriptorScalarValue) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorScalarValue) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorScalarValue) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$created_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorScalarValue) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorScalarValue) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -2170,6 +2373,10 @@ type ScalarValueTenantIdSafeOperators struct {
 	tableName string
 }
 
+func (x *ScalarValueTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+}
+
 func (x *ScalarValueTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
 }
@@ -2225,6 +2432,10 @@ func (x *ScalarValueDBQueryBuilder) TenantId() *ScalarValueTenantIdSafeOperators
 type ScalarValuePKSKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *ScalarValuePKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
 func (x *ScalarValuePKSKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -2284,6 +2495,10 @@ type ScalarValuePKSafeOperators struct {
 	tableName string
 }
 
+func (x *ScalarValuePKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+}
+
 func (x *ScalarValuePKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
 }
@@ -2339,6 +2554,10 @@ func (x *ScalarValueDBQueryBuilder) PK() *ScalarValuePKSafeOperators {
 type ScalarValueSKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *ScalarValueSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
 }
 
 func (x *ScalarValueSKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -2398,6 +2617,10 @@ type ScalarValueFTSDataSafeOperators struct {
 	tableName string
 }
 
+func (x *ScalarValueFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
 func (x *ScalarValueFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
 }
@@ -2449,172 +2672,550 @@ func (x *ScalarValueDBQueryBuilder) FTSData() *ScalarValueFTSDataSafeOperators {
 	return &ScalarValueFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) TenantId() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+type ScalarValueTenantIdQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) PKSK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+func (x *ScalarValueDBQueryUnsafe) TenantId() *ScalarValueTenantIdQueryType {
+	return &ScalarValueTenantIdQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) PK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk")
+func (x *ScalarValueTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 }
 
-func (x *ScalarValueDBQueryUnsafe) SK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk")
+type ScalarValuePKSKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) FTSData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+func (x *ScalarValueDBQueryUnsafe) PKSK() *ScalarValuePKSKQueryType {
+	return &ScalarValuePKSKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) PBData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+func (x *ScalarValuePKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
-func (x *ScalarValueDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "id")
+type ScalarValuePKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) Double() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "double")
+func (x *ScalarValueDBQueryUnsafe) PK() *ScalarValuePKQueryType {
+	return &ScalarValuePKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) Float() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "float")
+func (x *ScalarValuePKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
 }
 
-func (x *ScalarValueDBQueryUnsafe) Int32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "int_32")
+type ScalarValueSKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) Int64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "int_64")
+func (x *ScalarValueDBQueryUnsafe) SK() *ScalarValueSKQueryType {
+	return &ScalarValueSKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) Uint32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "uint_32")
+func (x *ScalarValueSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
 }
 
-func (x *ScalarValueDBQueryUnsafe) Uint64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "uint_64")
+type ScalarValueFTSDataQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) Sint32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sint_32")
+func (x *ScalarValueDBQueryUnsafe) FTSData() *ScalarValueFTSDataQueryType {
+	return &ScalarValueFTSDataQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) Sint64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sint_64")
+func (x *ScalarValueFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
 }
 
-func (x *ScalarValueDBQueryUnsafe) Fixed32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fixed_32")
+type ScalarValuePBDataQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) Fixed64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fixed_64")
+func (x *ScalarValueDBQueryUnsafe) PBData() *ScalarValuePBDataQueryType {
+	return &ScalarValuePBDataQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) Sfixed32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sfixed_32")
+func (x *ScalarValuePBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pb_data")
 }
 
-func (x *ScalarValueDBQueryUnsafe) Sfixed64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sfixed_64")
+type ScalarValueIdQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) Bool() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "bool")
+func (x *ScalarValueDBQueryUnsafe) Id() *ScalarValueIdQueryType {
+	return &ScalarValueIdQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) String_() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "string")
+func (x *ScalarValueIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
 }
 
-func (x *ScalarValueDBQueryUnsafe) Bytes() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "bytes")
+type ScalarValueDoubleQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedDouble() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_double")
+func (x *ScalarValueDBQueryUnsafe) Double() *ScalarValueDoubleQueryType {
+	return &ScalarValueDoubleQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedFloat() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_float")
+func (x *ScalarValueDoubleQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"double")
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedInt32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_int32")
+type ScalarValueFloatQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedInt64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_int64")
+func (x *ScalarValueDBQueryUnsafe) Float() *ScalarValueFloatQueryType {
+	return &ScalarValueFloatQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedUint32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_uint32")
+func (x *ScalarValueFloatQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"float")
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedUint64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_uint64")
+type ScalarValueInt32QueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedSint32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_sint32")
+func (x *ScalarValueDBQueryUnsafe) Int32() *ScalarValueInt32QueryType {
+	return &ScalarValueInt32QueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedSint64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_sint64")
+func (x *ScalarValueInt32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"int_32")
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedFixed32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_fixed32")
+type ScalarValueInt64QueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedFixed64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_fixed64")
+func (x *ScalarValueDBQueryUnsafe) Int64() *ScalarValueInt64QueryType {
+	return &ScalarValueInt64QueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedSfixed32() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_sfixed32")
+func (x *ScalarValueInt64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"int_64")
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedSfixed64() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_sfixed64")
+type ScalarValueUint32QueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedBool() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_bool")
+func (x *ScalarValueDBQueryUnsafe) Uint32() *ScalarValueUint32QueryType {
+	return &ScalarValueUint32QueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedString() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_string")
+func (x *ScalarValueUint32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"uint_32")
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedBytes() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_bytes")
+type ScalarValueUint64QueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) RepeatedEnum() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "repeated_enum")
+func (x *ScalarValueDBQueryUnsafe) Uint64() *ScalarValueUint64QueryType {
+	return &ScalarValueUint64QueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) StringMap() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "string_map")
+func (x *ScalarValueUint64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"uint_64")
 }
 
-func (x *ScalarValueDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+type ScalarValueSint32QueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *ScalarValueDBQueryUnsafe) StrPtr() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "str_ptr")
+func (x *ScalarValueDBQueryUnsafe) Sint32() *ScalarValueSint32QueryType {
+	return &ScalarValueSint32QueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *ScalarValueDBQueryUnsafe) BoolPtr() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "bool_ptr")
+func (x *ScalarValueSint32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sint_32")
+}
+
+type ScalarValueSint64QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) Sint64() *ScalarValueSint64QueryType {
+	return &ScalarValueSint64QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueSint64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sint_64")
+}
+
+type ScalarValueFixed32QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) Fixed32() *ScalarValueFixed32QueryType {
+	return &ScalarValueFixed32QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueFixed32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fixed_32")
+}
+
+type ScalarValueFixed64QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) Fixed64() *ScalarValueFixed64QueryType {
+	return &ScalarValueFixed64QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueFixed64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fixed_64")
+}
+
+type ScalarValueSfixed32QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) Sfixed32() *ScalarValueSfixed32QueryType {
+	return &ScalarValueSfixed32QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueSfixed32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_32")
+}
+
+type ScalarValueSfixed64QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) Sfixed64() *ScalarValueSfixed64QueryType {
+	return &ScalarValueSfixed64QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueSfixed64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+}
+
+type ScalarValueBoolQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) Bool() *ScalarValueBoolQueryType {
+	return &ScalarValueBoolQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueBoolQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"bool")
+}
+
+type ScalarValueString_QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) String_() *ScalarValueString_QueryType {
+	return &ScalarValueString_QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueString_QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"string")
+}
+
+type ScalarValueBytesQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) Bytes() *ScalarValueBytesQueryType {
+	return &ScalarValueBytesQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueBytesQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"bytes")
+}
+
+type ScalarValueRepeatedDoubleQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedDouble() *ScalarValueRepeatedDoubleQueryType {
+	return &ScalarValueRepeatedDoubleQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedDoubleQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_double")
+}
+
+type ScalarValueRepeatedFloatQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedFloat() *ScalarValueRepeatedFloatQueryType {
+	return &ScalarValueRepeatedFloatQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedFloatQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_float")
+}
+
+type ScalarValueRepeatedInt32QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedInt32() *ScalarValueRepeatedInt32QueryType {
+	return &ScalarValueRepeatedInt32QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedInt32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_int32")
+}
+
+type ScalarValueRepeatedInt64QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedInt64() *ScalarValueRepeatedInt64QueryType {
+	return &ScalarValueRepeatedInt64QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedInt64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_int64")
+}
+
+type ScalarValueRepeatedUint32QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedUint32() *ScalarValueRepeatedUint32QueryType {
+	return &ScalarValueRepeatedUint32QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedUint32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_uint32")
+}
+
+type ScalarValueRepeatedUint64QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedUint64() *ScalarValueRepeatedUint64QueryType {
+	return &ScalarValueRepeatedUint64QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedUint64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_uint64")
+}
+
+type ScalarValueRepeatedSint32QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedSint32() *ScalarValueRepeatedSint32QueryType {
+	return &ScalarValueRepeatedSint32QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedSint32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_sint32")
+}
+
+type ScalarValueRepeatedSint64QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedSint64() *ScalarValueRepeatedSint64QueryType {
+	return &ScalarValueRepeatedSint64QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedSint64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_sint64")
+}
+
+type ScalarValueRepeatedFixed32QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedFixed32() *ScalarValueRepeatedFixed32QueryType {
+	return &ScalarValueRepeatedFixed32QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedFixed32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_fixed32")
+}
+
+type ScalarValueRepeatedFixed64QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedFixed64() *ScalarValueRepeatedFixed64QueryType {
+	return &ScalarValueRepeatedFixed64QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedFixed64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_fixed64")
+}
+
+type ScalarValueRepeatedSfixed32QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedSfixed32() *ScalarValueRepeatedSfixed32QueryType {
+	return &ScalarValueRepeatedSfixed32QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedSfixed32QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_sfixed32")
+}
+
+type ScalarValueRepeatedSfixed64QueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedSfixed64() *ScalarValueRepeatedSfixed64QueryType {
+	return &ScalarValueRepeatedSfixed64QueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedSfixed64QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_sfixed64")
+}
+
+type ScalarValueRepeatedBoolQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedBool() *ScalarValueRepeatedBoolQueryType {
+	return &ScalarValueRepeatedBoolQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedBoolQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_bool")
+}
+
+type ScalarValueRepeatedStringQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedString() *ScalarValueRepeatedStringQueryType {
+	return &ScalarValueRepeatedStringQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedStringQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_string")
+}
+
+type ScalarValueRepeatedBytesQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedBytes() *ScalarValueRepeatedBytesQueryType {
+	return &ScalarValueRepeatedBytesQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedBytesQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_bytes")
+}
+
+type ScalarValueRepeatedEnumQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) RepeatedEnum() *ScalarValueRepeatedEnumQueryType {
+	return &ScalarValueRepeatedEnumQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueRepeatedEnumQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"repeated_enum")
+}
+
+type ScalarValueStringMapQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) StringMap() *ScalarValueStringMapQueryType {
+	return &ScalarValueStringMapQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueStringMapQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"string_map")
+}
+
+type ScalarValueCreatedAtQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) CreatedAt() *ScalarValueCreatedAtQueryType {
+	return &ScalarValueCreatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"created_at")
+}
+
+type ScalarValueStrPtrQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) StrPtr() *ScalarValueStrPtrQueryType {
+	return &ScalarValueStrPtrQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueStrPtrQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"str_ptr")
+}
+
+type ScalarValueBoolPtrQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) BoolPtr() *ScalarValueBoolPtrQueryType {
+	return &ScalarValueBoolPtrQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *ScalarValueBoolPtrQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"bool_ptr")
 }
 
 func (x *ScalarValueDBColumns) WithTable(t string) *ScalarValueDBColumns {
@@ -2817,15 +3418,19 @@ func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 }
 
 func (d *pgdbDescriptorEBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorEBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorEBook) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorEBook) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorEBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -2927,8 +3532,17 @@ func (x *EBookDBQueryBuilder) Unsafe() *EBookDBQueryUnsafe {
 	return &EBookDBQueryUnsafe{tableName: x.tableName}
 }
 
-func (x *EBookDBQueryUnsafe) Size() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "size")
+type EBookSizeQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *EBookDBQueryUnsafe) Size() *EBookSizeQueryType {
+	return &EBookSizeQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *EBookSizeQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"size")
 }
 
 func (x *EBookDBColumns) WithTable(t string) *EBookDBColumns {
@@ -2967,15 +3581,19 @@ func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 }
 
 func (d *pgdbDescriptorPaperBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorPaperBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorPaperBook) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorPaperBook) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorPaperBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -3077,8 +3695,17 @@ func (x *PaperBookDBQueryBuilder) Unsafe() *PaperBookDBQueryUnsafe {
 	return &PaperBookDBQueryUnsafe{tableName: x.tableName}
 }
 
-func (x *PaperBookDBQueryUnsafe) Pages() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pages")
+type PaperBookPagesQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PaperBookDBQueryUnsafe) Pages() *PaperBookPagesQueryType {
+	return &PaperBookPagesQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *PaperBookPagesQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pages")
 }
 
 func (x *PaperBookDBColumns) WithTable(t string) *PaperBookDBColumns {
@@ -3209,15 +3836,19 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 }
 
 func (d *pgdbDescriptorBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorBook) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Name: "pb$created_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorBook) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb$tenant_id", Type: "varchar"}
 }
 
 func (d *pgdbDescriptorBook) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -3555,6 +4186,10 @@ type BookTenantIdSafeOperators struct {
 	tableName string
 }
 
+func (x *BookTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+}
+
 func (x *BookTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
 }
@@ -3610,6 +4245,10 @@ func (x *BookDBQueryBuilder) TenantId() *BookTenantIdSafeOperators {
 type BookPKSKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *BookPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
 func (x *BookPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -3669,6 +4308,10 @@ type BookPKSafeOperators struct {
 	tableName string
 }
 
+func (x *BookPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+}
+
 func (x *BookPKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
 }
@@ -3724,6 +4367,10 @@ func (x *BookDBQueryBuilder) PK() *BookPKSafeOperators {
 type BookSKSafeOperators struct {
 	prefix    string
 	tableName string
+}
+
+func (x *BookSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
 }
 
 func (x *BookSKSafeOperators) Eq(v string) exp.BooleanExpression {
@@ -3783,6 +4430,10 @@ type BookFTSDataSafeOperators struct {
 	tableName string
 }
 
+func (x *BookFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
 func (x *BookFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
 }
@@ -3834,40 +4485,121 @@ func (x *BookDBQueryBuilder) FTSData() *BookFTSDataSafeOperators {
 	return &BookFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *BookDBQueryUnsafe) TenantId() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+type BookTenantIdQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *BookDBQueryUnsafe) PKSK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+func (x *BookDBQueryUnsafe) TenantId() *BookTenantIdQueryType {
+	return &BookTenantIdQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *BookDBQueryUnsafe) PK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pk")
+func (x *BookTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
 }
 
-func (x *BookDBQueryUnsafe) SK() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "sk")
+type BookPKSKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *BookDBQueryUnsafe) FTSData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+func (x *BookDBQueryUnsafe) PKSK() *BookPKSKQueryType {
+	return &BookPKSKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *BookDBQueryUnsafe) PBData() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+func (x *BookPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
 }
 
-func (x *BookDBQueryUnsafe) Id() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "id")
+type BookPKQueryType struct {
+	prefix    string
+	tableName string
 }
 
-func (x *BookDBQueryUnsafe) CreatedAt() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+func (x *BookDBQueryUnsafe) PK() *BookPKQueryType {
+	return &BookPKQueryType{tableName: x.tableName, prefix: "pb$"}
 }
 
-func (x *BookDBQueryUnsafe) Medium() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
+func (x *BookPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+}
+
+type BookSKQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *BookDBQueryUnsafe) SK() *BookSKQueryType {
+	return &BookSKQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *BookSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+}
+
+type BookFTSDataQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *BookDBQueryUnsafe) FTSData() *BookFTSDataQueryType {
+	return &BookFTSDataQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *BookFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
+type BookPBDataQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *BookDBQueryUnsafe) PBData() *BookPBDataQueryType {
+	return &BookPBDataQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *BookPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pb_data")
+}
+
+type BookIdQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *BookDBQueryUnsafe) Id() *BookIdQueryType {
+	return &BookIdQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *BookIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
+}
+
+type BookCreatedAtQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *BookDBQueryUnsafe) CreatedAt() *BookCreatedAtQueryType {
+	return &BookCreatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *BookCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"created_at")
+}
+
+type BookMediumQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *BookDBQueryUnsafe) Medium() *BookMediumQueryType {
+	return &BookMediumQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *BookMediumQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"medium_oneof")
 }
 
 func (x *BookDBColumns) WithTable(t string) *BookDBColumns {

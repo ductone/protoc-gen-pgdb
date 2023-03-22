@@ -1,5 +1,7 @@
 package v1
 
+import "github.com/doug-martin/goqu/v9/exp"
+
 // Descriptor is the same for all instances of a Message.
 type Descriptor interface {
 	TableName() string
@@ -61,11 +63,16 @@ func (r *DescriptorFieldOption) Nested(prefix string) []DescriptorFieldOptionFun
 }
 
 type Column struct {
+	Table              string
 	Name               string
 	Type               string
 	Nullable           bool
 	OverrideExpression string
 	Default            string
+}
+
+func (x *Column) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.Table, x.Name)
 }
 
 type Index struct {

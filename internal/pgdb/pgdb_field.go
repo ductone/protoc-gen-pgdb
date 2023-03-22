@@ -26,6 +26,7 @@ type fieldContext struct {
 	DB            *pgdb_v1.Column
 	DataType      *pgtype.Type
 	Convert       FiledConverter
+	QueryTypeName string
 }
 
 type FiledConverter interface {
@@ -204,10 +205,11 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	}
 
 	rv := &fieldContext{
-		IsVirtual: false,
-		GoName:    ctx.Name(f).String(),
-		Field:     f,
-		Convert:   convertDef,
+		IsVirtual:     false,
+		GoName:        ctx.Name(f).String(),
+		Field:         f,
+		Convert:       convertDef,
+		QueryTypeName: ctx.Name(f.Message()).String() + ctx.Name(f).String() + "QueryType",
 	}
 
 	if convertDef.TypeConversion != gtPbNestedMsg {
@@ -244,6 +246,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 	}
 
 	byteaDataType := pgDataTypeForName("bytea")
+
 	tenantIdField := &fieldContext{
 		ExcludeNested: true,
 		IsVirtual:     true,
@@ -259,6 +262,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			Message: m,
 			VarName: vn.String(),
 		},
+		QueryTypeName: ctx.Name(m).String() + "TenantId" + "QueryType",
 	}
 
 	vn = vn.Next()
@@ -276,6 +280,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		Convert: &pkskDataConvert{
 			ctx: ctx,
 		},
+		QueryTypeName: ctx.Name(m).String() + "PKSK" + "QueryType",
 	}
 
 	vn = vn.Next()
@@ -296,6 +301,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			Message: m,
 			KeyType: DynamoKeyTypePartition,
 		},
+		QueryTypeName: ctx.Name(m).String() + "PK" + "QueryType",
 	}
 
 	vn = vn.Next()
@@ -316,6 +322,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			Message: m,
 			KeyType: DynamoKeyTypeSort,
 		},
+		QueryTypeName: ctx.Name(m).String() + "SK" + "QueryType",
 	}
 	// https://github.com/jackc/pgtype/issues/150
 	// tsvector is not in-tree.  but we use to_tsvector() when inserting, so we just need to have the right type name
@@ -337,6 +344,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			m:       m,
 			VarName: vn.String(),
 		},
+		QueryTypeName: ctx.Name(m).String() + "FTSData" + "QueryType",
 	}
 
 	vn = vn.Next()
@@ -353,6 +361,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		Convert: &pbDataConvert{
 			VarName: vn.String(),
 		},
+		QueryTypeName: ctx.Name(m).String() + "PBData" + "QueryType",
 	}
 	return []*fieldContext{tenantIdField, pkskField, pkField, skField, ftsDataField, pbDataField}, nil
 }
