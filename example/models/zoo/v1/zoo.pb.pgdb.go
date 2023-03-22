@@ -147,12 +147,20 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	return rv
 }
 
+func (d *pgdbDescriptorShop) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_shop_models_zoo_v1_ca2425f6",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorShop) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "pb$pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorShop) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "pb$fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorShop) VersioningField() *pgdb_v1.Column {
@@ -1059,12 +1067,20 @@ func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptio
 	return rv
 }
 
+func (d *pgdbDescriptorShop_Manager) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_manager_models_zoo_v1_6ccf2214",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorShop_Manager) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "pb$pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorShop_Manager) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "pb$fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorShop_Manager) VersioningField() *pgdb_v1.Column {

@@ -210,12 +210,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 	return rv
 }
 
+func (d *pgdbDescriptorPet) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_pet_models_animals_v1_8a3723d5",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorPet) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb$pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorPet) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_pet_models_animals_v1_8a3723d5", Name: "pb$fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorPet) VersioningField() *pgdb_v1.Column {
@@ -1746,12 +1754,20 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 	return rv
 }
 
+func (d *pgdbDescriptorScalarValue) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_scalar_value_models_animals_v1_35025835",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorScalarValue) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb$pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorScalarValue) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb$fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorScalarValue) VersioningField() *pgdb_v1.Column {
@@ -3417,12 +3433,20 @@ func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 	return rv
 }
 
+func (d *pgdbDescriptorEBook) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_e_book_models_animals_v1_a344683d",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorEBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorEBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorEBook) VersioningField() *pgdb_v1.Column {
@@ -3580,12 +3604,20 @@ func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 	return rv
 }
 
+func (d *pgdbDescriptorPaperBook) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_paper_book_models_animals_v1_ba82559d",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorPaperBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb$pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorPaperBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb$fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorPaperBook) VersioningField() *pgdb_v1.Column {
@@ -3835,12 +3867,20 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	return rv
 }
 
+func (d *pgdbDescriptorBook) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_book_models_animals_v1_d871ffce",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorBook) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb_data", Type: "bytea"}
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb$pb_data", Type: "bytea"}
 }
 
 func (d *pgdbDescriptorBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "fts_data", Type: "tsvector"}
+	return &pgdb_v1.Column{Table: "pb_book_models_animals_v1_d871ffce", Name: "pb$fts_data", Type: "tsvector"}
 }
 
 func (d *pgdbDescriptorBook) VersioningField() *pgdb_v1.Column {
