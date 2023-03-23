@@ -207,7 +207,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("pksk_attractions_models_city_v1_1330fc81"),
+			Name:               io.IndexName("pksk_split_attractions_models_city_v1_bf0622cf"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           true,

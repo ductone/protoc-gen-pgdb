@@ -272,7 +272,7 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("pksk_pet_models_animals_v1_4fc115ea"),
+			Name:               io.IndexName("pksk_split_pet_models_animals_v1_157fa894"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           true,
@@ -1816,7 +1816,7 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("pksk_scalar_value_models_animals_v1_19369260"),
+			Name:               io.IndexName("pksk_split_scalar_value_models_animals_bedd2051"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           true,
@@ -3929,7 +3929,7 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("pksk_book_models_animals_v1_a25b591a"),
+			Name:               io.IndexName("pksk_split_book_models_animals_v1_fc6b6e89"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           true,
