@@ -28,7 +28,12 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 	}
 	rv = append(rv, cf...)
 
+	usedNames := map[string]struct{}{}
 	for _, index := range ext.Indexes {
+		if _, ok := usedNames[index.Name]; ok {
+			panic(fmt.Errorf("pgdb: getFieldIndexes:index name reused  on Message '%s': %s", m.FullyQualifiedName(), index.Name))
+		}
+		usedNames[index.Name] = struct{}{}
 		rv = append(rv, module.extraIndexes(ctx, m, ix, index))
 	}
 
@@ -101,10 +106,14 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		SourceFields: []string{"TenantId", "PKSK"},
 	}
 
+	pkskIndexName, err := getIndexName(m, "pksk_split")
+	if err != nil {
+		return nil, err
+	}
 	pkskIndex := &indexContext{
 		ExcludeNested: true,
 		DB: pgdb_v1.Index{
-			Name:     primaryIndexName,
+			Name:     pkskIndexName,
 			IsUnique: true,
 			Method:   pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:  []string{"tenant_id", "pk", "sk"},

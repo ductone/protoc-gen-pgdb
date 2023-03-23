@@ -209,7 +209,7 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("pksk_shop_models_zoo_v1_a0f13ce7"),
+			Name:               io.IndexName("pksk_split_shop_models_zoo_v1_c45b3ad3"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           true,
