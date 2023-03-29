@@ -210,7 +210,21 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			Name:               io.IndexName("pksk_split_attractions_models_city_v1_bf0622cf"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
-			IsUnique:           true,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_attractions_models_city_v1_8f879dd7"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",

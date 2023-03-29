@@ -212,7 +212,21 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			Name:               io.IndexName("pksk_split_shop_models_zoo_v1_c45b3ad3"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
-			IsUnique:           true,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_shop_models_zoo_v1_3fd2424c"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",

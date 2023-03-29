@@ -106,17 +106,36 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		SourceFields: []string{"TenantId", "PKSK"},
 	}
 
-	pkskIndexName, err := getIndexName(m, "pksk_split")
+	// So, we learned early in our deployment that having a second unique index
+	// doesn't work well with Upserts in Postgres.
+	//
+	// So here we "drop" this unique index by name
+	pkskIndexNameBroken, err := getIndexName(m, "pksk_split")
+	if err != nil {
+		return nil, err
+	}
+	pkskIndexBroken := &indexContext{
+		ExcludeNested: true,
+		DB: pgdb_v1.Index{
+			Name:      pkskIndexNameBroken,
+			IsUnique:  false,
+			IsDropped: true,
+			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:   []string{"tenant_id", "pk", "sk"},
+		},
+		SourceFields: []string{"TenantId", "PK", "SK"},
+	}
+
+	pkskIndexName, err := getIndexName(m, "pksk_split2")
 	if err != nil {
 		return nil, err
 	}
 	pkskIndex := &indexContext{
 		ExcludeNested: true,
 		DB: pgdb_v1.Index{
-			Name:     pkskIndexName,
-			IsUnique: true,
-			Method:   pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
-			Columns:  []string{"tenant_id", "pk", "sk"},
+			Name:    pkskIndexName,
+			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns: []string{"tenant_id", "pk", "sk"},
 		},
 		SourceFields: []string{"TenantId", "PK", "SK"},
 	}
@@ -135,5 +154,5 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		SourceFields: []string{"FTSData"},
 	}
 
-	return []*indexContext{primaryIndex, pkskIndex, ftsIndex}, nil
+	return []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}, nil
 }

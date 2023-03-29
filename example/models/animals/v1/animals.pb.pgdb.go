@@ -275,7 +275,21 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 			Name:               io.IndexName("pksk_split_pet_models_animals_v1_157fa894"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
-			IsUnique:           true,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_pet_models_animals_v1_e8761e9e"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
@@ -1819,7 +1833,21 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			Name:               io.IndexName("pksk_split_scalar_value_models_animals_bedd2051"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
-			IsUnique:           true,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_scalar_value_models_animals_12c49864"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
@@ -3932,7 +3960,21 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			Name:               io.IndexName("pksk_split_book_models_animals_v1_fc6b6e89"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
-			IsUnique:           true,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_book_models_animals_v1_735e1efd"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",

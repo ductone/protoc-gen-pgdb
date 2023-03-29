@@ -43,13 +43,13 @@ func Insert(msg DBReflectMessage) (string, []any, error) {
 		return "", nil, errors.New("pgdb_v1.Insert: malformed message: primary index missing")
 	}
 
-	q = q.OnConflict(goqu.DoUpdate(`ON CONSTRAINT "`+primaryIndex.Name+`"`,
-		conflictRecords,
-	).Where(
-		exp.NewIdentifierExpression("", "excluded", versionField.Name).Gte(
-			exp.NewLiteralExpression("?::timestamptz", record[versionField.Name]),
+	q = q.OnConflict(
+		exp.NewDoUpdateConflictExpression(`ON CONSTRAINT "`+primaryIndex.Name+`"`, conflictRecords).Where(
+			exp.NewIdentifierExpression("", "excluded", versionField.Name).Gte(
+				exp.NewLiteralExpression("?::timestamptz", record[versionField.Name]),
+			),
 		),
-	))
+	)
 
 	return q.ToSQL()
 }
