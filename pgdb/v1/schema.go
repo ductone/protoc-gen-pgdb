@@ -59,6 +59,10 @@ func IndexSchema(msg DBReflectMessage) ([]string, error) {
 			// we only support doing primary indexes in the create table, and don't support changing them, so bye bye.
 			continue
 		}
+		if idx.IsDropped {
+			// don't add dropped indexes to new tables
+			continue
+		}
 		rv = append(rv, index2sql(desc, idx))
 	}
 	return rv, nil
@@ -159,9 +163,11 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 		_, exists := indexes[idx.Name]
 		query := index2sql(desc, idx)
 
-		// if it should be dropped, and its still here, byeeee
-		if idx.IsDropped && exists {
-			rv = append(rv, query)
+		if idx.IsDropped {
+			// if it should be dropped, and its still here, byeeee
+			if exists {
+				rv = append(rv, query)
+			}
 			continue
 		}
 
