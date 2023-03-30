@@ -27,7 +27,7 @@ message Pet {
   };
   option (pgdb.v1.msg).indexes = {
     name: "profile"
-    nethod: INDEX_METHOD_BTREE_GIN,
+    method: INDEX_METHOD_BTREE_GIN,
     columns: [
       "tenant_id",
       "profile"
