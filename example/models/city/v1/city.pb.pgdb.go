@@ -584,49 +584,6 @@ func (x *AttractionsTenantIdSafeOperators) NotBetween(start string, end string) 
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *AttractionsTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *AttractionsDBQueryBuilder) TenantId() *AttractionsTenantIdSafeOperators {
 	return &AttractionsTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }

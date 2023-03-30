@@ -2,7 +2,6 @@ package pgdb
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
@@ -43,7 +42,6 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 }
 
 func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker, idx *pgdb_v1.MessageOptions_Index) *indexContext {
-	shoudLog := idx.Name == "furrrs"
 	indexName, err := getIndexName(m, idx.Name)
 	if err != nil {
 		panic(err)
@@ -64,60 +62,35 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 	if err != nil {
 		panic(err)
 	}
-	if shoudLog {
-		fmt.Fprintf(os.Stderr, "\n\n🌮🌮🌮: %s\n", m.Name())
-	}
 
 	for _, fieldName := range idx.Columns {
-		if shoudLog && fieldName == "zoo_shop🌮fur" {
-			fmt.Fprintf(os.Stderr, "🌮🌮🌮: %s -> %s\n", m.Name(), fieldName)
-		}
 		path := strings.Split(fieldName, "🌮")
-		if shoudLog && fieldName == "zoo_shop🌮fur" {
-			fmt.Fprintf(os.Stderr, "🌮 fields: %s\n", path)
-		}
 		var f pgs.Field
 		message := m
 		resolution := ""
 		for i, p := range path {
-			isLast := i == len(path)-1
-			if shoudLog && fieldName == "zoo_shop🌮fur" {
-				fmt.Fprintf(os.Stderr, "🦐: (%d) %s\n", i, p)
-			}
 			f = fieldByName(message, p)
-			if !isLast {
+			if i != len(path)-1 {
 				resolution += getNestedName(f)
-				t := f.Type()
-				message = t.Embed()
+				message = f.Type().Embed()
 				continue
 			}
-			resolution += f.Name().LowerSnakeCase().String()
-			// t := f.Type()
-			// message = t.Embed()
-			// if message == nil {
-			// 	panic(fmt.Errorf("nil nested message for t: %v", t))
-			// }
-			// cName, err := getColumnName(f)
-			// if err != nil {
-			// 	panic(err)
-			// }
-			// fmt.Fprintf(os.Stderr, "🦕🦕: %s:%d\n", cName, f.Descriptor().Number)
-			// continue
-			// }
-			rv.SourceFields = append(rv.SourceFields, ctx.Name(f).String())
 
-			if fieldName == tenantIdField {
-				rv.DB.Columns = append(rv.DB.Columns, "tenant_id")
+			if p == tenantIdField {
+				resolution += "tenant_id"
 			} else {
-				// pgColName, err := getColumnName(f)
-				// if err != nil {
-				// 	panic(err)
-				// }
-				fmt.Fprintf(os.Stderr, "\n🌮🌮🌮: %s: %s\n", fieldName, resolution)
-				rv.DB.Columns = append(rv.DB.Columns, resolution)
-			}
-		}
+				pgColName, err := getColumnName(f)
+				if err != nil {
+					panic(err)
+				}
 
+				resolution += pgColName
+			}
+
+			rv.SourceFields = append(rv.SourceFields, resolution)
+			// fmt.Fprintf(os.Stderr, "🌮: %s: %s -> %s\n", fieldName, path, resolution)
+			rv.DB.Columns = append(rv.DB.Columns, resolution)
+		}
 	}
 	return rv
 }
