@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
@@ -13,6 +14,7 @@ type indexContext struct {
 	DB            pgdb_v1.Index
 	ExcludeNested bool
 	SourceFields  []string
+	Type          string
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -65,11 +67,10 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 
 	for _, fieldName := range idx.Columns {
 		path := strings.Split(fieldName, "🌮")
-		var f pgs.Field
 		message := m
 		resolution := ""
 		for i, p := range path {
-			f = fieldByName(message, p)
+			f := fieldByName(message, p)
 			if i != len(path)-1 {
 				resolution += getNestedName(f)
 				message = f.Type().Embed()
@@ -88,8 +89,9 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			}
 
 			rv.SourceFields = append(rv.SourceFields, resolution)
-			// fmt.Fprintf(os.Stderr, "🌮: %s: %s -> %s\n", fieldName, path, resolution)
+			fmt.Fprintf(os.Stderr, "🧠: %s: %s -> %s %v\n", fieldName, path, resolution, f)
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
+
 		}
 	}
 	return rv

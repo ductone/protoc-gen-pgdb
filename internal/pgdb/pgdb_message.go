@@ -3,6 +3,7 @@ package pgdb
 import (
 	"fmt"
 	"io"
+	"os"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
@@ -67,6 +68,62 @@ func (fn *varNamer) String() string {
 	return fmt.Sprintf("%s%d", fn.prefix, fn.offset)
 }
 
+func (module *Module) getMessageFieldsFull(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {
+	fields := m.Fields()
+	rv := make([]*fieldContext, 0, len(fields))
+	ix.ProtobufEncodingJSON = true
+	cf, err := getCommonFields(ctx, m, ix)
+	if err != nil {
+		panic(err)
+	}
+	rv = append(rv, cf...)
+	vn := &varNamer{prefix: "v", offset: 0}
+
+	tenantIdField := ""
+	fext := pgdb_v1.MessageOptions{}
+	_, err = m.Extension(pgdb_v1.E_Msg, &fext)
+	if err != nil {
+		panic(err)
+	}
+
+	if !fext.NestedOnly {
+		tenantIdField, err = getTenantIDField(m)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	rv = append(rv, module.getMessageFieldsInner(ctx, m, fields, vn, tenantIdField, ix, goPrefix)...)
+
+	vn = &varNamer{prefix: "oneof", offset: 0}
+	for _, oneof := range m.RealOneOfs() {
+		vn = vn.Next()
+		fieldRep := module.getOneOf(ctx, oneof, vn, ix, goPrefix)
+		if fieldRep != nil {
+			rv = append(rv, fieldRep)
+		}
+	}
+	for _, f := range fields {
+		message := f.Type().Embed()
+		if message == nil {
+			continue
+		}
+		if _, internal := tryFieldByName(message, "tenant_id"); !internal {
+			continue
+		}
+		fmt.Fprintf(os.Stderr, "🦕 %s: recursivng %s\n", *message.Descriptor().Name, message.FullyQualifiedName())
+		rv = append(rv, module.getMessageFieldsFull(ctx, message, ix, goPrefix)...)
+	}
+
+	// for _, field := range rv {
+	// 	if field.Field == nil {
+	// 		continue
+	// 	}
+	// 	ix.AddProtoEntity(field.Field)
+	// }
+	return rv
+}
+
 func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
@@ -92,7 +149,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 		}
 	}
 
-	rv = append(rv, module.getMessageFieldsInner(ctx, fields, vn, tenantIdField, ix, goPrefix)...)
+	rv = append(rv, module.getMessageFieldsInner(ctx, m, fields, vn, tenantIdField, ix, goPrefix)...)
 
 	vn = &varNamer{prefix: "oneof", offset: 0}
 	for _, oneof := range m.RealOneOfs() {
@@ -102,6 +159,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 			rv = append(rv, fieldRep)
 		}
 	}
+
 	// for _, field := range rv {
 	// 	if field.Field == nil {
 	// 		continue
@@ -111,7 +169,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 	return rv
 }
 
-func (module *Module) getMessageFieldsInner(ctx pgsgo.Context, fields []pgs.Field, vn *varNamer, tenantIdField string, ix *importTracker, goPrefix string) []*fieldContext {
+func (module *Module) getMessageFieldsInner(ctx pgsgo.Context, m pgs.Message, fields []pgs.Field, vn *varNamer, tenantIdField string, ix *importTracker, goPrefix string) []*fieldContext {
 	rv := make([]*fieldContext, 0, len(fields))
 	for _, field := range fields {
 		// tenant_id done via common fields

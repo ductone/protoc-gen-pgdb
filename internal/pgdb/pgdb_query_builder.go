@@ -1,12 +1,17 @@
 package pgdb
 
 import (
+	"fmt"
 	"io"
+	"os"
+	"strings"
 
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type qbContext struct {
@@ -92,6 +97,17 @@ func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.
 
 func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *importTracker) *qbContext {
 	nsgFields := module.getMessageFields(ctx, m, ix, "m.self")
+	fullFields := module.getMessageFieldsFull(ctx, m, ix, "m.self")
+	for _, f := range fullFields {
+		//
+		if f.DB != nil && f.Field != nil {
+			name, _ := getColumnName(f.Field)
+			fmt.Fprintf(os.Stderr, "🌊 %s %v %s\n", *m.Descriptor().Name, f.DB.Type, name)
+		} else {
+			fmt.Fprintf(os.Stderr, "🌊 %s %s\n", *m.Descriptor().Name, f.GoName)
+		}
+
+	}
 
 	return &qbContext{
 		ReceiverType: ctx.Name(m).String(),
@@ -141,17 +157,26 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 			indexByFullName[f] = append(indexByFullName[f], idx)
 		}
 	}
+	missingIndices := map[string]bool{}
+	for key := range indexByFullName {
+		missingIndices[key] = true
+	}
+
 	for _, f := range fields {
 		inputType, err := f.Convert.GoType()
 		if err != nil {
 			panic(err)
 		}
+		// asdf, _ := getColumnName(f.Field)
+		fmt.Fprintf(os.Stderr, "🌮 %s: (safe field) %v %v %v\n", *m.Descriptor().Name, f.GoName, f.DB, f.DataType)
 		indexTypes := slice.Convert(indexByFullName[f.GoName], func(ic *indexContext) pgdb_v1.MessageOptions_Index_IndexMethod {
 			return ic.DB.Method
 		})
+
 		if len(indexTypes) == 0 {
 			continue
 		}
+		delete(missingIndices, f.GoName)
 		fieldName := f.GoName
 		if !f.IsVirtual {
 			fieldName = ctx.Name(f.Field).String()
@@ -172,6 +197,42 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 			Op:          ops,
 		})
 	}
+
+	// missings := []string{}
+	for key := range missingIndices {
+		if key == "tenant_id" {
+			continue
+		}
+		i := indexByFullName[key]
+		bettername := cases.Title(language.AmericanEnglish).String(strings.Split(i[0].DB.Name, "_")[0])
+		sf := i[0].SourceFields
+		n := ctx.Name(m).String() + bettername + "SafeOperators"
+
+		indexTypes := slice.Convert(i, func(ic *indexContext) pgdb_v1.MessageOptions_Index_IndexMethod {
+			return ic.DB.Method
+		})
+		if len(indexTypes) == 0 {
+			continue
+		}
+		fc := &fieldContext{
+			IsVirtual: false,
+			GoName:    bettername,
+		}
+		ops := safeOpsForIndexTypes(indexTypes)
+		rv = append(rv, &safeFieldContext{
+			// InputType:   inputType,
+			OpsTypeName: ctx.Name(m).String() + bettername + "SafeOperators",
+			Field:       fc,
+			// ColName:     f.DB.Name,
+			Op: ops,
+		})
+
+		fmt.Fprintf(os.Stderr, "🌮 missing!! %s from %v\n", n, sf)
+
+		// missings = append(missings, key)
+	}
+
+	// fmt.Fprintf(os.Stderr, "🌮 missing!! %s %v\n", *m.Descriptor().Name, missings)
 	return rv
 }
 

@@ -959,6 +959,66 @@ func (x *PetDBQueryBuilder) FTSData() *PetFTSDataSafeOperators {
 	return &PetFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
+type PetProfileSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *PetProfileSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
+}
+
+func (x *PetProfileSafeOperators) Eq(v) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"").Eq(v)
+}
+
+func (x *PetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *PetProfileSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *PetProfileSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *PetProfileSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *PetProfileSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *PetProfileSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *PetDBQueryBuilder) Profile() *PetProfileSafeOperators {
+	return &PetProfileSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
 type PetTenantIdQueryType struct {
 	prefix    string
 	tableName string
