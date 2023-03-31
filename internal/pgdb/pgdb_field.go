@@ -26,6 +26,7 @@ type fieldContext struct {
 	DataType      *pgtype.Type
 	Convert       FiledConverter
 	QueryTypeName string
+	Prefix_       string
 }
 
 type FiledConverter interface {

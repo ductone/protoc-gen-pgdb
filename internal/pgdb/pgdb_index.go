@@ -58,7 +58,7 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		return rv
 	}
 
-	rv.DB.Method = idx.Nethod
+	rv.DB.Method = idx.Method
 
 	tenantIdField, err := getTenantIDField(m)
 	if err != nil {
@@ -91,7 +91,8 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			rv.SourceFields = append(rv.SourceFields, resolution)
 			fmt.Fprintf(os.Stderr, "🧠: %s: %s -> %s %v\n", fieldName, path, resolution, f)
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
-
+			// module.getField()
+			// inputType, err := f.Convert.GoType()
 		}
 	}
 	return rv

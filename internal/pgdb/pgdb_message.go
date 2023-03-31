@@ -3,7 +3,6 @@ package pgdb
 import (
 	"fmt"
 	"io"
-	"os"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
@@ -68,7 +67,7 @@ func (fn *varNamer) String() string {
 	return fmt.Sprintf("%s%d", fn.prefix, fn.offset)
 }
 
-func (module *Module) getMessageFieldsFull(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {
+func (module *Module) getMessageFieldsFull(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string, prefix string) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
 	ix.ProtobufEncodingJSON = true
@@ -92,14 +91,17 @@ func (module *Module) getMessageFieldsFull(ctx pgsgo.Context, m pgs.Message, ix 
 			panic(err)
 		}
 	}
-
-	rv = append(rv, module.getMessageFieldsInner(ctx, m, fields, vn, tenantIdField, ix, goPrefix)...)
+	for _, f := range module.getMessageFieldsInner(ctx, m, fields, vn, tenantIdField, ix, goPrefix) {
+		f.Prefix_ = prefix
+		rv = append(rv, f)
+	}
 
 	vn = &varNamer{prefix: "oneof", offset: 0}
 	for _, oneof := range m.RealOneOfs() {
 		vn = vn.Next()
 		fieldRep := module.getOneOf(ctx, oneof, vn, ix, goPrefix)
 		if fieldRep != nil {
+			fieldRep.Prefix_ = prefix
 			rv = append(rv, fieldRep)
 		}
 	}
@@ -111,8 +113,13 @@ func (module *Module) getMessageFieldsFull(ctx pgsgo.Context, m pgs.Message, ix 
 		if _, internal := tryFieldByName(message, "tenant_id"); !internal {
 			continue
 		}
-		fmt.Fprintf(os.Stderr, "🦕 %s: recursivng %s\n", *message.Descriptor().Name, message.FullyQualifiedName())
-		rv = append(rv, module.getMessageFieldsFull(ctx, message, ix, goPrefix)...)
+		pre := getNestedName(f)
+		nesteds := module.getMessageFieldsFull(ctx, message, ix, goPrefix, prefix+pre)
+		for _, f := range nesteds {
+			f.Nested = true
+		}
+		rv = append(rv, nesteds...)
+		// fmt.Fprintf(os.Stderr, "🦕 %s: recursivng %s\n", *message.Descriptor().Name, message.FullyQualifiedName())
 	}
 
 	// for _, field := range rv {

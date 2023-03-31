@@ -97,14 +97,20 @@ func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.
 
 func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *importTracker) *qbContext {
 	nsgFields := module.getMessageFields(ctx, m, ix, "m.self")
-	fullFields := module.getMessageFieldsFull(ctx, m, ix, "m.self")
+	fullFields := module.getMessageFieldsFull(ctx, m, ix, "m.self", "")
 	for _, f := range fullFields {
 		//
 		if f.DB != nil && f.Field != nil {
 			name, _ := getColumnName(f.Field)
-			fmt.Fprintf(os.Stderr, "🌊 %s %v %s\n", *m.Descriptor().Name, f.DB.Type, name)
+			if f.GoName == "Medium" {
+				fmt.Fprintf(os.Stderr, "🌊🌊 %s %v\n", *m.Descriptor().Name, f)
+			}
+			fmt.Fprintf(os.Stderr, "🌊 %s %s%s\n", *m.Descriptor().Name, f.Prefix_, name)
 		} else {
-			fmt.Fprintf(os.Stderr, "🌊 %s %s\n", *m.Descriptor().Name, f.GoName)
+			if f.GoName == "Medium" {
+				fmt.Fprintf(os.Stderr, "🌊🌊 %s %v\n", *m.Descriptor().Name, f)
+			}
+			fmt.Fprintf(os.Stderr, "🌊 %s %s%s\n", *m.Descriptor().Name, f.Prefix_, f.GoName)
 		}
 
 	}
@@ -214,18 +220,18 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		if len(indexTypes) == 0 {
 			continue
 		}
-		fc := &fieldContext{
-			IsVirtual: false,
-			GoName:    bettername,
-		}
-		ops := safeOpsForIndexTypes(indexTypes)
-		rv = append(rv, &safeFieldContext{
-			// InputType:   inputType,
-			OpsTypeName: ctx.Name(m).String() + bettername + "SafeOperators",
-			Field:       fc,
-			// ColName:     f.DB.Name,
-			Op: ops,
-		})
+		// fc := &fieldContext{
+		// 	IsVirtual: false,
+		// 	GoName:    bettername,
+		// }
+		// ops := safeOpsForIndexTypes(indexTypes)
+		// rv = append(rv, &safeFieldContext{
+		// 	// InputType:   inputType,
+		// 	OpsTypeName: ctx.Name(m).String() + bettername + "SafeOperators",
+		// 	Field:       fc,
+		// 	// ColName:     f.DB.Name,
+		// 	Op: ops,
+		// })
 
 		fmt.Fprintf(os.Stderr, "🌮 missing!! %s from %v\n", n, sf)
 

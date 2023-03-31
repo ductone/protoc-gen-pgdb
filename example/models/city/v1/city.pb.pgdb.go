@@ -831,66 +831,6 @@ func (x *AttractionsDBQueryBuilder) FTSData() *AttractionsFTSDataSafeOperators {
 	return &AttractionsFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-type AttractionsFurrrsSafeOperators struct {
-	prefix    string
-	tableName string
-}
-
-func (x *AttractionsFurrrsSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
-}
-
-func (x *AttractionsFurrrsSafeOperators) Eq(v) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"").Eq(v)
-}
-
-func (x *AttractionsFurrrsSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *AttractionsFurrrsSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *AttractionsFurrrsSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *AttractionsFurrrsSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *AttractionsFurrrsSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsFurrrsSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsDBQueryBuilder) Furrrs() *AttractionsFurrrsSafeOperators {
-	return &AttractionsFurrrsSafeOperators{tableName: x.tableName, prefix: "pb$"}
-}
-
 type AttractionsTenantIdQueryType struct {
 	prefix    string
 	tableName string
