@@ -246,10 +246,6 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 
 	}
 
-	rv = append(rv, ((*animals_v1.Pet)(nil)).DBReflect().Descriptor().Indexes(io.Nested("10$")...)...)
-
-	rv = append(rv, ((*zoo_v1.Shop)(nil)).DBReflect().Descriptor().Indexes(io.Nested("11$")...)...)
-
 	return rv
 }
 

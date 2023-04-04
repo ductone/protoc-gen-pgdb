@@ -3996,10 +3996,6 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 
 	}
 
-	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("50$")...)...)
-
-	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("51$")...)...)
-
 	return rv
 }
 
