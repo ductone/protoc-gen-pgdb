@@ -227,7 +227,6 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 			if key != f.Prefix_+name {
 				continue
 			}
-			fmt.Fprintf(os.Stderr, "🌮 found it!! %s v %s%s\n", key, f.Prefix_, name)
 			inputType, err := f.Convert.GoType()
 			if err != nil {
 				panic(err)
@@ -244,16 +243,16 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 				}
 				var sb strings.Builder
 
-				sb.WriteString(ctx.Name(m).String())
+				_, _ = sb.WriteString(ctx.Name(m).String())
 				for i, sf := range ic.RawColumns {
 					for _, s := range strings.Split(sf, "🌮") {
-						sb.WriteString(cases.Title(language.AmericanEnglish).String(s))
+						_, _ = sb.WriteString(cases.Title(language.AmericanEnglish).String(s))
 					}
 					if i != len(ic.RawColumns)-1 {
-						sb.WriteString("_And_")
+						_, _ = sb.WriteString("_And_")
 					}
 				}
-				sb.WriteString("SafeOperators")
+				_, _ = sb.WriteString("SafeOperators")
 				fieldName := sb.String()
 
 				prefix := ""
@@ -263,8 +262,8 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 					}
 					prefix = sf
 				}
+				fmt.Fprintf(os.Stderr, "🌮 found it!! %s:%s -> (%s.%s)\n", ctx.Name(m).String(), key, ctx.Name(m).String(), fieldName)
 
-				fmt.Fprintf(os.Stderr, "🌮 found it!! %s -> %s %v\n", key, fieldName, ops)
 				rv = append(rv, &safeFieldContext{
 					InputType:   inputType,
 					OpsTypeName: ctx.Name(m).String() + fieldName + "SafeOperators",
