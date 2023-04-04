@@ -248,14 +248,6 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 
 	}
 
-	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("50$")...)...)
-
-	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Indexes(io.Nested("51$")...)...)
-
-	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect().Descriptor().Indexes(io.Nested("52$")...)...)
-
-	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect().Descriptor().Indexes(io.Nested("5$")...)...)
-
 	return rv
 }
 

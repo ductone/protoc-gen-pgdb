@@ -117,8 +117,5 @@ func (d *{{.ReceiverType}}) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 
   {{ end }}
 
-  {{ range .NestedFields }}
-    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect().Descriptor().Indexes(io.Nested("{{ .Prefix }}")...)...)
-  {{ end }}
   return rv
 }
