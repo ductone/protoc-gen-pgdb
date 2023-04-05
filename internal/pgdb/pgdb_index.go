@@ -60,32 +60,34 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 	}
 
 	rv.DB.Method = idx.Method
-
-	tenantIdField, err := getTenantIDField(m)
-	if err != nil {
-		panic(err)
-	}
+	tenantIdField, _ := getTenantIDField(m)
 
 	for _, fieldName := range idx.Columns {
 		path := strings.Split(fieldName, "🌮")
 		message := m
 		resolution := ""
 		for i, p := range path {
+			// TODO: the path could reference a oneOf which is "virtual"
 			f := fieldByName(message, p)
-			if i != len(path)-1 {
+			lastP := i == len(path)-1
+
+			if !lastP {
 				resolution += getNestedName(f)
 				message = f.Type().Embed()
 				continue
 			}
 
-			if p == tenantIdField {
-				resolution += "tenant_id"
+			// Access to tenant ids is limited by protoc's limited API (can't do extensions for different pgs.Files),
+			//   but we don't materialize them for nested models anyway...
+			if i == 0 && p == tenantIdField {
+				// don't snake tenant_id
+				resolution += p
 			} else {
 				pgColName, err := getColumnName(f)
+
 				if err != nil {
 					panic(err)
 				}
-
 				resolution += pgColName
 			}
 
@@ -114,7 +116,13 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 	if err != nil {
 		return nil, err
 	}
-	tenantIdField := fieldByName(m, "tenant_id")
+	var tenantIdField pgs.Field
+	if fext.TenantIdField != "" {
+		tenantIdField = fieldByName(m, fext.TenantIdField)
+	} else {
+		tenantIdField = fieldByName(m, "tenant_id")
+	}
+
 	primaryIndex := &indexContext{
 		ExcludeNested: true,
 		DB: pgdb_v1.Index{

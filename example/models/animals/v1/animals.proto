@@ -142,5 +142,17 @@ message Book {
   oneof medium {
     PaperBook paper = 50;
     EBook ebook = 51;
+    Newspaper news = 52;
   }
+}
+
+message Newspaper {
+  option (pgdb.v1.msg).tenant_id_field = "id";
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["id"]
+    sk_const: "example"
+  };
+  string id = 1;
+  string name = 2;
+  google.protobuf.Timestamp created_at = 3;
 }

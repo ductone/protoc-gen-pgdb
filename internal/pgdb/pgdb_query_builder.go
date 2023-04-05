@@ -155,7 +155,6 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 	}
 
 	for _, f := range fields {
-		// fmt.Fprintf(os.Stderr, "n %s %t %v\n", *m.Descriptor().Name, f.Convert.VarForValue(), f.IsVirtual, f.Field)
 		indexTypes := slice.Convert(indexByFullName[f.GoName], func(ic *indexContext) pgdb_v1.MessageOptions_Index_IndexMethod {
 			return ic.DB.Method
 		})
@@ -163,7 +162,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		if len(indexTypes) == 0 {
 			continue
 		}
-		fmt.Fprintf(os.Stderr, "🌮 %s: (safe field) %v %t %v\n", *m.Descriptor().Name, f.GoName, f.IsVirtual, f.Field)
+		// fmt.Fprintf(os.Stderr, "🌮 %s: (safe field) %v %t %v\n", *m.Descriptor().Name, f.GoName, f.IsVirtual, f.Field)
 		delete(missingIndices, f.GoName)
 		fieldName := f.GoName
 		if !f.IsVirtual {
@@ -246,7 +245,8 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 					}
 					prefix = sf
 				}
-				fmt.Fprintf(os.Stderr, "🌮 found it!! %s:%s -> (%s.%s)\n", ctx.Name(m).String(), missingKey, ctx.Name(m).String(), fieldName)
+
+				fmt.Fprintf(os.Stderr, "🌮 found it!! %s:%s -> (%s.%s)\n", ctx.Name(m).String(), missingKey, prefix, fieldName)
 
 				rv = append(rv, &safeFieldContext{
 					InputType:   inputType,
@@ -260,7 +260,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 			}
 		}
 		if !found {
-			panic(fmt.Errorf("cant resolve index: %s", missingKey))
+			panic(fmt.Errorf("cant resolve index: %s:%s", ctx.Name(m).String(), missingKey))
 		}
 	}
 	return rv
