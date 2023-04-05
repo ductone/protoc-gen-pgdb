@@ -24,12 +24,12 @@ type fieldContext struct {
 	Nested        bool
 	DB            *pgdb_v1.Column
 	DataType      *pgtype.Type
-	Convert       FiledConverter
+	Convert       FieldConverter
 	QueryTypeName string
 	Prefix_       string
 }
 
-type FiledConverter interface {
+type FieldConverter interface {
 	GoType() (string, error)
 	CodeForValue() (string, error)
 	VarForValue() (string, error)

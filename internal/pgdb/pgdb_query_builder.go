@@ -98,23 +98,6 @@ func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.
 
 func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *importTracker) *qbContext {
 	nsgFields := module.getMessageFields(ctx, m, ix, "m.self")
-	// fullFields := module.getMessageFieldsFull(ctx, m, ix, "m.self", "")
-	// for _, f := range fullFields {
-	// 	//
-	// 	if f.DB != nil && f.Field != nil {
-	// 		name, _ := getColumnName(f.Field)
-	// 		if f.GoName == "Medium" {
-	// 			fmt.Fprintf(os.Stderr, "🌊🌊 %s %v\n", *m.Descriptor().Name, f)
-	// 		}
-	// 		fmt.Fprintf(os.Stderr, "🌊 %s %s%s\n", *m.Descriptor().Name, f.Prefix_, name)
-	// 	} else {
-	// 		if f.GoName == "Medium" {
-	// 			fmt.Fprintf(os.Stderr, "🌊🌊 %s %v\n", *m.Descriptor().Name, f)
-	// 		}
-	// 		fmt.Fprintf(os.Stderr, "🌊 %s %s%s\n", *m.Descriptor().Name, f.Prefix_, f.GoName)
-	// 	}
-
-	// }
 
 	return &qbContext{
 		ReceiverType: ctx.Name(m).String(),
@@ -154,6 +137,8 @@ func safeOpCheck(indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool,
 	return false
 }
 
+// Safe "fields" reference an index.
+// Some fields are virtual, in that that are not explicitly backed by a pgs.Field in their Message (model) (pksk)
 func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*fieldContext, ix *importTracker) []*safeFieldContext {
 	rv := make([]*safeFieldContext, 0, len(fields))
 	// todo(pquerna): not ideal, little weird way to do this.
@@ -169,14 +154,8 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		missingIndices[key] = true
 	}
 
-	// getField
 	for _, f := range fields {
-		inputType, err := f.Convert.GoType()
-		if err != nil {
-			panic(err)
-		}
-		// asdf, _ := getColumnName(f.Field)
-		// fmt.Fprintf(os.Stderr, "🌮 %s: (safe field) %v %v %v\n", *m.Descriptor().Name, f.GoName, f.DB, f.DataType)
+		// fmt.Fprintf(os.Stderr, "n %s %t %v\n", *m.Descriptor().Name, f.Convert.VarForValue(), f.IsVirtual, f.Field)
 		indexTypes := slice.Convert(indexByFullName[f.GoName], func(ic *indexContext) pgdb_v1.MessageOptions_Index_IndexMethod {
 			return ic.DB.Method
 		})
@@ -184,6 +163,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		if len(indexTypes) == 0 {
 			continue
 		}
+		fmt.Fprintf(os.Stderr, "🌮 %s: (safe field) %v %t %v\n", *m.Descriptor().Name, f.GoName, f.IsVirtual, f.Field)
 		delete(missingIndices, f.GoName)
 		fieldName := f.GoName
 		if !f.IsVirtual {
@@ -197,6 +177,12 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		if ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists {
 			ix.XPQ = true
 		}
+
+		inputType, err := f.Convert.GoType()
+		if err != nil {
+			panic(err)
+		}
+
 		rv = append(rv, &safeFieldContext{
 			InputType:   inputType,
 			OpsTypeName: ctx.Name(m).String() + fieldName + "SafeOperators",
@@ -210,29 +196,26 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		return rv
 	}
 
-	allFields := module.getMessageFieldsFull(ctx, m, ix, "m.self", "")
-	for key := range missingIndices {
-		if key == "tenant_id" {
-			continue
-		}
+	for missingKey := range missingIndices {
 		found := false
-		for _, f := range allFields {
-			if f.Field == nil {
-				continue
-			}
-			name, err := getColumnName(f.Field)
-			if err != nil {
-				panic(err)
-			}
-			if key != f.Prefix_+name {
-				continue
-			}
-			inputType, err := f.Convert.GoType()
-			if err != nil {
-				panic(err)
-			}
+		for _, ic := range allIndexes {
+			for i, sf := range ic.SourceFields {
+				if missingKey != sf {
+					continue
+				}
+				f := ic.Fields[i]
+				if f == nil {
+					continue
+				}
+				found = true
+				// used for creating vars in templates, ie, not relevant
+				vn := &varNamer{prefix: "🌮", offset: 0}
+				fc := module.getField(ctx, *f, vn, ix, "🌮") //  we don't care about imports either
 
-			for _, ic := range indexByFullName[key] {
+				inputType, err := fc.Convert.GoType()
+				if err != nil {
+					panic(err)
+				}
 				indexTypes := []pgdb_v1.MessageOptions_Index_IndexMethod{ic.DB.Method}
 				ops := safeOpsForIndexTypes(indexTypes)
 				if ops.ObjectContains {
@@ -241,6 +224,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 				if ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists {
 					ix.XPQ = true
 				}
+
 				var sb strings.Builder
 
 				_, _ = sb.WriteString(ctx.Name(m).String())
@@ -262,26 +246,23 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 					}
 					prefix = sf
 				}
-				fmt.Fprintf(os.Stderr, "🌮 found it!! %s:%s -> (%s.%s)\n", ctx.Name(m).String(), key, ctx.Name(m).String(), fieldName)
+				fmt.Fprintf(os.Stderr, "🌮 found it!! %s:%s -> (%s.%s)\n", ctx.Name(m).String(), missingKey, ctx.Name(m).String(), fieldName)
 
 				rv = append(rv, &safeFieldContext{
 					InputType:   inputType,
 					OpsTypeName: ctx.Name(m).String() + fieldName + "SafeOperators",
-					Field:       f,
+					Field:       fc,
 					ColName:     prefix,
 					Op:          ops,
 					Prefix:      prefix,
 				})
+				break
 			}
-
-			found = true
-			break
 		}
 		if !found {
-			panic(fmt.Errorf("cant resolve index: %s", key))
+			panic(fmt.Errorf("cant resolve index: %s", missingKey))
 		}
 	}
-
 	return rv
 }
 

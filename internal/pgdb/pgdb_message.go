@@ -67,65 +67,6 @@ func (fn *varNamer) String() string {
 	return fmt.Sprintf("%s%d", fn.prefix, fn.offset)
 }
 
-func (module *Module) getMessageFieldsFull(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string, prefix string) []*fieldContext {
-	fields := m.Fields()
-	rv := make([]*fieldContext, 0, len(fields))
-	ix.ProtobufEncodingJSON = true
-	cf, err := getCommonFields(ctx, m, ix)
-	if err != nil {
-		panic(err)
-	}
-	rv = append(rv, cf...)
-
-	// tenantIdField := ""
-	fext := pgdb_v1.MessageOptions{}
-	_, err = m.Extension(pgdb_v1.E_Msg, &fext)
-	if err != nil {
-		panic(err)
-	}
-	// NOTE: limited API for nested messages
-	// if !fext.NestedOnly {
-	// tenantIdField, err = getTenantIDField(m)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// }
-	vn := &varNamer{prefix: "oneof", offset: 0}
-	for _, oneof := range m.RealOneOfs() {
-		vn = vn.Next()
-		fieldRep := module.getOneOf(ctx, oneof, vn, ix, goPrefix)
-		if fieldRep != nil {
-			fieldRep.Prefix_ = prefix
-			rv = append(rv, fieldRep)
-		}
-	}
-	vn = &varNamer{prefix: "v", offset: 0}
-	for _, field := range fields {
-		// if tenantIdField == field.Name().LowerSnakeCase().String() {
-		// 	continue
-		// }
-		vn = vn.Next()
-		fieldRep := module.getField(ctx, field, vn, ix, goPrefix)
-		if fieldRep == nil {
-			continue
-		}
-		fieldRep.Prefix_ = prefix
-		rv = append(rv, fieldRep)
-		message := field.Type().Embed()
-		if message == nil {
-			continue
-		}
-		// if _, internal := tryFieldByName(message, "tenant_id"); !internal {
-		// 	continue
-		// }
-		nesteds := module.getMessageFieldsFull(ctx, message, ix, goPrefix, prefix+getNestedName(field))
-		rv = append(rv, nesteds...)
-	}
-	// fmt.Fprintf(os.Stderr, "🦕 %s: recursivng %s\n", *message.Descriptor().Name, message.FullyQualifiedName())
-
-	return rv
-}
-
 func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))

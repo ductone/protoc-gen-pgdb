@@ -14,8 +14,8 @@ type indexContext struct {
 	ExcludeNested bool
 	SourceFields  []string
 	RawColumns    []string
+	Fields        []*pgs.Field
 	Type          string
-	// Prefix        string
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -90,10 +90,8 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			}
 
 			rv.SourceFields = append(rv.SourceFields, resolution)
-			// fmt.Fprintf(os.Stderr, "🧠: %s: %s -> %s %v\n", fieldName, path, resolution, f)
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
-			// module.getField()
-			// inputType, err := f.Convert.GoType()
+			rv.Fields = append(rv.Fields, &f)
 		}
 	}
 	rv.RawColumns = idx.Columns
@@ -116,7 +114,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 	if err != nil {
 		return nil, err
 	}
-
+	tenantIdField := fieldByName(m, "tenant_id")
 	primaryIndex := &indexContext{
 		ExcludeNested: true,
 		DB: pgdb_v1.Index{
@@ -127,6 +125,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns:   []string{"tenant_id", "pksk"},
 		},
 		SourceFields: []string{"TenantId", "PKSK"},
+		Fields:       []*pgs.Field{&tenantIdField, nil},
 	}
 
 	// So, we learned early in our deployment that having a second unique index
@@ -147,6 +146,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns:   []string{"tenant_id", "pk", "sk"},
 		},
 		SourceFields: []string{"TenantId", "PK", "SK"},
+		Fields:       []*pgs.Field{&tenantIdField, nil, nil},
 	}
 
 	pkskIndexName, err := getIndexName(m, "pksk_split2")
@@ -161,12 +161,14 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns: []string{"tenant_id", "pk", "sk"},
 		},
 		SourceFields: []string{"TenantId", "PK", "SK"},
+		Fields:       []*pgs.Field{&tenantIdField, nil, nil},
 	}
 
 	ftsIndexName, err := getIndexName(m, "fts_data")
 	if err != nil {
 		return nil, err
 	}
+
 	ftsIndex := &indexContext{
 		ExcludeNested: true,
 		DB: pgdb_v1.Index{
@@ -175,6 +177,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns: []string{"tenant_id", "fts_data"},
 		},
 		SourceFields: []string{"FTSData"},
+		Fields:       []*pgs.Field{&tenantIdField, nil},
 	}
 
 	return []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}, nil
