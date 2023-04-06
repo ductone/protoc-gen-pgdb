@@ -136,8 +136,6 @@ func safeOpCheck(indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool,
 	return false
 }
 
-// Safe "fields" reference an index.
-// Some fields are virtual, in that that are not explicitly backed by a pgs.Field in their Message (model) (pksk)
 func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*fieldContext, ix *importTracker) []*safeFieldContext {
 	rv := make([]*safeFieldContext, 0, len(fields))
 	// todo(pquerna): not ideal, little weird way to do this.
@@ -148,14 +146,13 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 			indexByFullName[f] = append(indexByFullName[f], idx)
 		}
 	}
-	for f := range indexByFullName {
-		fmt.Fprintf(os.Stderr, "🌮 source field: %s -> %s\n", m.Name(), f)
-	}
 	missingIndices := map[string]bool{}
 	for key := range indexByFullName {
 		missingIndices[key] = true
 	}
 
+	// Common indexes are mostly virtual (not backed by an actual not f.Field here...)
+	// These are only the `fieldContext` for our Message, ie not the full graph
 	for _, f := range fields {
 		indexTypes := slice.Convert(indexByFullName[f.GoName], func(ic *indexContext) pgdb_v1.MessageOptions_Index_IndexMethod {
 			return ic.DB.Method
@@ -164,7 +161,6 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		if len(indexTypes) == 0 {
 			continue
 		}
-		// fmt.Fprintf(os.Stderr, "🌮 %s: (safe field) %v %t %v\n", *m.Descriptor().Name, f.GoName, f.IsVirtual, f.Field)
 		delete(missingIndices, f.GoName)
 		fieldName := f.GoName
 		if !f.IsVirtual {
@@ -198,18 +194,19 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 	}
 
 	for missingKey := range missingIndices {
-		fmt.Fprintf(os.Stderr, "🌮 missing Key %s -> %s\n", m.Name(), missingKey)
-		found := false
-		for _, ic := range allIndexes {
+		ics := indexByFullName[missingKey]
+		for _, ic := range ics {
+			found := false
 			for i, sf := range ic.SourceFields {
 				if missingKey != sf {
 					continue
 				}
+				fmt.Fprintf(os.Stderr, "🌮 missing Key %s -> %s\n", m.Name(), missingKey)
 				f := ic.Fields[i]
 				if f == nil {
+					module.Debugf("No field for missing index %s.", missingKey)
 					continue
 				}
-				found = true
 				// used for creating vars in templates, ie, not relevant
 				vn := &varNamer{prefix: "🌮", offset: 0}
 				fc := module.getField(ctx, *f, vn, ix, "🌮") //  we don't care about imports either
@@ -236,8 +233,6 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 				_, _ = sb.WriteString("SafeOperators")
 				fieldName := sb.String()
 
-				// fmt.Fprintf(os.Stderr, "🌮 found it!! %s:%s -> (%s.%s)\n", ctx.Name(m).String(), missingKey, prefix, fieldName)
-
 				rv = append(rv, &safeFieldContext{
 					InputType:   inputType,
 					OpsTypeName: fieldName,
@@ -245,11 +240,12 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 					ColName:     ic.DB.Columns[i],
 					Op:          ops,
 				})
+				found = true
 				break
 			}
-		}
-		if !found {
-			panic(fmt.Errorf("cant resolve index: %s:%s", ctx.Name(m).String(), missingKey))
+			if !found {
+				panic(fmt.Errorf("cant resolve index: %s:%s", ctx.Name(m).String(), missingKey))
+			}
 		}
 	}
 	return rv
