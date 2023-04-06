@@ -30,6 +30,14 @@ type Attractions struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	//	option (pgdb.v1.msg).indexes = {
+	//	  name: "oneof"
+	//	  method: INDEX_METHOD_BTREE_GIN,
+	//	  columns: [
+	//	    "tenant_id",
+	//	    "what"
+	//	  ]
+	//	};
 	TenantId  string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	Id        string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 	Numid     int32                  `protobuf:"varint,3,opt,name=numid,proto3" json:"numid,omitempty"`

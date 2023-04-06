@@ -17,15 +17,16 @@ const (
 
 type fieldContext struct {
 	// denotes a realized/virtual field that comes from multiple fields. in this case, F is nil.
-	IsVirtual     bool
-	ExcludeNested bool
-	GoName        string
-	Field         pgs.Field
-	Nested        bool
-	DB            *pgdb_v1.Column
-	DataType      *pgtype.Type
-	Convert       FieldConverter
-	QueryTypeName string
+	IsVirtual       bool
+	ExcludeNested   bool
+	GoName          string
+	Field           pgs.Field
+	Nested          bool
+	DB              *pgdb_v1.Column
+	DataType        *pgtype.Type
+	Convert         FieldConverter
+	QueryTypeName   string
+	FullDBFieldName string
 }
 
 type FieldConverter interface {

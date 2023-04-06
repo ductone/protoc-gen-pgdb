@@ -66,9 +66,8 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		resolution := ""
 		for i, p := range path {
 			// TODO: the path could reference a oneOf which is "virtual"
-			f := fieldByName(message, p)
 			lastP := i == len(path)-1
-
+			f := fieldByName(message, p)
 			if !lastP {
 				resolution += getNestedName(f)
 				message = f.Type().Embed()

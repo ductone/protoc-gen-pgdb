@@ -3,6 +3,7 @@ package pgdb
 import (
 	"fmt"
 	"io"
+	"os"
 	"strings"
 
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
@@ -96,12 +97,20 @@ func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.
 
 func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *importTracker) *qbContext {
 	nsgFields := module.getMessageFields(ctx, m, ix, "m.self")
+	// fmt.Fprintf(os.Stderr, "🦐: %s\n", m.Name())
+	// if m.Name() == "Attractions" {
+	// alls := module.getAllMessageFields(ctx, m, ix, "m.self", "")
+	// for _, fc := range alls {
+	// fmt.Fprintf(os.Stderr, "🦐: %s.%s.%s\n", m.Name(), fc.Prefix, fc.GoName)
+	// }
 
+	// }
+	module.getSafeFields2(ctx, m, ix)
 	return &qbContext{
 		ReceiverType: ctx.Name(m).String(),
 		DbType:       getDbType(ctx, m),
 		QueryType:    getQueryType(ctx, m),
-		QueryFields:  module.getSafeFields(ctx, m, nsgFields, ix),
+		QueryFields:  module.getSafeFields2(ctx, m, ix),
 		NestedFields: getNesteFieldNames(nsgFields),
 		UnsafeType:   getUnsafeType(ctx, m),
 		UnsafeFields: nsgFields,
@@ -135,6 +144,59 @@ func safeOpCheck(indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool,
 	return false
 }
 
+func (module *Module) getSafeFields2(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*safeFieldContext {
+	if m.Name() != "Attractions" {
+		return nil
+	}
+	fields := module.getAllMessageFields(ctx, m, ix, ".", "")
+	rv := make([]*safeFieldContext, 0, len(fields))
+	// todo(pquerna): not ideal, little weird way to do this.
+	allIndexes := module.getMessageIndexes(ctx, m, &importTracker{})
+	indexByFullName := make(map[string][]*indexContext)
+	for _, idx := range allIndexes {
+
+		for _, f := range idx.DB.Columns {
+			indexByFullName[f] = append(indexByFullName[f], idx)
+			// fmt.Fprintf(os.Stderr, "🦐🦐: %s.%s\n", m.Name(), f)
+		}
+	}
+
+	for f := range indexByFullName {
+		fmt.Fprintf(os.Stderr, "🦐🦐: %s.%s\n", m.Name(), f)
+	}
+	for _, f := range fields {
+		indexTypes := slice.Convert(indexByFullName[f.FullDBFieldName], func(ic *indexContext) pgdb_v1.MessageOptions_Index_IndexMethod {
+			return ic.DB.Method
+		})
+
+		if len(indexTypes) == 0 {
+			continue
+		}
+		ops := safeOpsForIndexTypes(indexTypes)
+		if ops.ObjectContains {
+			ix.JSON = true
+		}
+		if ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists {
+			ix.XPQ = true
+		}
+
+		inputType, err := f.Convert.GoType()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(os.Stderr, "🌮: index match: %s %s\n", m.Name(), f.FullDBFieldName)
+		rv = append(rv, &safeFieldContext{
+			InputType:   inputType,
+			OpsTypeName: ctx.Name(m).String() + strings.Join(strings.Split(f.FullDBFieldName, "$"), "") + "SafeOperators",
+			Field:       f,
+			ColName:     f.DB.Name,
+			Op:          ops,
+		})
+	}
+
+	return rv
+}
+
 func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*fieldContext, ix *importTracker) []*safeFieldContext {
 	rv := make([]*safeFieldContext, 0, len(fields))
 	// todo(pquerna): not ideal, little weird way to do this.
@@ -145,9 +207,11 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 			indexByFullName[f] = append(indexByFullName[f], idx)
 		}
 	}
+
 	missingIndices := map[string]bool{}
 	for key := range indexByFullName {
 		missingIndices[key] = true
+
 	}
 
 	// Common indexes are mostly virtual (not backed by an actual not f.Field here...)
