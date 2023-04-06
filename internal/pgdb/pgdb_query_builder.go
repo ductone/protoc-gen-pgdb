@@ -192,6 +192,8 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 		return rv
 	}
 
+	// strategy #2
+	// "missing" indices ought to only correspond to nested indices, which will have a pgs.Field
 	for missingKey := range missingIndices {
 		ics := indexByFullName[missingKey]
 		found := false

@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
@@ -22,7 +21,7 @@ func TestSchemaAttractions(t *testing.T) {
 	schema, err := pgdb_v1.CreateSchema(&Attractions{})
 	require.NoError(t, err)
 	for _, line := range schema {
-		fmt.Printf("%s\n", line)
+		// fmt.Printf("%s\n", line)
 		_, err := pg.DB.Exec(ctx, line)
 		require.NoErrorf(t, err, "TestSchemaPet: failed to execute sql: '\n%s\n'", line)
 	}
