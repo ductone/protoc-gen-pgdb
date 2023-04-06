@@ -256,6 +256,16 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		OverrideExpression: "",
 	})
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("nestednestednested_attractions_models_c_53854283"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("11$52$sfixed_64")},
+		OverrideExpression: "",
+	})
+
 	return rv
 }
 
@@ -932,6 +942,66 @@ func (x *AttractionsZoo_shopFurSafeOperators) ObjectAllKeyExists(keys ...string)
 
 func (x *AttractionsDBQueryBuilder) Fur() *AttractionsZoo_shopFurSafeOperators {
 	return &AttractionsZoo_shopFurSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type AttractionsZoo_shopAnythingSfixed_64SafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsZoo_shopAnythingSfixed_64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"11$52$sfixed_64")
+}
+
+func (x *AttractionsZoo_shopAnythingSfixed_64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"11$52$sfixed_64").Eq(v)
+}
+
+func (x *AttractionsZoo_shopAnythingSfixed_64SafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"11$52$sfixed_64")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *AttractionsZoo_shopAnythingSfixed_64SafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"11$52$sfixed_64")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *AttractionsZoo_shopAnythingSfixed_64SafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"11$52$sfixed_64")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *AttractionsZoo_shopAnythingSfixed_64SafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"11$52$sfixed_64")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *AttractionsZoo_shopAnythingSfixed_64SafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"11$52$sfixed_64")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsZoo_shopAnythingSfixed_64SafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"11$52$sfixed_64")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsDBQueryBuilder) Sfixed64() *AttractionsZoo_shopAnythingSfixed_64SafeOperators {
+	return &AttractionsZoo_shopAnythingSfixed_64SafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type AttractionsTenantIdQueryType struct {

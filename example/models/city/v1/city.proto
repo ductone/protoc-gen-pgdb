@@ -28,6 +28,14 @@ message Attractions {
       "zoo_shop.fur"
     ]
   };
+  option (pgdb.v1.msg).indexes = {
+    name: "nestednestednested"
+    method: INDEX_METHOD_BTREE_GIN,
+    columns: [
+      "tenant_id",
+      "zoo_shop.anything.sfixed_64"
+    ]
+  };
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {
     full_text_type: FULL_TEXT_TYPE_EXACT
