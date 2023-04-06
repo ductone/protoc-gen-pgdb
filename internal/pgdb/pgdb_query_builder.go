@@ -194,8 +194,11 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 
 	for missingKey := range missingIndices {
 		ics := indexByFullName[missingKey]
+		found := false
 		for _, ic := range ics {
-			found := false
+			if found {
+				break
+			}
 			for i, sf := range ic.SourceFields {
 				if missingKey != sf {
 					continue
@@ -241,9 +244,9 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 				found = true
 				break
 			}
-			if !found {
-				panic(fmt.Errorf("cant resolve index: %s:%s", ctx.Name(m).String(), missingKey))
-			}
+		}
+		if !found {
+			panic(fmt.Errorf("cant resolve index: %s:%s", ctx.Name(m).String(), missingKey))
 		}
 	}
 	return rv
