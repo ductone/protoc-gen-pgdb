@@ -3,7 +3,6 @@ package pgdb
 import (
 	"fmt"
 	"io"
-	"os"
 	"strings"
 
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
@@ -201,15 +200,14 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 				if missingKey != sf {
 					continue
 				}
-				fmt.Fprintf(os.Stderr, "🌮 missing Key %s -> %s\n", m.Name(), missingKey)
 				f := ic.Fields[i]
 				if f == nil {
 					module.Debugf("No field for missing index %s.", missingKey)
 					continue
 				}
 				// used for creating vars in templates, ie, not relevant
-				vn := &varNamer{prefix: "🌮", offset: 0}
-				fc := module.getField(ctx, *f, vn, ix, "🌮") //  we don't care about imports either
+				vn := &varNamer{prefix: ".", offset: 0}
+				fc := module.getField(ctx, *f, vn, ix, ".") //  we don't care about imports either
 
 				inputType, err := fc.Convert.GoType()
 				if err != nil {
@@ -227,7 +225,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 				var sb strings.Builder
 
 				_, _ = sb.WriteString(ctx.Name(m).String())
-				for _, s := range strings.Split(ic.RawColumns[i], "🌮") {
+				for _, s := range strings.Split(ic.RawColumns[i], ".") {
 					_, _ = sb.WriteString(cases.Title(language.AmericanEnglish).String(s))
 				}
 				_, _ = sb.WriteString("SafeOperators")

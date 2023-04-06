@@ -25,7 +25,7 @@ message Attractions {
     method: INDEX_METHOD_BTREE_GIN,
     columns: [
       "tenant_id",
-      "zoo_shop🌮fur"
+      "zoo_shop.fur"
     ]
   };
   string tenant_id = 1;

@@ -59,10 +59,9 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 	}
 
 	rv.DB.Method = idx.Method
-	// tenantIdField, _ := getTenantIDField(m)
 
 	for _, fieldName := range idx.Columns {
-		path := strings.Split(fieldName, "🌮")
+		path := strings.Split(fieldName, ".")
 		message := m
 		resolution := ""
 		for i, p := range path {
@@ -75,22 +74,13 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 				message = f.Type().Embed()
 				continue
 			}
-
-			// Access to tenant ids is limited by protoc's limited API (can't do extensions for different pgs.Files),
-			//   but we don't materialize them for nested models anyway...
-			// if i == 0 && p == tenantIdField {
-			// 	// don't snake tenant_id
-			// 	resolution += p
-			// } else {
 			pgColName, err := getColumnName(f)
 
 			if err != nil {
 				panic(err)
 			}
 			resolution += pgColName
-			// }
 
-			// module.Logf("old source fields: %s vs %s", ctx.Name(f).String(), resolution)
 			rv.SourceFields = append(rv.SourceFields, ctx.Name(f).String())
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
 			rv.Fields = append(rv.Fields, &f)
