@@ -14,7 +14,6 @@ type indexContext struct {
 	ExcludeNested bool
 	SourceFields  []string
 	RawColumns    []string
-	Fields        []*pgs.Field
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -67,22 +66,44 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		for i, p := range path {
 			// TODO: the path could reference a oneOf which is "virtual"
 			lastP := i == len(path)-1
-			f := fieldByName(message, p)
+
 			if !lastP {
+				f := fieldByName(message, p)
 				resolution += getNestedName(f)
 				message = f.Type().Embed()
 				continue
 			}
-			pgColName, err := getColumnName(f)
 
-			if err != nil {
-				panic(err)
+			name := ""
+			sourceField := ""
+			// could be a real field!
+			if f, ok := tryFieldByName(message, p); ok {
+				sourceField = ctx.Name(f).String()
+				name, err = getColumnName(f)
+				if err != nil {
+					panic(err)
+				}
+			} else {
+				// look in oneofs!
+				for _, oo := range message.RealOneOfs() {
+					if oo.Name().String() == p {
+						sourceField = ctx.Name(oo).String()
+						name, err = getColumnOneOfName(oo)
+						if err != nil {
+							panic(err)
+						}
+						break
+					}
+				}
 			}
-			resolution += pgColName
+			if name == "" {
+				panic(fmt.Errorf("could not find field for index: %s", path))
+			}
 
-			rv.SourceFields = append(rv.SourceFields, ctx.Name(f).String())
+			resolution += name
+
+			rv.SourceFields = append(rv.SourceFields, sourceField)
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
-			rv.Fields = append(rv.Fields, &f)
 		}
 	}
 	rv.RawColumns = idx.Columns
@@ -105,12 +126,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 	if err != nil {
 		return nil, err
 	}
-	var tenantIdField pgs.Field
-	if fext.TenantIdField != "" {
-		tenantIdField = fieldByName(m, fext.TenantIdField)
-	} else {
-		tenantIdField = fieldByName(m, "tenant_id")
-	}
 
 	primaryIndex := &indexContext{
 		ExcludeNested: true,
@@ -122,7 +137,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns:   []string{"tenant_id", "pksk"},
 		},
 		SourceFields: []string{"TenantId", "PKSK"},
-		Fields:       []*pgs.Field{&tenantIdField, nil},
 	}
 
 	// So, we learned early in our deployment that having a second unique index
@@ -143,7 +157,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns:   []string{"tenant_id", "pk", "sk"},
 		},
 		SourceFields: []string{"TenantId", "PK", "SK"},
-		Fields:       []*pgs.Field{&tenantIdField, nil, nil},
 	}
 
 	pkskIndexName, err := getIndexName(m, "pksk_split2")
@@ -158,7 +171,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns: []string{"tenant_id", "pk", "sk"},
 		},
 		SourceFields: []string{"TenantId", "PK", "SK"},
-		Fields:       []*pgs.Field{&tenantIdField, nil, nil},
 	}
 
 	ftsIndexName, err := getIndexName(m, "fts_data")
@@ -174,7 +186,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns: []string{"tenant_id", "fts_data"},
 		},
 		SourceFields: []string{"FTSData"},
-		Fields:       []*pgs.Field{&tenantIdField, nil},
 	}
 
 	return []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}, nil

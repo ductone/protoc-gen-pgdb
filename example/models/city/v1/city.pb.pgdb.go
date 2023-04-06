@@ -266,6 +266,16 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		OverrideExpression: "",
 	})
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("oneof_attractions_models_city_v1_f6c0dc62"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("what_oneof")},
+		OverrideExpression: "",
+	})
+
 	return rv
 }
 
@@ -882,6 +892,66 @@ func (x *Attractionsfts_dataSafeOperators) ObjectAllKeyExists(keys ...string) ex
 
 func (x *AttractionsDBQueryBuilder) FTSData() *Attractionsfts_dataSafeOperators {
 	return &Attractionsfts_dataSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type Attractionswhat_oneofSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *Attractionswhat_oneofSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+}
+
+func (x *Attractionswhat_oneofSafeOperators) Eq(v int4) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof").Eq(v)
+}
+
+func (x *Attractionswhat_oneofSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *Attractionswhat_oneofSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *Attractionswhat_oneofSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *Attractionswhat_oneofSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *Attractionswhat_oneofSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *Attractionswhat_oneofSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsDBQueryBuilder) What() *Attractionswhat_oneofSafeOperators {
+	return &Attractionswhat_oneofSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type Attractions1152sfixed_64SafeOperators struct {
