@@ -88,7 +88,6 @@ type safeFieldContext struct {
 	InputType   string
 	ColName     string
 	Op          *safeOps
-	Prefix      string
 }
 
 func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -149,6 +148,9 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 			indexByFullName[f] = append(indexByFullName[f], idx)
 		}
 	}
+	for f := range indexByFullName {
+		fmt.Fprintf(os.Stderr, "🌮 source field: %s -> %s\n", m.Name(), f)
+	}
 	missingIndices := map[string]bool{}
 	for key := range indexByFullName {
 		missingIndices[key] = true
@@ -196,6 +198,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 	}
 
 	for missingKey := range missingIndices {
+		fmt.Fprintf(os.Stderr, "🌮 missing Key %s -> %s\n", m.Name(), missingKey)
 		found := false
 		for _, ic := range allIndexes {
 			for i, sf := range ic.SourceFields {
@@ -227,34 +230,20 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*
 				var sb strings.Builder
 
 				_, _ = sb.WriteString(ctx.Name(m).String())
-				for i, sf := range ic.RawColumns {
-					for _, s := range strings.Split(sf, "🌮") {
-						_, _ = sb.WriteString(cases.Title(language.AmericanEnglish).String(s))
-					}
-					if i != len(ic.RawColumns)-1 {
-						_, _ = sb.WriteString("_And_")
-					}
+				for _, s := range strings.Split(ic.RawColumns[i], "🌮") {
+					_, _ = sb.WriteString(cases.Title(language.AmericanEnglish).String(s))
 				}
 				_, _ = sb.WriteString("SafeOperators")
 				fieldName := sb.String()
 
-				prefix := ""
-				for _, sf := range ic.SourceFields {
-					if sf == "tenant_id" {
-						continue
-					}
-					prefix = sf
-				}
-
-				fmt.Fprintf(os.Stderr, "🌮 found it!! %s:%s -> (%s.%s)\n", ctx.Name(m).String(), missingKey, prefix, fieldName)
+				// fmt.Fprintf(os.Stderr, "🌮 found it!! %s:%s -> (%s.%s)\n", ctx.Name(m).String(), missingKey, prefix, fieldName)
 
 				rv = append(rv, &safeFieldContext{
 					InputType:   inputType,
-					OpsTypeName: ctx.Name(m).String() + fieldName + "SafeOperators",
+					OpsTypeName: fieldName,
 					Field:       fc,
-					ColName:     prefix,
+					ColName:     ic.DB.Columns[i],
 					Op:          ops,
-					Prefix:      prefix,
 				})
 				break
 			}

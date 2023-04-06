@@ -15,7 +15,6 @@ type indexContext struct {
 	SourceFields  []string
 	RawColumns    []string
 	Fields        []*pgs.Field
-	Type          string
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -60,7 +59,7 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 	}
 
 	rv.DB.Method = idx.Method
-	tenantIdField, _ := getTenantIDField(m)
+	// tenantIdField, _ := getTenantIDField(m)
 
 	for _, fieldName := range idx.Columns {
 		path := strings.Split(fieldName, "🌮")
@@ -79,19 +78,20 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 
 			// Access to tenant ids is limited by protoc's limited API (can't do extensions for different pgs.Files),
 			//   but we don't materialize them for nested models anyway...
-			if i == 0 && p == tenantIdField {
-				// don't snake tenant_id
-				resolution += p
-			} else {
-				pgColName, err := getColumnName(f)
+			// if i == 0 && p == tenantIdField {
+			// 	// don't snake tenant_id
+			// 	resolution += p
+			// } else {
+			pgColName, err := getColumnName(f)
 
-				if err != nil {
-					panic(err)
-				}
-				resolution += pgColName
+			if err != nil {
+				panic(err)
 			}
+			resolution += pgColName
+			// }
 
-			rv.SourceFields = append(rv.SourceFields, resolution)
+			// module.Logf("old source fields: %s vs %s", ctx.Name(f).String(), resolution)
+			rv.SourceFields = append(rv.SourceFields, ctx.Name(f).String())
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
 			rv.Fields = append(rv.Fields, &f)
 		}

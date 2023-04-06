@@ -712,6 +712,49 @@ func (x *PetTenantIdSafeOperators) NotBetween(start string, end string) exp.Rang
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
 }
 
+func (x *PetTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *PetTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *PetTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *PetTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *PetTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *PetTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
 func (x *PetDBQueryBuilder) TenantId() *PetTenantIdSafeOperators {
 	return &PetTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
@@ -959,20 +1002,20 @@ func (x *PetDBQueryBuilder) FTSData() *PetFTSDataSafeOperators {
 	return &PetFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-type PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators struct {
+type PetProfileSafeOperators struct {
 	prefix    string
 	tableName string
 }
 
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *PetProfileSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 }
 
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) Eq(v string) exp.BooleanExpression {
+func (x *PetProfileSafeOperators) Eq(v any) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile").Eq(v)
 }
 
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+func (x *PetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error
 	var data []byte
 
@@ -990,93 +1033,33 @@ func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectContains(o
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectPathExists(path string) exp.Expression {
+func (x *PetProfileSafeOperators) ObjectPathExists(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectPath(path string) exp.Expression {
+func (x *PetProfileSafeOperators) ObjectPath(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectKeyExists(key string) exp.Expression {
+func (x *PetProfileSafeOperators) ObjectKeyExists(key string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+func (x *PetProfileSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+func (x *PetProfileSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
-func (x *PetDBQueryBuilder) TenantId() *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators {
-	return &PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators{tableName: x.tableName, prefix: "pb$"}
-}
-
-type PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators struct {
-	prefix    string
-	tableName string
-}
-
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
-}
-
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) Eq(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile").Eq(v)
-}
-
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"profile")
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
-func (x *PetDBQueryBuilder) Profile() *PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators {
-	return &PetPetTenant_id_And_ProfileSafeOperatorsSafeOperators{tableName: x.tableName, prefix: "pb$"}
+func (x *PetDBQueryBuilder) Profile() *PetProfileSafeOperators {
+	return &PetProfileSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type PetTenantIdQueryType struct {
