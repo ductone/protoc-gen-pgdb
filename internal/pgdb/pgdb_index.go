@@ -10,10 +10,9 @@ import (
 )
 
 type indexContext struct {
-	DB            pgdb_v1.Index
-	ExcludeNested bool
-	SourceFields  []string
-	RawColumns    []string
+	DB             pgdb_v1.Index
+	ExcludeNested  bool
+	HumanDBColumns []string // [tenant_id zoo_shop.fur] vs DB.Cols: [tenant_id 11$fur]
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -64,7 +63,6 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		message := m
 		resolution := ""
 		for i, p := range path {
-			// TODO: the path could reference a oneOf which is "virtual"
 			lastP := i == len(path)-1
 
 			if !lastP {
@@ -75,10 +73,8 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			}
 
 			name := ""
-			sourceField := ""
 			// could be a real field!
 			if f, ok := tryFieldByName(message, p); ok {
-				sourceField = ctx.Name(f).String()
 				name, err = getColumnName(f)
 				if err != nil {
 					panic(err)
@@ -87,7 +83,6 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 				// look in oneofs!
 				for _, oo := range message.RealOneOfs() {
 					if oo.Name().String() == p {
-						sourceField = ctx.Name(oo).String()
 						name, err = getColumnOneOfName(oo)
 						if err != nil {
 							panic(err)
@@ -101,12 +96,10 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			}
 
 			resolution += name
-
-			rv.SourceFields = append(rv.SourceFields, sourceField)
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
 		}
 	}
-	rv.RawColumns = idx.Columns
+	rv.HumanDBColumns = idx.Columns
 	return rv
 }
 
@@ -136,7 +129,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:   []string{"tenant_id", "pksk"},
 		},
-		SourceFields: []string{"TenantId", "PKSK"},
+		HumanDBColumns: []string{"tenant_id", "pksk"},
 	}
 
 	// So, we learned early in our deployment that having a second unique index
@@ -156,7 +149,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:   []string{"tenant_id", "pk", "sk"},
 		},
-		SourceFields: []string{"TenantId", "PK", "SK"},
+		HumanDBColumns: []string{"tenant_id", "pk", "sk"},
 	}
 
 	pkskIndexName, err := getIndexName(m, "pksk_split2")
@@ -170,7 +163,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns: []string{"tenant_id", "pk", "sk"},
 		},
-		SourceFields: []string{"TenantId", "PK", "SK"},
+		HumanDBColumns: []string{"tenant_id", "pk", "sk"},
 	}
 
 	ftsIndexName, err := getIndexName(m, "fts_data")
@@ -185,7 +178,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			Columns: []string{"tenant_id", "fts_data"},
 		},
-		SourceFields: []string{"FTSData"},
+		HumanDBColumns: []string{"tenant_id", "fts_data"},
 	}
 
 	return []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}, nil

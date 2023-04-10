@@ -26,7 +26,7 @@ type fieldContext struct {
 	DataType        *pgtype.Type
 	Convert         FieldConverter
 	QueryTypeName   string
-	FullDBFieldName string
+	DBFieldNameDeep string
 }
 
 type FieldConverter interface {

@@ -20,10 +20,6 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	pgWriteString(buf, desc.TableName())
 	_, _ = buf.WriteString("\n(\n")
 
-	// for _, f := range desc.Fields() {
-	// 	fmt.Fprintf(os.Stderr, "🦕field🦕: %s, %s\n", f.Name, f.Type)
-	// }
-
 	_, _ = buf.WriteString(
 		strings.Join(
 			slice.Convert(desc.Fields(), col2spec),

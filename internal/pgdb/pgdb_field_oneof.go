@@ -57,7 +57,7 @@ type oneofFieldContext struct {
 }
 
 func (tidc *oneofDataConvert) GoType() (string, error) {
-	return pgTypeInt4, nil
+	return "int32", nil
 }
 
 func (fdc *oneofDataConvert) CodeForValue() (string, error) {

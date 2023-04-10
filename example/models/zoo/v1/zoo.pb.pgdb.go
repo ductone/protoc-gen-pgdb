@@ -2,15 +2,17 @@
 package v1
 
 import (
+	"encoding/json"
 	"strings"
 
 	"time"
 
 	animals_v1 "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1"
 
-	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-
 	"github.com/doug-martin/goqu/v9/exp"
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+	"github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -564,6 +566,353 @@ func (x *ShopDBQueryBuilder) WithTable(t string) *ShopDBQueryBuilder {
 
 func (x *ShopDBQueryBuilder) Unsafe() *ShopDBQueryUnsafe {
 	return &ShopDBQueryUnsafe{tableName: x.tableName}
+}
+
+type ShopTenantIdSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+}
+
+func (x *ShopTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
+}
+
+func (x *ShopTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Neq(v)
+}
+
+func (x *ShopTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gt(v)
+}
+
+func (x *ShopTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gte(v)
+}
+
+func (x *ShopTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lt(v)
+}
+
+func (x *ShopTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lte(v)
+}
+
+func (x *ShopTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").In(v)
+}
+
+func (x *ShopTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotIn(v)
+}
+
+func (x *ShopTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNull()
+}
+
+func (x *ShopTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNotNull()
+}
+
+func (x *ShopTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *ShopDBQueryBuilder) TenantId() *ShopTenantIdSafeOperators {
+	return &ShopTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type ShopPKSKSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
+}
+
+func (x *ShopPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Eq(v)
+}
+
+func (x *ShopPKSKSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Neq(v)
+}
+
+func (x *ShopPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gt(v)
+}
+
+func (x *ShopPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gte(v)
+}
+
+func (x *ShopPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lt(v)
+}
+
+func (x *ShopPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lte(v)
+}
+
+func (x *ShopPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").In(v)
+}
+
+func (x *ShopPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotIn(v)
+}
+
+func (x *ShopPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNull()
+}
+
+func (x *ShopPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNotNull()
+}
+
+func (x *ShopPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopDBQueryBuilder) PKSK() *ShopPKSKSafeOperators {
+	return &ShopPKSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type ShopPKSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+}
+
+func (x *ShopPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
+}
+
+func (x *ShopPKSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Neq(v)
+}
+
+func (x *ShopPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gt(v)
+}
+
+func (x *ShopPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gte(v)
+}
+
+func (x *ShopPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lt(v)
+}
+
+func (x *ShopPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lte(v)
+}
+
+func (x *ShopPKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").In(v)
+}
+
+func (x *ShopPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotIn(v)
+}
+
+func (x *ShopPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNull()
+}
+
+func (x *ShopPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNotNull()
+}
+
+func (x *ShopPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopDBQueryBuilder) PK() *ShopPKSafeOperators {
+	return &ShopPKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type ShopSKSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+}
+
+func (x *ShopSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Eq(v)
+}
+
+func (x *ShopSKSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Neq(v)
+}
+
+func (x *ShopSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gt(v)
+}
+
+func (x *ShopSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gte(v)
+}
+
+func (x *ShopSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lt(v)
+}
+
+func (x *ShopSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lte(v)
+}
+
+func (x *ShopSKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").In(v)
+}
+
+func (x *ShopSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotIn(v)
+}
+
+func (x *ShopSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNull()
+}
+
+func (x *ShopSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNotNull()
+}
+
+func (x *ShopSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopDBQueryBuilder) SK() *ShopSKSafeOperators {
+	return &ShopSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type ShopFTSDataSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *ShopFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
+func (x *ShopFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
+}
+
+func (x *ShopFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *ShopFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *ShopFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *ShopFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *ShopFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *ShopFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *ShopDBQueryBuilder) FTSData() *ShopFTSDataSafeOperators {
+	return &ShopFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type ShopTenantIdQueryType struct {

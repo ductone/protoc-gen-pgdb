@@ -3,10 +3,7 @@ package pgdb
 import (
 	"fmt"
 	"io"
-	"os"
-	"strings"
 
-	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
@@ -94,26 +91,17 @@ func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.
 }
 
 func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *importTracker) *qbContext {
-	nsgFields := module.getMessageFields(ctx, m, ix, "m.self")
-	// fmt.Fprintf(os.Stderr, "🦐: %s\n", m.Name())
-	// if m.Name() == "Attractions" {
-	// alls := module.getAllMessageFields(ctx, m, ix, "m.self", "")
-	// for _, fc := range alls {
-	// fmt.Fprintf(os.Stderr, "🦐: %s.%s.%s\n", m.Name(), fc.Prefix, fc.GoName)
-	// }
-
-	// }
-	module.getSafeFields2(ctx, m, ix)
+	msgFields := module.getMessageFields(ctx, m, ix, "m.self")
 	return &qbContext{
 		ReceiverType: ctx.Name(m).String(),
 		DbType:       getDbType(ctx, m),
 		QueryType:    getQueryType(ctx, m),
-		QueryFields:  module.getSafeFields2(ctx, m, ix),
-		NestedFields: getNesteFieldNames(nsgFields),
+		QueryFields:  module.getSafeFields(ctx, m, ix),
+		NestedFields: getNestedFieldNames(msgFields),
 		UnsafeType:   getUnsafeType(ctx, m),
-		UnsafeFields: nsgFields,
+		UnsafeFields: msgFields,
 		ColumnType:   getColumnType(ctx, m),
-		ColumnFields: nsgFields,
+		ColumnFields: msgFields,
 	}
 }
 
@@ -142,41 +130,32 @@ func safeOpCheck(indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool,
 	return false
 }
 
-func (module *Module) getSafeFields2(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*safeFieldContext {
-	if m.Name() != "Attractions" {
-		return nil
-	}
-	fields := module.getAllMessageFields(ctx, m, ix, ".", "")
+func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*safeFieldContext {
+	fields := module.getMessageFieldsDeep(ctx, m, ix, "m.self", "", "")
 	rv := make([]*safeFieldContext, 0, len(fields))
-	// todo(pquerna): not ideal, little weird way to do this.
-	allIndexes := module.getMessageIndexes(ctx, m, &importTracker{})
-	indexByFullName := make(map[string][]*indexContext)
-	for _, idx := range allIndexes {
 
+	// uniquify index by path or else we'll double generate methods
+	allIndexes := module.getMessageIndexes(ctx, m, &importTracker{})
+	indexByFullName := make(map[string][]pgdb_v1.MessageOptions_Index_IndexMethod)
+	missingIndices := map[string]bool{}
+	for _, idx := range allIndexes {
 		for _, f := range idx.DB.Columns {
-			indexByFullName[f] = append(indexByFullName[f], idx)
-			// fmt.Fprintf(os.Stderr, "🦐🦐: %s.%s\n", m.Name(), f)
+			if _, ok := indexByFullName[f]; !ok {
+				indexByFullName[f] = []pgdb_v1.MessageOptions_Index_IndexMethod{}
+			}
+			indexByFullName[f] = append(indexByFullName[f], idx.DB.Method)
+			missingIndices[f] = true
 		}
 	}
 
-	missingIndices := map[string]bool{}
-	for key := range indexByFullName {
-		missingIndices[key] = true
-
-	}
-	for f := range indexByFullName {
-		fmt.Fprintf(os.Stderr, "🦐🦐: %s.%s\n", m.Name(), f)
-	}
 	for _, f := range fields {
-		indexTypes := slice.Convert(indexByFullName[f.FullDBFieldName], func(ic *indexContext) pgdb_v1.MessageOptions_Index_IndexMethod {
-			return ic.DB.Method
-		})
-
-		if len(indexTypes) == 0 {
+		methods := indexByFullName[f.DBFieldNameDeep]
+		if len(methods) == 0 {
 			continue
 		}
-		delete(missingIndices, f.FullDBFieldName)
-		ops := safeOpsForIndexTypes(indexTypes)
+		delete(missingIndices, f.DBFieldNameDeep)
+
+		ops := safeOpsForIndexTypes(methods)
 		if ops.ObjectContains {
 			ix.JSON = true
 		}
@@ -188,10 +167,15 @@ func (module *Module) getSafeFields2(ctx pgsgo.Context, m pgs.Message, ix *impor
 		if err != nil {
 			panic(err)
 		}
-		fmt.Fprintf(os.Stderr, "🌮: index match: %s %s\n", m.Name(), f.FullDBFieldName)
+
+		if f.GoName == "" {
+			panic(fmt.Errorf("missing goName for field context: %s:\n%v", m.Name(), f))
+		}
+
+		// fmt.Fprintf(os.Stderr, "🌮: index match: %s.%s\n", m.Name(), f.GoName)
 		rv = append(rv, &safeFieldContext{
 			InputType:   inputType,
-			OpsTypeName: ctx.Name(m).String() + strings.Join(strings.Split(f.FullDBFieldName, "$"), "") + "SafeOperators",
+			OpsTypeName: ctx.Name(m).String() + f.GoName + "SafeOperators",
 			Field:       f,
 			ColName:     f.DB.Name,
 			Op:          ops,
@@ -202,127 +186,6 @@ func (module *Module) getSafeFields2(ctx pgsgo.Context, m pgs.Message, ix *impor
 	}
 	return rv
 }
-
-// func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, fields []*fieldContext, ix *importTracker) []*safeFieldContext {
-// 	rv := make([]*safeFieldContext, 0, len(fields))
-// 	// todo(pquerna): not ideal, little weird way to do this.
-// 	allIndexes := module.getMessageIndexes(ctx, m, &importTracker{})
-// 	indexByFullName := make(map[string][]*indexContext)
-// 	for _, idx := range allIndexes {
-// 		for _, f := range idx.SourceFields {
-// 			indexByFullName[f] = append(indexByFullName[f], idx)
-// 		}
-// 	}
-
-// 	missingIndices := map[string]bool{}
-// 	for key := range indexByFullName {
-// 		missingIndices[key] = true
-
-// 	}
-
-// 	// Common indexes are mostly virtual (not backed by an actual not f.Field here...)
-// 	// These are only the `fieldContext` for our Message, ie not the full graph
-// 	for _, f := range fields {
-// 		indexTypes := slice.Convert(indexByFullName[f.GoName], func(ic *indexContext) pgdb_v1.MessageOptions_Index_IndexMethod {
-// 			return ic.DB.Method
-// 		})
-
-// 		if len(indexTypes) == 0 {
-// 			continue
-// 		}
-// 		delete(missingIndices, f.GoName)
-// 		fieldName := f.GoName
-// 		if !f.IsVirtual {
-// 			fieldName = ctx.Name(f.Field).String()
-// 		}
-
-// 		ops := safeOpsForIndexTypes(indexTypes)
-// 		if ops.ObjectContains {
-// 			ix.JSON = true
-// 		}
-// 		if ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists {
-// 			ix.XPQ = true
-// 		}
-
-// 		inputType, err := f.Convert.GoType()
-// 		if err != nil {
-// 			panic(err)
-// 		}
-
-// 		rv = append(rv, &safeFieldContext{
-// 			InputType:   inputType,
-// 			OpsTypeName: ctx.Name(m).String() + fieldName + "SafeOperators",
-// 			Field:       f,
-// 			ColName:     f.DB.Name,
-// 			Op:          ops,
-// 		})
-// 	}
-
-// 	if len(missingIndices) == 0 {
-// 		return rv
-// 	}
-
-// 	// strategy #2
-// 	// "missing" indices ought to only correspond to nested indices, which will have a pgs.Field
-// 	for missingKey := range missingIndices {
-// 		ics := indexByFullName[missingKey]
-// 		found := false
-// 		for _, ic := range ics {
-// 			if found {
-// 				break
-// 			}
-// 			for i, sf := range ic.SourceFields {
-// 				if missingKey != sf {
-// 					continue
-// 				}
-// 				f := ic.Fields[i]
-// 				if f == nil {
-// 					module.Debugf("No field for missing index %s.", missingKey)
-// 					continue
-// 				}
-// 				// used for creating vars in templates, ie, not relevant
-// 				vn := &varNamer{prefix: ".", offset: 0}
-// 				fc := module.getField(ctx, *f, vn, ix, ".") //  we don't care about imports either
-
-// 				inputType, err := fc.Convert.GoType()
-// 				if err != nil {
-// 					panic(err)
-// 				}
-// 				indexTypes := []pgdb_v1.MessageOptions_Index_IndexMethod{ic.DB.Method}
-// 				ops := safeOpsForIndexTypes(indexTypes)
-// 				if ops.ObjectContains {
-// 					ix.JSON = true
-// 				}
-// 				if ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists {
-// 					ix.XPQ = true
-// 				}
-
-// 				var sb strings.Builder
-
-// 				_, _ = sb.WriteString(ctx.Name(m).String())
-// 				for _, s := range strings.Split(ic.RawColumns[i], ".") {
-// 					_, _ = sb.WriteString(cases.Title(language.AmericanEnglish).String(s))
-// 				}
-// 				_, _ = sb.WriteString("SafeOperators")
-// 				fieldName := sb.String()
-
-// 				rv = append(rv, &safeFieldContext{
-// 					InputType:   inputType,
-// 					OpsTypeName: fieldName,
-// 					Field:       fc,
-// 					ColName:     ic.DB.Columns[i],
-// 					Op:          ops,
-// 				})
-// 				found = true
-// 				break
-// 			}
-// 		}
-// 		if !found {
-// 			panic(fmt.Errorf("cant resolve index: %s:%s", ctx.Name(m).String(), missingKey))
-// 		}
-// 	}
-// 	return rv
-// }
 
 func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod) *safeOps {
 	indexMethods := make(map[pgdb_v1.MessageOptions_Index_IndexMethod]bool)

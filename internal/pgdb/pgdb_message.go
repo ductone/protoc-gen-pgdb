@@ -67,20 +67,20 @@ func (fn *varNamer) String() string {
 	return fmt.Sprintf("%s%d", fn.prefix, fn.offset)
 }
 
-func (module *Module) getAllMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string, prefix string) []*fieldContext {
+func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string, dbPrefix string, humanPrefix string) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
 	tenantIdField := "tenant_id"
 
 	// only top level embed gets a common field and has a full protoc API
-	if prefix == "" {
+	if dbPrefix == "" {
 		ix.ProtobufEncodingJSON = true
 		cfs, err := getCommonFields(ctx, m, ix)
 		if err != nil {
 			panic(err)
 		}
 		for _, cf := range cfs {
-			cf.FullDBFieldName = cf.DB.Name
+			cf.DBFieldNameDeep = cf.DB.Name
 			rv = append(rv, cf)
 		}
 
@@ -109,7 +109,8 @@ func (module *Module) getAllMessageFields(ctx pgsgo.Context, m pgs.Message, ix *
 		if err != nil {
 			panic(err)
 		}
-		fc.FullDBFieldName = prefix + name
+		fc.DBFieldNameDeep = dbPrefix + name
+		fc.GoName = humanPrefix + fc.GoName
 		rv = append(rv, fc)
 	}
 
@@ -128,7 +129,14 @@ func (module *Module) getAllMessageFields(ctx pgsgo.Context, m pgs.Message, ix *
 		if err != nil {
 			panic(err)
 		}
-		fc.FullDBFieldName = prefix + name
+
+		fc.DBFieldNameDeep = dbPrefix + name
+		// don't do exponential growth of prefixes..
+		nextHumanPrefix := humanPrefix + fc.GoName
+		if humanPrefix != "" {
+			fc.GoName = humanPrefix
+		}
+
 		rv = append(rv, fc)
 
 		if fc.Field == nil {
@@ -138,10 +146,10 @@ func (module *Module) getAllMessageFields(ctx pgsgo.Context, m pgs.Message, ix *
 		if embededMessage == nil {
 			continue
 		}
+
 		pre := getNestedName(fc.Field)
 
-		// fmt.Fprintf(os.Stderr, "🌮 : stepping into embed %s.%s -> %s (%s)\n", m.Name(), pre, embededMessage.Name(), prefix+pre)
-		rv = append(rv, module.getAllMessageFields(ctx, embededMessage, ix, goPrefix, prefix+pre)...)
+		rv = append(rv, module.getMessageFieldsDeep(ctx, embededMessage, ix, goPrefix, dbPrefix+pre, nextHumanPrefix)...)
 	}
 	return rv
 }
