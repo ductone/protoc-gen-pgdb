@@ -184,7 +184,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 		}
 	}
 
-	rv = append(rv, module.getMessageFieldsInner(ctx, m, fields, vn, tenantIdField, ix, goPrefix)...)
+	rv = append(rv, module.getMessageFieldsInner(ctx, fields, vn, tenantIdField, ix, goPrefix)...)
 
 	vn = &varNamer{prefix: "oneof", offset: 0}
 	for _, oneof := range m.RealOneOfs() {
@@ -195,16 +195,10 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 		}
 	}
 
-	// for _, field := range rv {
-	// 	if field.Field == nil {
-	// 		continue
-	// 	}
-	// 	ix.AddProtoEntity(field.Field)
-	// }
 	return rv
 }
 
-func (module *Module) getMessageFieldsInner(ctx pgsgo.Context, m pgs.Message, fields []pgs.Field, vn *varNamer, tenantIdField string, ix *importTracker, goPrefix string) []*fieldContext {
+func (module *Module) getMessageFieldsInner(ctx pgsgo.Context, fields []pgs.Field, vn *varNamer, tenantIdField string, ix *importTracker, goPrefix string) []*fieldContext {
 	rv := make([]*fieldContext, 0, len(fields))
 	for _, field := range fields {
 		// tenant_id done via common fields
