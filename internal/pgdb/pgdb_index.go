@@ -10,9 +10,8 @@ import (
 )
 
 type indexContext struct {
-	DB             pgdb_v1.Index
-	ExcludeNested  bool
-	HumanDBColumns []string // [tenant_id zoo_shop.fur] vs DB.Cols: [tenant_id 11$fur]
+	DB            pgdb_v1.Index
+	ExcludeNested bool
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -99,7 +98,6 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
 		}
 	}
-	rv.HumanDBColumns = idx.Columns
 	return rv
 }
 
@@ -129,7 +127,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:   []string{"tenant_id", "pksk"},
 		},
-		HumanDBColumns: []string{"tenant_id", "pksk"},
 	}
 
 	// So, we learned early in our deployment that having a second unique index
@@ -149,7 +146,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:   []string{"tenant_id", "pk", "sk"},
 		},
-		HumanDBColumns: []string{"tenant_id", "pk", "sk"},
 	}
 
 	pkskIndexName, err := getIndexName(m, "pksk_split2")
@@ -163,7 +159,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns: []string{"tenant_id", "pk", "sk"},
 		},
-		HumanDBColumns: []string{"tenant_id", "pk", "sk"},
 	}
 
 	ftsIndexName, err := getIndexName(m, "fts_data")
@@ -178,7 +173,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			Columns: []string{"tenant_id", "fts_data"},
 		},
-		HumanDBColumns: []string{"tenant_id", "fts_data"},
 	}
 
 	return []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}, nil
