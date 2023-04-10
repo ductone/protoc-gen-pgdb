@@ -110,7 +110,9 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 			panic(err)
 		}
 		fc.DBFieldNameDeep = dbPrefix + name
-		fc.GoName = humanPrefix + fc.GoName
+		if humanPrefix != "" {
+			fc.GoName = humanPrefix + fc.GoName
+		}
 		rv = append(rv, fc)
 	}
 
@@ -131,20 +133,23 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 		}
 
 		fc.DBFieldNameDeep = dbPrefix + name
-		// don't do exponential growth of prefixes..
+
+		rv = append(rv, fc)
+		var embededMessage pgs.Message
+		if fc.Field != nil {
+			embededMessage = fc.Field.Type().Embed()
+		}
+
+		if embededMessage == nil {
+			if humanPrefix != "" {
+				fc.GoName = humanPrefix + fc.GoName
+			}
+			continue
+		}
+		// NOTE: humanPrefixes need to avoid exponential growth of prefixes (for two deep or lower).
 		nextHumanPrefix := humanPrefix + fc.GoName
 		if humanPrefix != "" {
 			fc.GoName = humanPrefix
-		}
-
-		rv = append(rv, fc)
-
-		if fc.Field == nil {
-			continue
-		}
-		embededMessage := fc.Field.Type().Embed()
-		if embededMessage == nil {
-			continue
 		}
 
 		pre := getNestedName(fc.Field)

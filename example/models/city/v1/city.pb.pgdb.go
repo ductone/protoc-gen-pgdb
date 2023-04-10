@@ -954,20 +954,20 @@ func (x *AttractionsDBQueryBuilder) What() *AttractionsWhatSafeOperators {
 	return &AttractionsWhatSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-type AttractionsZooShopAnythingSafeOperators struct {
+type AttractionsZooShopAnythingSfixed64SafeOperators struct {
 	prefix    string
 	tableName string
 }
 
-func (x *AttractionsZooShopAnythingSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
 }
 
-func (x *AttractionsZooShopAnythingSafeOperators) Eq(v int64) exp.BooleanExpression {
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Eq(v int64) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64").Eq(v)
 }
 
-func (x *AttractionsZooShopAnythingSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error
 	var data []byte
 
@@ -985,49 +985,49 @@ func (x *AttractionsZooShopAnythingSafeOperators) ObjectContains(obj interface{}
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
-func (x *AttractionsZooShopAnythingSafeOperators) ObjectPathExists(path string) exp.Expression {
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectPathExists(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
-func (x *AttractionsZooShopAnythingSafeOperators) ObjectPath(path string) exp.Expression {
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectPath(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
-func (x *AttractionsZooShopAnythingSafeOperators) ObjectKeyExists(key string) exp.Expression {
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectKeyExists(key string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
-func (x *AttractionsZooShopAnythingSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
-func (x *AttractionsZooShopAnythingSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
-func (x *AttractionsDBQueryBuilder) ZooShopAnything() *AttractionsZooShopAnythingSafeOperators {
-	return &AttractionsZooShopAnythingSafeOperators{tableName: x.tableName, prefix: "pb$"}
+func (x *AttractionsDBQueryBuilder) ZooShopAnythingSfixed64() *AttractionsZooShopAnythingSfixed64SafeOperators {
+	return &AttractionsZooShopAnythingSfixed64SafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
-type AttractionsZooShopSafeOperators struct {
+type AttractionsZooShopFurSafeOperators struct {
 	prefix    string
 	tableName string
 }
 
-func (x *AttractionsZooShopSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *AttractionsZooShopFurSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
 }
 
-func (x *AttractionsZooShopSafeOperators) Eq(v int32) exp.BooleanExpression {
+func (x *AttractionsZooShopFurSafeOperators) Eq(v int32) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur").Eq(v)
 }
 
-func (x *AttractionsZooShopSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+func (x *AttractionsZooShopFurSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error
 	var data []byte
 
@@ -1045,33 +1045,33 @@ func (x *AttractionsZooShopSafeOperators) ObjectContains(obj interface{}) (exp.E
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
-func (x *AttractionsZooShopSafeOperators) ObjectPathExists(path string) exp.Expression {
+func (x *AttractionsZooShopFurSafeOperators) ObjectPathExists(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
-func (x *AttractionsZooShopSafeOperators) ObjectPath(path string) exp.Expression {
+func (x *AttractionsZooShopFurSafeOperators) ObjectPath(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
-func (x *AttractionsZooShopSafeOperators) ObjectKeyExists(key string) exp.Expression {
+func (x *AttractionsZooShopFurSafeOperators) ObjectKeyExists(key string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
-func (x *AttractionsZooShopSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+func (x *AttractionsZooShopFurSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
-func (x *AttractionsZooShopSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+func (x *AttractionsZooShopFurSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
-func (x *AttractionsDBQueryBuilder) ZooShop() *AttractionsZooShopSafeOperators {
-	return &AttractionsZooShopSafeOperators{tableName: x.tableName, prefix: "pb$"}
+func (x *AttractionsDBQueryBuilder) ZooShopFur() *AttractionsZooShopFurSafeOperators {
+	return &AttractionsZooShopFurSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type AttractionsTenantIdQueryType struct {
