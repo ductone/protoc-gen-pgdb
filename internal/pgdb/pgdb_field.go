@@ -36,16 +36,16 @@ type FieldConverter interface {
 	VarForAppend() (string, error)
 }
 
-func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker, goPrefix string) *fieldContext {
+func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker, goPrefix string) (*fieldContext, error) {
 	ext := pgdb_v1.FieldOptions{}
 	_, err := f.Extension(pgdb_v1.E_Options, &ext)
 	if err != nil {
-		panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err))
+		return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err)
 	}
 
 	if ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT {
 		// explict option to just not store this in postgres
-		return nil
+		return nil, nil
 	}
 
 	isArray := f.Type().ProtoLabel() == pgs.Repeated && !f.Type().IsMap()
@@ -53,8 +53,8 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 
 	pgColName, err := getColumnName(f)
 	if err != nil {
-		panic(fmt.Errorf("pgdb: getColumnName failed for: %v: %s (of type %s)",
-			pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+		return nil, fmt.Errorf("pgdb: getColumnName failed for: %v: %s (of type %s)",
+			pt, f.FullyQualifiedName(), f.Descriptor().GetType())
 	}
 
 	convertDef := &fieldConvert{
@@ -128,7 +128,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 			switch f.Descriptor().GetTypeName() {
 			case ".google.protobuf.Any":
 				if isArray {
-					panic(fmt.Errorf("pgdb: unsupported field type: %v: %s: repeated Any not supported", pt, f.FullyQualifiedName()))
+					return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s: repeated Any not supported", pt, f.FullyQualifiedName())
 				}
 				convertDef.PostgresTypeName = pgTypeJSONB
 				convertDef.TypeConversion = gtPbWktAny
@@ -155,19 +155,19 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 
 			default:
 				if isArray {
-					panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
-						pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+					return nil, fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
+						pt, f.FullyQualifiedName(), f.Descriptor().GetType())
 				}
 				convertDef.TypeConversion = gtPbNestedMsg
 				convertDef.NestedPrefix = getNestedName(f)
 			}
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT:
 			// explict option to just not store this in postgres
-			return nil
+			return nil, nil
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND:
 			if isArray {
-				panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
-					pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+				return nil, fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
+					pt, f.FullyQualifiedName(), f.Descriptor().GetType())
 			}
 			convertDef.TypeConversion = gtPbNestedMsg
 			convertDef.NestedPrefix = getNestedName(f)
@@ -176,8 +176,8 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 			convertDef.PostgresTypeName = pgTypeJSONB
 			convertDef.TypeConversion = gtPbGenericMsg
 		default:
-			panic(fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
-				pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+			return nil, fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
+				pt, f.FullyQualifiedName(), f.Descriptor().GetType())
 		}
 	case pgs.BytesT:
 		convertDef.IsArray = isArray
@@ -191,10 +191,10 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 		nullable = false
 
 	case pgs.GroupT:
-		panic(fmt.Errorf("pgdb: unsupported field type: Group: %s", f.FullyQualifiedName()))
+		return nil, fmt.Errorf("pgdb: unsupported field type: Group: %s", f.FullyQualifiedName())
 	default:
-		panic(fmt.Errorf("pgdb: unsupported field type: %v: %s (of type %s)",
-			pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
+		return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s (of type %s)",
+			pt, f.FullyQualifiedName(), f.Descriptor().GetType())
 	}
 
 	if isArray {
@@ -215,7 +215,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	if convertDef.TypeConversion != gtPbNestedMsg {
 		dbTypeRef := pgDataTypeForName(convertDef.PostgresTypeName)
 		if !nullable && defaultValue == "" {
-			panic(fmt.Errorf("pgdb: nullable column with no default: %s (%s)", pgColName, dbTypeRef.Name))
+			return nil, fmt.Errorf("pgdb: nullable column with no default: %s (%s)", pgColName, dbTypeRef.Name)
 		}
 		rv.DB = &pgdb_v1.Column{
 			Name:     pgColName,
@@ -227,7 +227,16 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 	} else {
 		rv.Nested = true
 	}
-	return rv
+	return rv, nil
+}
+
+// Panics on error.
+func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker, goPrefix string) *fieldContext {
+	fc, err := module.getFieldSafe(ctx, f, vn, ix, goPrefix)
+	if err != nil {
+		panic(err)
+	}
+	return fc
 }
 
 func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fieldContext, error) {
