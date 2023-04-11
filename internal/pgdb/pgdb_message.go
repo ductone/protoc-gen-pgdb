@@ -123,8 +123,8 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 			continue
 		}
 		vn = vn.Next()
-		fc := module.getField(ctx, field, vn, ix, goPrefix)
-		if fc == nil {
+		fc, err := module.getFieldSafe(ctx, field, vn, ix, goPrefix)
+		if fc == nil || err != nil {
 			continue
 		}
 		name, err := getColumnName(fc.Field)
