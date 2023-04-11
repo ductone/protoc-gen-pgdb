@@ -2,7 +2,6 @@ package pgdb
 
 import (
 	"fmt"
-	"strconv"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -18,18 +17,19 @@ const (
 
 type fieldContext struct {
 	// denotes a realized/virtual field that comes from multiple fields. in this case, F is nil.
-	IsVirtual     bool
-	ExcludeNested bool
-	GoName        string
-	Field         pgs.Field
-	Nested        bool
-	DB            *pgdb_v1.Column
-	DataType      *pgtype.Type
-	Convert       FiledConverter
-	QueryTypeName string
+	IsVirtual       bool
+	ExcludeNested   bool
+	GoName          string
+	Field           pgs.Field
+	Nested          bool
+	DB              *pgdb_v1.Column
+	DataType        *pgtype.Type
+	Convert         FieldConverter
+	QueryTypeName   string
+	DBFieldNameDeep string
 }
 
-type FiledConverter interface {
+type FieldConverter interface {
 	GoType() (string, error)
 	CodeForValue() (string, error)
 	VarForValue() (string, error)
@@ -159,7 +159,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 						pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 				}
 				convertDef.TypeConversion = gtPbNestedMsg
-				convertDef.NestedPrefix = strconv.FormatInt(int64(*f.Descriptor().Number), 10) + "$"
+				convertDef.NestedPrefix = getNestedName(f)
 			}
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT:
 			// explict option to just not store this in postgres
@@ -170,7 +170,7 @@ func (module *Module) getField(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix 
 					pt, f.FullyQualifiedName(), f.Descriptor().GetType()))
 			}
 			convertDef.TypeConversion = gtPbNestedMsg
-			convertDef.NestedPrefix = strconv.FormatInt(int64(*f.Descriptor().Number), 10) + "$"
+			convertDef.NestedPrefix = getNestedName(f)
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
 			convertDef.IsArray = isArray
 			convertDef.PostgresTypeName = pgTypeJSONB

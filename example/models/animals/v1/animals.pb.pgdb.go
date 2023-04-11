@@ -2469,6 +2469,49 @@ func (x *ScalarValueTenantIdSafeOperators) NotBetween(start string, end string) 
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
 }
 
+func (x *ScalarValueTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *ScalarValueTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *ScalarValueTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *ScalarValueTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *ScalarValueTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *ScalarValueTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
 func (x *ScalarValueDBQueryBuilder) TenantId() *ScalarValueTenantIdSafeOperators {
 	return &ScalarValueTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
@@ -3892,6 +3935,8 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 
 	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
 
+	rv = append(rv, ((*Newspaper)(nil)).DBReflect().Descriptor().Fields(df.Nested("52$")...)...)
+
 	return rv
 }
 
@@ -4094,6 +4139,8 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		cfv4tmp = append(cfv4tmp, m.self.GetEbook().DBReflect().SearchData()...)
 
+		cfv4tmp = append(cfv4tmp, m.self.GetNews().DBReflect().SearchData()...)
+
 		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
 		if ro.Nulled {
@@ -4177,6 +4224,25 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		}
 	}
 
+	v5tmp := m.self.GetNews()
+	v5opts := ro.Nested("52$")
+	if v5tmp == nil {
+		v5opts = append(v5opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v5, err := pgdb_v1.MarshalNestedRecord(v5tmp, v5opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v5 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
 	oneof1 := uint32(0)
 
 	switch m.self.GetMedium().(type) {
@@ -4186,6 +4252,9 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	case *Book_Ebook:
 		oneof1 = 51
+
+	case *Book_News:
+		oneof1 = 52
 
 	}
 
@@ -4211,6 +4280,8 @@ func (m *pgdbMessageBook) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 	rv = append(rv, m.self.GetPaper().DBReflect().SearchData()...)
 
 	rv = append(rv, m.self.GetEbook().DBReflect().SearchData()...)
+
+	rv = append(rv, m.self.GetNews().DBReflect().SearchData()...)
 
 	return rv
 }
@@ -4314,6 +4385,49 @@ func (x *BookTenantIdSafeOperators) Between(start string, end string) exp.RangeE
 
 func (x *BookTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *BookTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *BookTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *BookTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *BookTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *BookTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *BookTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *BookDBQueryBuilder) TenantId() *BookTenantIdSafeOperators {
@@ -4718,4 +4832,878 @@ func (x *BookDBColumns) CreatedAt() exp.Expression {
 
 func (x *BookDBColumns) Medium() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
+}
+
+type pgdbDescriptorNewspaper struct{}
+
+var (
+	instancepgdbDescriptorNewspaper pgdb_v1.Descriptor = &pgdbDescriptorNewspaper{}
+)
+
+func (d *pgdbDescriptorNewspaper) TableName() string {
+	return "pb_newspaper_models_animals_v1_f52e04fd"
+}
+
+func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("name"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorNewspaper) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_newspaper_models_animals_v1_f52e04fd",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorNewspaper) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_newspaper_models_animals_v1_f52e04fd", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorNewspaper) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_newspaper_models_animals_v1_f52e04fd", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorNewspaper) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_newspaper_models_animals_v1_f52e04fd", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorNewspaper) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_newspaper_models_animals_v1_f52e04fd", Name: "pb$tenant_id", Type: "varchar"}
+}
+
+func (d *pgdbDescriptorNewspaper) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_newspaper_models_animals_v1_b6316285"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorNewspaper) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_newspaper_models_animals_v1_b6316285"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_newspaper_models_animals_v1_21637534"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_newspaper_models_animals_v1_ccc0a328"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_newspaper_models_animals_v1_a1025ab6"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	return rv
+}
+
+type pgdbMessageNewspaper struct {
+	self *Newspaper
+}
+
+func (dbr *Newspaper) DBReflect() pgdb_v1.Message {
+	return &pgdbMessageNewspaper{
+		self: dbr,
+	}
+}
+
+func (m *pgdbMessageNewspaper) Descriptor() pgdb_v1.Descriptor {
+	return instancepgdbDescriptorNewspaper
+}
+
+func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := string(m.self.Id)
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_animals_v1_newspaper")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.Id)
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("example")
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv4 := exp.NewLiteralExpression("NULL")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv4
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv5
+		}
+
+	}
+
+	v1 := string(m.self.GetName())
+
+	if ro.Nulled {
+		rv[ro.ColumnName("name")] = nullExp
+	} else {
+		rv[ro.ColumnName("name")] = v1
+	}
+
+	var v2 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v2tmp := m.self.GetCreatedAt().AsTime()
+		v2 = &v2tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v2
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageNewspaper) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+type NewspaperDB struct {
+	tableName string
+}
+
+type NewspaperDBQueryBuilder struct {
+	tableName string
+}
+
+type NewspaperDBQueryUnsafe struct {
+	tableName string
+}
+
+type NewspaperDBColumns struct {
+	tableName string
+}
+
+func (x *Newspaper) DB() *NewspaperDB {
+	return &NewspaperDB{tableName: x.DBReflect().Descriptor().TableName()}
+}
+
+func (x *NewspaperDB) TableName() string {
+	return x.tableName
+}
+
+func (x *NewspaperDB) Query() *NewspaperDBQueryBuilder {
+	return &NewspaperDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *NewspaperDB) Columns() *NewspaperDBColumns {
+	return &NewspaperDBColumns{tableName: x.tableName}
+}
+
+func (x *NewspaperDB) WithTable(t string) *NewspaperDB {
+	return &NewspaperDB{tableName: t}
+}
+
+func (x *NewspaperDBQueryBuilder) WithTable(t string) *NewspaperDBQueryBuilder {
+	return &NewspaperDBQueryBuilder{tableName: t}
+}
+
+func (x *NewspaperDBQueryBuilder) Unsafe() *NewspaperDBQueryUnsafe {
+	return &NewspaperDBQueryUnsafe{tableName: x.tableName}
+}
+
+type NewspaperTenantIdSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+}
+
+func (x *NewspaperTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
+}
+
+func (x *NewspaperTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Neq(v)
+}
+
+func (x *NewspaperTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gt(v)
+}
+
+func (x *NewspaperTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gte(v)
+}
+
+func (x *NewspaperTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lt(v)
+}
+
+func (x *NewspaperTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lte(v)
+}
+
+func (x *NewspaperTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").In(v)
+}
+
+func (x *NewspaperTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotIn(v)
+}
+
+func (x *NewspaperTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNull()
+}
+
+func (x *NewspaperTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNotNull()
+}
+
+func (x *NewspaperTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Between(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *NewspaperTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *NewspaperTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *NewspaperTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *NewspaperTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *NewspaperTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *NewspaperDBQueryBuilder) TenantId() *NewspaperTenantIdSafeOperators {
+	return &NewspaperTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type NewspaperPKSKSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
+}
+
+func (x *NewspaperPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Eq(v)
+}
+
+func (x *NewspaperPKSKSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Neq(v)
+}
+
+func (x *NewspaperPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gt(v)
+}
+
+func (x *NewspaperPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gte(v)
+}
+
+func (x *NewspaperPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lt(v)
+}
+
+func (x *NewspaperPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lte(v)
+}
+
+func (x *NewspaperPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").In(v)
+}
+
+func (x *NewspaperPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotIn(v)
+}
+
+func (x *NewspaperPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNull()
+}
+
+func (x *NewspaperPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNotNull()
+}
+
+func (x *NewspaperPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Between(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperDBQueryBuilder) PKSK() *NewspaperPKSKSafeOperators {
+	return &NewspaperPKSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type NewspaperPKSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+}
+
+func (x *NewspaperPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
+}
+
+func (x *NewspaperPKSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Neq(v)
+}
+
+func (x *NewspaperPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gt(v)
+}
+
+func (x *NewspaperPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gte(v)
+}
+
+func (x *NewspaperPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lt(v)
+}
+
+func (x *NewspaperPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lte(v)
+}
+
+func (x *NewspaperPKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").In(v)
+}
+
+func (x *NewspaperPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotIn(v)
+}
+
+func (x *NewspaperPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNull()
+}
+
+func (x *NewspaperPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNotNull()
+}
+
+func (x *NewspaperPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Between(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperDBQueryBuilder) PK() *NewspaperPKSafeOperators {
+	return &NewspaperPKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type NewspaperSKSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+}
+
+func (x *NewspaperSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Eq(v)
+}
+
+func (x *NewspaperSKSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Neq(v)
+}
+
+func (x *NewspaperSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gt(v)
+}
+
+func (x *NewspaperSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gte(v)
+}
+
+func (x *NewspaperSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lt(v)
+}
+
+func (x *NewspaperSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lte(v)
+}
+
+func (x *NewspaperSKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").In(v)
+}
+
+func (x *NewspaperSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotIn(v)
+}
+
+func (x *NewspaperSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNull()
+}
+
+func (x *NewspaperSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNotNull()
+}
+
+func (x *NewspaperSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Between(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperDBQueryBuilder) SK() *NewspaperSKSafeOperators {
+	return &NewspaperSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type NewspaperFTSDataSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
+func (x *NewspaperFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
+}
+
+func (x *NewspaperFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *NewspaperFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *NewspaperFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *NewspaperFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *NewspaperFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *NewspaperFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *NewspaperDBQueryBuilder) FTSData() *NewspaperFTSDataSafeOperators {
+	return &NewspaperFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type NewspaperTenantIdQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) TenantId() *NewspaperTenantIdQueryType {
+	return &NewspaperTenantIdQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *NewspaperTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+}
+
+type NewspaperPKSKQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) PKSK() *NewspaperPKSKQueryType {
+	return &NewspaperPKSKQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *NewspaperPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
+}
+
+type NewspaperPKQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) PK() *NewspaperPKQueryType {
+	return &NewspaperPKQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *NewspaperPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+}
+
+type NewspaperSKQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) SK() *NewspaperSKQueryType {
+	return &NewspaperSKQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *NewspaperSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+}
+
+type NewspaperFTSDataQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) FTSData() *NewspaperFTSDataQueryType {
+	return &NewspaperFTSDataQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *NewspaperFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+}
+
+type NewspaperPBDataQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) PBData() *NewspaperPBDataQueryType {
+	return &NewspaperPBDataQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *NewspaperPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pb_data")
+}
+
+type NewspaperNameQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) Name() *NewspaperNameQueryType {
+	return &NewspaperNameQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *NewspaperNameQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"name")
+}
+
+type NewspaperCreatedAtQueryType struct {
+	prefix    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) CreatedAt() *NewspaperCreatedAtQueryType {
+	return &NewspaperCreatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+}
+
+func (x *NewspaperCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"created_at")
+}
+
+func (x *NewspaperDBColumns) WithTable(t string) *NewspaperDBColumns {
+	return &NewspaperDBColumns{tableName: t}
+}
+
+func (x *NewspaperDBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *NewspaperDBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *NewspaperDBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *NewspaperDBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *NewspaperDBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *NewspaperDBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *NewspaperDBColumns) Name() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "name")
+}
+
+func (x *NewspaperDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }

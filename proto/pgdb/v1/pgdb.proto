@@ -24,7 +24,7 @@ message MessageOptions {
       INDEX_METHOD_BTREE_GIN = 3;
     }
     string name = 1;
-    IndexMethod nethod = 2;
+    IndexMethod method = 2;
     repeated string columns = 3;
     // used to indicate the index by this name can be dropped
     bool dropped = 4;

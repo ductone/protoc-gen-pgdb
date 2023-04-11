@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"fmt"
+	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
@@ -11,7 +12,6 @@ import (
 type indexContext struct {
 	DB            pgdb_v1.Index
 	ExcludeNested bool
-	SourceFields  []string
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -55,23 +55,47 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		return rv
 	}
 
-	rv.DB.Method = idx.Nethod
-	tenantIdField, err := getTenantIDField(m)
-	if err != nil {
-		panic(err)
-	}
-	for _, fieldName := range idx.Columns {
-		f := fieldByName(m, fieldName)
-		rv.SourceFields = append(rv.SourceFields, ctx.Name(f).String())
+	rv.DB.Method = idx.Method
 
-		if fieldName == tenantIdField {
-			rv.DB.Columns = append(rv.DB.Columns, "tenant_id")
-		} else {
-			pgColName, err := getColumnName(f)
-			if err != nil {
-				panic(err)
+	for _, fieldName := range idx.Columns {
+		path := strings.Split(fieldName, ".")
+		message := m
+		resolution := ""
+		for i, p := range path {
+			lastP := i == len(path)-1
+
+			if !lastP {
+				f := fieldByName(message, p)
+				resolution += getNestedName(f)
+				message = f.Type().Embed()
+				continue
 			}
-			rv.DB.Columns = append(rv.DB.Columns, pgColName)
+
+			name := ""
+			// could be a real field!
+			if f, ok := tryFieldByName(message, p); ok {
+				name, err = getColumnName(f)
+				if err != nil {
+					panic(err)
+				}
+			} else {
+				// look in oneofs!
+				for _, oo := range message.RealOneOfs() {
+					if oo.Name().String() == p {
+						name, err = getColumnOneOfName(oo)
+						if err != nil {
+							panic(err)
+						}
+						break
+					}
+				}
+			}
+			if name == "" {
+				panic(fmt.Errorf("could not find field for index: %s", path))
+			}
+
+			resolution += name
+			rv.DB.Columns = append(rv.DB.Columns, resolution)
 		}
 	}
 	return rv
@@ -103,7 +127,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:   []string{"tenant_id", "pksk"},
 		},
-		SourceFields: []string{"TenantId", "PKSK"},
 	}
 
 	// So, we learned early in our deployment that having a second unique index
@@ -123,7 +146,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:   []string{"tenant_id", "pk", "sk"},
 		},
-		SourceFields: []string{"TenantId", "PK", "SK"},
 	}
 
 	pkskIndexName, err := getIndexName(m, "pksk_split2")
@@ -137,13 +159,13 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns: []string{"tenant_id", "pk", "sk"},
 		},
-		SourceFields: []string{"TenantId", "PK", "SK"},
 	}
 
 	ftsIndexName, err := getIndexName(m, "fts_data")
 	if err != nil {
 		return nil, err
 	}
+
 	ftsIndex := &indexContext{
 		ExcludeNested: true,
 		DB: pgdb_v1.Index{
@@ -151,7 +173,6 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			Columns: []string{"tenant_id", "fts_data"},
 		},
-		SourceFields: []string{"FTSData"},
 	}
 
 	return []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}, nil

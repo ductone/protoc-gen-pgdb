@@ -46,6 +46,10 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 		return nil, err
 	}
 	rv = append(rv, more...)
+
+	// for _, r := range rv {
+	// 	fmt.Fprintf(os.Stderr, " %s\n", r)
+	// }
 	return rv, nil
 }
 

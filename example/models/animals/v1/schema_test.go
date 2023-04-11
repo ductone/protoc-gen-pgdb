@@ -84,7 +84,6 @@ func TestSchemaPet(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, query, params...)
 	// spew.Dump(query, params)
 	// spew.Dump(record)
-	// fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
 
 	insertMsg2 := &Pet{

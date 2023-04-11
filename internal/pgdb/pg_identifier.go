@@ -38,6 +38,10 @@ func getTableName(m pgs.Message) (string, error) {
 	return proposed, nil
 }
 
+func getNestedName(f pgs.Field) string {
+	return strconv.FormatInt(int64(*f.Descriptor().Number), 10) + "$"
+}
+
 func getColumnName(f pgs.Field) (string, error) {
 	buf := strings.Builder{}
 	// TOOD(pquerna): figure out prefix?

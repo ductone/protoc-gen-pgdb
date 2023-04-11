@@ -625,6 +625,49 @@ func (x *ShopTenantIdSafeOperators) NotBetween(start string, end string) exp.Ran
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
 }
 
+func (x *ShopTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *ShopTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
 func (x *ShopDBQueryBuilder) TenantId() *ShopTenantIdSafeOperators {
 	return &ShopTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }

@@ -25,10 +25,12 @@ func IndexOptionIsNested(b bool) IndexOptionsFunc {
 	}
 }
 
+const columnPrefix = "pb$"
+
 func NewIndexOptions(opts []IndexOptionsFunc) *IndexOption {
 	option := &IndexOption{
 		IndexPrefix:  "pbidx_",
-		ColumnPrefix: "pb$",
+		ColumnPrefix: columnPrefix,
 	}
 	for _, opt := range opts {
 		opt(option)
@@ -41,6 +43,11 @@ func (r *IndexOption) IndexName(in string) string {
 }
 
 func (r *IndexOption) ColumnName(in string) string {
+	// Tenant IDs are not reflected into ancestor messages
+	//  indices from nested messages that reference tenant_ids need to be retargeted to the top message
+	if in == "tenant_id" {
+		return columnPrefix + "tenant_id"
+	}
 	return r.ColumnPrefix + in
 }
 

@@ -246,6 +246,36 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 
 	}
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("furrrs_attractions_models_city_v1_97e8b7fb"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("11$fur")},
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("nestednestednested_attractions_models_c_53854283"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("11$52$sfixed_64")},
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("oneof_attractions_models_city_v1_f6c0dc62"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("what_oneof")},
+		OverrideExpression: "",
+	})
+
 	return rv
 }
 
@@ -574,6 +604,49 @@ func (x *AttractionsTenantIdSafeOperators) NotBetween(start string, end string) 
 	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
 }
 
+func (x *AttractionsTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *AttractionsTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *AttractionsTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *AttractionsTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *AttractionsTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
 func (x *AttractionsDBQueryBuilder) TenantId() *AttractionsTenantIdSafeOperators {
 	return &AttractionsTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
@@ -819,6 +892,186 @@ func (x *AttractionsFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp
 
 func (x *AttractionsDBQueryBuilder) FTSData() *AttractionsFTSDataSafeOperators {
 	return &AttractionsFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type AttractionsWhatSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsWhatSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+}
+
+func (x *AttractionsWhatSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof").Eq(v)
+}
+
+func (x *AttractionsWhatSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *AttractionsWhatSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *AttractionsWhatSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *AttractionsWhatSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *AttractionsWhatSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsWhatSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsDBQueryBuilder) What() *AttractionsWhatSafeOperators {
+	return &AttractionsWhatSafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type AttractionsZooShopAnythingSfixed64SafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64").Eq(v)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsDBQueryBuilder) ZooShopAnythingSfixed64() *AttractionsZooShopAnythingSfixed64SafeOperators {
+	return &AttractionsZooShopAnythingSfixed64SafeOperators{tableName: x.tableName, prefix: "pb$"}
+}
+
+type AttractionsZooShopFurSafeOperators struct {
+	prefix    string
+	tableName string
+}
+
+func (x *AttractionsZooShopFurSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+}
+
+func (x *AttractionsZooShopFurSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur").Eq(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *AttractionsZooShopFurSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsZooShopFurSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsDBQueryBuilder) ZooShopFur() *AttractionsZooShopFurSafeOperators {
+	return &AttractionsZooShopFurSafeOperators{tableName: x.tableName, prefix: "pb$"}
 }
 
 type AttractionsTenantIdQueryType struct {

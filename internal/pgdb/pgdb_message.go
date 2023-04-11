@@ -67,6 +67,98 @@ func (fn *varNamer) String() string {
 	return fmt.Sprintf("%s%d", fn.prefix, fn.offset)
 }
 
+func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string, dbPrefix string, humanPrefix string) []*fieldContext {
+	fields := m.Fields()
+	rv := make([]*fieldContext, 0, len(fields))
+	tenantIdField := "tenant_id"
+
+	// only top level embed gets a common field and has a full protoc API
+	if dbPrefix == "" {
+		ix.ProtobufEncodingJSON = true
+		cfs, err := getCommonFields(ctx, m, ix)
+		if err != nil {
+			panic(err)
+		}
+		for _, cf := range cfs {
+			cf.DBFieldNameDeep = cf.DB.Name
+			rv = append(rv, cf)
+		}
+
+		fext := pgdb_v1.MessageOptions{}
+		_, err = m.Extension(pgdb_v1.E_Msg, &fext)
+		if err != nil {
+			panic(err)
+		}
+
+		if !fext.NestedOnly {
+			tenantIdField, err = getTenantIDField(m)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+
+	vn := &varNamer{prefix: "oneof", offset: 0}
+	for _, oneof := range m.RealOneOfs() {
+		vn = vn.Next()
+		fc := module.getOneOf(ctx, oneof, vn, ix, goPrefix)
+		if fc == nil {
+			continue
+		}
+		name, err := getColumnOneOfName(oneof)
+		if err != nil {
+			panic(err)
+		}
+		fc.DBFieldNameDeep = dbPrefix + name
+		if humanPrefix != "" {
+			fc.GoName = humanPrefix + fc.GoName
+		}
+		rv = append(rv, fc)
+	}
+
+	vn = &varNamer{prefix: "v", offset: 0}
+	for _, field := range fields {
+		// tenant_id done via common fields and shouldn't be nested
+		if tenantIdField == field.Name().LowerSnakeCase().String() {
+			continue
+		}
+		vn = vn.Next()
+		fc := module.getField(ctx, field, vn, ix, goPrefix)
+		if fc == nil {
+			continue
+		}
+		name, err := getColumnName(fc.Field)
+		if err != nil {
+			panic(err)
+		}
+
+		fc.DBFieldNameDeep = dbPrefix + name
+
+		rv = append(rv, fc)
+		var embededMessage pgs.Message
+		if fc.Field != nil {
+			embededMessage = fc.Field.Type().Embed()
+		}
+
+		if embededMessage == nil {
+			if humanPrefix != "" {
+				fc.GoName = humanPrefix + fc.GoName
+			}
+			continue
+		}
+		// NOTE: humanPrefixes need to avoid exponential growth of prefixes (for two deep or lower).
+		nextHumanPrefix := humanPrefix + fc.GoName
+		if humanPrefix != "" {
+			fc.GoName = humanPrefix
+		}
+
+		pre := getNestedName(fc.Field)
+
+		rv = append(rv, module.getMessageFieldsDeep(ctx, embededMessage, ix, goPrefix, dbPrefix+pre, nextHumanPrefix)...)
+	}
+	return rv
+}
+
 func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
@@ -102,12 +194,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 			rv = append(rv, fieldRep)
 		}
 	}
-	// for _, field := range rv {
-	// 	if field.Field == nil {
-	// 		continue
-	// 	}
-	// 	ix.AddProtoEntity(field.Field)
-	// }
+
 	return rv
 }
 

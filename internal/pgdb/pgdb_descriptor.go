@@ -68,7 +68,7 @@ type nestedFieldContext struct {
 	Prefix   string
 }
 
-func getNesteFieldNames(fields []*fieldContext) []string {
+func getNestedFieldNames(fields []*fieldContext) []string {
 	rv := make([]string, 0)
 	for _, f := range fields {
 		if !f.Nested {
