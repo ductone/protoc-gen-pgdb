@@ -109,6 +109,7 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 		if err != nil {
 			panic(err)
 		}
+
 		fc.DBFieldNameDeep = dbPrefix + name
 		if humanPrefix != "" {
 			fc.GoName = humanPrefix + fc.GoName

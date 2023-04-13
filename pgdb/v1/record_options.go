@@ -32,7 +32,7 @@ func NewRecordOptions(opts []RecordOptionsFunc) *RecordOption {
 		opt(option)
 	}
 	if option.Prefix == "" {
-		option.Prefix = "pb$"
+		option.Prefix = columnPrefix
 	}
 	return option
 }

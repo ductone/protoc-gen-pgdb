@@ -172,12 +172,11 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 			panic(fmt.Errorf("missing goName for field context: %s:\n%v", m.Name(), f))
 		}
 
-		// fmt.Fprintf(os.Stderr, "🌮: index match: %s.%s\n", m.Name(), f.GoName)
 		rv = append(rv, &safeFieldContext{
 			InputType:   inputType,
 			OpsTypeName: ctx.Name(m).String() + f.GoName + "SafeOperators",
 			Field:       f,
-			ColName:     f.DB.Name,
+			ColName:     f.DBFieldNameDeep,
 			Op:          ops,
 		})
 	}

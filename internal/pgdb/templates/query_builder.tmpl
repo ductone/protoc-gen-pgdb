@@ -49,84 +49,84 @@ func (x *{{- .QueryType -}}) Unsafe() *{{- .UnsafeType }} {
 
 {{ range .QueryFields }}
 type {{ .OpsTypeName }} struct {
-	prefix string
+	column string
 	tableName string
 }
 
 func  (x *{{ .OpsTypeName }}) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 {{if .Op.Eq }}
 func  (x *{{ .OpsTypeName }}) Eq(v {{.InputType}}) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 {{end}}
 
 {{if .Op.Neq }}
 func  (x *{{ .OpsTypeName }}) Neq(v {{.InputType}}) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 {{end}}
 
 
 {{if .Op.Gt }}
 func  (x *{{ .OpsTypeName }}) Gt(v {{.InputType}}) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 {{end}}
 
 {{if .Op.Gte }}
 func  (x *{{ .OpsTypeName }}) Gte(v {{.InputType}}) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 {{end}}
 
 {{if .Op.Lt }}
 func  (x *{{ .OpsTypeName }}) Lt(v {{.InputType}}) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 {{end}}
 
 {{if .Op.Lte }}
 func  (x *{{ .OpsTypeName }}) Lte(v {{.InputType}}) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 {{end}}
 
 {{if .Op.In }}
 func  (x *{{ .OpsTypeName }}) In(v []{{.InputType}}) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 {{end}}
 
 {{if .Op.NotIn }}
 func  (x *{{ .OpsTypeName }}) NotIn(v []{{.InputType}}) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 {{end}}
 
 {{if .Op.IsNull }}
 func  (x *{{ .OpsTypeName }}) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 {{end}}
 
 {{if .Op.IsNotNull }}
 func  (x *{{ .OpsTypeName }}) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 {{end}}
 
 {{if .Op.Between }}
 func  (x *{{ .OpsTypeName }}) Between(start {{.InputType}}, end {{.InputType}}) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 {{end}}
 
 {{if .Op.NotBetween }}
 func  (x *{{ .OpsTypeName }}) NotBetween(start {{.InputType}}, end {{.InputType}}) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 {{end}}
 
@@ -145,48 +145,48 @@ func  (x *{{ .OpsTypeName }}) ObjectContains(obj interface{}) (exp.Expression, e
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 {{end}}
 
 {{if .Op.ObjectPathExists }}
 func  (x *{{ .OpsTypeName }}) ObjectPathExists(path string) (exp.Expression) {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 {{end}}
 
 {{if .Op.ObjectPath }}
 func  (x *{{ .OpsTypeName }}) ObjectPath(path string) (exp.Expression) {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 {{end}}
 
 {{if .Op.ObjectKeyExists }}
 func  (x *{{ .OpsTypeName }}) ObjectKeyExists(key string) (exp.Expression) {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 {{end}}
 
 {{if .Op.ObjectAnyKeyExists }}
 func  (x *{{ .OpsTypeName }}) ObjectAnyKeyExists(keys ...string) (exp.Expression) {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 {{end}}
 
 {{if .Op.ObjectAllKeyExists }}
 func  (x *{{ .OpsTypeName }}) ObjectAllKeyExists(keys ...string) (exp.Expression) {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .ColName -}}")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 {{end}}
 
 func (x *{{ $QueryType }}) {{ .Field.GoName -}}() *{{ .OpsTypeName }} {
-	return &{{- .OpsTypeName -}}{tableName: x.tableName, prefix: "pb$"}
+	return &{{- .OpsTypeName -}}{tableName: x.tableName, column: "pb$" + "{{- .ColName -}}"}
 }
 {{ end }}
 
@@ -194,16 +194,16 @@ func (x *{{ $QueryType }}) {{ .Field.GoName -}}() *{{ .OpsTypeName }} {
 {{ if .DB -}}
 
 type {{ .QueryTypeName }} struct {
-	prefix string
+	column string
 	tableName string
 }
 
 func (x *{{ $UnsafeType }}) {{ .GoName -}}() *{{ .QueryTypeName }} {
-	return &{{- .QueryTypeName -}}{tableName: x.tableName, prefix: "pb$"}
+	return &{{- .QueryTypeName -}}{tableName: x.tableName, column: "pb$" + "{{- .DB.Name -}}"}
 }
 
 func  (x *{{ .QueryTypeName }}) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix + "{{- .DB.Name -}}")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 {{- end }}

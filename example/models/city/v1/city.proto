@@ -44,6 +44,22 @@ message Attractions {
       "what"
     ]
   };
+  option (pgdb.v1.msg).indexes = {
+    name: "nested_oneof"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "tenant_id",
+      "zoo_shop.medium"
+    ]
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "medium_medium"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "tenant_id",
+      "medium.medium" 
+    ]
+  };
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {
     full_text_type: FULL_TEXT_TYPE_EXACT
@@ -54,4 +70,5 @@ message Attractions {
     models.animals.v1.Pet pet = 10;
     models.zoo.v1.Shop zoo_shop = 11;
   }
+  models.zoo.v1.Shop medium = 12;
 }
