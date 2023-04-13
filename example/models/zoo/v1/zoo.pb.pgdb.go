@@ -569,60 +569,60 @@ func (x *ShopDBQueryBuilder) Unsafe() *ShopDBQueryUnsafe {
 }
 
 type ShopTenantIdSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *ShopTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *ShopTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *ShopTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
 func (x *ShopTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
 func (x *ShopTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
 func (x *ShopTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
 func (x *ShopTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ShopTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
 func (x *ShopTenantIdSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
 func (x *ShopTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
 func (x *ShopTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
 func (x *ShopTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *ShopTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -639,233 +639,233 @@ func (x *ShopTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Express
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *ShopTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *ShopTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *ShopTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *ShopTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *ShopTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *ShopDBQueryBuilder) TenantId() *ShopTenantIdSafeOperators {
-	return &ShopTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &ShopTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
 
 type ShopPKSKSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopPKSKSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *ShopPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *ShopPKSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *ShopPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
 func (x *ShopPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
 func (x *ShopPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
 func (x *ShopPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
 func (x *ShopPKSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ShopPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
 func (x *ShopPKSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
 func (x *ShopPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
 func (x *ShopPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
 func (x *ShopPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *ShopDBQueryBuilder) PKSK() *ShopPKSKSafeOperators {
-	return &ShopPKSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &ShopPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
 }
 
 type ShopPKSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopPKSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *ShopPKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *ShopPKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *ShopPKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
 func (x *ShopPKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
 func (x *ShopPKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
 func (x *ShopPKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
 func (x *ShopPKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ShopPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
 func (x *ShopPKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
 func (x *ShopPKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
 func (x *ShopPKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
 func (x *ShopPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *ShopDBQueryBuilder) PK() *ShopPKSafeOperators {
-	return &ShopPKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &ShopPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
 }
 
 type ShopSKSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopSKSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *ShopSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *ShopSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *ShopSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
 func (x *ShopSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
 func (x *ShopSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
 func (x *ShopSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
 func (x *ShopSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ShopSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
 func (x *ShopSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
 func (x *ShopSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
 func (x *ShopSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
 func (x *ShopSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *ShopDBQueryBuilder) SK() *ShopSKSafeOperators {
-	return &ShopSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &ShopSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
 type ShopFTSDataSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *ShopFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *ShopFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -882,167 +882,167 @@ func (x *ShopFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expressi
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *ShopFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *ShopFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *ShopFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *ShopFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *ShopFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *ShopDBQueryBuilder) FTSData() *ShopFTSDataSafeOperators {
-	return &ShopFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &ShopFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type ShopTenantIdQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) TenantId() *ShopTenantIdQueryType {
-	return &ShopTenantIdQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
 
 func (x *ShopTenantIdQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopPKSKQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) PKSK() *ShopPKSKQueryType {
-	return &ShopPKSKQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
 }
 
 func (x *ShopPKSKQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopPKQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) PK() *ShopPKQueryType {
-	return &ShopPKQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
 }
 
 func (x *ShopPKQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopSKQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) SK() *ShopSKQueryType {
-	return &ShopSKQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
 func (x *ShopSKQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopFTSDataQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) FTSData() *ShopFTSDataQueryType {
-	return &ShopFTSDataQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 func (x *ShopFTSDataQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopPBDataQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) PBData() *ShopPBDataQueryType {
-	return &ShopPBDataQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
 }
 
 func (x *ShopPBDataQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pb_data")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopIdQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) Id() *ShopIdQueryType {
-	return &ShopIdQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
 }
 
 func (x *ShopIdQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopCreatedAtQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) CreatedAt() *ShopCreatedAtQueryType {
-	return &ShopCreatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
 }
 
 func (x *ShopCreatedAtQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"created_at")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopFurQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) Fur() *ShopFurQueryType {
-	return &ShopFurQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopFurQueryType{tableName: x.tableName, column: "pb$" + "fur"}
 }
 
 func (x *ShopFurQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type ShopMediumQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *ShopDBQueryUnsafe) Medium() *ShopMediumQueryType {
-	return &ShopMediumQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &ShopMediumQueryType{tableName: x.tableName, column: "pb$" + "medium_oneof"}
 }
 
 func (x *ShopMediumQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"medium_oneof")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *ShopDBColumns) WithTable(t string) *ShopDBColumns {
@@ -1240,16 +1240,16 @@ func (x *Shop_ManagerDBQueryBuilder) Unsafe() *Shop_ManagerDBQueryUnsafe {
 }
 
 type Shop_ManagerIdQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *Shop_ManagerDBQueryUnsafe) Id() *Shop_ManagerIdQueryType {
-	return &Shop_ManagerIdQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &Shop_ManagerIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
 }
 
 func (x *Shop_ManagerIdQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *Shop_ManagerDBColumns) WithTable(t string) *Shop_ManagerDBColumns {

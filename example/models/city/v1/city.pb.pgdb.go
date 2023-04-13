@@ -142,6 +142,8 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 
 	rv = append(rv, ((*zoo_v1.Shop)(nil)).DBReflect().Descriptor().Fields(df.Nested("11$")...)...)
 
+	rv = append(rv, ((*zoo_v1.Shop)(nil)).DBReflect().Descriptor().Fields(df.Nested("12$")...)...)
+
 	return rv
 }
 
@@ -276,6 +278,26 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		OverrideExpression: "",
 	})
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("nested_oneof_attractions_models_city_v1_bde17620"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("11$medium_oneof")},
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("medium_medium_attractions_models_city_v_904ccc0f"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("12$medium_oneof")},
+		OverrideExpression: "",
+	})
+
 	return rv
 }
 
@@ -374,6 +396,8 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		cfv4tmp = append(cfv4tmp, m.self.GetZooShop().DBReflect().SearchData()...)
 
+		cfv4tmp = append(cfv4tmp, m.self.GetMedium().DBReflect().SearchData()...)
+
 		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
 
 		if ro.Nulled {
@@ -465,6 +489,25 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		}
 	}
 
+	v6tmp := m.self.GetMedium()
+	v6opts := ro.Nested("12$")
+	if v6tmp == nil {
+		v6opts = append(v6opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v6, err := pgdb_v1.MarshalNestedRecord(v6tmp, v6opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v6 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
 	oneof1 := uint32(0)
 
 	switch m.self.GetWhat().(type) {
@@ -499,6 +542,8 @@ func (m *pgdbMessageAttractions) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 	rv = append(rv, m.self.GetPet().DBReflect().SearchData()...)
 
 	rv = append(rv, m.self.GetZooShop().DBReflect().SearchData()...)
+
+	rv = append(rv, m.self.GetMedium().DBReflect().SearchData()...)
 
 	return rv
 }
@@ -548,60 +593,60 @@ func (x *AttractionsDBQueryBuilder) Unsafe() *AttractionsDBQueryUnsafe {
 }
 
 type AttractionsTenantIdSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
 func (x *AttractionsTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
 func (x *AttractionsTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -618,233 +663,233 @@ func (x *AttractionsTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *AttractionsTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *AttractionsTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *AttractionsTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *AttractionsTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsDBQueryBuilder) TenantId() *AttractionsTenantIdSafeOperators {
-	return &AttractionsTenantIdSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
 
 type AttractionsPKSKSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsPKSKSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
 func (x *AttractionsPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
 func (x *AttractionsPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsDBQueryBuilder) PKSK() *AttractionsPKSKSafeOperators {
-	return &AttractionsPKSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
 }
 
 type AttractionsPKSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsPKSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsPKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *AttractionsPKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *AttractionsPKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
 func (x *AttractionsPKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
 func (x *AttractionsPKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
 func (x *AttractionsPKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
 func (x *AttractionsPKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
 func (x *AttractionsPKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
 func (x *AttractionsPKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
 func (x *AttractionsPKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsDBQueryBuilder) PK() *AttractionsPKSafeOperators {
-	return &AttractionsPKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
 }
 
 type AttractionsSKSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsSKSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsSKSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *AttractionsSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Neq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *AttractionsSKSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
 func (x *AttractionsSKSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Gte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
 func (x *AttractionsSKSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lt(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
 func (x *AttractionsSKSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Lte(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
 func (x *AttractionsSKSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").In(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotIn(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
 func (x *AttractionsSKSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
 func (x *AttractionsSKSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").IsNotNull()
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
 func (x *AttractionsSKSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").Between(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk").NotBetween(exp.NewRangeVal(start, end))
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsDBQueryBuilder) SK() *AttractionsSKSafeOperators {
-	return &AttractionsSKSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
 type AttractionsFTSDataSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *AttractionsFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -861,50 +906,50 @@ func (x *AttractionsFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.E
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *AttractionsFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *AttractionsFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *AttractionsFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *AttractionsFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsDBQueryBuilder) FTSData() *AttractionsFTSDataSafeOperators {
-	return &AttractionsFTSDataSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type AttractionsWhatSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsWhatSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsWhatSafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *AttractionsWhatSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -921,50 +966,111 @@ func (x *AttractionsWhatSafeOperators) ObjectContains(obj interface{}) (exp.Expr
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *AttractionsWhatSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *AttractionsWhatSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *AttractionsWhatSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *AttractionsWhatSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsWhatSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsDBQueryBuilder) What() *AttractionsWhatSafeOperators {
-	return &AttractionsWhatSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsWhatSafeOperators{tableName: x.tableName, column: "pb$" + "what_oneof"}
+}
+
+type AttractionsZooShopMediumSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) In(v []int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsZooShopMediumSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsDBQueryBuilder) ZooShopMedium() *AttractionsZooShopMediumSafeOperators {
+	return &AttractionsZooShopMediumSafeOperators{tableName: x.tableName, column: "pb$" + "11$medium_oneof"}
 }
 
 type AttractionsZooShopAnythingSfixed64SafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -981,50 +1087,50 @@ func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectContains(obj int
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"sfixed_64")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsDBQueryBuilder) ZooShopAnythingSfixed64() *AttractionsZooShopAnythingSfixed64SafeOperators {
-	return &AttractionsZooShopAnythingSfixed64SafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsZooShopAnythingSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + "11$52$sfixed_64"}
 }
 
 type AttractionsZooShopFurSafeOperators struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsZooShopFurSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsZooShopFurSafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur").Eq(v)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
 func (x *AttractionsZooShopFurSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -1041,167 +1147,228 @@ func (x *AttractionsZooShopFurSafeOperators) ObjectContains(obj interface{}) (ex
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
 func (x *AttractionsZooShopFurSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
 func (x *AttractionsZooShopFurSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
 func (x *AttractionsZooShopFurSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
 func (x *AttractionsZooShopFurSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsZooShopFurSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.prefix+"fur")
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *AttractionsDBQueryBuilder) ZooShopFur() *AttractionsZooShopFurSafeOperators {
-	return &AttractionsZooShopFurSafeOperators{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsZooShopFurSafeOperators{tableName: x.tableName, column: "pb$" + "11$fur"}
+}
+
+type AttractionsMediumMediumSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumMediumSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) In(v []int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumMediumSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumMediumSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumMediumSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumMediumSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsDBQueryBuilder) MediumMedium() *AttractionsMediumMediumSafeOperators {
+	return &AttractionsMediumMediumSafeOperators{tableName: x.tableName, column: "pb$" + "12$medium_oneof"}
 }
 
 type AttractionsTenantIdQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) TenantId() *AttractionsTenantIdQueryType {
-	return &AttractionsTenantIdQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
 
 func (x *AttractionsTenantIdQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"tenant_id")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsPKSKQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) PKSK() *AttractionsPKSKQueryType {
-	return &AttractionsPKSKQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
 }
 
 func (x *AttractionsPKSKQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pksk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsPKQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) PK() *AttractionsPKQueryType {
-	return &AttractionsPKQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
 }
 
 func (x *AttractionsPKQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsSKQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) SK() *AttractionsSKQueryType {
-	return &AttractionsSKQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
 func (x *AttractionsSKQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"sk")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsFTSDataQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) FTSData() *AttractionsFTSDataQueryType {
-	return &AttractionsFTSDataQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 func (x *AttractionsFTSDataQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"fts_data")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsPBDataQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) PBData() *AttractionsPBDataQueryType {
-	return &AttractionsPBDataQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
 }
 
 func (x *AttractionsPBDataQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"pb_data")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsIdQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) Id() *AttractionsIdQueryType {
-	return &AttractionsIdQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
 }
 
 func (x *AttractionsIdQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"id")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsNumidQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) Numid() *AttractionsNumidQueryType {
-	return &AttractionsNumidQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsNumidQueryType{tableName: x.tableName, column: "pb$" + "numid"}
 }
 
 func (x *AttractionsNumidQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"numid")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsCreatedAtQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) CreatedAt() *AttractionsCreatedAtQueryType {
-	return &AttractionsCreatedAtQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
 }
 
 func (x *AttractionsCreatedAtQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"created_at")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 type AttractionsWhatQueryType struct {
-	prefix    string
+	column    string
 	tableName string
 }
 
 func (x *AttractionsDBQueryUnsafe) What() *AttractionsWhatQueryType {
-	return &AttractionsWhatQueryType{tableName: x.tableName, prefix: "pb$"}
+	return &AttractionsWhatQueryType{tableName: x.tableName, column: "pb$" + "what_oneof"}
 }
 
 func (x *AttractionsWhatQueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.prefix+"what_oneof")
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
 func (x *AttractionsDBColumns) WithTable(t string) *AttractionsDBColumns {
