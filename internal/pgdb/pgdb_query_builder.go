@@ -5,6 +5,7 @@ import (
 	"io"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+	"github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
@@ -42,6 +43,14 @@ type qbContext struct {
 //		   ? (jsonb,text)					ObjectKeyExists(string)
 //		   ?| (jsonb,text[])				ObjectAnyKeyExists([]string)
 //		   ?& (jsonb,text[])				ObjectAllKeyExists([]string)
+//
+//			&& (anyarray,anyarray)			Overlap
+//			@> (anyarray,anyarray)			ArrayContains
+//			<@ (anyarray,anyarray)			ArrayIsContained
+//			= (anyarray,anyarray)			ArrayEqual (not aliased, use equal)
+//
+//			tsvector_ops	@@ (tsvector,tsquery)
+//			@@@ (tsvector,tsquery)
 type safeOps struct {
 	// exp.Comparable
 	Eq  bool
@@ -70,6 +79,12 @@ type safeOps struct {
 	ObjectKeyExists    bool
 	ObjectAnyKeyExists bool
 	ObjectAllKeyExists bool
+
+	// Array Ops
+	ArrayOverlap     bool
+	ArrayContains    bool
+	ArrayIsContained bool
+	ArrayEqual       bool
 
 	// never safe, or at least we can't understand it yet:
 	// exp.Likeable
@@ -121,7 +136,10 @@ func getColumnType(ctx pgsgo.Context, m pgs.Message) string {
 	return ctx.Name(m).String() + "DBColumns"
 }
 
-func safeOpCheck(indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool, methods ...pgdb_v1.MessageOptions_Index_IndexMethod) bool {
+func safeOpCheck(allowed bool, indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool, methods ...pgdb_v1.MessageOptions_Index_IndexMethod) bool {
+	if !allowed {
+		return false
+	}
 	for _, m := range methods {
 		if indexMethods[m] {
 			return true
@@ -155,7 +173,20 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 		}
 		delete(missingIndices, f.DBFieldNameDeep)
 
-		ops := safeOpsForIndexTypes(methods)
+		isArray := false
+		isJSONB := false
+
+		if f.DB != nil {
+			isArray = f.DB.Type[0] == '_'
+			isJSONB = f.DB.Type == "jsonb"
+		}
+		inputType, err := f.Convert.GoType()
+		if err != nil {
+			panic(err)
+		}
+
+		_, isSupportedArrayType := xpq.SupportedArrayGoTypes[inputType]
+		ops := safeOpsForIndexTypes(methods, isArray && isSupportedArrayType, isJSONB)
 		if ops.ObjectContains {
 			ix.JSON = true
 		}
@@ -163,10 +194,9 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 			ix.XPQ = true
 		}
 
-		inputType, err := f.Convert.GoType()
-		if err != nil {
-			panic(err)
-		}
+		// if isArray {
+		// 	fmt.Fprintf(os.Stderr, "🌮 %s.%s: %s :: %t %t %t\n", m.Name(), f.DBFieldNameDeep, inputType, isArray, isSupportedArrayType, isJSONB)
+		// }
 
 		if f.GoName == "" {
 			panic(fmt.Errorf("missing goName for field context: %s:\n%v", m.Name(), f))
@@ -186,7 +216,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 	return rv
 }
 
-func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod) *safeOps {
+func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSuportedArrayType bool, isJSONB bool) *safeOps {
 	indexMethods := make(map[pgdb_v1.MessageOptions_Index_IndexMethod]bool)
 	for _, m := range input {
 		indexMethods[m] = true
@@ -196,28 +226,33 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod) *saf
 	gin := pgdb_v1.MessageOptions_Index_INDEX_METHOD_GIN
 
 	rv := &safeOps{
-		Eq:  safeOpCheck(indexMethods, btree, btreeGin, gin),
-		Neq: safeOpCheck(indexMethods, btree),
-		Gt:  safeOpCheck(indexMethods, btree),
-		Gte: safeOpCheck(indexMethods, btree),
-		Lt:  safeOpCheck(indexMethods, btree),
-		Lte: safeOpCheck(indexMethods, btree),
+		Eq:  safeOpCheck(true, indexMethods, btree, btreeGin, gin),
+		Neq: safeOpCheck(true, indexMethods, btree),
+		Gt:  safeOpCheck(true, indexMethods, btree),
+		Gte: safeOpCheck(true, indexMethods, btree),
+		Lt:  safeOpCheck(true, indexMethods, btree),
+		Lte: safeOpCheck(true, indexMethods, btree),
 
-		In:    safeOpCheck(indexMethods, btree),
-		NotIn: safeOpCheck(indexMethods, btree),
+		In:    safeOpCheck(true, indexMethods, btree),
+		NotIn: safeOpCheck(true, indexMethods, btree),
 
-		IsNull:    safeOpCheck(indexMethods, btree),
-		IsNotNull: safeOpCheck(indexMethods, btree),
+		IsNull:    safeOpCheck(true, indexMethods, btree),
+		IsNotNull: safeOpCheck(true, indexMethods, btree),
 
-		Between:    safeOpCheck(indexMethods, btree),
-		NotBetween: safeOpCheck(indexMethods, btree),
+		Between:    safeOpCheck(true, indexMethods, btree),
+		NotBetween: safeOpCheck(true, indexMethods, btree),
 
-		ObjectContains:     safeOpCheck(indexMethods, btreeGin, gin),
-		ObjectPathExists:   safeOpCheck(indexMethods, btreeGin, gin),
-		ObjectPath:         safeOpCheck(indexMethods, btreeGin, gin),
-		ObjectKeyExists:    safeOpCheck(indexMethods, btreeGin, gin),
-		ObjectAnyKeyExists: safeOpCheck(indexMethods, btreeGin, gin),
-		ObjectAllKeyExists: safeOpCheck(indexMethods, btreeGin, gin),
+		ArrayOverlap:     safeOpCheck(isSuportedArrayType, indexMethods, gin),
+		ArrayContains:    safeOpCheck(isSuportedArrayType, indexMethods, gin),
+		ArrayIsContained: safeOpCheck(isSuportedArrayType, indexMethods, gin),
+		// ArrayEqual:       safeOpCheck(true, indexMethods, gin),
+
+		ObjectContains:     safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
+		ObjectPathExists:   safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
+		ObjectPath:         safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
+		ObjectKeyExists:    safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
+		ObjectAnyKeyExists: safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
+		ObjectAllKeyExists: safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
 	}
 	return rv
 }

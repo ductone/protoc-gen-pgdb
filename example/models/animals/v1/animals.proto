@@ -65,6 +65,20 @@ message ScalarValue {
       "id"
     ],
   };
+  option (pgdb.v1.msg).indexes = {
+    name: "repeated_sfixed32"
+    method: INDEX_METHOD_GIN,
+    columns: [
+      "tenant_id",
+      "repeated_sfixed32",
+      "repeated_sfixed64",
+      "repeated_double",
+      "repeated_bytes",
+      "string_map"
+    ]
+  };
+
+
   string tenant_id = 1;
   string id = 2;
 
