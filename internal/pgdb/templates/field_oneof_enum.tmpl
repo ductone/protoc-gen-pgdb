@@ -1,0 +1,15 @@
+{{ $VarName := .VarName }}
+{{ $OneOfName := .GoName }}
+{{ $StructName := .StructName }}
+
+type {{ $StructName }}{{ $OneOfName }}Type int32
+
+var {{ $StructName }}{{ $OneOfName }} = struct {
+{{- range .Fields }}
+    {{ .GoType }} {{ $StructName }}{{ $OneOfName }}Type
+{{- end }}
+}{
+{{- range .Fields }}
+    {{ .GoType }}: {{ .FieldNumber }},
+{{- end }}
+}

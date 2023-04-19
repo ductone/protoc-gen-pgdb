@@ -34,6 +34,7 @@ type FieldConverter interface {
 	CodeForValue() (string, error)
 	VarForValue() (string, error)
 	VarForAppend() (string, error)
+	EnumForValue() (string, error)
 }
 
 func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer, ix *importTracker, goPrefix string) (*fieldContext, error) {

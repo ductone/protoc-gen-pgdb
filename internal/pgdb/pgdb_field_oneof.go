@@ -56,34 +56,60 @@ type oneofFieldContext struct {
 	Fields  []*oneofMemberField
 }
 
-func (tidc *oneofDataConvert) GoType() (string, error) {
-	return "int32", nil
+func (ofdc *oneofDataConvert) GoType() (string, error) {
+	return ofdc.ctx.Name(ofdc.oneof.Message()).String() + ofdc.ctx.Name(ofdc.oneof).String() + "Type", nil
+	// return "int32", nil
 }
 
-func (fdc *oneofDataConvert) CodeForValue() (string, error) {
+func (ofdc *oneofDataConvert) CodeForValue() (string, error) {
 	c := &oneofFieldContext{
-		VarName: fdc.VarName,
-		GoName:  fdc.ctx.Name(fdc.oneof).String(),
+		VarName: ofdc.VarName,
+		GoName:  ofdc.ctx.Name(ofdc.oneof).String(),
 	}
-	for _, field := range fdc.oneof.Fields() {
+	for _, field := range ofdc.oneof.Fields() {
 		c.Fields = append(c.Fields, &oneofMemberField{
 			FieldNumber: uint32(*field.Descriptor().Number),
-			GoType:      fdc.ctx.OneofOption(field).String(),
+			GoType:      ofdc.ctx.OneofOption(field).String(),
 			Field:       field,
 		})
 	}
 
 	if len(c.Fields) == 0 {
-		return fdc.VarName + ` := uint32(0)`, nil
+		return ofdc.VarName + ` := uint32(0)`, nil
 	}
 
 	return templateExecToString("field_oneof.tmpl", c)
 }
 
-func (fdc *oneofDataConvert) VarForValue() (string, error) {
-	return fdc.VarName, nil
+func (ofdc *oneofDataConvert) VarForValue() (string, error) {
+	return ofdc.VarName, nil
 }
 
-func (fdc *oneofDataConvert) VarForAppend() (string, error) {
+func (ofdc *oneofDataConvert) VarForAppend() (string, error) {
 	return "", nil
+}
+
+type oneofFieldEnumContext struct {
+	StructName string
+	VarName    string
+	GoName     string
+	Fields     []*oneofMemberField
+}
+
+func (ofdc *oneofDataConvert) EnumForValue() (string, error) {
+	c := &oneofFieldEnumContext{
+		StructName: ofdc.ctx.Name(ofdc.oneof.Message()).String(),
+		VarName:    ofdc.VarName,
+		GoName:     ofdc.ctx.Name(ofdc.oneof).String(),
+	}
+	for _, field := range ofdc.oneof.Fields() {
+
+		c.Fields = append(c.Fields, &oneofMemberField{
+			FieldNumber: uint32(*field.Descriptor().Number),
+			GoType:      field.Name().UpperCamelCase().String(),
+			Field:       field,
+		})
+	}
+
+	return templateExecToString("field_oneof_enum.tmpl", c)
 }

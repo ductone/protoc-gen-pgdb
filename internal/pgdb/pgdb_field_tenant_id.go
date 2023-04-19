@@ -41,6 +41,10 @@ func (tidc *tenantIdDataConvert) VarForAppend() (string, error) {
 	return "", nil
 }
 
+func (tidc *tenantIdDataConvert) EnumForValue() (string, error) {
+	return "", nil
+}
+
 func getTenantIDField(msg pgs.Message) (string, error) {
 	fieldName := "tenant_id"
 	ext := pgdb_v1.MessageOptions{}

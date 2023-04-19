@@ -246,6 +246,10 @@ func (fc *fieldConvert) VarForAppend() (string, error) {
 	return fc.varName, nil
 }
 
+func (fc *fieldConvert) EnumForValue() (string, error) {
+	return "", nil
+}
+
 type stringFormatContext struct {
 	IsFloat  bool
 	IsInt    bool

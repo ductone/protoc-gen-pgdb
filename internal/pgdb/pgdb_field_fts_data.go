@@ -89,3 +89,7 @@ func (fdc *ftsDataConvert) VarForValue() (string, error) {
 func (fdc *ftsDataConvert) VarForAppend() (string, error) {
 	return "", nil
 }
+
+func (tidc *ftsDataConvert) EnumForValue() (string, error) {
+	return "", nil
+}
