@@ -99,16 +99,18 @@ func (ofdc *oneofDataConvert) VarForAppend() (string, error) {
 
 type oneofFieldEnumContext struct {
 	StructName string
-	VarName    string
-	GoName     string
-	Fields     []*oneofMemberField
+	// VarName    string
+	GoType string
+	Fields []*oneofMemberField
 }
 
 func (ofdc *oneofDataConvert) EnumForValue() (string, error) {
+	oneof := ofdc.oneof
+	ctx := ofdc.ctx
+
 	c := &oneofFieldEnumContext{
-		StructName: ofdc.ctx.Name(ofdc.oneof.Message()).String(),
-		VarName:    ofdc.VarName,
-		GoName:     ofdc.ctx.Name(ofdc.oneof).String(),
+		StructName: ctx.Name(oneof.Message()).String() + ctx.Name(oneof).String(),
+		GoType:     ofdc.goType,
 	}
 	for _, field := range ofdc.oneof.Fields() {
 

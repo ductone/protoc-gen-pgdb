@@ -1,12 +1,10 @@
-{{ $VarName := .VarName }}
-{{ $OneOfName := .GoName }}
-{{ $StructName := .StructName }}
+{{ $GoType := .GoType }}
 
-type {{ $StructName }}{{ $OneOfName }}Type int32
+type {{ $GoType }} int32
 
-var {{ $StructName }}{{ $OneOfName }} = struct {
+var {{ .StructName }} = struct {
 {{- range .Fields }}
-    {{ .GoType }} {{ $StructName }}{{ $OneOfName }}Type
+    {{ .GoType }} {{ $GoType }}
 {{- end }}
 }{
 {{- range .Fields }}
