@@ -10,7 +10,7 @@ import (
 
 type Array[T sqlable] []T
 
-// jsonb would be the most useful addition
+// jsonb would be the most useful addition.
 var SupportedArrayGoTypes = map[string]bool{
 	"string":  true,
 	"int8":    true,

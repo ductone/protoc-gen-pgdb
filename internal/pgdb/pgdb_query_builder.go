@@ -44,13 +44,13 @@ type qbContext struct {
 //		   ?| (jsonb,text[])				ObjectAnyKeyExists([]string)
 //		   ?& (jsonb,text[])				ObjectAllKeyExists([]string)
 //
-//			&& (anyarray,anyarray)			Overlap
-//			@> (anyarray,anyarray)			ArrayContains
-//			<@ (anyarray,anyarray)			ArrayIsContained
-//			= (anyarray,anyarray)			ArrayEqual (not aliased, use equal)
+//		   && (anyarray,anyarray)			Overlap
+//		   @> (anyarray,anyarray)			ArrayContains
+//		   <@ (anyarray,anyarray)			ArrayIsContained
+//		   = (anyarray,anyarray)			ArrayEqual (not aliased, use equal)
 //
-//			tsvector_ops	@@ (tsvector,tsquery)
-//			@@@ (tsvector,tsquery)
+//		   tsvector_ops	@@ (tsvector,tsquery)
+//		   @@@ (tsvector,tsquery)
 type safeOps struct {
 	// exp.Comparable
 	Eq  bool
@@ -84,7 +84,7 @@ type safeOps struct {
 	ArrayOverlap     bool
 	ArrayContains    bool
 	ArrayIsContained bool
-	ArrayEqual       bool
+	// ArrayEqual       bool  -- covered by equal
 
 	// never safe, or at least we can't understand it yet:
 	// exp.Likeable
@@ -136,10 +136,7 @@ func getColumnType(ctx pgsgo.Context, m pgs.Message) string {
 	return ctx.Name(m).String() + "DBColumns"
 }
 
-func safeOpCheck(allowed bool, indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool, methods ...pgdb_v1.MessageOptions_Index_IndexMethod) bool {
-	if !allowed {
-		return false
-	}
+func safeOpCheck(indexMethods map[pgdb_v1.MessageOptions_Index_IndexMethod]bool, methods ...pgdb_v1.MessageOptions_Index_IndexMethod) bool {
 	for _, m := range methods {
 		if indexMethods[m] {
 			return true
@@ -194,10 +191,6 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 			ix.XPQ = true
 		}
 
-		// if isArray {
-		// 	fmt.Fprintf(os.Stderr, "🌮 %s.%s: %s :: %t %t %t\n", m.Name(), f.DBFieldNameDeep, inputType, isArray, isSupportedArrayType, isJSONB)
-		// }
-
 		if f.GoName == "" {
 			panic(fmt.Errorf("missing goName for field context: %s:\n%v", m.Name(), f))
 		}
@@ -226,33 +219,33 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 	gin := pgdb_v1.MessageOptions_Index_INDEX_METHOD_GIN
 
 	rv := &safeOps{
-		Eq:  safeOpCheck(true, indexMethods, btree, btreeGin, gin),
-		Neq: safeOpCheck(true, indexMethods, btree),
-		Gt:  safeOpCheck(true, indexMethods, btree),
-		Gte: safeOpCheck(true, indexMethods, btree),
-		Lt:  safeOpCheck(true, indexMethods, btree),
-		Lte: safeOpCheck(true, indexMethods, btree),
+		Eq:  safeOpCheck(indexMethods, btree, btreeGin, gin),
+		Neq: safeOpCheck(indexMethods, btree),
+		Gt:  safeOpCheck(indexMethods, btree),
+		Gte: safeOpCheck(indexMethods, btree),
+		Lt:  safeOpCheck(indexMethods, btree),
+		Lte: safeOpCheck(indexMethods, btree),
 
-		In:    safeOpCheck(true, indexMethods, btree),
-		NotIn: safeOpCheck(true, indexMethods, btree),
+		In:    safeOpCheck(indexMethods, btree),
+		NotIn: safeOpCheck(indexMethods, btree),
 
-		IsNull:    safeOpCheck(true, indexMethods, btree),
-		IsNotNull: safeOpCheck(true, indexMethods, btree),
+		IsNull:    safeOpCheck(indexMethods, btree),
+		IsNotNull: safeOpCheck(indexMethods, btree),
 
-		Between:    safeOpCheck(true, indexMethods, btree),
-		NotBetween: safeOpCheck(true, indexMethods, btree),
+		Between:    safeOpCheck(indexMethods, btree),
+		NotBetween: safeOpCheck(indexMethods, btree),
 
-		ArrayOverlap:     safeOpCheck(isSuportedArrayType, indexMethods, gin),
-		ArrayContains:    safeOpCheck(isSuportedArrayType, indexMethods, gin),
-		ArrayIsContained: safeOpCheck(isSuportedArrayType, indexMethods, gin),
+		ArrayOverlap:     isSuportedArrayType && safeOpCheck(indexMethods, gin),
+		ArrayContains:    isSuportedArrayType && safeOpCheck(indexMethods, gin),
+		ArrayIsContained: isSuportedArrayType && safeOpCheck(indexMethods, gin),
 		// ArrayEqual:       safeOpCheck(true, indexMethods, gin),
 
-		ObjectContains:     safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
-		ObjectPathExists:   safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
-		ObjectPath:         safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
-		ObjectKeyExists:    safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
-		ObjectAnyKeyExists: safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
-		ObjectAllKeyExists: safeOpCheck(isJSONB, indexMethods, btreeGin, gin),
+		ObjectContains:     isJSONB && safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectPathExists:   isJSONB && safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectPath:         isJSONB && safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectKeyExists:    isJSONB && safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectAnyKeyExists: isJSONB && safeOpCheck(indexMethods, btreeGin, gin),
+		ObjectAllKeyExists: isJSONB && safeOpCheck(indexMethods, btreeGin, gin),
 	}
 	return rv
 }
