@@ -12,10 +12,14 @@ func (pbdc *pbDataConvert) VarForValue() (string, error) {
 	return pbdc.VarName, nil
 }
 
-func (tidc *pbDataConvert) VarForAppend() (string, error) {
+func (pbdc *pbDataConvert) VarForAppend() (string, error) {
 	return "", nil
 }
 
 func (pbdc *pbDataConvert) GoType() (string, error) {
 	return "[]byte", nil
+}
+
+func (pbdc *pbDataConvert) EnumForValue() (string, error) {
+	return "", nil
 }

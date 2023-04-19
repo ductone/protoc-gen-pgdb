@@ -33,14 +33,22 @@ func (c *importTracker) Type(f pgs.Field) pgsgo.TypeName {
 	return t
 }
 
-func (ix *importTracker) importableTypeName(f pgs.Field, e pgs.Entity) pgsgo.TypeName {
-	t := pgsgo.TypeName(ix.ctx.Name(e))
+func (ix *importTracker) importableTypeName(f pgs.Entity, containingEntity pgs.Entity) pgsgo.TypeName {
+	t := pgsgo.TypeName(ix.ctx.Name(containingEntity))
 
-	if ix.ctx.ImportPath(e) == ix.ctx.ImportPath(f) {
+	if ix.ctx.ImportPath(containingEntity) == ix.ctx.ImportPath(f) {
 		return t
 	}
-	pkgName := ix.ctx.PackageName(e)
-	importName := ix.ctx.ImportPath(e)
+	return pgsgo.TypeName(fmt.Sprintf("%s.%s", ix.importablePackageName(f, containingEntity), t))
+}
+
+func (ix *importTracker) importablePackageName(f pgs.Entity, containingEntity pgs.Entity) pgsgo.TypeName {
+	ctx := ix.ctx
+	if ctx.ImportPath(containingEntity) == ctx.ImportPath(f) {
+		return ""
+	}
+	pkgName := ctx.PackageName(containingEntity)
+	importName := ctx.ImportPath(containingEntity)
 	matched, err := regexp.MatchString(`^v(\d)+$`, pkgName.String())
 	if err != nil {
 		panic(err)
@@ -62,8 +70,7 @@ func (ix *importTracker) importableTypeName(f pgs.Field, e pgs.Entity) pgsgo.Typ
 		}
 		pkgName += "x"
 	}
-
-	return pgsgo.TypeName(fmt.Sprintf("%s.%s", pkgName, t))
+	return pgsgo.TypeName(pkgName)
 }
 
 func (c *importTracker) elType(ft pgs.FieldType) pgsgo.TypeName {

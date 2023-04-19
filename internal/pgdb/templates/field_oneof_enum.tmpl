@@ -1,0 +1,13 @@
+{{ $GoType := .GoType }}
+
+type {{ $GoType }} int32
+
+var {{ .StructName }} = struct {
+{{- range .Fields }}
+    {{ .GoType }} {{ $GoType }}
+{{- end }}
+}{
+{{- range .Fields }}
+    {{ .GoType }}: {{ .FieldNumber }},
+{{- end }}
+}

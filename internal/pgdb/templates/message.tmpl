@@ -1,3 +1,6 @@
+{{- range .Fields }}
+ {{.Convert.EnumForValue}}
+{{- end }}
 
 type {{.MessageType}} struct {
     self *{{.ReceiverType}}

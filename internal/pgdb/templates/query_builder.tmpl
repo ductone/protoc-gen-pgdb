@@ -130,6 +130,28 @@ func  (x *{{ .OpsTypeName }}) NotBetween(start {{.InputType}}, end {{.InputType}
 }
 {{end}}
 
+{{if .Op.ArrayOverlap }}
+func  (x *{{ .OpsTypeName }}) ArrayOverlap(items ...{{.InputType}}) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[{{.InputType}}](items)), nil
+}
+{{end}}
+
+
+{{if .Op.ArrayContains }}
+func  (x *{{ .OpsTypeName }}) ArrayContains(items ...{{.InputType}}) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[{{.InputType}}](items)), nil
+}
+{{end}}
+
+{{if .Op.ArrayIsContained }}
+func  (x *{{ .OpsTypeName }}) ArrayIsContained(items ...{{.InputType}}) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[{{.InputType}}](items)), nil
+}
+{{end}}
+
 {{if .Op.ObjectContains }}
 func  (x *{{ .OpsTypeName }}) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error

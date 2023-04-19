@@ -88,6 +88,10 @@ func (dkdc *dynamoKeyDataConvert) VarForValue() (string, error) {
 	return dkdc.VarName, nil
 }
 
+func (dkdc *dynamoKeyDataConvert) EnumForValue() (string, error) {
+	return "", nil
+}
+
 type pkskDataConvert struct {
 	ctx pgsgo.Context
 }
@@ -105,5 +109,9 @@ func (psdc *pkskDataConvert) VarForValue() (string, error) {
 }
 
 func (dkdc *pkskDataConvert) VarForAppend() (string, error) {
+	return "", nil
+}
+
+func (tidc *pkskDataConvert) EnumForValue() (string, error) {
 	return "", nil
 }

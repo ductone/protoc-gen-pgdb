@@ -270,7 +270,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("oneof_attractions_models_city_v1_f6c0dc62"),
-		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 		IsPrimary:          false,
 		IsUnique:           false,
 		IsDropped:          false,
@@ -298,7 +298,27 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		OverrideExpression: "",
 	})
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("petprofile_attractions_models_city_v1_7827b3bf"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_GIN,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("10$profile")},
+		OverrideExpression: "",
+	})
+
 	return rv
+}
+
+type AttractionsWhatType int32
+
+var AttractionsWhat = struct {
+	Pet     AttractionsWhatType
+	ZooShop AttractionsWhatType
+}{
+	Pet:     10,
+	ZooShop: 11,
 }
 
 type pgdbMessageAttractions struct {
@@ -649,49 +669,6 @@ func (x *AttractionsTenantIdSafeOperators) NotBetween(start string, end string) 
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *AttractionsTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *AttractionsDBQueryBuilder) TenantId() *AttractionsTenantIdSafeOperators {
 	return &AttractionsTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
@@ -892,49 +869,6 @@ func (x *AttractionsFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *AttractionsFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *AttractionsFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *AttractionsFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *AttractionsFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *AttractionsDBQueryBuilder) FTSData() *AttractionsFTSDataSafeOperators {
 	return &AttractionsFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
@@ -948,11 +882,72 @@ func (x *AttractionsWhatSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *AttractionsWhatSafeOperators) Eq(v int32) exp.BooleanExpression {
+func (x *AttractionsWhatSafeOperators) Eq(v AttractionsWhatType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsWhatSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+func (x *AttractionsWhatSafeOperators) Neq(v AttractionsWhatType) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Gt(v AttractionsWhatType) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Gte(v AttractionsWhatType) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Lt(v AttractionsWhatType) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Lte(v AttractionsWhatType) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsWhatSafeOperators) In(v []AttractionsWhatType) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsWhatSafeOperators) NotIn(v []AttractionsWhatType) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsWhatSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsWhatSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsWhatSafeOperators) Between(start AttractionsWhatType, end AttractionsWhatType) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsWhatSafeOperators) NotBetween(start AttractionsWhatType, end AttractionsWhatType) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsDBQueryBuilder) What() *AttractionsWhatSafeOperators {
+	return &AttractionsWhatSafeOperators{tableName: x.tableName, column: "pb$" + "what_oneof"}
+}
+
+type AttractionsPetSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsPetSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsPetSafeOperators) Eq(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsPetSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error
 	var data []byte
 
@@ -970,33 +965,33 @@ func (x *AttractionsWhatSafeOperators) ObjectContains(obj interface{}) (exp.Expr
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
-func (x *AttractionsWhatSafeOperators) ObjectPathExists(path string) exp.Expression {
+func (x *AttractionsPetSafeOperators) ObjectPathExists(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
-func (x *AttractionsWhatSafeOperators) ObjectPath(path string) exp.Expression {
+func (x *AttractionsPetSafeOperators) ObjectPath(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
-func (x *AttractionsWhatSafeOperators) ObjectKeyExists(key string) exp.Expression {
+func (x *AttractionsPetSafeOperators) ObjectKeyExists(key string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
-func (x *AttractionsWhatSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+func (x *AttractionsPetSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
-func (x *AttractionsWhatSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+func (x *AttractionsPetSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
-func (x *AttractionsDBQueryBuilder) What() *AttractionsWhatSafeOperators {
-	return &AttractionsWhatSafeOperators{tableName: x.tableName, column: "pb$" + "what_oneof"}
+func (x *AttractionsDBQueryBuilder) Pet() *AttractionsPetSafeOperators {
+	return &AttractionsPetSafeOperators{tableName: x.tableName, column: "pb$" + "10$profile"}
 }
 
 type AttractionsZooShopMediumSafeOperators struct {
@@ -1008,35 +1003,35 @@ func (x *AttractionsZooShopMediumSafeOperators) Identifier() exp.IdentifierExpre
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) Eq(v int32) exp.BooleanExpression {
+func (x *AttractionsZooShopMediumSafeOperators) Eq(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) Neq(v int32) exp.BooleanExpression {
+func (x *AttractionsZooShopMediumSafeOperators) Neq(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) Gt(v int32) exp.BooleanExpression {
+func (x *AttractionsZooShopMediumSafeOperators) Gt(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) Gte(v int32) exp.BooleanExpression {
+func (x *AttractionsZooShopMediumSafeOperators) Gte(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) Lt(v int32) exp.BooleanExpression {
+func (x *AttractionsZooShopMediumSafeOperators) Lt(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) Lte(v int32) exp.BooleanExpression {
+func (x *AttractionsZooShopMediumSafeOperators) Lte(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) In(v []int32) exp.BooleanExpression {
+func (x *AttractionsZooShopMediumSafeOperators) In(v []zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+func (x *AttractionsZooShopMediumSafeOperators) NotIn(v []zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1048,11 +1043,11 @@ func (x *AttractionsZooShopMediumSafeOperators) IsNotNull() exp.BooleanExpressio
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+func (x *AttractionsZooShopMediumSafeOperators) Between(start zoo_v1.ShopMediumType, end zoo_v1.ShopMediumType) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
-func (x *AttractionsZooShopMediumSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+func (x *AttractionsZooShopMediumSafeOperators) NotBetween(start zoo_v1.ShopMediumType, end zoo_v1.ShopMediumType) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
@@ -1073,49 +1068,6 @@ func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Eq(v int64) exp.Boolea
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsZooShopAnythingSfixed64SafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *AttractionsDBQueryBuilder) ZooShopAnythingSfixed64() *AttractionsZooShopAnythingSfixed64SafeOperators {
 	return &AttractionsZooShopAnythingSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + "11$52$sfixed_64"}
 }
@@ -1133,49 +1085,6 @@ func (x *AttractionsZooShopFurSafeOperators) Eq(v int32) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsZooShopFurSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *AttractionsZooShopFurSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *AttractionsZooShopFurSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *AttractionsZooShopFurSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *AttractionsZooShopFurSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsZooShopFurSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *AttractionsDBQueryBuilder) ZooShopFur() *AttractionsZooShopFurSafeOperators {
 	return &AttractionsZooShopFurSafeOperators{tableName: x.tableName, column: "pb$" + "11$fur"}
 }
@@ -1189,35 +1098,35 @@ func (x *AttractionsMediumMediumSafeOperators) Identifier() exp.IdentifierExpres
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *AttractionsMediumMediumSafeOperators) Eq(v int32) exp.BooleanExpression {
+func (x *AttractionsMediumMediumSafeOperators) Eq(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsMediumMediumSafeOperators) Neq(v int32) exp.BooleanExpression {
+func (x *AttractionsMediumMediumSafeOperators) Neq(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
-func (x *AttractionsMediumMediumSafeOperators) Gt(v int32) exp.BooleanExpression {
+func (x *AttractionsMediumMediumSafeOperators) Gt(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
-func (x *AttractionsMediumMediumSafeOperators) Gte(v int32) exp.BooleanExpression {
+func (x *AttractionsMediumMediumSafeOperators) Gte(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
-func (x *AttractionsMediumMediumSafeOperators) Lt(v int32) exp.BooleanExpression {
+func (x *AttractionsMediumMediumSafeOperators) Lt(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
-func (x *AttractionsMediumMediumSafeOperators) Lte(v int32) exp.BooleanExpression {
+func (x *AttractionsMediumMediumSafeOperators) Lte(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
-func (x *AttractionsMediumMediumSafeOperators) In(v []int32) exp.BooleanExpression {
+func (x *AttractionsMediumMediumSafeOperators) In(v []zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
-func (x *AttractionsMediumMediumSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+func (x *AttractionsMediumMediumSafeOperators) NotIn(v []zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1229,11 +1138,11 @@ func (x *AttractionsMediumMediumSafeOperators) IsNotNull() exp.BooleanExpression
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
-func (x *AttractionsMediumMediumSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+func (x *AttractionsMediumMediumSafeOperators) Between(start zoo_v1.ShopMediumType, end zoo_v1.ShopMediumType) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
-func (x *AttractionsMediumMediumSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+func (x *AttractionsMediumMediumSafeOperators) NotBetween(start zoo_v1.ShopMediumType, end zoo_v1.ShopMediumType) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 

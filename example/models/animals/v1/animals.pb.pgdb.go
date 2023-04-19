@@ -712,49 +712,6 @@ func (x *PetTenantIdSafeOperators) NotBetween(start string, end string) exp.Rang
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *PetTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *PetTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *PetTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *PetTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *PetTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *PetTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *PetDBQueryBuilder) TenantId() *PetTenantIdSafeOperators {
 	return &PetTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
@@ -953,49 +910,6 @@ func (x *PetFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
 
 func (x *PetFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *PetFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *PetFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *PetFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *PetFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *PetFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *PetFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *PetDBQueryBuilder) FTSData() *PetFTSDataSafeOperators {
@@ -1869,6 +1783,16 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 
 	}
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("repeated_sfixed32_scalar_value_models_a_4e825cd3"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_GIN,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("repeated_sfixed32"), io.ColumnName("repeated_sfixed64"), io.ColumnName("repeated_double"), io.ColumnName("repeated_bytes"), io.ColumnName("string_map")},
+		OverrideExpression: "",
+	})
+
 	return rv
 }
 
@@ -2469,49 +2393,6 @@ func (x *ScalarValueTenantIdSafeOperators) NotBetween(start string, end string) 
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *ScalarValueTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *ScalarValueTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *ScalarValueTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *ScalarValueTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *ScalarValueTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *ScalarValueTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *ScalarValueDBQueryBuilder) TenantId() *ScalarValueTenantIdSafeOperators {
 	return &ScalarValueTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
@@ -2712,7 +2593,152 @@ func (x *ScalarValueFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ScalarValueFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+func (x *ScalarValueDBQueryBuilder) FTSData() *ScalarValueFTSDataSafeOperators {
+	return &ScalarValueFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type ScalarValueRepeatedDoubleSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ScalarValueRepeatedDoubleSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ScalarValueRepeatedDoubleSafeOperators) Eq(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ScalarValueRepeatedDoubleSafeOperators) ArrayOverlap(items ...float64) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[float64](items)), nil
+}
+
+func (x *ScalarValueRepeatedDoubleSafeOperators) ArrayContains(items ...float64) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[float64](items)), nil
+}
+
+func (x *ScalarValueRepeatedDoubleSafeOperators) ArrayIsContained(items ...float64) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[float64](items)), nil
+}
+
+func (x *ScalarValueDBQueryBuilder) RepeatedDouble() *ScalarValueRepeatedDoubleSafeOperators {
+	return &ScalarValueRepeatedDoubleSafeOperators{tableName: x.tableName, column: "pb$" + "repeated_double"}
+}
+
+type ScalarValueRepeatedSfixed32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ScalarValueRepeatedSfixed32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ScalarValueRepeatedSfixed32SafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ScalarValueRepeatedSfixed32SafeOperators) ArrayOverlap(items ...int32) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[int32](items)), nil
+}
+
+func (x *ScalarValueRepeatedSfixed32SafeOperators) ArrayContains(items ...int32) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[int32](items)), nil
+}
+
+func (x *ScalarValueRepeatedSfixed32SafeOperators) ArrayIsContained(items ...int32) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[int32](items)), nil
+}
+
+func (x *ScalarValueDBQueryBuilder) RepeatedSfixed32() *ScalarValueRepeatedSfixed32SafeOperators {
+	return &ScalarValueRepeatedSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + "repeated_sfixed32"}
+}
+
+type ScalarValueRepeatedSfixed64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ScalarValueRepeatedSfixed64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ScalarValueRepeatedSfixed64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ScalarValueRepeatedSfixed64SafeOperators) ArrayOverlap(items ...int64) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[int64](items)), nil
+}
+
+func (x *ScalarValueRepeatedSfixed64SafeOperators) ArrayContains(items ...int64) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[int64](items)), nil
+}
+
+func (x *ScalarValueRepeatedSfixed64SafeOperators) ArrayIsContained(items ...int64) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[int64](items)), nil
+}
+
+func (x *ScalarValueDBQueryBuilder) RepeatedSfixed64() *ScalarValueRepeatedSfixed64SafeOperators {
+	return &ScalarValueRepeatedSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + "repeated_sfixed64"}
+}
+
+type ScalarValueRepeatedBytesSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ScalarValueRepeatedBytesSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ScalarValueRepeatedBytesSafeOperators) Eq(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ScalarValueRepeatedBytesSafeOperators) ArrayOverlap(items ...[]byte) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[[]byte](items)), nil
+}
+
+func (x *ScalarValueRepeatedBytesSafeOperators) ArrayContains(items ...[]byte) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[[]byte](items)), nil
+}
+
+func (x *ScalarValueRepeatedBytesSafeOperators) ArrayIsContained(items ...[]byte) (exp.Expression, error) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[[]byte](items)), nil
+}
+
+func (x *ScalarValueDBQueryBuilder) RepeatedBytes() *ScalarValueRepeatedBytesSafeOperators {
+	return &ScalarValueRepeatedBytesSafeOperators{tableName: x.tableName, column: "pb$" + "repeated_bytes"}
+}
+
+type ScalarValueStringMapSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ScalarValueStringMapSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ScalarValueStringMapSafeOperators) Eq(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ScalarValueStringMapSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error
 	var data []byte
 
@@ -2730,33 +2756,33 @@ func (x *ScalarValueFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.E
 	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
 }
 
-func (x *ScalarValueFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
+func (x *ScalarValueStringMapSafeOperators) ObjectPathExists(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
 
-func (x *ScalarValueFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
+func (x *ScalarValueStringMapSafeOperators) ObjectPath(path string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? @@ ?", idExp, path)
 }
 
-func (x *ScalarValueFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
+func (x *ScalarValueStringMapSafeOperators) ObjectKeyExists(key string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("? \\? ?", idExp, key)
 }
 
-func (x *ScalarValueFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+func (x *ScalarValueStringMapSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
 }
 
-func (x *ScalarValueFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+func (x *ScalarValueStringMapSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
-func (x *ScalarValueDBQueryBuilder) FTSData() *ScalarValueFTSDataSafeOperators {
-	return &ScalarValueFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+func (x *ScalarValueDBQueryBuilder) StringMap() *ScalarValueStringMapSafeOperators {
+	return &ScalarValueStringMapSafeOperators{tableName: x.tableName, column: "pb$" + "string_map"}
 }
 
 type ScalarValueTenantIdQueryType struct {
@@ -4044,6 +4070,18 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 	return rv
 }
 
+type BookMediumType int32
+
+var BookMedium = struct {
+	Paper BookMediumType
+	Ebook BookMediumType
+	News  BookMediumType
+}{
+	Paper: 50,
+	Ebook: 51,
+	News:  52,
+}
+
 type pgdbMessageBook struct {
 	self *Book
 }
@@ -4387,49 +4425,6 @@ func (x *BookTenantIdSafeOperators) NotBetween(start string, end string) exp.Ran
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *BookTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *BookTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *BookTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *BookTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *BookTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *BookTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *BookDBQueryBuilder) TenantId() *BookTenantIdSafeOperators {
 	return &BookTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
@@ -4628,49 +4623,6 @@ func (x *BookFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
 
 func (x *BookFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *BookFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *BookFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *BookFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *BookFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *BookFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *BookFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *BookDBQueryBuilder) FTSData() *BookFTSDataSafeOperators {
@@ -5278,49 +5230,6 @@ func (x *NewspaperTenantIdSafeOperators) NotBetween(start string, end string) ex
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *NewspaperTenantIdSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *NewspaperTenantIdSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *NewspaperTenantIdSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *NewspaperTenantIdSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *NewspaperTenantIdSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *NewspaperTenantIdSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 func (x *NewspaperDBQueryBuilder) TenantId() *NewspaperTenantIdSafeOperators {
 	return &NewspaperTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
@@ -5519,49 +5428,6 @@ func (x *NewspaperFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
 
 func (x *NewspaperFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *NewspaperFTSDataSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *NewspaperFTSDataSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *NewspaperFTSDataSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *NewspaperFTSDataSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *NewspaperFTSDataSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
 }
 
 func (x *NewspaperDBQueryBuilder) FTSData() *NewspaperFTSDataSafeOperators {

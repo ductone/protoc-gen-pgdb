@@ -8,7 +8,7 @@ import (
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
 
-func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer, ix *importTracker, goPrefix string) *fieldContext {
+func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer, ix *importTracker) *fieldContext {
 	pgColName, err := getColumnOneOfName(oneof)
 	if err != nil {
 		panic(fmt.Errorf("pgdb: getColumnOneOfName failed for: %s: %w",
@@ -16,6 +16,13 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 	}
 
 	dbTypeRef := pgDataTypeForName("int4")
+
+	importPath := ix.importablePackageName(ix.input, oneof).String()
+	goType := ctx.Name(oneof.Message()).String() + ctx.Name(oneof).String() + "Type"
+	if importPath != "" {
+		goType = importPath + "." + goType
+	}
+
 	rv := &fieldContext{
 		IsVirtual: false,
 		GoName:    ctx.Name(oneof).String(),
@@ -30,6 +37,7 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 			ix:      ix,
 			oneof:   oneof,
 			VarName: vn.String(),
+			goType:  goType,
 		},
 		QueryTypeName: ctx.Name(oneof.Message()).String() + ctx.Name(oneof).String() + "QueryType",
 	}
@@ -42,6 +50,7 @@ type oneofDataConvert struct {
 	ix      *importTracker
 	VarName string
 	oneof   pgs.OneOf
+	goType  string
 }
 
 type oneofMemberField struct {
@@ -56,34 +65,60 @@ type oneofFieldContext struct {
 	Fields  []*oneofMemberField
 }
 
-func (tidc *oneofDataConvert) GoType() (string, error) {
-	return "int32", nil
+func (ofdc *oneofDataConvert) GoType() (string, error) {
+	return ofdc.goType, nil
 }
 
-func (fdc *oneofDataConvert) CodeForValue() (string, error) {
+func (ofdc *oneofDataConvert) CodeForValue() (string, error) {
 	c := &oneofFieldContext{
-		VarName: fdc.VarName,
-		GoName:  fdc.ctx.Name(fdc.oneof).String(),
+		VarName: ofdc.VarName,
+		GoName:  ofdc.ctx.Name(ofdc.oneof).String(),
 	}
-	for _, field := range fdc.oneof.Fields() {
+	for _, field := range ofdc.oneof.Fields() {
 		c.Fields = append(c.Fields, &oneofMemberField{
 			FieldNumber: uint32(*field.Descriptor().Number),
-			GoType:      fdc.ctx.OneofOption(field).String(),
+			GoType:      ofdc.ctx.OneofOption(field).String(),
 			Field:       field,
 		})
 	}
 
 	if len(c.Fields) == 0 {
-		return fdc.VarName + ` := uint32(0)`, nil
+		return ofdc.VarName + ` := uint32(0)`, nil
 	}
 
 	return templateExecToString("field_oneof.tmpl", c)
 }
 
-func (fdc *oneofDataConvert) VarForValue() (string, error) {
-	return fdc.VarName, nil
+func (ofdc *oneofDataConvert) VarForValue() (string, error) {
+	return ofdc.VarName, nil
 }
 
-func (fdc *oneofDataConvert) VarForAppend() (string, error) {
+func (ofdc *oneofDataConvert) VarForAppend() (string, error) {
 	return "", nil
+}
+
+type oneofFieldEnumContext struct {
+	StructName string
+	// VarName    string
+	GoType string
+	Fields []*oneofMemberField
+}
+
+func (ofdc *oneofDataConvert) EnumForValue() (string, error) {
+	oneof := ofdc.oneof
+	ctx := ofdc.ctx
+
+	c := &oneofFieldEnumContext{
+		StructName: ctx.Name(oneof.Message()).String() + ctx.Name(oneof).String(),
+		GoType:     ofdc.goType,
+	}
+	for _, field := range ofdc.oneof.Fields() {
+		c.Fields = append(c.Fields, &oneofMemberField{
+			FieldNumber: uint32(*field.Descriptor().Number),
+			GoType:      field.Name().UpperCamelCase().String(),
+			Field:       field,
+		})
+	}
+
+	return templateExecToString("field_oneof_enum.tmpl", c)
 }

@@ -10,6 +10,23 @@ import (
 
 type Array[T sqlable] []T
 
+// jsonb would be the most useful addition.
+var SupportedArrayGoTypes = map[string]bool{
+	"string":  true,
+	"int8":    true,
+	"int16":   true,
+	"int32":   true,
+	"int64":   true,
+	"uint8":   true,
+	"uint16":  true,
+	"uint32":  true,
+	"uint64":  true,
+	"float32": true,
+	"float64": true,
+	"bool":    true,
+	"[]byte":  true,
+}
+
 type sqlable interface {
 	string | int8 | int16 | int32 | int64 | uint8 | uint16 | uint32 | uint64 | float32 | float64 | bool | []byte
 }
