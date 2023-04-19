@@ -113,7 +113,6 @@ func (ofdc *oneofDataConvert) EnumForValue() (string, error) {
 		GoType:     ofdc.goType,
 	}
 	for _, field := range ofdc.oneof.Fields() {
-
 		c.Fields = append(c.Fields, &oneofMemberField{
 			FieldNumber: uint32(*field.Descriptor().Number),
 			GoType:      field.Name().UpperCamelCase().String(),
