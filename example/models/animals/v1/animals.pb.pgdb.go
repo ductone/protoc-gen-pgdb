@@ -912,50 +912,6 @@ func (x *PetFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *PetFTSDataSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *PetFTSDataSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *PetFTSDataSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *PetFTSDataSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *PetFTSDataSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *PetFTSDataSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *PetFTSDataSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *PetFTSDataSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *PetFTSDataSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *PetFTSDataSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *PetFTSDataSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
 func (x *PetDBQueryBuilder) FTSData() *PetFTSDataSafeOperators {
 	return &PetFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
@@ -971,50 +927,6 @@ func (x *PetProfileSafeOperators) Identifier() exp.IdentifierExpression {
 
 func (x *PetProfileSafeOperators) Eq(v any) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *PetProfileSafeOperators) Neq(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *PetProfileSafeOperators) Gt(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *PetProfileSafeOperators) Gte(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *PetProfileSafeOperators) Lt(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *PetProfileSafeOperators) Lte(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *PetProfileSafeOperators) In(v []any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *PetProfileSafeOperators) NotIn(v []any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *PetProfileSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *PetProfileSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *PetProfileSafeOperators) Between(start any, end any) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *PetProfileSafeOperators) NotBetween(start any, end any) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *PetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
@@ -2681,50 +2593,6 @@ func (x *ScalarValueFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ScalarValueFTSDataSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *ScalarValueFTSDataSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *ScalarValueFTSDataSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *ScalarValueFTSDataSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *ScalarValueFTSDataSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *ScalarValueFTSDataSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *ScalarValueFTSDataSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *ScalarValueFTSDataSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *ScalarValueFTSDataSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *ScalarValueFTSDataSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *ScalarValueFTSDataSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
 func (x *ScalarValueDBQueryBuilder) FTSData() *ScalarValueFTSDataSafeOperators {
 	return &ScalarValueFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
@@ -4202,6 +4070,18 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 	return rv
 }
 
+type BookMediumType int32
+
+var BookMedium = struct {
+	Paper BookMediumType
+	Ebook BookMediumType
+	News  BookMediumType
+}{
+	Paper: 50,
+	Ebook: 51,
+	News:  52,
+}
+
 type pgdbMessageBook struct {
 	self *Book
 }
@@ -4743,50 +4623,6 @@ func (x *BookFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
 
 func (x *BookFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *BookFTSDataSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *BookFTSDataSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *BookFTSDataSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *BookFTSDataSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *BookFTSDataSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *BookFTSDataSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *BookFTSDataSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *BookFTSDataSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *BookFTSDataSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *BookFTSDataSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *BookFTSDataSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *BookDBQueryBuilder) FTSData() *BookFTSDataSafeOperators {
@@ -5592,50 +5428,6 @@ func (x *NewspaperFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
 
 func (x *NewspaperFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) In(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *NewspaperFTSDataSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *NewspaperFTSDataSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *NewspaperFTSDataSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *NewspaperFTSDataSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *NewspaperDBQueryBuilder) FTSData() *NewspaperFTSDataSafeOperators {

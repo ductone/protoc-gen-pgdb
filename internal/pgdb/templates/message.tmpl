@@ -1,3 +1,6 @@
+{{- range .Fields }}
+ {{.Convert.EnumForValue}}
+{{- end }}
 
 type {{.MessageType}} struct {
     self *{{.ReceiverType}}
@@ -74,7 +77,3 @@ func (m *{{.MessageType}}) SearchData(opts ...pgdb_v1.RecordOptionsFunc) ([]*pgd
     {{ end }}
     return rv
 }
-
-{{- range .Fields }}
- {{.Convert.EnumForValue}}
-{{- end }}

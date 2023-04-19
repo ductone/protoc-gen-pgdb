@@ -101,7 +101,7 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 	vn := &varNamer{prefix: "oneof", offset: 0}
 	for _, oneof := range m.RealOneOfs() {
 		vn = vn.Next()
-		fc := module.getOneOf(ctx, oneof, vn, ix, goPrefix)
+		fc := module.getOneOf(ctx, oneof, vn, ix)
 		if fc == nil {
 			continue
 		}
@@ -190,7 +190,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 	vn = &varNamer{prefix: "oneof", offset: 0}
 	for _, oneof := range m.RealOneOfs() {
 		vn = vn.Next()
-		fieldRep := module.getOneOf(ctx, oneof, vn, ix, goPrefix)
+		fieldRep := module.getOneOf(ctx, oneof, vn, ix)
 		if fieldRep != nil {
 			rv = append(rv, fieldRep)
 		}

@@ -2,13 +2,14 @@ package pgdb
 
 import (
 	"fmt"
+	"os"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
 
-func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer, ix *importTracker, goPrefix string) *fieldContext {
+func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer, ix *importTracker) *fieldContext {
 	pgColName, err := getColumnOneOfName(oneof)
 	if err != nil {
 		panic(fmt.Errorf("pgdb: getColumnOneOfName failed for: %s: %w",
@@ -57,7 +58,18 @@ type oneofFieldContext struct {
 }
 
 func (ofdc *oneofDataConvert) GoType() (string, error) {
-	return ofdc.ctx.Name(ofdc.oneof.Message()).String() + ofdc.ctx.Name(ofdc.oneof).String() + "Type", nil
+	oneof := ofdc.oneof
+	thing := ofdc.ix.importableTypeName2(ofdc.ix.input, oneof).String()
+	// thing := ofdc.ctx.ImportPath(oneof)
+	// ofdc.ix.ImportPath(f)
+	path := ofdc.ctx.Name(oneof.Message()).String() + ofdc.ctx.Name(oneof).String() + "Type"
+	if thing != "" {
+		path = thing + "." + path
+	}
+
+	fmt.Fprintf(os.Stderr, "  %s\n\n", path)
+	return path, nil
+	// return ofdc.ctx.Name(oneof.Message()).String() + ofdc.ctx.Name(oneof).String() + "Type", nil
 	// return "int32", nil
 }
 
