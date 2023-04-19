@@ -2,7 +2,6 @@ package pgdb
 
 import (
 	"fmt"
-	"os"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star"
@@ -17,6 +16,13 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 	}
 
 	dbTypeRef := pgDataTypeForName("int4")
+
+	importPath := ix.importablePackageName(ix.input, oneof).String()
+	goType := ctx.Name(oneof.Message()).String() + ctx.Name(oneof).String() + "Type"
+	if importPath != "" {
+		goType = importPath + "." + goType
+	}
+
 	rv := &fieldContext{
 		IsVirtual: false,
 		GoName:    ctx.Name(oneof).String(),
@@ -31,6 +37,7 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 			ix:      ix,
 			oneof:   oneof,
 			VarName: vn.String(),
+			goType:  goType,
 		},
 		QueryTypeName: ctx.Name(oneof.Message()).String() + ctx.Name(oneof).String() + "QueryType",
 	}
@@ -43,6 +50,7 @@ type oneofDataConvert struct {
 	ix      *importTracker
 	VarName string
 	oneof   pgs.OneOf
+	goType  string
 }
 
 type oneofMemberField struct {
@@ -58,19 +66,7 @@ type oneofFieldContext struct {
 }
 
 func (ofdc *oneofDataConvert) GoType() (string, error) {
-	oneof := ofdc.oneof
-	thing := ofdc.ix.importableTypeName2(ofdc.ix.input, oneof).String()
-	// thing := ofdc.ctx.ImportPath(oneof)
-	// ofdc.ix.ImportPath(f)
-	path := ofdc.ctx.Name(oneof.Message()).String() + ofdc.ctx.Name(oneof).String() + "Type"
-	if thing != "" {
-		path = thing + "." + path
-	}
-
-	fmt.Fprintf(os.Stderr, "  %s\n\n", path)
-	return path, nil
-	// return ofdc.ctx.Name(oneof.Message()).String() + ofdc.ctx.Name(oneof).String() + "Type", nil
-	// return "int32", nil
+	return ofdc.goType, nil
 }
 
 func (ofdc *oneofDataConvert) CodeForValue() (string, error) {

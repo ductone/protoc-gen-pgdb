@@ -2,7 +2,6 @@ package pgdb
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 
 	pgs "github.com/lyft/protoc-gen-star"
@@ -22,7 +21,6 @@ func (c *importTracker) Type(f pgs.Field) pgsgo.TypeName {
 	case ft.IsEmbed():
 		return c.importableTypeName(f, ft.Embed()).Pointer()
 	case ft.IsEnum():
-		fmt.Fprintf(os.Stderr, "🦐 %s\n", f.Name().String())
 		t = c.importableTypeName(f, ft.Enum())
 	default:
 		t = scalarType(ft.ProtoType())
@@ -35,51 +33,22 @@ func (c *importTracker) Type(f pgs.Field) pgsgo.TypeName {
 	return t
 }
 
-func (ix *importTracker) importableTypeName(f pgs.Entity, e pgs.Entity) pgsgo.TypeName {
-	t := pgsgo.TypeName(ix.ctx.Name(e))
+func (ix *importTracker) importableTypeName(f pgs.Entity, containingEntity pgs.Entity) pgsgo.TypeName {
+	t := pgsgo.TypeName(ix.ctx.Name(containingEntity))
 
-	fmt.Fprintf(os.Stderr, "🌮 %s %s %s\n", f.Name().String(), ix.ctx.ImportPath(e).String(), ix.ctx.ImportPath(f).String())
-	if ix.ctx.ImportPath(e) == ix.ctx.ImportPath(f) {
-		fmt.Fprintf(os.Stderr, " %s 1\n", t)
+	if ix.ctx.ImportPath(containingEntity) == ix.ctx.ImportPath(f) {
 		return t
 	}
-	pkgName := ix.ctx.PackageName(e)
-	importName := ix.ctx.ImportPath(e)
-	matched, err := regexp.MatchString(`^v(\d)+$`, pkgName.String())
-	if err != nil {
-		panic(err)
-	}
-
-	if matched {
-		niceName := importName.Dir().Base()
-		pkgName = pgs.Name(fmt.Sprintf("%s_%s", niceName, pkgName.String()))
-	}
-
-	for {
-		to, ok := ix.typeMapper[pkgName]
-		if !ok {
-			ix.typeMapper[pkgName] = importName
-			break
-		}
-		if to == importName {
-			break
-		}
-		pkgName += "x"
-	}
-	fmt.Fprintf(os.Stderr, " %s 2\n", pgsgo.TypeName(fmt.Sprintf("%s.%s", pkgName, t)))
-	return pgsgo.TypeName(fmt.Sprintf("%s.%s", pkgName, t))
+	return pgsgo.TypeName(fmt.Sprintf("%s.%s", ix.importablePackageName(f, containingEntity), t))
 }
 
-func (ix *importTracker) importableTypeName2(f pgs.Entity, e pgs.Entity) pgsgo.TypeName {
-	t := pgsgo.TypeName(ix.ctx.Name(e))
-
-	fmt.Fprintf(os.Stderr, "🌮 %s %s %s\n", f.Name().String(), ix.ctx.ImportPath(e).String(), ix.ctx.ImportPath(f).String())
-	if ix.ctx.ImportPath(e) == ix.ctx.ImportPath(f) {
-		fmt.Fprintf(os.Stderr, " %s 1\n", t)
+func (ix *importTracker) importablePackageName(f pgs.Entity, containingEntity pgs.Entity) pgsgo.TypeName {
+	ctx := ix.ctx
+	if ctx.ImportPath(containingEntity) == ctx.ImportPath(f) {
 		return ""
 	}
-	pkgName := ix.ctx.PackageName(e)
-	importName := ix.ctx.ImportPath(e)
+	pkgName := ctx.PackageName(containingEntity)
+	importName := ctx.ImportPath(containingEntity)
 	matched, err := regexp.MatchString(`^v(\d)+$`, pkgName.String())
 	if err != nil {
 		panic(err)
@@ -101,7 +70,6 @@ func (ix *importTracker) importableTypeName2(f pgs.Entity, e pgs.Entity) pgsgo.T
 		}
 		pkgName += "x"
 	}
-	fmt.Fprintf(os.Stderr, " %s 2\n", pgsgo.TypeName(fmt.Sprintf("%s.%s", pkgName, t)))
 	return pgsgo.TypeName(pkgName)
 }
 
