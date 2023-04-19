@@ -38,7 +38,7 @@ message Attractions {
   };
   option (pgdb.v1.msg).indexes = {
     name: "oneof"
-    method: INDEX_METHOD_BTREE_GIN,
+    method: INDEX_METHOD_BTREE,
     columns: [
       "tenant_id",
       "what"

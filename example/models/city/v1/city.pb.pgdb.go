@@ -270,7 +270,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("oneof_attractions_models_city_v1_f6c0dc62"),
-		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 		IsPrimary:          false,
 		IsUnique:           false,
 		IsDropped:          false,

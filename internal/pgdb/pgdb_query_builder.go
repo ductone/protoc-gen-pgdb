@@ -168,6 +168,15 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 		if len(methods) == 0 {
 			continue
 		}
+		if f.GoName == "" {
+			panic(fmt.Errorf("missing goName for field context: %s:\n%v", m.Name(), f))
+		}
+
+		inputType, err := f.Convert.GoType()
+		if err != nil {
+			panic(err)
+		}
+
 		delete(missingIndices, f.DBFieldNameDeep)
 
 		isArray := false
@@ -177,23 +186,11 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 			isArray = f.DB.Type[0] == '_'
 			isJSONB = f.DB.Type == "jsonb"
 		}
-		inputType, err := f.Convert.GoType()
-		if err != nil {
-			panic(err)
-		}
-
 		_, isSupportedArrayType := xpq.SupportedArrayGoTypes[inputType]
 		ops := safeOpsForIndexTypes(methods, isArray && isSupportedArrayType, isJSONB)
-		if ops.ObjectContains {
-			ix.JSON = true
-		}
-		if ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists {
-			ix.XPQ = true
-		}
 
-		if f.GoName == "" {
-			panic(fmt.Errorf("missing goName for field context: %s:\n%v", m.Name(), f))
-		}
+		ix.JSON = ix.JSON || isJSONB
+		ix.XPQ = ix.XPQ || ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists || (isArray && isSupportedArrayType)
 
 		rv = append(rv, &safeFieldContext{
 			InputType:   inputType,
@@ -219,19 +216,16 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 	gin := pgdb_v1.MessageOptions_Index_INDEX_METHOD_GIN
 
 	rv := &safeOps{
-		Eq:  safeOpCheck(indexMethods, btree, btreeGin, gin),
-		Neq: safeOpCheck(indexMethods, btree, btreeGin),
-		Gt:  safeOpCheck(indexMethods, btree, btreeGin),
-		Gte: safeOpCheck(indexMethods, btree, btreeGin),
-		Lt:  safeOpCheck(indexMethods, btree, btreeGin),
-		Lte: safeOpCheck(indexMethods, btree, btreeGin),
-
-		In:    safeOpCheck(indexMethods, btree, btreeGin),
-		NotIn: safeOpCheck(indexMethods, btree, btreeGin),
-
-		IsNull:    safeOpCheck(indexMethods, btree, btreeGin),
-		IsNotNull: safeOpCheck(indexMethods, btree, btreeGin),
-
+		Eq:         safeOpCheck(indexMethods, btree, btreeGin, gin),
+		Neq:        safeOpCheck(indexMethods, btree, btreeGin),
+		Gt:         safeOpCheck(indexMethods, btree, btreeGin),
+		Gte:        safeOpCheck(indexMethods, btree, btreeGin),
+		Lt:         safeOpCheck(indexMethods, btree, btreeGin),
+		Lte:        safeOpCheck(indexMethods, btree, btreeGin),
+		In:         safeOpCheck(indexMethods, btree, btreeGin),
+		NotIn:      safeOpCheck(indexMethods, btree, btreeGin),
+		IsNull:     safeOpCheck(indexMethods, btree, btreeGin),
+		IsNotNull:  safeOpCheck(indexMethods, btree, btreeGin),
 		Between:    safeOpCheck(indexMethods, btree, btreeGin),
 		NotBetween: safeOpCheck(indexMethods, btree, btreeGin),
 
