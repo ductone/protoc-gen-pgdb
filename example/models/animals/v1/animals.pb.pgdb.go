@@ -2610,19 +2610,19 @@ func (x *ScalarValueRepeatedDoubleSafeOperators) Eq(v float64) exp.BooleanExpres
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ScalarValueRepeatedDoubleSafeOperators) ArrayOverlap(items ...float64) (exp.Expression, error) {
+func (x *ScalarValueRepeatedDoubleSafeOperators) Overlaps(items ...float64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[float64](items)), nil
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[float64](items))
 }
 
-func (x *ScalarValueRepeatedDoubleSafeOperators) ArrayContains(items ...float64) (exp.Expression, error) {
+func (x *ScalarValueRepeatedDoubleSafeOperators) Contains(items ...float64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[float64](items)), nil
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[float64](items))
 }
 
-func (x *ScalarValueRepeatedDoubleSafeOperators) ArrayIsContained(items ...float64) (exp.Expression, error) {
+func (x *ScalarValueRepeatedDoubleSafeOperators) IsContainedBy(items ...float64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[float64](items)), nil
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[float64](items))
 }
 
 func (x *ScalarValueDBQueryBuilder) RepeatedDouble() *ScalarValueRepeatedDoubleSafeOperators {
@@ -2642,19 +2642,19 @@ func (x *ScalarValueRepeatedSfixed32SafeOperators) Eq(v int32) exp.BooleanExpres
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ScalarValueRepeatedSfixed32SafeOperators) ArrayOverlap(items ...int32) (exp.Expression, error) {
+func (x *ScalarValueRepeatedSfixed32SafeOperators) Overlaps(items ...int32) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[int32](items)), nil
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
 }
 
-func (x *ScalarValueRepeatedSfixed32SafeOperators) ArrayContains(items ...int32) (exp.Expression, error) {
+func (x *ScalarValueRepeatedSfixed32SafeOperators) Contains(items ...int32) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[int32](items)), nil
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
 }
 
-func (x *ScalarValueRepeatedSfixed32SafeOperators) ArrayIsContained(items ...int32) (exp.Expression, error) {
+func (x *ScalarValueRepeatedSfixed32SafeOperators) IsContainedBy(items ...int32) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[int32](items)), nil
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
 }
 
 func (x *ScalarValueDBQueryBuilder) RepeatedSfixed32() *ScalarValueRepeatedSfixed32SafeOperators {
@@ -2674,19 +2674,19 @@ func (x *ScalarValueRepeatedSfixed64SafeOperators) Eq(v int64) exp.BooleanExpres
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ScalarValueRepeatedSfixed64SafeOperators) ArrayOverlap(items ...int64) (exp.Expression, error) {
+func (x *ScalarValueRepeatedSfixed64SafeOperators) Overlaps(items ...int64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[int64](items)), nil
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int64](items))
 }
 
-func (x *ScalarValueRepeatedSfixed64SafeOperators) ArrayContains(items ...int64) (exp.Expression, error) {
+func (x *ScalarValueRepeatedSfixed64SafeOperators) Contains(items ...int64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[int64](items)), nil
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int64](items))
 }
 
-func (x *ScalarValueRepeatedSfixed64SafeOperators) ArrayIsContained(items ...int64) (exp.Expression, error) {
+func (x *ScalarValueRepeatedSfixed64SafeOperators) IsContainedBy(items ...int64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[int64](items)), nil
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int64](items))
 }
 
 func (x *ScalarValueDBQueryBuilder) RepeatedSfixed64() *ScalarValueRepeatedSfixed64SafeOperators {
@@ -2706,19 +2706,19 @@ func (x *ScalarValueRepeatedBytesSafeOperators) Eq(v []byte) exp.BooleanExpressi
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ScalarValueRepeatedBytesSafeOperators) ArrayOverlap(items ...[]byte) (exp.Expression, error) {
+func (x *ScalarValueRepeatedBytesSafeOperators) Overlaps(items ...[]byte) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("&&"), xpq.Array[[]byte](items)), nil
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[[]byte](items))
 }
 
-func (x *ScalarValueRepeatedBytesSafeOperators) ArrayContains(items ...[]byte) (exp.Expression, error) {
+func (x *ScalarValueRepeatedBytesSafeOperators) Contains(items ...[]byte) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@>"), xpq.Array[[]byte](items)), nil
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[[]byte](items))
 }
 
-func (x *ScalarValueRepeatedBytesSafeOperators) ArrayIsContained(items ...[]byte) (exp.Expression, error) {
+func (x *ScalarValueRepeatedBytesSafeOperators) IsContainedBy(items ...[]byte) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("<@"), xpq.Array[[]byte](items)), nil
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[[]byte](items))
 }
 
 func (x *ScalarValueDBQueryBuilder) RepeatedBytes() *ScalarValueRepeatedBytesSafeOperators {
