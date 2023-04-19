@@ -220,25 +220,24 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 
 	rv := &safeOps{
 		Eq:  safeOpCheck(indexMethods, btree, btreeGin, gin),
-		Neq: safeOpCheck(indexMethods, btree),
-		Gt:  safeOpCheck(indexMethods, btree),
-		Gte: safeOpCheck(indexMethods, btree),
-		Lt:  safeOpCheck(indexMethods, btree),
-		Lte: safeOpCheck(indexMethods, btree),
+		Neq: safeOpCheck(indexMethods, btree, btreeGin),
+		Gt:  safeOpCheck(indexMethods, btree, btreeGin),
+		Gte: safeOpCheck(indexMethods, btree, btreeGin),
+		Lt:  safeOpCheck(indexMethods, btree, btreeGin),
+		Lte: safeOpCheck(indexMethods, btree, btreeGin),
 
-		In:    safeOpCheck(indexMethods, btree),
-		NotIn: safeOpCheck(indexMethods, btree),
+		In:    safeOpCheck(indexMethods, btree, btreeGin),
+		NotIn: safeOpCheck(indexMethods, btree, btreeGin),
 
-		IsNull:    safeOpCheck(indexMethods, btree),
-		IsNotNull: safeOpCheck(indexMethods, btree),
+		IsNull:    safeOpCheck(indexMethods, btree, btreeGin),
+		IsNotNull: safeOpCheck(indexMethods, btree, btreeGin),
 
-		Between:    safeOpCheck(indexMethods, btree),
-		NotBetween: safeOpCheck(indexMethods, btree),
+		Between:    safeOpCheck(indexMethods, btree, btreeGin),
+		NotBetween: safeOpCheck(indexMethods, btree, btreeGin),
 
-		ArrayOverlap:     isSuportedArrayType && safeOpCheck(indexMethods, gin),
-		ArrayContains:    isSuportedArrayType && safeOpCheck(indexMethods, gin),
-		ArrayIsContained: isSuportedArrayType && safeOpCheck(indexMethods, gin),
-		// ArrayEqual:       safeOpCheck(true, indexMethods, gin),
+		ArrayOverlap:     isSuportedArrayType && safeOpCheck(indexMethods, btreeGin, gin),
+		ArrayContains:    isSuportedArrayType && safeOpCheck(indexMethods, btreeGin, gin),
+		ArrayIsContained: isSuportedArrayType && safeOpCheck(indexMethods, btreeGin, gin),
 
 		ObjectContains:     isJSONB && safeOpCheck(indexMethods, btreeGin, gin),
 		ObjectPathExists:   isJSONB && safeOpCheck(indexMethods, btreeGin, gin),

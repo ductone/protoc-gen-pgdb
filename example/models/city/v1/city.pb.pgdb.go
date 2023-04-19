@@ -859,6 +859,50 @@ func (x *AttractionsFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+func (x *AttractionsFTSDataSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsFTSDataSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsFTSDataSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsFTSDataSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsFTSDataSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsFTSDataSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsFTSDataSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsFTSDataSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsFTSDataSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsFTSDataSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsFTSDataSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
 func (x *AttractionsDBQueryBuilder) FTSData() *AttractionsFTSDataSafeOperators {
 	return &AttractionsFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
@@ -874,6 +918,50 @@ func (x *AttractionsWhatSafeOperators) Identifier() exp.IdentifierExpression {
 
 func (x *AttractionsWhatSafeOperators) Eq(v int32) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsWhatSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsWhatSafeOperators) In(v []int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsWhatSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsWhatSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsWhatSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsWhatSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsWhatSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsDBQueryBuilder) What() *AttractionsWhatSafeOperators {
@@ -1014,6 +1102,50 @@ func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Eq(v int64) exp.Boolea
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) In(v []int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsZooShopAnythingSfixed64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
 func (x *AttractionsDBQueryBuilder) ZooShopAnythingSfixed64() *AttractionsZooShopAnythingSfixed64SafeOperators {
 	return &AttractionsZooShopAnythingSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + "11$52$sfixed_64"}
 }
@@ -1029,6 +1161,50 @@ func (x *AttractionsZooShopFurSafeOperators) Identifier() exp.IdentifierExpressi
 
 func (x *AttractionsZooShopFurSafeOperators) Eq(v int32) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) In(v []int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsZooShopFurSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsZooShopFurSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsZooShopFurSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsZooShopFurSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
 func (x *AttractionsDBQueryBuilder) ZooShopFur() *AttractionsZooShopFurSafeOperators {
