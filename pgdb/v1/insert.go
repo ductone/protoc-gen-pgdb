@@ -45,7 +45,7 @@ func Insert(msg DBReflectMessage) (string, []any, error) {
 
 	q = q.OnConflict(
 		exp.NewDoUpdateConflictExpression(`ON CONSTRAINT "`+primaryIndex.Name+`"`, conflictRecords).Where(
-			exp.NewIdentifierExpression("", "excluded", versionField.Name).Gte(
+			exp.NewIdentifierExpression("", tableName, versionField.Name).Lte(
 				exp.NewLiteralExpression("?::timestamptz", record[versionField.Name]),
 			),
 		),
