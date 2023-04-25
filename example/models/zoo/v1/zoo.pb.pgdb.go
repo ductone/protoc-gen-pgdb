@@ -590,10 +590,6 @@ func (x *ShopTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ShopTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *ShopTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -620,6 +616,10 @@ func (x *ShopTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
 
 func (x *ShopTenantIdSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ShopTenantIdSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
 func (x *ShopTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
@@ -651,10 +651,6 @@ func (x *ShopPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ShopPKSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *ShopPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -681,6 +677,10 @@ func (x *ShopPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 
 func (x *ShopPKSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ShopPKSKSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
 func (x *ShopPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
@@ -712,10 +712,6 @@ func (x *ShopPKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ShopPKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *ShopPKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -742,6 +738,10 @@ func (x *ShopPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 
 func (x *ShopPKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ShopPKSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
 func (x *ShopPKSafeOperators) IsNotNull() exp.BooleanExpression {
@@ -773,10 +773,6 @@ func (x *ShopSKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *ShopSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *ShopSKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -803,6 +799,10 @@ func (x *ShopSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 
 func (x *ShopSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ShopSKSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
 func (x *ShopSKSafeOperators) IsNotNull() exp.BooleanExpression {
