@@ -308,6 +308,16 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		OverrideExpression: "",
 	})
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("id_attractions_models_city_v1_890e34d0"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("id")},
+		OverrideExpression: "",
+	})
+
 	return rv
 }
 
@@ -625,10 +635,6 @@ func (x *AttractionsTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsTenantIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *AttractionsTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -655,6 +661,10 @@ func (x *AttractionsTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpressi
 
 func (x *AttractionsTenantIdSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsTenantIdSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
 func (x *AttractionsTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
@@ -686,10 +696,6 @@ func (x *AttractionsPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsPKSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *AttractionsPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -716,6 +722,10 @@ func (x *AttractionsPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 
 func (x *AttractionsPKSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsPKSKSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
 func (x *AttractionsPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
@@ -747,10 +757,6 @@ func (x *AttractionsPKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsPKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *AttractionsPKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -777,6 +783,10 @@ func (x *AttractionsPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 
 func (x *AttractionsPKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsPKSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
 func (x *AttractionsPKSafeOperators) IsNotNull() exp.BooleanExpression {
@@ -808,10 +818,6 @@ func (x *AttractionsSKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsSKSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *AttractionsSKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -838,6 +844,10 @@ func (x *AttractionsSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 
 func (x *AttractionsSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsSKSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
 func (x *AttractionsSKSafeOperators) IsNotNull() exp.BooleanExpression {
@@ -886,10 +896,6 @@ func (x *AttractionsWhatSafeOperators) Eq(v AttractionsWhatType) exp.BooleanExpr
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *AttractionsWhatSafeOperators) Neq(v AttractionsWhatType) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
 func (x *AttractionsWhatSafeOperators) Gt(v AttractionsWhatType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
@@ -932,6 +938,67 @@ func (x *AttractionsWhatSafeOperators) NotBetween(start AttractionsWhatType, end
 
 func (x *AttractionsDBQueryBuilder) What() *AttractionsWhatSafeOperators {
 	return &AttractionsWhatSafeOperators{tableName: x.tableName, column: "pb$" + "what_oneof"}
+}
+
+type AttractionsIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsIdSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsIdSafeOperators) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsDBQueryBuilder) Id() *AttractionsIdSafeOperators {
+	return &AttractionsIdSafeOperators{tableName: x.tableName, column: "pb$" + "id"}
 }
 
 type AttractionsPetSafeOperators struct {
@@ -1005,10 +1072,6 @@ func (x *AttractionsZooShopMediumSafeOperators) Identifier() exp.IdentifierExpre
 
 func (x *AttractionsZooShopMediumSafeOperators) Eq(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsZooShopMediumSafeOperators) Neq(v zoo_v1.ShopMediumType) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *AttractionsZooShopMediumSafeOperators) Gt(v zoo_v1.ShopMediumType) exp.BooleanExpression {
@@ -1100,10 +1163,6 @@ func (x *AttractionsMediumMediumSafeOperators) Identifier() exp.IdentifierExpres
 
 func (x *AttractionsMediumMediumSafeOperators) Eq(v zoo_v1.ShopMediumType) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumMediumSafeOperators) Neq(v zoo_v1.ShopMediumType) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
 }
 
 func (x *AttractionsMediumMediumSafeOperators) Gt(v zoo_v1.ShopMediumType) exp.BooleanExpression {

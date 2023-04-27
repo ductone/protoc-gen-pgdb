@@ -112,6 +112,13 @@ func  (x *{{ .OpsTypeName }}) IsNull() exp.BooleanExpression {
 }
 {{end}}
 
+
+{{if .Op.IsEmpty }}
+func  (x *{{ .OpsTypeName }}) IsEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+{{end}}
+
 {{if .Op.IsNotNull }}
 func  (x *{{ .OpsTypeName }}) IsNotNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
