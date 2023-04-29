@@ -53,6 +53,7 @@ const (
 type formatContext struct {
 	VarName      string
 	InputName    string
+	CastFunc     string
 	CastType     string
 	IsArray      bool
 	NestedPrefix string
@@ -108,6 +109,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "float32",
+			CastFunc:  "float32",
 			IsArray:   fc.IsArray,
 		})
 	case gtFloat64:
@@ -115,6 +117,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "float64",
+			CastFunc:  "float64",
 			IsArray:   fc.IsArray,
 		})
 	case gtInt32:
@@ -122,6 +125,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "int32",
+			CastFunc:  "int32",
 			IsArray:   fc.IsArray,
 		})
 	case gtInt64:
@@ -129,6 +133,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "int64",
+			CastFunc:  "int64",
 			IsArray:   fc.IsArray,
 		})
 	case gtUint32:
@@ -136,6 +141,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "uint32",
+			CastFunc:  "uint32",
 			IsArray:   fc.IsArray,
 		})
 	case gtUint64:
@@ -143,6 +149,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "uint64",
+			CastFunc:  "uint64",
 			IsArray:   fc.IsArray,
 		})
 	case gtBool:
@@ -150,12 +157,14 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  pgTypeBool,
+			CastFunc:  pgTypeBool,
 			IsArray:   fc.IsArray,
 		})
 	case gtString:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
+			CastFunc:  "pgdb_v1.SanitizeString",
 			CastType:  fieldConvertString,
 			IsArray:   fc.IsArray,
 		})
@@ -164,6 +173,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "[]byte",
+			CastFunc:  "[]byte",
 			IsArray:   fc.IsArray,
 		})
 	case gtEnum:
@@ -171,6 +181,7 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 			CastType:  "int32",
+			CastFunc:  "int32",
 			IsArray:   fc.IsArray,
 		})
 	case gtPbWktTimestamp:

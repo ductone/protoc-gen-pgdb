@@ -350,7 +350,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := (m.self.TenantId)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -452,7 +452,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := pgdb_v1.SanitizeString(m.self.GetId())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -496,7 +496,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		rv[ro.ColumnName("deleted_at")] = v4
 	}
 
-	v5 := string(m.self.GetDisplayName())
+	v5 := pgdb_v1.SanitizeString(m.self.GetDisplayName())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("display_name")] = nullExp
@@ -504,7 +504,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		rv[ro.ColumnName("display_name")] = v5
 	}
 
-	v6 := string(m.self.GetDescription())
+	v6 := pgdb_v1.SanitizeString(m.self.GetDescription())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("description")] = nullExp
@@ -1822,7 +1822,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := (m.self.TenantId)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -1914,7 +1914,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := pgdb_v1.SanitizeString(m.self.GetId())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -2026,7 +2026,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		rv[ro.ColumnName("bool")] = v14
 	}
 
-	v15 := string(m.self.GetString_())
+	v15 := pgdb_v1.SanitizeString(m.self.GetString_())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("string")] = nullExp
@@ -2187,7 +2187,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v30 := make(xpq.Array[string], 0, len(m.self.GetRepeatedString()))
 	for _, v30arrTmp := range m.self.GetRepeatedString() {
-		v30 = append(v30, string(v30arrTmp))
+		v30 = append(v30, pgdb_v1.SanitizeString(v30arrTmp))
 	}
 
 	if ro.Nulled {
@@ -4108,7 +4108,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := (m.self.TenantId)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -4204,7 +4204,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := pgdb_v1.SanitizeString(m.self.GetId())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -5023,7 +5023,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.Id)
+		cfv0 := (m.self.Id)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -5100,7 +5100,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 	}
 
-	v1 := string(m.self.GetName())
+	v1 := pgdb_v1.SanitizeString(m.self.GetName())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("name")] = nullExp
