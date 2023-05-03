@@ -618,7 +618,7 @@ func (x *ShopTenantIdSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *ShopTenantIdSafeOperators) IsEmpty() exp.Expression {
+func (x *ShopTenantIdSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
@@ -679,7 +679,7 @@ func (x *ShopPKSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *ShopPKSKSafeOperators) IsEmpty() exp.Expression {
+func (x *ShopPKSKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
@@ -740,7 +740,7 @@ func (x *ShopPKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *ShopPKSafeOperators) IsEmpty() exp.Expression {
+func (x *ShopPKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
@@ -801,7 +801,7 @@ func (x *ShopSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *ShopSKSafeOperators) IsEmpty() exp.Expression {
+func (x *ShopSKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
