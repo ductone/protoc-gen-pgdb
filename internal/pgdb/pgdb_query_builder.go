@@ -53,13 +53,13 @@ type qbContext struct {
 //		   @@@ (tsvector,tsquery)
 type safeOps struct {
 	// exp.Comparable
-	Eq      bool
-	Neq     bool
-	Gt      bool
-	Gte     bool
-	Lt      bool
-	Lte     bool
-	IsEmpty bool
+	Eq         bool
+	Neq        bool
+	Gt         bool
+	Gte        bool
+	Lt         bool
+	Lte        bool
+	IsNotEmpty bool
 
 	// exp.Inable
 	In    bool
@@ -222,7 +222,7 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 		Eq: safeOpCheck(indexMethods, btree, btreeGin, gin),
 		// not acutally safe!
 		// Neq:                safeOpCheck(indexMethods, btree),
-		IsEmpty:            safeOpCheck(indexMethods, btree) && isText,
+		IsNotEmpty:         safeOpCheck(indexMethods, btree) && isText,
 		Gt:                 safeOpCheck(indexMethods, btree),
 		Gte:                safeOpCheck(indexMethods, btree),
 		Lt:                 safeOpCheck(indexMethods, btree),

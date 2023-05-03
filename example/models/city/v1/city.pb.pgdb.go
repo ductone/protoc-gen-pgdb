@@ -663,7 +663,7 @@ func (x *AttractionsTenantIdSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *AttractionsTenantIdSafeOperators) IsEmpty() exp.Expression {
+func (x *AttractionsTenantIdSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
@@ -724,7 +724,7 @@ func (x *AttractionsPKSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *AttractionsPKSKSafeOperators) IsEmpty() exp.Expression {
+func (x *AttractionsPKSKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
@@ -785,7 +785,7 @@ func (x *AttractionsPKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *AttractionsPKSafeOperators) IsEmpty() exp.Expression {
+func (x *AttractionsPKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
@@ -846,7 +846,7 @@ func (x *AttractionsSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *AttractionsSKSafeOperators) IsEmpty() exp.Expression {
+func (x *AttractionsSKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
@@ -981,7 +981,7 @@ func (x *AttractionsIdSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *AttractionsIdSafeOperators) IsEmpty() exp.Expression {
+func (x *AttractionsIdSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
