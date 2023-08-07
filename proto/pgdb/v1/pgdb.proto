@@ -22,6 +22,7 @@ message MessageOptions {
       // Requires loading of BTREE_GIN extension:
       // https://www.postgresql.org/docs/current/btree-gin.html
       INDEX_METHOD_BTREE_GIN = 3;
+      INDEX_METHOD_BRIN = 4;
     }
     string name = 1;
     IndexMethod method = 2;
