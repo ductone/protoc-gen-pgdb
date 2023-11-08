@@ -57,10 +57,10 @@ func interfaceToValue(in interface{}) string {
 }
 
 func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []lexeme {
-	rv := make([]lexeme, 0, 8)
 	edgeGramFilter := edgegramStream(3)
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
+	rv := make([]lexeme, 0, 8)
 	pos := 1
 	for _, doc := range docs {
 		docValue := interfaceToValue(doc.Value)
