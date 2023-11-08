@@ -84,19 +84,32 @@ func TestSearchCamelCase(t *testing.T) {
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-			Value:  "AWSProdAuthGroupSNSAccess",
+			Value:  "AWSProdUSEastAuthSNSTestSQS FooBarLOLFoobarSOSTestNOPE CheezeBreeze",
 		},
 	})
 
-	requireQueryTrue(t, pg, vector, "awsprodauthgroupsnsaccess")
-	requireQueryTrue(t, pg, vector, "aws")
+	requireQueryTrue(t, pg, vector, "awsproduseastauthsnstestsqs")
 	requireQueryTrue(t, pg, vector, "prod")
-	requireQueryTrue(t, pg, vector, "group")
+	requireQueryTrue(t, pg, vector, "east")
+	requireQueryTrue(t, pg, vector, "auth")
+	requireQueryTrue(t, pg, vector, "test")
+	requireQueryTrue(t, pg, vector, "foo")
+	requireQueryTrue(t, pg, vector, "bar")
+	requireQueryTrue(t, pg, vector, "foobar")
+	requireQueryTrue(t, pg, vector, "test")
+	requireQueryTrue(t, pg, vector, "cheeze")
+	requireQueryTrue(t, pg, vector, "breeze")
+	requireQueryTrue(t, pg, vector, "aws")
+	requireQueryTrue(t, pg, vector, "us")
 	requireQueryTrue(t, pg, vector, "sns")
-	requireQueryTrue(t, pg, vector, "access")
+	requireQueryTrue(t, pg, vector, "sqs")
+	requireQueryTrue(t, pg, vector, "lol")
+	requireQueryTrue(t, pg, vector, "sos")
+	requireQueryTrue(t, pg, vector, "nope")
+
 	requireQueryFalse(t, pg, vector, "github")
-	requireQueryFalse(t, pg, vector, "odau")
-	requireQueryFalse(t, pg, vector, "uthgro")
+	requireQueryFalse(t, pg, vector, "spro")
+	requireQueryFalse(t, pg, vector, "snste")
 }
 
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {

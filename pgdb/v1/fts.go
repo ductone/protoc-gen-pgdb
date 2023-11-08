@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
@@ -55,14 +56,11 @@ func interfaceToValue(in interface{}) string {
 	}
 }
 
-// FullTextSearchVectors converts a set of input documents
-// into a ::tsvector. Note: this function may generally ignore errors in input text, to be robust to
-// untrusted inputs, and will do its "best", for some value of "best".
-func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Filter) exp.Expression {
+func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []lexeme {
+	rv := make([]lexeme, 0, 8)
 	edgeGramFilter := edgegramStream(3)
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
-	rv := make([]lexeme, 0, 8)
 	pos := 1
 	for _, doc := range docs {
 		docValue := interfaceToValue(doc.Value)
@@ -108,6 +106,37 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 			_ = err
 		}
 	}
+	return rv
+}
+
+func camelSplitDocs(docs []*SearchContent) []lexeme {
+	rv := make([]lexeme, 0, 8)
+	re := regexp.MustCompile(`[[:upper:]][[:lower:]]+`)
+	re2 := regexp.MustCompile(`(?P<token>[[:upper:]]+)([[:upper:]][[:lower:]]|$|\s)`)
+	template := "$token"
+	for _, doc := range docs {
+		docValue := interfaceToValue(doc.Value)
+		for _, match := range re.FindAllStringIndex(docValue, -1) {
+			result := docValue[match[0]:match[1]]
+			rv = append(rv, lexeme{strings.ToLower(result), match[0] + 1, doc.Weight})
+		}
+		for _, match := range re2.FindAllStringSubmatchIndex(docValue, -1) {
+			result := []byte{}
+			result = re2.ExpandString(result, template, docValue, match)
+			rv = append(rv, lexeme{strings.ToLower(string(result)), match[0] + 1, doc.Weight})
+		}
+	}
+	return rv
+}
+
+// FullTextSearchVectors converts a set of input documents
+// into a ::tsvector. Note: this function may generally ignore errors in input text, to be robust to
+// untrusted inputs, and will do its "best", for some value of "best".
+func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Filter) exp.Expression {
+	rv := make([]lexeme, 0, 8)
+
+	rv = append(rv, lemmatizeDocs(docs, additionalFilters...)...)
+	rv = append(rv, camelSplitDocs(docs)...)
 
 	if len(rv) == 0 {
 		return exp.NewLiteralExpression("''::tsvector")
