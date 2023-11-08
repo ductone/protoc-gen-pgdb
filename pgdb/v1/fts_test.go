@@ -74,7 +74,6 @@ func TestSearchCamelCase(t *testing.T) {
 	require.NoError(t, err)
 	defer pg.Stop()
 
-	// an empty doc, containing just spaces and punctuation
 	vector := FullTextSearchVectors([]*SearchContent{
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
