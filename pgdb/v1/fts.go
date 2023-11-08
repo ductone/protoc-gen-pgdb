@@ -111,18 +111,18 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 
 func camelSplitDocs(docs []*SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
-	re := regexp.MustCompile(`[[:upper:]][[:lower:]]+`)
-	re2 := regexp.MustCompile(`(?P<token>[[:upper:]]+)([[:upper:]][[:lower:]]|$|\s)`)
+	camelCaseRegex := regexp.MustCompile(`[[:upper:]][[:lower:]]+`)
+	acronymRegex := regexp.MustCompile(`(?P<token>[[:upper:]]+)([[:upper:]][[:lower:]]|$|\s)`)
 	template := "$token"
 	for _, doc := range docs {
 		docValue := interfaceToValue(doc.Value)
-		for _, match := range re.FindAllStringIndex(docValue, -1) {
+		for _, match := range camelCaseRegex.FindAllStringIndex(docValue, -1) {
 			result := docValue[match[0]:match[1]]
 			rv = append(rv, lexeme{strings.ToLower(result), match[0] + 1, doc.Weight})
 		}
-		for _, match := range re2.FindAllStringSubmatchIndex(docValue, -1) {
+		for _, match := range acronymRegex.FindAllStringSubmatchIndex(docValue, -1) {
 			result := []byte{}
-			result = re2.ExpandString(result, template, docValue, match)
+			result = acronymRegex.ExpandString(result, template, docValue, match)
 			rv = append(rv, lexeme{strings.ToLower(string(result)), match[0] + 1, doc.Weight})
 		}
 	}
