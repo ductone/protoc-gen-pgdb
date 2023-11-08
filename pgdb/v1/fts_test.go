@@ -30,6 +30,11 @@ func TestSearchBigQueryDoc(t *testing.T) {
 			Value:  "role/biquery.user",
 		},
 		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "role/biquery.user",
+		},
+		{
 			// filter all tokens < 3 characters out?
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_MED,
@@ -67,6 +72,31 @@ func TestSearchEmpty(t *testing.T) {
 	require.Equal(t, `''::tsvector`, vector.(exp.LiteralExpression).Literal())
 	requireQueryFalse(t, pg, vector, "2DmNjwzqyfzisCFmt0OrPvwJ3gT")
 	requireQueryFalse(t, pg, vector, " ")
+}
+
+func TestSearchCamelCase(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	// an empty doc, containing just spaces and punctuation
+	vector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "AWSProdAuthGroupSNSAccess",
+		},
+	})
+
+	requireQueryTrue(t, pg, vector, "awsprodauthgroupsnsaccess")
+	requireQueryTrue(t, pg, vector, "aws")
+	requireQueryTrue(t, pg, vector, "prod")
+	requireQueryTrue(t, pg, vector, "group")
+	requireQueryTrue(t, pg, vector, "sns")
+	requireQueryTrue(t, pg, vector, "access")
+	requireQueryFalse(t, pg, vector, "github")
+	requireQueryFalse(t, pg, vector, "odau")
+	requireQueryFalse(t, pg, vector, "uthgro")
 }
 
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
