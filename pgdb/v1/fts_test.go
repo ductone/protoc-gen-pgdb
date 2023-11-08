@@ -30,11 +30,6 @@ func TestSearchBigQueryDoc(t *testing.T) {
 			Value:  "role/biquery.user",
 		},
 		{
-			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
-			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-			Value:  "role/biquery.user",
-		},
-		{
 			// filter all tokens < 3 characters out?
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_MED,
