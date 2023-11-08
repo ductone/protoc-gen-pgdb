@@ -83,7 +83,9 @@ type safeOps struct {
 
 	// Array Ops
 	ArrayOverlap     bool
+	ArrayNotOverlap  bool
 	ArrayContains    bool
+	ArrayNotContains bool
 	ArrayIsContained bool
 	// ArrayEqual       bool  -- covered by equal
 
@@ -234,7 +236,9 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 		Between:            safeOpCheck(indexMethods, btree),
 		NotBetween:         safeOpCheck(indexMethods, btree),
 		ArrayOverlap:       safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,
+		ArrayNotOverlap:    safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,
 		ArrayContains:      safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,
+		ArrayNotContains:   safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,
 		ArrayIsContained:   safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,
 		ObjectContains:     safeOpCheck(indexMethods, btreeGin, gin) && isJSONB,
 		ObjectPathExists:   safeOpCheck(indexMethods, btreeGin, gin) && isJSONB,
