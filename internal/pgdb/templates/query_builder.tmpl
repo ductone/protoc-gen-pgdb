@@ -138,17 +138,38 @@ func  (x *{{ .OpsTypeName }}) NotBetween(start {{.InputType}}, end {{.InputType}
 {{end}}
 
 {{if .Op.ArrayOverlap }}
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
 func  (x *{{ .OpsTypeName }}) Overlaps(items ...{{.InputType}}) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[{{.InputType}}](items))
 }
 {{end}}
 
+{{if .Op.ArrayNotOverlap }}
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func  (x *{{ .OpsTypeName }}) UnsafeNotOverlaps(items ...{{.InputType}}) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[{{.InputType}}](items))
+}
+{{end}}
 
 {{if .Op.ArrayContains }}
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
 func  (x *{{ .OpsTypeName }}) Contains(items ...{{.InputType}}) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[{{.InputType}}](items))
+}
+{{end}}
+
+{{if .Op.ArrayNotContains }}
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func  (x *{{ .OpsTypeName }}) UnsafeNotContains(items ...{{.InputType}}) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[{{.InputType}}](items))
 }
 {{end}}
 

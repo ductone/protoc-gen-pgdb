@@ -2610,14 +2610,32 @@ func (x *ScalarValueRepeatedDoubleSafeOperators) Eq(v float64) exp.BooleanExpres
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
 func (x *ScalarValueRepeatedDoubleSafeOperators) Overlaps(items ...float64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[float64](items))
 }
 
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *ScalarValueRepeatedDoubleSafeOperators) UnsafeNotOverlaps(items ...float64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[float64](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
 func (x *ScalarValueRepeatedDoubleSafeOperators) Contains(items ...float64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[float64](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *ScalarValueRepeatedDoubleSafeOperators) UnsafeNotContains(items ...float64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[float64](items))
 }
 
 func (x *ScalarValueRepeatedDoubleSafeOperators) IsContainedBy(items ...float64) exp.Expression {
@@ -2642,14 +2660,32 @@ func (x *ScalarValueRepeatedSfixed32SafeOperators) Eq(v int32) exp.BooleanExpres
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
 func (x *ScalarValueRepeatedSfixed32SafeOperators) Overlaps(items ...int32) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
 }
 
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *ScalarValueRepeatedSfixed32SafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
 func (x *ScalarValueRepeatedSfixed32SafeOperators) Contains(items ...int32) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *ScalarValueRepeatedSfixed32SafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
 }
 
 func (x *ScalarValueRepeatedSfixed32SafeOperators) IsContainedBy(items ...int32) exp.Expression {
@@ -2674,14 +2710,32 @@ func (x *ScalarValueRepeatedSfixed64SafeOperators) Eq(v int64) exp.BooleanExpres
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
 func (x *ScalarValueRepeatedSfixed64SafeOperators) Overlaps(items ...int64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int64](items))
 }
 
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *ScalarValueRepeatedSfixed64SafeOperators) UnsafeNotOverlaps(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int64](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
 func (x *ScalarValueRepeatedSfixed64SafeOperators) Contains(items ...int64) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int64](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *ScalarValueRepeatedSfixed64SafeOperators) UnsafeNotContains(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int64](items))
 }
 
 func (x *ScalarValueRepeatedSfixed64SafeOperators) IsContainedBy(items ...int64) exp.Expression {
@@ -2706,14 +2760,32 @@ func (x *ScalarValueRepeatedBytesSafeOperators) Eq(v []byte) exp.BooleanExpressi
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
 func (x *ScalarValueRepeatedBytesSafeOperators) Overlaps(items ...[]byte) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[[]byte](items))
 }
 
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *ScalarValueRepeatedBytesSafeOperators) UnsafeNotOverlaps(items ...[]byte) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[[]byte](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
 func (x *ScalarValueRepeatedBytesSafeOperators) Contains(items ...[]byte) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[[]byte](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *ScalarValueRepeatedBytesSafeOperators) UnsafeNotContains(items ...[]byte) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[[]byte](items))
 }
 
 func (x *ScalarValueRepeatedBytesSafeOperators) IsContainedBy(items ...[]byte) exp.Expression {
