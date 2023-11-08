@@ -115,6 +115,9 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 	acronymRegex := regexp.MustCompile(`(?P<token>[[:upper:]]+)([[:upper:]][[:lower:]]|$|\s)`)
 	template := "$token"
 	for _, doc := range docs {
+		if doc.Type == FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG {
+			continue
+		}
 		docValue := interfaceToValue(doc.Value)
 		for _, match := range camelCaseRegex.FindAllStringIndex(docValue, -1) {
 			result := docValue[match[0]:match[1]]
