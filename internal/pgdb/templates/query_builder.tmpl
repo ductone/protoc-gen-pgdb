@@ -151,7 +151,7 @@ func  (x *{{ .OpsTypeName }}) Overlaps(items ...{{.InputType}}) exp.Expression {
 // NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
 func  (x *{{ .OpsTypeName }}) NotOverlaps(items ...{{.InputType}}) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[{{.InputType}}](items))
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[{{.InputType}}](items))
 }
 {{end}}
 
@@ -169,7 +169,7 @@ func  (x *{{ .OpsTypeName }}) Contains(items ...{{.InputType}}) exp.Expression {
 // NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
 func  (x *{{ .OpsTypeName }}) NotContains(items ...{{.InputType}}) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[{{.InputType}}](items))
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[{{.InputType}}](items))
 }
 {{end}}
 
