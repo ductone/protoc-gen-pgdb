@@ -126,6 +126,7 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 			} else if len(word) > 0 {
 				word = append(word, r)
 			}
+			pos += 1
 		}
 		if len(word) > 0 {
 			rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
