@@ -159,7 +159,7 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 			if unicode.IsUpper(prev) {
 				word = append(word, prev)
 			}
-			rv = append(rv, lexeme{strings.ToLower(string(word)), len(docValue) - len(word), doc.Weight})
+			rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 		}
 	}
 	return rv
