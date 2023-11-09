@@ -104,6 +104,13 @@ func TestSearchCamelCase(t *testing.T) {
 	requireQueryFalse(t, pg, vector, "github")
 	requireQueryFalse(t, pg, vector, "spro")
 	requireQueryFalse(t, pg, vector, "snste")
+	requireQueryFalse(t, pg, vector, "zebre")
+	requireQueryFalse(t, pg, vector, "lfoo")
+	requireQueryFalse(t, pg, vector, "seast")
+	requireQueryFalse(t, pg, vector, "easta")
+	requireQueryFalse(t, pg, vector, "arSOSTe")
+	requireQueryFalse(t, pg, vector, "zeBree")
+	requireQueryFalse(t, pg, vector, "testsq")
 }
 
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
