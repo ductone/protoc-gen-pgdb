@@ -108,6 +108,62 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 	return rv
 }
 
+func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
+	rv := make([]lexeme, 0, 8)
+	var word []rune
+	var pos = 1
+	for _, r := range docValue {
+		if unicode.IsUpper(r) {
+			if len(word) > 0 {
+				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+			}
+			word = []rune{r}
+		} else if len(word) > 0 {
+			word = append(word, r)
+		}
+		pos += 1
+	}
+	if len(word) > 0 {
+		rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+	}
+	return rv
+}
+
+func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
+	rv := make([]lexeme, 0, 8)
+	var word []rune
+	var pos = 1
+	var prev rune
+	for _, r := range docValue {
+		if prev == 0 {
+			prev = r
+			continue
+		}
+		if unicode.IsUpper(prev) {
+			switch {
+			case unicode.IsSpace(r) && len(word) > 0:
+				word = append(word, prev)
+				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				word = nil
+			case !unicode.IsUpper(r) && len(word) > 0:
+				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				word = nil
+			default:
+				word = append(word, prev)
+			}
+		}
+		prev = r
+		pos += 1
+	}
+	if len(word) > 0 {
+		if unicode.IsUpper(prev) {
+			word = append(word, prev)
+		}
+		rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+	}
+	return rv
+}
+
 func camelSplitDocs(docs []*SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
 	for _, doc := range docs {
@@ -115,52 +171,8 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 			continue
 		}
 		docValue := interfaceToValue(doc.Value)
-		var word []rune
-		var pos = 1
-		for _, r := range docValue {
-			if unicode.IsUpper(r) {
-				if len(word) > 0 {
-					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
-				}
-				word = []rune{r}
-			} else if len(word) > 0 {
-				word = append(word, r)
-			}
-			pos += 1
-		}
-		if len(word) > 0 {
-			rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
-		}
-		word = nil
-		var prev rune
-		pos = 1
-		for _, r := range docValue {
-			if prev == 0 {
-				prev = r
-				continue
-			}
-			if unicode.IsUpper(prev) {
-				switch {
-				case unicode.IsSpace(r) && len(word) > 0:
-					word = append(word, prev)
-					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
-					word = nil
-				case !unicode.IsUpper(r) && len(word) > 0:
-					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
-					word = nil
-				default:
-					word = append(word, prev)
-				}
-			}
-			prev = r
-			pos += 1
-		}
-		if len(word) > 0 {
-			if unicode.IsUpper(prev) {
-				word = append(word, prev)
-			}
-			rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
-		}
+		rv = append(rv, camelSplitDoc(docValue, doc)...)
+		rv = append(rv, acronymSplitDoc(docValue, doc)...)
 	}
 	return rv
 }
