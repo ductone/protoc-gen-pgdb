@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
@@ -12,26 +11,6 @@ import (
 	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/ductone/protoc-gen-pgdb/internal/stackoverflow"
 )
-
-var (
-	camelCaseRegex = regexp.MustCompile(`[[:upper:]][[:lower:]]+`)
-	// acronymRegex - this is to catch acronyms in a named group 'token'
-	// the suffix after the group is foward looking to avoid the first letter of a camel cased word
-	// for example given the text AuthSNSTest this regex captures SNS in token but matches on SNSTe:
-	//
-	// Given the text `AuthSNSTest`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		[[:upper:]][[:lower:]] -> Te - discarded
-	// Given the text `AuthSNS Foo`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		\s -> the trailing empty space ' ' - discarded
-	// Given the text `AuthSNS`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		$ -> end of string
-	acronymRegex = regexp.MustCompile(`(?P<token>[[:upper:]]+)([[:upper:]][[:lower:]]|$|\s)`)
-)
-
-const template = "$token"
 
 type SearchContent struct {
 	Type   FieldOptions_FullTextType
@@ -136,14 +115,47 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 			continue
 		}
 		docValue := interfaceToValue(doc.Value)
-		for _, match := range camelCaseRegex.FindAllStringIndex(docValue, -1) {
-			result := docValue[match[0]:match[1]]
-			rv = append(rv, lexeme{strings.ToLower(result), match[0] + 1, doc.Weight})
+		var word []rune
+		for i, r := range docValue {
+			if unicode.IsUpper(r) {
+				if len(word) > 0 {
+					rv = append(rv, lexeme{strings.ToLower(string(word)), i + 1, doc.Weight})
+				}
+				word = []rune{r}
+			} else if len(word) > 0 {
+				word = append(word, r)
+			}
 		}
-		for _, match := range acronymRegex.FindAllStringSubmatchIndex(docValue, -1) {
-			result := []byte{}
-			result = acronymRegex.ExpandString(result, template, docValue, match)
-			rv = append(rv, lexeme{strings.ToLower(string(result)), match[0] + 1, doc.Weight})
+		if len(word) > 0 {
+			rv = append(rv, lexeme{strings.ToLower(string(word)), len(word) + 1, doc.Weight})
+			word = nil
+		}
+		word = nil
+		var prev rune
+		for i, r := range docValue {
+			if prev == 0 {
+				prev = r
+				continue
+			}
+			if unicode.IsUpper(prev) {
+				if unicode.IsSpace(r) && len(word) > 0 {
+					word = append(word, prev)
+					rv = append(rv, lexeme{strings.ToLower(string(word)), i + 1, doc.Weight})
+					word = nil
+				} else if !unicode.IsUpper(r) && len(word) > 0 {
+					rv = append(rv, lexeme{strings.ToLower(string(word)), i + 1, doc.Weight})
+					word = nil
+				} else {
+					word = append(word, prev)
+				}
+			}
+			prev = r
+		}
+		if len(word) > 0 {
+			if unicode.IsUpper(prev) {
+				word = append(word, prev)
+			}
+			rv = append(rv, lexeme{strings.ToLower(string(word)), len(word) + 1, doc.Weight})
 		}
 	}
 	return rv
