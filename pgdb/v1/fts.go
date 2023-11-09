@@ -116,10 +116,11 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 		}
 		docValue := interfaceToValue(doc.Value)
 		var word []rune
-		for i, r := range docValue {
+		var pos = 1
+		for _, r := range docValue {
 			if unicode.IsUpper(r) {
 				if len(word) > 0 {
-					rv = append(rv, lexeme{strings.ToLower(string(word)), i - len(word) + 1, doc.Weight})
+					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 				}
 				word = []rune{r}
 			} else if len(word) > 0 {
@@ -127,11 +128,12 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 			}
 		}
 		if len(word) > 0 {
-			rv = append(rv, lexeme{strings.ToLower(string(word)), len(docValue) - len(word) + 1, doc.Weight})
+			rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 		}
 		word = nil
 		var prev rune
-		for i, r := range docValue {
+		pos = 1
+		for _, r := range docValue {
 			if prev == 0 {
 				prev = r
 				continue
@@ -140,16 +142,17 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 				switch {
 				case unicode.IsSpace(r) && len(word) > 0:
 					word = append(word, prev)
-					rv = append(rv, lexeme{strings.ToLower(string(word)), i - len(word), doc.Weight})
+					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 					word = nil
 				case !unicode.IsUpper(r) && len(word) > 0:
-					rv = append(rv, lexeme{strings.ToLower(string(word)), i - len(word), doc.Weight})
+					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 					word = nil
 				default:
 					word = append(word, prev)
 				}
 			}
 			prev = r
+			pos += 1
 		}
 		if len(word) > 0 {
 			if unicode.IsUpper(prev) {
