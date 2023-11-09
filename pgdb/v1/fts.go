@@ -13,6 +13,26 @@ import (
 	"github.com/ductone/protoc-gen-pgdb/internal/stackoverflow"
 )
 
+var (
+	camelCaseRegex = regexp.MustCompile(`[[:upper:]][[:lower:]]+`)
+	// acronymRegex - this is to catch acronyms in a named group 'token'
+	// the suffix after the group is foward looking to avoid the first letter of a camel cased word
+	// for example given the text AuthSNSTest this regex captures SNS in token but matches on SNSTe:
+	//
+	// Given the text `AuthSNSTest`:
+	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
+	//		[[:upper:]][[:lower:]] -> Te - discarded
+	// Given the text `AuthSNS Foo`:
+	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
+	//		\s -> the trailing empty space ' ' - discarded
+	// Given the text `AuthSNS`:
+	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
+	//		$ -> end of string
+	acronymRegex = regexp.MustCompile(`(?P<token>[[:upper:]]+)([[:upper:]][[:lower:]]|$|\s)`)
+)
+
+const template = "$token"
+
 type SearchContent struct {
 	Type   FieldOptions_FullTextType
 	Weight FieldOptions_FullTextWeight
@@ -111,22 +131,6 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 
 func camelSplitDocs(docs []*SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
-	camelCaseRegex := regexp.MustCompile(`[[:upper:]][[:lower:]]+`)
-	// acronymRegex - this is to catch acronyms in a named group 'token'
-	// the suffix after the group is foward looking to avoid the first letter of a camel cased word
-	// for example given the text AuthSNSTest this regex captures SNS in token but matches on SNSTe:
-	//
-	// Given the text `AuthSNSTest`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		[[:upper:]][[:lower:]] -> Te - discarded
-	// Given the text `AuthSNS Foo`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		\s -> the trailing empty space ' ' - discarded
-	// Given the text `AuthSNS`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		$ -> end of string
-	acronymRegex := regexp.MustCompile(`(?P<token>[[:upper:]]+)([[:upper:]][[:lower:]]|$|\s)`)
-	template := "$token"
 	for _, doc := range docs {
 		if doc.Type == FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG {
 			continue
