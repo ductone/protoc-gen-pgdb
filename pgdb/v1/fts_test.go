@@ -241,7 +241,6 @@ func TestCamelSplitDoc(t *testing.T) {
 }
 
 func TestAcronymSplitDoc(t *testing.T) {
-
 	testCases := []struct {
 		searchContent   *SearchContent
 		expectedLexemes []lexeme
