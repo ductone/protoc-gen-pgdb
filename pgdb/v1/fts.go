@@ -134,7 +134,7 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 				// in word and lower so continue appending
 				word = append(word, r)
 			case len(word) >= MinWordSize:
-				// have a word, current is not lower and prev is upper so end current word
+				// have a word, current is not lower so end current word
 				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 				word = nil
 			default:
