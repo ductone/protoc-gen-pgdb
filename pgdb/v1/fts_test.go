@@ -308,7 +308,6 @@ func TestAcronymSplitDoc(t *testing.T) {
 		lexemes := acronymSplitDoc(tc.searchContent.Value.(string), tc.searchContent)
 		require.Equal(t, tc.expectedLexemes, lexemes)
 	}
-
 }
 
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
