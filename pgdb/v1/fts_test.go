@@ -302,6 +302,14 @@ func TestAcronymSplitDoc(t *testing.T) {
 				{"aws", 5, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
 			},
 		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "FoAW",
+			},
+			expectedLexemes: []lexeme{},
+		},
 	}
 
 	for _, tc := range testCases {
