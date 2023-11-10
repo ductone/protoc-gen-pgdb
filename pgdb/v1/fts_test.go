@@ -276,6 +276,18 @@ func TestAcronymSplitDoc(t *testing.T) {
 			searchContent: &SearchContent{
 				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWS-US_SNS/SQS",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 3, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sns", 10, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sqs", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
 				Value:  "FeAWSFo",
 			},
 			expectedLexemes: []lexeme{

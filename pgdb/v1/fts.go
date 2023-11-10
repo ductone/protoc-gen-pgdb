@@ -162,15 +162,15 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 		}
 		if unicode.IsUpper(prev) {
 			switch {
-			case unicode.IsSpace(r):
-				// finish acronym if there is one of min length if we encounter space
-				word = append(word, prev)
+			case unicode.IsLower(r):
+				// only append previous if it is upper case and and current is not lower case (i.e. don't append T in AWSTest)
 				if len(word) >= MinWordSize {
 					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 				}
 				word = nil
 			case !unicode.IsUpper(r):
-				// only append previous if it is upper case and and current is not lower case (i.e. don't append T in AWSTest)
+				// finish acronym if there is one of min length if we encounter space
+				word = append(word, prev)
 				if len(word) >= MinWordSize {
 					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 				}
