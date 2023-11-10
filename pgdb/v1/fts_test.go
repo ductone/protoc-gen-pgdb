@@ -141,6 +141,25 @@ func TestCamelSplitDoc(t *testing.T) {
 			searchContent: &SearchContent{
 				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWSProdUSEastAuthSNSTestSQS-FooBarLOLFoobarSOSTestNOPE:CheezeBreeze",
+			},
+			expectedLexemes: []lexeme{
+				{"prod", 7, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"east", 13, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"auth", 17, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"test", 24, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"foo", 31, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"bar", 34, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"foobar", 43, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"test", 50, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"cheeze", 61, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"breeze", 67, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
 				Value:  "AWSProdUSEastAuthSNSTestSQS",
 			},
 			expectedLexemes: []lexeme{
@@ -232,6 +251,17 @@ func TestCamelSplitDoc(t *testing.T) {
 				{"reat", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
 			},
 		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "Pr$East+TeReat",
+			},
+			expectedLexemes: []lexeme{
+				{"east", 7, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"reat", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -265,6 +295,18 @@ func TestAcronymSplitDoc(t *testing.T) {
 				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
 				Value:  "AWS US SNS SQS",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 3, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sns", 10, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sqs", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWS:US/SNS|SQS",
 			},
 			expectedLexemes: []lexeme{
 				{"aws", 3, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
