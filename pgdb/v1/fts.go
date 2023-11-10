@@ -133,14 +133,15 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 			}
 		} else if len(word) > 0 {
 			// in a current word, do we append or end?
-			if unicode.IsLower(r) {
+			switch {
+			case unicode.IsLower(r):
 				// in word and lower so continue appending
 				word = append(word, r)
-			} else if len(word) >= MinWordSize {
+			case len(word) >= MinWordSize:
 				// neither lower or upper case end current word
 				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 				word = nil
-			} else {
+			default:
 				word = nil
 			}
 		}
