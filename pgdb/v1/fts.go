@@ -18,6 +18,8 @@ type SearchContent struct {
 	Value  interface{}
 }
 
+const MinWordSize = 3
+
 func interfaceToValue(in interface{}) string {
 	if in == nil {
 		return ""
@@ -112,18 +114,40 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
 	var word []rune
 	var pos = 1
+	var prev rune
 	for _, r := range docValue {
-		if unicode.IsUpper(r) {
-			if len(word) > 0 {
-				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
-			}
-			word = []rune{r}
-		} else if len(word) > 0 {
-			word = append(word, r)
+		if prev == 0 {
+			prev = r
+			continue
 		}
+		if unicode.IsUpper(prev) {
+			if len(word) == 0 { // no current word
+				if unicode.IsLower(r) {
+					// got a upper case in prev and current is lower, starting a new word
+					word = []rune{prev, r}
+				}
+			} else if len(word) >= MinWordSize {
+				// have a word, and current is upper so end current word
+				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				word = nil
+			}
+		} else if len(word) > 0 {
+			// in a current word, do we append or end?
+			if unicode.IsLower(r) {
+				// in word and lower so continue appending
+				word = append(word, r)
+			} else if len(word) >= MinWordSize {
+				// neither lower or upper case end current word
+				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				word = nil
+			} else {
+				word = nil
+			}
+		}
+		prev = r
 		pos += 1
 	}
-	if len(word) > 0 {
+	if len(word) >= MinWordSize {
 		rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
 	}
 	return rv
@@ -141,12 +165,16 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 		}
 		if unicode.IsUpper(prev) {
 			switch {
-			case unicode.IsSpace(r) && len(word) > 0:
+			case unicode.IsSpace(r):
 				word = append(word, prev)
-				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				if len(word) >= MinWordSize {
+					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				}
 				word = nil
-			case !unicode.IsUpper(r) && len(word) > 0:
-				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+			case !unicode.IsUpper(r):
+				if len(word) >= MinWordSize {
+					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				}
 				word = nil
 			default:
 				word = append(word, prev)
