@@ -157,7 +157,7 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 		pos += 1
 	}
 	if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
-		rv = append(rv, lexeme{strings.ToLower(string(buffer.String())), pos, doc.Weight})
+		rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
 	}
 	return rv
 }
