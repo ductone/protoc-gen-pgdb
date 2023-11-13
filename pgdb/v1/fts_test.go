@@ -262,6 +262,17 @@ func TestCamelSplitDoc(t *testing.T) {
 				{"reat", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
 			},
 		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "Hello, 世界🌮🌍B🌎Foo🌏",
+			},
+			expectedLexemes: []lexeme{
+				{"hello", 5, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"foo", 16, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -363,6 +374,16 @@ func TestAcronymSplitDoc(t *testing.T) {
 				Value:  "FoAW",
 			},
 			expectedLexemes: []lexeme{},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "Hello, 世界🌮🌍B🌎FOO🌏",
+			},
+			expectedLexemes: []lexeme{
+				{"foo", 16, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
 		},
 	}
 

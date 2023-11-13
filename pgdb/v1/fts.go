@@ -1,9 +1,11 @@
 package v1
 
 import (
+	"bytes"
 	"strconv"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/clipperhouse/jargon"
 	"github.com/clipperhouse/jargon/filters/ascii"
@@ -112,7 +114,7 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 
 func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
-	var word []rune
+	var buffer bytes.Buffer
 	var pos = 1
 	var prev rune
 	for _, r := range docValue {
@@ -121,38 +123,39 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 			continue
 		}
 		if unicode.IsUpper(prev) {
-			if len(word) == 0 { // no current word
+			if buffer.Len() == 0 { // no current word
 				if unicode.IsLower(r) {
 					// got a upper case in prev and current is lower, starting a new word
-					word = []rune{prev, r}
+					buffer.WriteRune(prev)
+					buffer.WriteRune(r)
 				}
 			}
-		} else if len(word) > 0 {
+		} else if buffer.Len() > 0 {
 			// in a current word, do we append or end?
 			switch {
 			case unicode.IsLower(r):
 				// in word and lower so continue appending
-				word = append(word, r)
-			case len(word) >= MinWordSize:
+				buffer.WriteRune(r)
+			case utf8.RuneCount(buffer.Bytes()) >= MinWordSize:
 				// have a word, current is not lower so end current word
-				rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
-				word = nil
+				rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				buffer = bytes.Buffer{}
 			default:
-				word = nil
+				buffer = bytes.Buffer{}
 			}
 		}
 		prev = r
 		pos += 1
 	}
-	if len(word) >= MinWordSize {
-		rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+	if utf8.RuneCount(buffer.Bytes()) >= MinWordSize {
+		rv = append(rv, lexeme{strings.ToLower(string(buffer.String())), pos, doc.Weight})
 	}
 	return rv
 }
 
 func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
-	var word []rune
+	var buffer bytes.Buffer
 	var pos = 1
 	var prev rune
 	for _, r := range docValue {
@@ -164,31 +167,31 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 			switch {
 			case unicode.IsLower(r):
 				// only append previous if it is upper case and and current is not lower case (i.e. don't append T in AWSTest)
-				if len(word) >= MinWordSize {
-					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				if utf8.RuneCount(buffer.Bytes()) >= MinWordSize {
+					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
 				}
-				word = nil
+				buffer = bytes.Buffer{}
 			case !unicode.IsUpper(r):
 				// finish acronym if there is one of min length if we encounter space
-				word = append(word, prev)
-				if len(word) >= MinWordSize {
-					rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+				buffer.WriteRune(prev)
+				if utf8.RuneCount(buffer.Bytes()) >= MinWordSize {
+					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
 				}
-				word = nil
+				buffer = bytes.Buffer{}
 			default:
-				word = append(word, prev)
+				buffer.WriteRune(prev)
 			}
 		}
 		prev = r
 		pos += 1
 	}
 	// finish acronym if there is one of min length
-	if len(word) > 0 {
+	if buffer.Len() > 0 {
 		if unicode.IsUpper(prev) {
-			word = append(word, prev)
+			buffer.WriteRune(prev)
 		}
-		if len(word) >= MinWordSize {
-			rv = append(rv, lexeme{strings.ToLower(string(word)), pos, doc.Weight})
+		if utf8.RuneCount(buffer.Bytes()) >= MinWordSize {
+			rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
 		}
 	}
 	return rv
