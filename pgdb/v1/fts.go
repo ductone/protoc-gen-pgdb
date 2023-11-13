@@ -204,7 +204,6 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 	if buffer.Len() > 0 {
 		if unicode.IsUpper(prev) {
 			if _, e := buffer.WriteRune(prev); e != nil {
-				buffer = bytes.Buffer{}
 				return rv
 			}
 		}
