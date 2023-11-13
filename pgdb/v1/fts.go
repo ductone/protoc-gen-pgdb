@@ -126,8 +126,14 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 			if buffer.Len() == 0 { // no current word
 				if unicode.IsLower(r) {
 					// got a upper case in prev and current is lower, starting a new word
-					buffer.WriteRune(prev)
-					buffer.WriteRune(r)
+					if _, e := buffer.WriteRune(prev); e != nil {
+						buffer = bytes.Buffer{}
+						continue
+					}
+					if _, e := buffer.WriteRune(r); e != nil {
+						buffer = bytes.Buffer{}
+						continue
+					}
 				}
 			}
 		} else if buffer.Len() > 0 {
@@ -135,7 +141,10 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 			switch {
 			case unicode.IsLower(r):
 				// in word and lower so continue appending
-				buffer.WriteRune(r)
+				if _, e := buffer.WriteRune(r); e != nil {
+					buffer = bytes.Buffer{}
+					continue
+				}
 			case utf8.RuneCount(buffer.Bytes()) >= minWordSize:
 				// have a word, current is not lower so end current word
 				rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
@@ -173,13 +182,19 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 				buffer = bytes.Buffer{}
 			case !unicode.IsUpper(r):
 				// finish acronym if there is one of min length if we encounter space
-				buffer.WriteRune(prev)
+				if _, e := buffer.WriteRune(prev); e != nil {
+					buffer = bytes.Buffer{}
+					continue
+				}
 				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
 					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
 				}
 				buffer = bytes.Buffer{}
 			default:
-				buffer.WriteRune(prev)
+				if _, e := buffer.WriteRune(prev); e != nil {
+					buffer = bytes.Buffer{}
+					continue
+				}
 			}
 		}
 		prev = r
@@ -188,7 +203,10 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 	// finish acronym if there is one of min length
 	if buffer.Len() > 0 {
 		if unicode.IsUpper(prev) {
-			buffer.WriteRune(prev)
+			if _, e := buffer.WriteRune(prev); e != nil {
+				buffer = bytes.Buffer{}
+				return rv
+			}
 		}
 		if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
 			rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
