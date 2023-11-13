@@ -127,11 +127,11 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 				if unicode.IsLower(r) {
 					// got a upper case in prev and current is lower, starting a new word
 					if _, e := buffer.WriteRune(prev); e != nil {
-						buffer = bytes.Buffer{}
+						buffer.Reset()
 						continue
 					}
 					if _, e := buffer.WriteRune(r); e != nil {
-						buffer = bytes.Buffer{}
+						buffer.Reset()
 						continue
 					}
 				}
@@ -142,15 +142,15 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 			case unicode.IsLower(r):
 				// in word and lower so continue appending
 				if _, e := buffer.WriteRune(r); e != nil {
-					buffer = bytes.Buffer{}
+					buffer.Reset()
 					continue
 				}
 			case utf8.RuneCount(buffer.Bytes()) >= minWordSize:
 				// have a word, current is not lower so end current word
 				rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
-				buffer = bytes.Buffer{}
+				buffer.Reset()
 			default:
-				buffer = bytes.Buffer{}
+				buffer.Reset()
 			}
 		}
 		prev = r
@@ -179,20 +179,20 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
 					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
 				}
-				buffer = bytes.Buffer{}
+				buffer.Reset()
 			case !unicode.IsUpper(r):
 				// finish acronym if there is one of min length if we encounter space
 				if _, e := buffer.WriteRune(prev); e != nil {
-					buffer = bytes.Buffer{}
+					buffer.Reset()
 					continue
 				}
 				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
 					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
 				}
-				buffer = bytes.Buffer{}
+				buffer.Reset()
 			default:
 				if _, e := buffer.WriteRune(prev); e != nil {
-					buffer = bytes.Buffer{}
+					buffer.Reset()
 					continue
 				}
 			}
