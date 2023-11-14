@@ -1,10 +1,11 @@
 package v1
 
 import (
-	"regexp"
+	"bytes"
 	"strconv"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/clipperhouse/jargon"
 	"github.com/clipperhouse/jargon/filters/ascii"
@@ -13,31 +14,13 @@ import (
 	"github.com/ductone/protoc-gen-pgdb/internal/stackoverflow"
 )
 
-var (
-	camelCaseRegex = regexp.MustCompile(`[[:upper:]][[:lower:]]+`)
-	// acronymRegex - this is to catch acronyms in a named group 'token'
-	// the suffix after the group is foward looking to avoid the first letter of a camel cased word
-	// for example given the text AuthSNSTest this regex captures SNS in token but matches on SNSTe:
-	//
-	// Given the text `AuthSNSTest`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		[[:upper:]][[:lower:]] -> Te - discarded
-	// Given the text `AuthSNS Foo`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		\s -> the trailing empty space ' ' - discarded
-	// Given the text `AuthSNS`:
-	// 		?P<token>[[:upper:]]+) -> SNS - captured in "token"
-	//		$ -> end of string
-	acronymRegex = regexp.MustCompile(`(?P<token>[[:upper:]]+)([[:upper:]][[:lower:]]|$|\s)`)
-)
-
-const template = "$token"
-
 type SearchContent struct {
 	Type   FieldOptions_FullTextType
 	Weight FieldOptions_FullTextWeight
 	Value  interface{}
 }
+
+const minWordSize = 3
 
 func interfaceToValue(in interface{}) string {
 	if in == nil {
@@ -129,6 +112,108 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 	return rv
 }
 
+func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
+	rv := make([]lexeme, 0, 8)
+	var buffer bytes.Buffer
+	var pos = 1
+	var prev rune
+	for _, r := range docValue {
+		if prev == 0 {
+			prev = r
+			continue
+		}
+		if unicode.IsUpper(prev) {
+			if buffer.Len() == 0 { // no current word
+				if unicode.IsLower(r) {
+					// got a upper case in prev and current is lower, starting a new word
+					if _, e := buffer.WriteRune(prev); e != nil {
+						buffer.Reset()
+						continue
+					}
+					if _, e := buffer.WriteRune(r); e != nil {
+						buffer.Reset()
+						continue
+					}
+				}
+			}
+		} else if buffer.Len() > 0 {
+			// in a current word, do we append or end?
+			switch {
+			case unicode.IsLower(r):
+				// in word and lower so continue appending
+				if _, e := buffer.WriteRune(r); e != nil {
+					buffer.Reset()
+					continue
+				}
+			case utf8.RuneCount(buffer.Bytes()) >= minWordSize:
+				// have a word, current is not lower so end current word
+				rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				buffer.Reset()
+			default:
+				buffer.Reset()
+			}
+		}
+		prev = r
+		pos += 1
+	}
+	if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
+		rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+	}
+	return rv
+}
+
+func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
+	rv := make([]lexeme, 0, 8)
+	var buffer bytes.Buffer
+	var pos = 1
+	var prev rune
+	for _, r := range docValue {
+		if prev == 0 {
+			prev = r
+			continue
+		}
+		if unicode.IsUpper(prev) {
+			switch {
+			case unicode.IsLower(r):
+				// only append previous if it is upper case and and current is not lower case (i.e. don't append T in AWSTest)
+				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
+					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				}
+				buffer.Reset()
+			case !unicode.IsUpper(r):
+				// finish acronym if there is one of min length if we encounter space
+				if _, e := buffer.WriteRune(prev); e != nil {
+					buffer.Reset()
+					continue
+				}
+				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
+					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				}
+				buffer.Reset()
+			default:
+				if _, e := buffer.WriteRune(prev); e != nil {
+					buffer.Reset()
+					continue
+				}
+			}
+		}
+		prev = r
+		pos += 1
+	}
+	// finish acronym if there is one of min length
+	if buffer.Len() > 0 {
+		if unicode.IsUpper(prev) {
+			if _, e := buffer.WriteRune(prev); e != nil {
+				return rv
+			}
+		}
+		if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
+			rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+		}
+	}
+	return rv
+}
+
 func camelSplitDocs(docs []*SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
 	for _, doc := range docs {
@@ -136,15 +221,8 @@ func camelSplitDocs(docs []*SearchContent) []lexeme {
 			continue
 		}
 		docValue := interfaceToValue(doc.Value)
-		for _, match := range camelCaseRegex.FindAllStringIndex(docValue, -1) {
-			result := docValue[match[0]:match[1]]
-			rv = append(rv, lexeme{strings.ToLower(result), match[0] + 1, doc.Weight})
-		}
-		for _, match := range acronymRegex.FindAllStringSubmatchIndex(docValue, -1) {
-			result := []byte{}
-			result = acronymRegex.ExpandString(result, template, docValue, match)
-			rv = append(rv, lexeme{strings.ToLower(string(result)), match[0] + 1, doc.Weight})
-		}
+		rv = append(rv, camelSplitDoc(docValue, doc)...)
+		rv = append(rv, acronymSplitDoc(docValue, doc)...)
 	}
 	return rv
 }
