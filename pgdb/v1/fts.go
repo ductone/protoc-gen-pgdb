@@ -1,9 +1,11 @@
 package v1
 
 import (
+	"bytes"
 	"strconv"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/clipperhouse/jargon"
 	"github.com/clipperhouse/jargon/filters/ascii"
@@ -17,6 +19,8 @@ type SearchContent struct {
 	Weight FieldOptions_FullTextWeight
 	Value  interface{}
 }
+
+const minWordSize = 3
 
 func interfaceToValue(in interface{}) string {
 	if in == nil {
@@ -55,10 +59,7 @@ func interfaceToValue(in interface{}) string {
 	}
 }
 
-// FullTextSearchVectors converts a set of input documents
-// into a ::tsvector. Note: this function may generally ignore errors in input text, to be robust to
-// untrusted inputs, and will do its "best", for some value of "best".
-func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Filter) exp.Expression {
+func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []lexeme {
 	edgeGramFilter := edgegramStream(3)
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
@@ -108,6 +109,132 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 			_ = err
 		}
 	}
+	return rv
+}
+
+func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
+	rv := make([]lexeme, 0, 8)
+	var buffer bytes.Buffer
+	var pos = 1
+	var prev rune
+	for _, r := range docValue {
+		if prev == 0 {
+			prev = r
+			continue
+		}
+		if unicode.IsUpper(prev) {
+			if buffer.Len() == 0 { // no current word
+				if unicode.IsLower(r) {
+					// got a upper case in prev and current is lower, starting a new word
+					if _, e := buffer.WriteRune(prev); e != nil {
+						buffer.Reset()
+						continue
+					}
+					if _, e := buffer.WriteRune(r); e != nil {
+						buffer.Reset()
+						continue
+					}
+				}
+			}
+		} else if buffer.Len() > 0 {
+			// in a current word, do we append or end?
+			switch {
+			case unicode.IsLower(r):
+				// in word and lower so continue appending
+				if _, e := buffer.WriteRune(r); e != nil {
+					buffer.Reset()
+					continue
+				}
+			case utf8.RuneCount(buffer.Bytes()) >= minWordSize:
+				// have a word, current is not lower so end current word
+				rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				buffer.Reset()
+			default:
+				buffer.Reset()
+			}
+		}
+		prev = r
+		pos += 1
+	}
+	if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
+		rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+	}
+	return rv
+}
+
+func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
+	rv := make([]lexeme, 0, 8)
+	var buffer bytes.Buffer
+	var pos = 1
+	var prev rune
+	for _, r := range docValue {
+		if prev == 0 {
+			prev = r
+			continue
+		}
+		if unicode.IsUpper(prev) {
+			switch {
+			case unicode.IsLower(r):
+				// only append previous if it is upper case and and current is not lower case (i.e. don't append T in AWSTest)
+				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
+					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				}
+				buffer.Reset()
+			case !unicode.IsUpper(r):
+				// finish acronym if there is one of min length if we encounter space
+				if _, e := buffer.WriteRune(prev); e != nil {
+					buffer.Reset()
+					continue
+				}
+				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
+					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				}
+				buffer.Reset()
+			default:
+				if _, e := buffer.WriteRune(prev); e != nil {
+					buffer.Reset()
+					continue
+				}
+			}
+		}
+		prev = r
+		pos += 1
+	}
+	// finish acronym if there is one of min length
+	if buffer.Len() > 0 {
+		if unicode.IsUpper(prev) {
+			if _, e := buffer.WriteRune(prev); e != nil {
+				return rv
+			}
+		}
+		if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
+			rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+		}
+	}
+	return rv
+}
+
+func camelSplitDocs(docs []*SearchContent) []lexeme {
+	rv := make([]lexeme, 0, 8)
+	for _, doc := range docs {
+		if doc.Type == FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG {
+			continue
+		}
+		docValue := interfaceToValue(doc.Value)
+		rv = append(rv, camelSplitDoc(docValue, doc)...)
+		rv = append(rv, acronymSplitDoc(docValue, doc)...)
+	}
+	return rv
+}
+
+// FullTextSearchVectors converts a set of input documents
+// into a ::tsvector. Note: this function may generally ignore errors in input text, to be robust to
+// untrusted inputs, and will do its "best", for some value of "best".
+func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Filter) exp.Expression {
+	rv := make([]lexeme, 0, 8)
+
+	rv = append(rv, lemmatizeDocs(docs, additionalFilters...)...)
+	rv = append(rv, camelSplitDocs(docs)...)
 
 	if len(rv) == 0 {
 		return exp.NewLiteralExpression("''::tsvector")

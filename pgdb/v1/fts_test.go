@@ -69,6 +69,330 @@ func TestSearchEmpty(t *testing.T) {
 	requireQueryFalse(t, pg, vector, " ")
 }
 
+func TestSearchCamelCase(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	vector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "AWSProdUSEastAuthSNSTestSQS FooBarLOLFoobarSOSTestNOPE CheezeBreeze",
+		},
+	})
+
+	requireQueryTrue(t, pg, vector, "awsproduseastauthsnstestsqs")
+	requireQueryTrue(t, pg, vector, "prod")
+	requireQueryTrue(t, pg, vector, "east")
+	requireQueryTrue(t, pg, vector, "auth")
+	requireQueryTrue(t, pg, vector, "test")
+	requireQueryTrue(t, pg, vector, "foo")
+	requireQueryTrue(t, pg, vector, "bar")
+	requireQueryTrue(t, pg, vector, "foobar")
+	requireQueryTrue(t, pg, vector, "test")
+	requireQueryTrue(t, pg, vector, "cheeze")
+	requireQueryTrue(t, pg, vector, "breeze")
+	requireQueryTrue(t, pg, vector, "aws")
+	requireQueryTrue(t, pg, vector, "sns")
+	requireQueryTrue(t, pg, vector, "sqs")
+	requireQueryTrue(t, pg, vector, "lol")
+	requireQueryTrue(t, pg, vector, "sos")
+	requireQueryTrue(t, pg, vector, "nope")
+
+	requireQueryFalse(t, pg, vector, "github")
+	requireQueryFalse(t, pg, vector, "us")
+	requireQueryFalse(t, pg, vector, "spro")
+	requireQueryFalse(t, pg, vector, "snste")
+	requireQueryFalse(t, pg, vector, "zebre")
+	requireQueryFalse(t, pg, vector, "lfoo")
+	requireQueryFalse(t, pg, vector, "seast")
+	requireQueryFalse(t, pg, vector, "easta")
+	requireQueryFalse(t, pg, vector, "arsoste")
+	requireQueryFalse(t, pg, vector, "zebree")
+	requireQueryFalse(t, pg, vector, "testsq")
+}
+
+func TestCamelSplitDoc(t *testing.T) {
+	testCases := []struct {
+		searchContent   *SearchContent
+		expectedLexemes []lexeme
+	}{
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWSProdUSEastAuthSNSTestSQS FooBarLOLFoobarSOSTestNOPE CheezeBreeze",
+			},
+			expectedLexemes: []lexeme{
+				{"prod", 7, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"east", 13, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"auth", 17, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"test", 24, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"foo", 31, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"bar", 34, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"foobar", 43, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"test", 50, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"cheeze", 61, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"breeze", 67, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWSProdUSEastAuthSNSTestSQS-FooBarLOLFoobarSOSTestNOPE:CheezeBreeze",
+			},
+			expectedLexemes: []lexeme{
+				{"prod", 7, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"east", 13, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"auth", 17, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"test", 24, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"foo", 31, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"bar", 34, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"foobar", 43, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"test", 50, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"cheeze", 61, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"breeze", 67, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWSProdUSEastAuthSNSTestSQS",
+			},
+			expectedLexemes: []lexeme{
+				{"prod", 7, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"east", 13, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"auth", 17, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"test", 24, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "ProdEastAuthTest",
+			},
+			expectedLexemes: []lexeme{
+				{"prod", 4, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"east", 8, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"auth", 12, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"test", 16, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "PrEastTe",
+			},
+			expectedLexemes: []lexeme{
+				{"east", 6, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "PEastT",
+			},
+			expectedLexemes: []lexeme{
+				{"east", 5, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "PPPPPPPEastTTTTTT",
+			},
+			expectedLexemes: []lexeme{
+				{"east", 11, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "EastTe",
+			},
+			expectedLexemes: []lexeme{
+				{"east", 4, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "PrEast",
+			},
+			expectedLexemes: []lexeme{
+				{"east", 6, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "PrEaTe",
+			},
+			expectedLexemes: []lexeme{},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "Pr East TeReat",
+			},
+			expectedLexemes: []lexeme{
+				{"east", 7, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"reat", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "Pr$East+TeReat",
+			},
+			expectedLexemes: []lexeme{
+				{"east", 7, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"reat", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "Hello, 世𝒜界🌮🌍B🌎Foo🌏",
+			},
+			expectedLexemes: []lexeme{
+				{"hello", 5, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"foo", 17, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		lexemes := camelSplitDoc(tc.searchContent.Value.(string), tc.searchContent)
+		require.Equal(t, tc.expectedLexemes, lexemes)
+	}
+}
+
+func TestAcronymSplitDoc(t *testing.T) {
+	testCases := []struct {
+		searchContent   *SearchContent
+		expectedLexemes []lexeme
+	}{
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWSProdUSEastAuthSNSTestSQS FooBarLOLFoobarSOSTestNOPE CheezeBreeze",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 4, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sns", 21, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sqs", 27, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"lol", 38, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sos", 47, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"nope", 54, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWS US SNS SQS",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 3, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sns", 10, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sqs", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWS:US/SNS|SQS",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 3, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sns", 10, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sqs", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "AWS-US_SNS/SQS",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 3, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sns", 10, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"sqs", 14, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "FeAWSFo",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 6, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "FeAWS ",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 5, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  " AWSFo",
+			},
+			expectedLexemes: []lexeme{
+				{"aws", 5, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "FoAW",
+			},
+			expectedLexemes: []lexeme{},
+		},
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "Hello, 世𝒜界🌮🌍B🌎FOO🌏",
+			},
+			expectedLexemes: []lexeme{
+				{"foo", 17, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		lexemes := acronymSplitDoc(tc.searchContent.Value.(string), tc.searchContent)
+		require.Equal(t, tc.expectedLexemes, lexemes)
+	}
+}
+
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
 	qb := goqu.Dialect("postgres")
 	ctx := context.Background()
