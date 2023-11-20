@@ -76,10 +76,17 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		convertDef.TypeConversion = gtFloat64
 		defaultValue = "0.0"
 		nullable = false
+	// Check if this is an array of floats and have a field option to convert to vector typing
 	case pgs.FloatT:
 		// aka float32
 		convertDef.PostgresTypeName = "float4"
 		convertDef.IsArray = isArray
+		if isArray {
+			switch ext.ArrayType {
+			case pgdb_v1.FieldOptions_ARRAY_TYPE_VECTOR:
+				convertDef.PostgresTypeName = "vector"
+			}
+		}
 		convertDef.TypeConversion = gtFloat32
 		defaultValue = "0.0"
 		nullable = false

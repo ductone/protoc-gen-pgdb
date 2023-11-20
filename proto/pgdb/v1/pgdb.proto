@@ -68,4 +68,11 @@ message FieldOptions {
     MESSAGE_BEHAVOIR_JSONB = 3;
   }
   MessageBehavoir message_behavoir = 3;
+
+  // Only valid for repeated float fields.
+  enum ArrayType {
+    ARRAY_TYPE_UNSPECIFIED = 0;
+    ARRAY_TYPE_VECTOR = 1;
+  }
+  ArrayType array_type = 4;
 }

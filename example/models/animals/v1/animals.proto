@@ -54,6 +54,9 @@ message Pet {
   double price = 13;
   bool very_long_naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame = 14;
   repeated google.protobuf.Struct extra_profiles = 15;
+  repeated float this_should_be_a_vector = 16 [(pgdb.v1.options) = {
+    array_type: ARRAY_TYPE_VECTOR
+  }];
 }
 
 message ScalarValue {
