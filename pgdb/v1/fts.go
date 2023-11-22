@@ -112,7 +112,7 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 	return rv
 }
 
-// snakeSubTokensSplitDoc tokenizes foo bar baz in foo_bar_baz
+// snakeSubTokensSplitDoc tokenizes foo bar baz in foo_bar_baz.
 func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
 	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
@@ -161,7 +161,7 @@ func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *Searc
 	return rv
 }
 
-// snakeFullTokensSplitDoc tokenizes foo_bar_baz from foo_bar_baz
+// snakeFullTokensSplitDoc tokenizes foo_bar_baz from foo_bar_baz.
 func snakeFullTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
 	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
@@ -275,13 +275,13 @@ func acronymSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchConten
 		if unicode.IsUpper(prev) {
 			switch {
 			case unicode.IsLower(r):
-				// only append previous if it is upper case and and current is not lower case (i.e. don't append T in AWSTest)
+				// only append previous if it is upper case and and current is not lower case (i.e. don't append T in AWSTest).
 				if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
 					rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
 				}
 				wordBuffer.Reset()
 			case !unicode.IsUpper(r):
-				// finish acronym if there is one of min length if we encounter space
+				// finish acronym if there is one of min length if we encounter space.
 				if _, e := wordBuffer.WriteRune(prev); e != nil {
 					wordBuffer.Reset()
 					continue
@@ -300,7 +300,7 @@ func acronymSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchConten
 		prev = r
 		pos += 1
 	}
-	// finish acronym if there is one of min length
+	// finish acronym if there is one of min length.
 	if wordBuffer.Len() > 0 {
 		if unicode.IsUpper(prev) {
 			if _, e := wordBuffer.WriteRune(prev); e != nil {
