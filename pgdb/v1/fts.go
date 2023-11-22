@@ -112,9 +112,109 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 	return rv
 }
 
-func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
+// snakeSubTokensSplitDoc tokenizes foo bar baz in foo_bar_baz
+func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
+	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
-	var buffer bytes.Buffer
+	var pos = 1
+	var prev rune
+	for _, r := range docValue {
+		if prev == 0 {
+			prev = r
+			continue
+		}
+		if prev == '_' {
+			if wordBuffer.Len() == 0 { // no current word
+				if unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r) || unicode.IsSymbol(r) {
+					prev = r
+					continue
+				}
+				// starting a new word
+				if _, e := wordBuffer.WriteRune(r); e != nil {
+					wordBuffer.Reset()
+					continue
+				}
+			}
+		} else if wordBuffer.Len() > 0 {
+			// in a current word, do we append or end?
+			switch {
+			case r == '_' || unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r) || unicode.IsSymbol(r):
+				if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+					// have a word, current is a rune that doesn't continue the word so end current word
+					rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+				}
+				wordBuffer.Reset()
+			default:
+				// in word and current rune continues word so continue appending
+				if _, e := wordBuffer.WriteRune(r); e != nil {
+					wordBuffer.Reset()
+					continue
+				}
+			}
+		}
+		prev = r
+		pos += 1
+	}
+	if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+		rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+	}
+	return rv
+}
+
+// snakeFullTokensSplitDoc tokenizes foo_bar_baz from foo_bar_baz
+func snakeFullTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
+	wordBuffer.Reset()
+	rv := make([]lexeme, 0, 8)
+	pos := 1
+	hasUnderscore := false
+	for _, r := range docValue {
+		if wordBuffer.Len() == 0 { // no current word
+			if r == '_' {
+				hasUnderscore = true
+			}
+			if unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r) {
+				continue
+			}
+			// starting a new word
+			if _, e := wordBuffer.WriteRune(r); e != nil {
+				wordBuffer.Reset()
+				continue
+			}
+		} else if wordBuffer.Len() > 0 {
+			// in a current word, do we append or end?
+			switch {
+			case r != '_' && (unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r)):
+				if hasUnderscore && utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+					// have a word, current is a rune that doesn't continue the word so end current word
+					rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+				}
+				hasUnderscore = false
+				wordBuffer.Reset()
+			default:
+				// in word and current rune continues word so continue appending
+				if r == '_' {
+					hasUnderscore = true
+					continue
+				}
+				if _, e := wordBuffer.WriteRune(r); e != nil {
+					wordBuffer.Reset()
+					hasUnderscore = false
+					continue
+				}
+			}
+		}
+		pos += 1
+	}
+
+	if hasUnderscore && utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+		rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+	}
+	return rv
+}
+
+func camelSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
+	wordBuffer.Reset()
+	rv := make([]lexeme, 0, 8)
 	var pos = 1
 	var prev rune
 	for _, r := range docValue {
@@ -123,48 +223,48 @@ func camelSplitDoc(docValue string, doc *SearchContent) []lexeme {
 			continue
 		}
 		if unicode.IsUpper(prev) {
-			if buffer.Len() == 0 { // no current word
+			if wordBuffer.Len() == 0 { // no current word
 				if unicode.IsLower(r) {
 					// got a upper case in prev and current is lower, starting a new word
-					if _, e := buffer.WriteRune(prev); e != nil {
-						buffer.Reset()
+					if _, e := wordBuffer.WriteRune(prev); e != nil {
+						wordBuffer.Reset()
 						continue
 					}
-					if _, e := buffer.WriteRune(r); e != nil {
-						buffer.Reset()
+					if _, e := wordBuffer.WriteRune(r); e != nil {
+						wordBuffer.Reset()
 						continue
 					}
 				}
 			}
-		} else if buffer.Len() > 0 {
+		} else if wordBuffer.Len() > 0 {
 			// in a current word, do we append or end?
 			switch {
 			case unicode.IsLower(r):
 				// in word and lower so continue appending
-				if _, e := buffer.WriteRune(r); e != nil {
-					buffer.Reset()
+				if _, e := wordBuffer.WriteRune(r); e != nil {
+					wordBuffer.Reset()
 					continue
 				}
-			case utf8.RuneCount(buffer.Bytes()) >= minWordSize:
+			case utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize:
 				// have a word, current is not lower so end current word
-				rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
-				buffer.Reset()
+				rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+				wordBuffer.Reset()
 			default:
-				buffer.Reset()
+				wordBuffer.Reset()
 			}
 		}
 		prev = r
 		pos += 1
 	}
-	if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
-		rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+	if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+		rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
 	}
 	return rv
 }
 
-func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
+func acronymSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
+	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
-	var buffer bytes.Buffer
 	var pos = 1
 	var prev rune
 	for _, r := range docValue {
@@ -176,23 +276,23 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 			switch {
 			case unicode.IsLower(r):
 				// only append previous if it is upper case and and current is not lower case (i.e. don't append T in AWSTest)
-				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
-					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+					rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
 				}
-				buffer.Reset()
+				wordBuffer.Reset()
 			case !unicode.IsUpper(r):
 				// finish acronym if there is one of min length if we encounter space
-				if _, e := buffer.WriteRune(prev); e != nil {
-					buffer.Reset()
+				if _, e := wordBuffer.WriteRune(prev); e != nil {
+					wordBuffer.Reset()
 					continue
 				}
-				if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
-					rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+				if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+					rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
 				}
-				buffer.Reset()
+				wordBuffer.Reset()
 			default:
-				if _, e := buffer.WriteRune(prev); e != nil {
-					buffer.Reset()
+				if _, e := wordBuffer.WriteRune(prev); e != nil {
+					wordBuffer.Reset()
 					continue
 				}
 			}
@@ -201,28 +301,32 @@ func acronymSplitDoc(docValue string, doc *SearchContent) []lexeme {
 		pos += 1
 	}
 	// finish acronym if there is one of min length
-	if buffer.Len() > 0 {
+	if wordBuffer.Len() > 0 {
 		if unicode.IsUpper(prev) {
-			if _, e := buffer.WriteRune(prev); e != nil {
+			if _, e := wordBuffer.WriteRune(prev); e != nil {
 				return rv
 			}
 		}
-		if utf8.RuneCount(buffer.Bytes()) >= minWordSize {
-			rv = append(rv, lexeme{strings.ToLower(buffer.String()), pos, doc.Weight})
+		if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+			rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
 		}
 	}
 	return rv
 }
 
-func camelSplitDocs(docs []*SearchContent) []lexeme {
+// normalizeVectorDocs - converts a set of input documents into a set of lexemes matching common patterns such as camel case, snake case and accronyms.
+func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
 	for _, doc := range docs {
 		if doc.Type == FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG {
 			continue
 		}
 		docValue := interfaceToValue(doc.Value)
-		rv = append(rv, camelSplitDoc(docValue, doc)...)
-		rv = append(rv, acronymSplitDoc(docValue, doc)...)
+		var wordBuffer bytes.Buffer
+		rv = append(rv, camelSplitDoc(docValue, wordBuffer, doc)...)
+		rv = append(rv, snakeSubTokensSplitDoc(docValue, wordBuffer, doc)...)
+		rv = append(rv, snakeFullTokensSplitDoc(docValue, wordBuffer, doc)...)
+		rv = append(rv, acronymSplitDoc(docValue, wordBuffer, doc)...)
 	}
 	return rv
 }
@@ -234,7 +338,7 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 	rv := make([]lexeme, 0, 8)
 
 	rv = append(rv, lemmatizeDocs(docs, additionalFilters...)...)
-	rv = append(rv, camelSplitDocs(docs)...)
+	rv = append(rv, normalizeVectorDocs(docs)...)
 
 	if len(rv) == 0 {
 		return exp.NewLiteralExpression("''::tsvector")
@@ -259,7 +363,6 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 
 	terms = cleanToken(terms)
 	stemmedTerms = cleanToken(stemmedTerms)
-
 	return exp.NewLiteralExpression(
 		"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
 		terms, stemmedTerms)
@@ -272,12 +375,13 @@ type lexeme struct {
 }
 
 func cleanToken(in string) string {
-	return strings.Map(func(r rune) rune {
+	rv := strings.Map(func(r rune) rune {
 		if unicode.IsDigit(r) || unicode.IsLetter(r) || unicode.IsSpace(r) {
 			return r
 		}
 		return specialReplaceChar
-	}, in)
+	}, strings.ReplaceAll(in, "_", ""))
+	return rv
 }
 
 const specialReplaceChar = '�'
