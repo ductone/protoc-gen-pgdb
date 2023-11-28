@@ -112,7 +112,7 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 	return rv
 }
 
-// snakeSubTokensSplitDoc tokenizes foo bar baz in foo_bar_baz.
+// snakeSubTokensSplitDoc tokenizes []string{bar, baz, quo} from foo_bar_baz quix_quo.
 func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
 	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
@@ -161,7 +161,7 @@ func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *Searc
 	return rv
 }
 
-// snakeFullTokensSplitDoc tokenizes foo_bar_baz from foo_bar_baz.
+// snakeFullTokensSplitDoc tokenizes []string{foobarbaz, quixquo} from foo_bar_baz quix_quo.
 func snakeFullTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
 	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
