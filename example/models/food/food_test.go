@@ -36,6 +36,9 @@ func TestSchemaFoodPasta(t *testing.T) {
 		strings.Count(ct, "$pksk"),
 		"Create table should contain only one pksk field + index: %s", ct,
 	)
+
+	require.Contains(t, ct, "PARTITION BY LIST")
+
 	require.Equal(t, 1,
 		strings.Count(ct, "fts_data"),
 		"Create table should contain only one fts_data field: %s", ct,
