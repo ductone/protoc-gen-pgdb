@@ -1,6 +1,8 @@
 package v1
 
-import "github.com/doug-martin/goqu/v9/exp"
+import (
+	"github.com/doug-martin/goqu/v9/exp"
+)
 
 // Descriptor is the same for all instances of a Message.
 type Descriptor interface {
@@ -13,14 +15,16 @@ type Descriptor interface {
 	SearchField() *Column
 	VersioningField() *Column
 	TenantField() *Column
+	IsPartitioned() bool
 
 	Indexes(opts ...IndexOptionsFunc) []*Index
 	IndexPrimaryKey(opts ...IndexOptionsFunc) *Index
 }
 
 type DescriptorFieldOption struct {
-	Prefix   string
-	IsNested bool
+	Prefix        string
+	IsNested      bool
+	IsPartitioned bool
 }
 
 func (dfo DescriptorFieldOption) Nullable(defaultValue bool) bool {

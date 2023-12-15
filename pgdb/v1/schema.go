@@ -39,8 +39,17 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	}
 
 	_, _ = buf.WriteString(")\n")
+
+	if desc.IsPartitioned() {
+		_, _ = buf.WriteString("PARTITION BY LIST(")
+		_, _ = buf.WriteString(desc.TenantField().Name)
+		_, _ = buf.WriteString(")\n")
+	}
+
 	rv := []string{buf.String()}
 
+	// We must first create indexes on the partitioned tables and then create an index on the main table
+	// TODO(scott)
 	more, err := IndexSchema(msg)
 	if err != nil {
 		return nil, err

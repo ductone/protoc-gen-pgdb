@@ -17,6 +17,7 @@ type descriptorTemplateContext struct {
 	NestedFields    []*nestedFieldContext
 	Indexes         []*indexContext
 	VersioningField string
+	IsPartitioned   bool
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -53,6 +54,7 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		Indexes:         module.getMessageIndexes(ctx, m, ix),
 		TableName:       tableName,
 		VersioningField: vf,
+		IsPartitioned:   fext.Partitioned,
 	}
 
 	return templates["descriptor.tmpl"].Execute(w, c)

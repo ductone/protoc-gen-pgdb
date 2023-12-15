@@ -9,6 +9,10 @@ func (d *{{.ReceiverType}}) TableName() string {
     return "{{.TableName}}"
 }
 
+func (d *{{.ReceiverType}}) IsPartitioned() bool {
+    return {{.IsPartitioned}}
+}
+
 func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
   df := pgdb_v1.NewDescriptorFieldOption(opts)
   _ = df

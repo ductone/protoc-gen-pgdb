@@ -14,7 +14,7 @@ func index2sql(desc Descriptor, idx *Index) string {
 		_, _ = buf.WriteString("DROP INDEX")
 		// WARNING: unique indexes cannot be dropped
 		// concurrently.  Maybe unsafe?
-		if !idx.IsUnique {
+		if !idx.IsUnique || !desc.IsPartitioned() {
 			_, _ = buf.WriteString(" CONCURRENTLY")
 		}
 		_, _ = buf.WriteString(" IF EXISTS ")
@@ -26,7 +26,12 @@ func index2sql(desc Descriptor, idx *Index) string {
 	if idx.IsUnique {
 		_, _ = buf.WriteString(" UNIQUE")
 	}
-	_, _ = buf.WriteString(" INDEX CONCURRENTLY IF NOT EXISTS\n  ")
+	_, _ = buf.WriteString(" INDEX")
+	// Note cannot drop or add indexes concurrently on the master partition tables
+	if !desc.IsPartitioned() {
+		_, _ = buf.WriteString(" CONCURRENTLY")
+	}
+	_, _ = buf.WriteString(" IF NOT EXISTS\n  ")
 	pgWriteString(buf, idx.Name)
 	_, _ = buf.WriteString("\nON\n  ")
 	pgWriteString(buf, desc.TableName())

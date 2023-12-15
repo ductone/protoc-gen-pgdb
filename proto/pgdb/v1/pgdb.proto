@@ -37,6 +37,10 @@ message MessageOptions {
   // if this message is only used in nested messages, a subset of methods
   // will be generated.
   bool nested_only = 4;
+
+  // if this message is used then we create a partitioned table and partition by
+  // tenant_id.
+  bool partitioned = 5;
 }
 
 extend google.protobuf.FieldOptions {
