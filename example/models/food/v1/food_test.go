@@ -56,4 +56,27 @@ func TestSchemaFoodPasta(t *testing.T) {
 	}
 	ct = schema[0]
 	require.Contains(t, ct, "CREATE TABLE")
+
+	// Verify number of master partition tables
+	partTablesQuery := `SELECT count(t.tablename), t.tablename
+		FROM pg_tables t
+		LEFT JOIN pg_partitioned_table p ON p.partrelid = (SELECT oid FROM pg_class WHERE relname = t.tablename)
+		WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema') AND p.partrelid IS NOT NULL
+		GROUP BY t.tablename;`
+
+	rows, err := pg.DB.Query(ctx, partTablesQuery)
+	require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to count partitioned tables query: '\n%s\n'", partTablesQuery)
+	defer rows.Close()
+	var partTableCount int
+	var tableName string
+
+	for rows.Next() {
+		err = rows.Scan(&partTableCount, &tableName)
+		require.NoError(t, err)
+		fmt.Printf("%s %d\n", tableName, partTableCount)
+	}
+
+	require.NoError(t, rows.Err())
+	require.Equal(t, 1, partTableCount, "Should have one master partition table")
+
 }
