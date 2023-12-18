@@ -20,71 +20,84 @@ func TestSchemaFoodPasta(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	smsg := &Pasta{}
-	schema, err := pgdb_v1.CreateSchema(smsg)
-	require.NoError(t, err)
-	for _, line := range schema {
-		fmt.Printf("%s \n", line)
-		_, err := pg.DB.Exec(ctx, line)
-		require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
-		// os.Stderr.WriteString(line)
-		// os.Stderr.WriteString("\n------\n")
+	msgs := []pgdb_v1.DBReflectMessage{
+		&Pasta{},
+		&SauceIngredient{},
+		&PastaIngredient{},
 	}
-	ct := schema[0]
-	require.Contains(t, ct, "CREATE TABLE")
-	require.Equal(t, 2,
-		strings.Count(ct, "$pksk"),
-		"Create table should contain only one pksk field + index: %s", ct,
-	)
 
-	require.Contains(t, ct, "PARTITION BY LIST")
+	for _, smsg := range msgs {
+		schema, err := pgdb_v1.CreateSchema(smsg)
+		require.NoError(t, err)
+		for _, line := range schema {
+			fmt.Printf("%s \n", line)
+			_, err := pg.DB.Exec(ctx, line)
+			require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
+			// os.Stderr.WriteString(line)
+			// os.Stderr.WriteString("\n------\n")
+		}
+		ct := schema[0]
+		require.Contains(t, ct, "CREATE TABLE")
+		require.Equal(t, 2,
+			strings.Count(ct, "$pksk"),
+			"Create table should contain only one pksk field + index: %s", ct,
+		)
 
-	require.Equal(t, 1,
-		strings.Count(ct, "fts_data"),
-		"Create table should contain only one fts_data field: %s", ct,
-	)
-	_, err = pg.DB.Exec(ctx, "DROP TABLE "+smsg.DBReflect().Descriptor().TableName())
-	require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to drop")
+		if smsg.DBReflect().Descriptor().IsPartitioned() {
+			require.Contains(t, ct, "PARTITION BY LIST")
+		} else {
+			require.NotContains(t, ct, "PARTITION BY LIST")
+		}
 
-	schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
-	require.NoError(t, err)
-	for _, line := range schema {
-		_, err := pg.DB.Exec(ctx, line)
-		require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
-		// os.Stderr.WriteString(line)
-		// os.Stderr.WriteString("\n------\n")
+		require.Equal(t, 1,
+			strings.Count(ct, "fts_data"),
+			"Create table should contain only one fts_data field: %s", ct,
+		)
+		_, err = pg.DB.Exec(ctx, "DROP TABLE "+smsg.DBReflect().Descriptor().TableName())
+		require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to drop")
+
+		schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
+		require.NoError(t, err)
+		for _, line := range schema {
+			_, err := pg.DB.Exec(ctx, line)
+			require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
+			// os.Stderr.WriteString(line)
+			// os.Stderr.WriteString("\n------\n")
+		}
+		ct = schema[0]
+		require.Contains(t, ct, "CREATE TABLE")
+
+		fakeTenantIds := []string{"t1", "t2", "t3"}
+		protoTableName := smsg.DBReflect().Descriptor().TableName()
+
+		if smsg.DBReflect().Descriptor().IsPartitioned() {
+			// TODO(scott) makes helper functions and move to pgdb_v1
+			verifyMasterPartition(t, pg, protoTableName, fakeTenantIds)
+			// Test sub-tables for partitions
+			// Create sub-tables
+			for _, tenantId := range fakeTenantIds {
+				_, err = pg.DB.Exec(ctx, fmt.Sprintf("CREATE TABLE %s_%s PARTITION OF %s FOR VALUES IN ('%s')", protoTableName, tenantId, protoTableName, tenantId))
+				require.NoError(t, err, "TestSchemaFoodPasta: failed to create partitioned table")
+			}
+			verifySubTables(t, pg, protoTableName, fakeTenantIds)
+			// Insert data into master table
+			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, smsg)
+		}
 	}
-	ct = schema[0]
-	require.Contains(t, ct, "CREATE TABLE")
-
-	fakeTenantIds := []string{"t1", "t2", "t3"}
-	protoTableName := smsg.DBReflect().Descriptor().TableName()
-
-	// TODO(scott) makes helper functions and move to pgdb_v1
-	verifyMasterPartition(t, pg, protoTableName, fakeTenantIds)
-	// Test sub-tables for partitions
-	// Create sub-tables
-	for _, tenantId := range fakeTenantIds {
-		_, err = pg.DB.Exec(ctx, fmt.Sprintf("CREATE TABLE %s_%s PARTITION OF %s FOR VALUES IN ('%s')", protoTableName, tenantId, protoTableName, tenantId))
-		require.NoError(t, err, "TestSchemaFoodPasta: failed to create partitioned table")
-	}
-	verifySubTables(t, pg, protoTableName, fakeTenantIds)
-	// Insert data into master table
-	fields := smsg.DB().Query()
-	testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, fields.TenantId().column)
 
 }
 
 func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
 	ctx := context.Background()
+	fmt.Println(tableName)
 	// Verify number of master partition tables
 	partTablesQuery := `SELECT count(t.tablename), t.tablename
 		FROM pg_tables t
 		LEFT JOIN pg_partitioned_table p ON p.partrelid = (SELECT oid FROM pg_class WHERE relname = t.tablename)
-		WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema') AND p.partrelid IS NOT NULL
+		WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema') AND p.partrelid IS NOT NULL AND t.tablename = $1
 		GROUP BY t.tablename;`
 
-	rows, err := pg.DB.Query(ctx, partTablesQuery)
+	rows, err := pg.DB.Query(ctx, partTablesQuery, tableName)
 	require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to count partitioned tables query: '\n%s\n'", partTablesQuery)
 	defer rows.Close()
 	var partTableCount int
@@ -98,7 +111,8 @@ func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTe
 
 	require.NoError(t, rows.Err())
 	require.Equal(t, 1, partTableCount, "Should have one master partition table")
-	require.Equal(t, tableName, queryTableName, "Table name did not match proto")
+	require.Equal(t, tableName, queryTableName, "Should have one master partition table")
+
 }
 
 func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
@@ -140,39 +154,72 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 	}
 }
 
-func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, selectColStr string) {
+func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, msg pgdb_v1.DBReflectMessage) {
 	ctx := context.Background()
 	// Insert data into master table
 	// Verify data in master table
 	// Verify data in sub tables
-	pasta1 := &Pasta{
-		TenantId: "t1",
-		Id:       "p1",
+	var obj1 pgdb_v1.DBReflectMessage
+	var obj2 pgdb_v1.DBReflectMessage
+	var obj3 pgdb_v1.DBReflectMessage
+	switch msg.(type) {
+	case *Pasta:
+		obj1 = &Pasta{
+			TenantId: "t1",
+			Id:       "p1",
+		}
+		obj2 = &Pasta{
+			TenantId: "t2",
+			Id:       "p2",
+		}
+		obj3 = &Pasta{
+			TenantId: "t3",
+			Id:       "p3",
+		}
+	case *SauceIngredient:
+		obj1 = &SauceIngredient{
+			TenantId: "t1",
+			Id:       "p1",
+		}
+		obj2 = &SauceIngredient{
+			TenantId: "t2",
+			Id:       "p2",
+		}
+		obj3 = &SauceIngredient{
+			TenantId: "t3",
+			Id:       "p3",
+		}
+	case *PastaIngredient:
+		obj1 = &PastaIngredient{
+			TenantId:     "t1",
+			IngredientId: "p1",
+		}
+		obj2 = &PastaIngredient{
+			TenantId:     "t2",
+			IngredientId: "p2",
+		}
+		obj3 = &PastaIngredient{
+			TenantId:     "t3",
+			IngredientId: "p3",
+		}
 	}
-	pasta2 := &Pasta{
-		TenantId: "t2",
-		Id:       "p2",
-	}
-	pasta3 := &Pasta{
-		TenantId: "t3",
-		Id:       "p3",
-	}
-	sql, args, err := pgdb_v1.Insert(pasta1)
+	sql, args, err := pgdb_v1.Insert(obj1)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
-	sql, args, err = pgdb_v1.Insert(pasta2)
+	sql, args, err = pgdb_v1.Insert(obj2)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
-	sql, args, err = pgdb_v1.Insert(pasta3)
+	sql, args, err = pgdb_v1.Insert(obj3)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
 	var tenantIdSelect string
+	selectColStr := msg.DBReflect().Descriptor().TenantField().Name
 	// Test select from master table
 	masterSelectSql := `SELECT %s FROM %s`
 	fmtSql := fmt.Sprintf(masterSelectSql, selectColStr, tableName)

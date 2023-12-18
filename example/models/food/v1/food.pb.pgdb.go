@@ -909,7 +909,7 @@ func (d *pgdbDescriptorPastaIngredient) TableName() string {
 }
 
 func (d *pgdbDescriptorPastaIngredient) IsPartitioned() bool {
-	return false
+	return true
 }
 
 func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -1821,21 +1821,21 @@ func (x *PastaIngredientDBColumns) PastaId() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "pasta_id")
 }
 
-type pgdbDescriptorSauceIngerdient struct{}
+type pgdbDescriptorSauceIngredient struct{}
 
 var (
-	instancepgdbDescriptorSauceIngerdient pgdb_v1.Descriptor = &pgdbDescriptorSauceIngerdient{}
+	instancepgdbDescriptorSauceIngredient pgdb_v1.Descriptor = &pgdbDescriptorSauceIngredient{}
 )
 
-func (d *pgdbDescriptorSauceIngerdient) TableName() string {
-	return "pb_sauce_ingerdient_models_food_v1_75b5bada"
+func (d *pgdbDescriptorSauceIngredient) TableName() string {
+	return "pb_sauce_ingredient_models_food_v1_e37b4524"
 }
 
-func (d *pgdbDescriptorSauceIngerdient) IsPartitioned() bool {
+func (d *pgdbDescriptorSauceIngredient) IsPartitioned() bool {
 	return false
 }
 
-func (d *pgdbDescriptorSauceIngerdient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
 
@@ -1948,36 +1948,36 @@ func (d *pgdbDescriptorSauceIngerdient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	return rv
 }
 
-func (d *pgdbDescriptorSauceIngerdient) PKSKField() *pgdb_v1.Column {
+func (d *pgdbDescriptorSauceIngredient) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
-		Table: "pb_sauce_ingerdient_models_food_v1_75b5bada",
+		Table: "pb_sauce_ingredient_models_food_v1_e37b4524",
 		Name:  "pb$pksk",
 		Type:  "varchar",
 	}
 }
 
-func (d *pgdbDescriptorSauceIngerdient) DataField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_sauce_ingerdient_models_food_v1_75b5bada", Name: "pb$pb_data", Type: "bytea"}
+func (d *pgdbDescriptorSauceIngredient) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_sauce_ingredient_models_food_v1_e37b4524", Name: "pb$pb_data", Type: "bytea"}
 }
 
-func (d *pgdbDescriptorSauceIngerdient) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_sauce_ingerdient_models_food_v1_75b5bada", Name: "pb$fts_data", Type: "tsvector"}
+func (d *pgdbDescriptorSauceIngredient) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_sauce_ingredient_models_food_v1_e37b4524", Name: "pb$fts_data", Type: "tsvector"}
 }
 
-func (d *pgdbDescriptorSauceIngerdient) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_sauce_ingerdient_models_food_v1_75b5bada", Name: "pb$updated_at", Type: "timestamptz"}
+func (d *pgdbDescriptorSauceIngredient) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_sauce_ingredient_models_food_v1_e37b4524", Name: "pb$updated_at", Type: "timestamptz"}
 }
 
-func (d *pgdbDescriptorSauceIngerdient) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_sauce_ingerdient_models_food_v1_75b5bada", Name: "pb$tenant_id", Type: "varchar"}
+func (d *pgdbDescriptorSauceIngredient) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_sauce_ingredient_models_food_v1_e37b4524", Name: "pb$tenant_id", Type: "varchar"}
 }
 
-func (d *pgdbDescriptorSauceIngerdient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+func (d *pgdbDescriptorSauceIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
 
 	return &pgdb_v1.Index{
-		Name:               io.IndexName("pksk_sauce_ingerdient_models_food_v1_1d2509ae"),
+		Name:               io.IndexName("pksk_sauce_ingredient_models_food_v1_86464d5b"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 		IsPrimary:          true,
 		IsUnique:           true,
@@ -1988,7 +1988,7 @@ func (d *pgdbDescriptorSauceIngerdient) IndexPrimaryKey(opts ...pgdb_v1.IndexOpt
 
 }
 
-func (d *pgdbDescriptorSauceIngerdient) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
 	rv := make([]*pgdb_v1.Index, 0)
@@ -1996,7 +1996,7 @@ func (d *pgdbDescriptorSauceIngerdient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("pksk_sauce_ingerdient_models_food_v1_1d2509ae"),
+			Name:               io.IndexName("pksk_sauce_ingredient_models_food_v1_86464d5b"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          true,
 			IsUnique:           true,
@@ -2010,7 +2010,7 @@ func (d *pgdbDescriptorSauceIngerdient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("pksk_split_sauce_ingerdient_models_food_2a32d083"),
+			Name:               io.IndexName("pksk_split_sauce_ingredient_models_food_b82c5af3"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           false,
@@ -2024,7 +2024,7 @@ func (d *pgdbDescriptorSauceIngerdient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("pksk_split2_sauce_ingerdient_models_foo_4720bf89"),
+			Name:               io.IndexName("pksk_split2_sauce_ingredient_models_foo_b576dd2d"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
 			IsPrimary:          false,
 			IsUnique:           false,
@@ -2038,7 +2038,7 @@ func (d *pgdbDescriptorSauceIngerdient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 	if !io.IsNested {
 
 		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_sauce_ingerdient_models_food_v_25f1d82c"),
+			Name:               io.IndexName("fts_data_sauce_ingredient_models_food_v_43892256"),
 			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
 			IsPrimary:          false,
 			IsUnique:           false,
@@ -2052,21 +2052,21 @@ func (d *pgdbDescriptorSauceIngerdient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 	return rv
 }
 
-type pgdbMessageSauceIngerdient struct {
-	self *SauceIngerdient
+type pgdbMessageSauceIngredient struct {
+	self *SauceIngredient
 }
 
-func (dbr *SauceIngerdient) DBReflect() pgdb_v1.Message {
-	return &pgdbMessageSauceIngerdient{
+func (dbr *SauceIngredient) DBReflect() pgdb_v1.Message {
+	return &pgdbMessageSauceIngredient{
 		self: dbr,
 	}
 }
 
-func (m *pgdbMessageSauceIngerdient) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorSauceIngerdient
+func (m *pgdbMessageSauceIngredient) Descriptor() pgdb_v1.Descriptor {
+	return instancepgdbDescriptorSauceIngredient
 }
 
-func (m *pgdbMessageSauceIngerdient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
 	ro := pgdb_v1.NewRecordOptions(opts)
 	_ = ro
 	nullExp := exp.NewLiteralExpression("NULL")
@@ -2096,7 +2096,7 @@ func (m *pgdbMessageSauceIngerdient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		sb.Reset()
 
-		_, _ = sb.WriteString("models_food_v1_sauce_ingerdient")
+		_, _ = sb.WriteString("models_food_v1_sauce_ingredient")
 
 		_, _ = sb.WriteString(":")
 
@@ -2215,7 +2215,7 @@ func (m *pgdbMessageSauceIngerdient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	return rv, nil
 }
 
-func (m *pgdbMessageSauceIngerdient) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+func (m *pgdbMessageSauceIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
 	rv := []*pgdb_v1.SearchContent{
 
 		{
@@ -2228,481 +2228,481 @@ func (m *pgdbMessageSauceIngerdient) SearchData(opts ...pgdb_v1.RecordOptionsFun
 	return rv
 }
 
-type SauceIngerdientDB struct {
+type SauceIngredientDB struct {
 	tableName string
 }
 
-type SauceIngerdientDBQueryBuilder struct {
+type SauceIngredientDBQueryBuilder struct {
 	tableName string
 }
 
-type SauceIngerdientDBQueryUnsafe struct {
+type SauceIngredientDBQueryUnsafe struct {
 	tableName string
 }
 
-type SauceIngerdientDBColumns struct {
+type SauceIngredientDBColumns struct {
 	tableName string
 }
 
-func (x *SauceIngerdient) DB() *SauceIngerdientDB {
-	return &SauceIngerdientDB{tableName: x.DBReflect().Descriptor().TableName()}
+func (x *SauceIngredient) DB() *SauceIngredientDB {
+	return &SauceIngredientDB{tableName: x.DBReflect().Descriptor().TableName()}
 }
 
-func (x *SauceIngerdientDB) TableName() string {
+func (x *SauceIngredientDB) TableName() string {
 	return x.tableName
 }
 
-func (x *SauceIngerdientDB) Query() *SauceIngerdientDBQueryBuilder {
-	return &SauceIngerdientDBQueryBuilder{tableName: x.tableName}
+func (x *SauceIngredientDB) Query() *SauceIngredientDBQueryBuilder {
+	return &SauceIngredientDBQueryBuilder{tableName: x.tableName}
 }
 
-func (x *SauceIngerdientDB) Columns() *SauceIngerdientDBColumns {
-	return &SauceIngerdientDBColumns{tableName: x.tableName}
+func (x *SauceIngredientDB) Columns() *SauceIngredientDBColumns {
+	return &SauceIngredientDBColumns{tableName: x.tableName}
 }
 
-func (x *SauceIngerdientDB) WithTable(t string) *SauceIngerdientDB {
-	return &SauceIngerdientDB{tableName: t}
+func (x *SauceIngredientDB) WithTable(t string) *SauceIngredientDB {
+	return &SauceIngredientDB{tableName: t}
 }
 
-func (x *SauceIngerdientDBQueryBuilder) WithTable(t string) *SauceIngerdientDBQueryBuilder {
-	return &SauceIngerdientDBQueryBuilder{tableName: t}
+func (x *SauceIngredientDBQueryBuilder) WithTable(t string) *SauceIngredientDBQueryBuilder {
+	return &SauceIngredientDBQueryBuilder{tableName: t}
 }
 
-func (x *SauceIngerdientDBQueryBuilder) Unsafe() *SauceIngerdientDBQueryUnsafe {
-	return &SauceIngerdientDBQueryUnsafe{tableName: x.tableName}
+func (x *SauceIngredientDBQueryBuilder) Unsafe() *SauceIngredientDBQueryUnsafe {
+	return &SauceIngredientDBQueryUnsafe{tableName: x.tableName}
 }
 
-type SauceIngerdientTenantIdSafeOperators struct {
+type SauceIngredientTenantIdSafeOperators struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) IsNotEmpty() exp.Expression {
+func (x *SauceIngredientTenantIdSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+func (x *SauceIngredientTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+func (x *SauceIngredientTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
-func (x *SauceIngerdientTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+func (x *SauceIngredientTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *SauceIngerdientDBQueryBuilder) TenantId() *SauceIngerdientTenantIdSafeOperators {
-	return &SauceIngerdientTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+func (x *SauceIngredientDBQueryBuilder) TenantId() *SauceIngredientTenantIdSafeOperators {
+	return &SauceIngredientTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
 
-type SauceIngerdientPKSKSafeOperators struct {
+type SauceIngredientPKSKSafeOperators struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientPKSKSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) In(v []string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) IsNull() exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) IsNotEmpty() exp.Expression {
+func (x *SauceIngredientPKSKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+func (x *SauceIngredientPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+func (x *SauceIngredientPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
-func (x *SauceIngerdientPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+func (x *SauceIngredientPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *SauceIngerdientDBQueryBuilder) PKSK() *SauceIngerdientPKSKSafeOperators {
-	return &SauceIngerdientPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+func (x *SauceIngredientDBQueryBuilder) PKSK() *SauceIngredientPKSKSafeOperators {
+	return &SauceIngredientPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
 }
 
-type SauceIngerdientPKSafeOperators struct {
+type SauceIngredientPKSafeOperators struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientPKSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientPKSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *SauceIngerdientPKSafeOperators) Eq(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *SauceIngerdientPKSafeOperators) Gt(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
-func (x *SauceIngerdientPKSafeOperators) Gte(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) Gte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
-func (x *SauceIngerdientPKSafeOperators) Lt(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) Lt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
-func (x *SauceIngerdientPKSafeOperators) Lte(v string) exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) Lte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
-func (x *SauceIngerdientPKSafeOperators) In(v []string) exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) In(v []string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
-func (x *SauceIngerdientPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
-func (x *SauceIngerdientPKSafeOperators) IsNull() exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *SauceIngerdientPKSafeOperators) IsNotEmpty() exp.Expression {
+func (x *SauceIngredientPKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
-func (x *SauceIngerdientPKSafeOperators) IsNotNull() exp.BooleanExpression {
+func (x *SauceIngredientPKSafeOperators) IsNotNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
-func (x *SauceIngerdientPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+func (x *SauceIngredientPKSafeOperators) Between(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
-func (x *SauceIngerdientPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+func (x *SauceIngredientPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *SauceIngerdientDBQueryBuilder) PK() *SauceIngerdientPKSafeOperators {
-	return &SauceIngerdientPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+func (x *SauceIngredientDBQueryBuilder) PK() *SauceIngredientPKSafeOperators {
+	return &SauceIngredientPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
 }
 
-type SauceIngerdientSKSafeOperators struct {
+type SauceIngredientSKSafeOperators struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientSKSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientSKSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *SauceIngerdientSKSafeOperators) Eq(v string) exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *SauceIngerdientSKSafeOperators) Gt(v string) exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
-func (x *SauceIngerdientSKSafeOperators) Gte(v string) exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) Gte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
-func (x *SauceIngerdientSKSafeOperators) Lt(v string) exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) Lt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
-func (x *SauceIngerdientSKSafeOperators) Lte(v string) exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) Lte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
-func (x *SauceIngerdientSKSafeOperators) In(v []string) exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) In(v []string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
-func (x *SauceIngerdientSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
-func (x *SauceIngerdientSKSafeOperators) IsNull() exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *SauceIngerdientSKSafeOperators) IsNotEmpty() exp.Expression {
+func (x *SauceIngredientSKSafeOperators) IsNotEmpty() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
 }
 
-func (x *SauceIngerdientSKSafeOperators) IsNotNull() exp.BooleanExpression {
+func (x *SauceIngredientSKSafeOperators) IsNotNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
-func (x *SauceIngerdientSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+func (x *SauceIngredientSKSafeOperators) Between(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
-func (x *SauceIngerdientSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+func (x *SauceIngredientSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *SauceIngerdientDBQueryBuilder) SK() *SauceIngerdientSKSafeOperators {
-	return &SauceIngerdientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+func (x *SauceIngredientDBQueryBuilder) SK() *SauceIngredientSKSafeOperators {
+	return &SauceIngredientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
-type SauceIngerdientFTSDataSafeOperators struct {
+type SauceIngredientFTSDataSafeOperators struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *SauceIngerdientFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+func (x *SauceIngredientFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *SauceIngerdientDBQueryBuilder) FTSData() *SauceIngerdientFTSDataSafeOperators {
-	return &SauceIngerdientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+func (x *SauceIngredientDBQueryBuilder) FTSData() *SauceIngredientFTSDataSafeOperators {
+	return &SauceIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
-type SauceIngerdientTenantIdQueryType struct {
+type SauceIngredientTenantIdQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) TenantId() *SauceIngerdientTenantIdQueryType {
-	return &SauceIngerdientTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+func (x *SauceIngredientDBQueryUnsafe) TenantId() *SauceIngredientTenantIdQueryType {
+	return &SauceIngredientTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
 }
 
-func (x *SauceIngerdientTenantIdQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientTenantIdQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientPKSKQueryType struct {
+type SauceIngredientPKSKQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) PKSK() *SauceIngerdientPKSKQueryType {
-	return &SauceIngerdientPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+func (x *SauceIngredientDBQueryUnsafe) PKSK() *SauceIngredientPKSKQueryType {
+	return &SauceIngredientPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
 }
 
-func (x *SauceIngerdientPKSKQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientPKSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientPKQueryType struct {
+type SauceIngredientPKQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) PK() *SauceIngerdientPKQueryType {
-	return &SauceIngerdientPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+func (x *SauceIngredientDBQueryUnsafe) PK() *SauceIngredientPKQueryType {
+	return &SauceIngredientPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
 }
 
-func (x *SauceIngerdientPKQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientPKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientSKQueryType struct {
+type SauceIngredientSKQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) SK() *SauceIngerdientSKQueryType {
-	return &SauceIngerdientSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+func (x *SauceIngredientDBQueryUnsafe) SK() *SauceIngredientSKQueryType {
+	return &SauceIngredientSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
-func (x *SauceIngerdientSKQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientFTSDataQueryType struct {
+type SauceIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) FTSData() *SauceIngerdientFTSDataQueryType {
-	return &SauceIngerdientFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+func (x *SauceIngredientDBQueryUnsafe) FTSData() *SauceIngredientFTSDataQueryType {
+	return &SauceIngredientFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
-func (x *SauceIngerdientFTSDataQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientFTSDataQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientPBDataQueryType struct {
+type SauceIngredientPBDataQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) PBData() *SauceIngerdientPBDataQueryType {
-	return &SauceIngerdientPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+func (x *SauceIngredientDBQueryUnsafe) PBData() *SauceIngredientPBDataQueryType {
+	return &SauceIngredientPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
 }
 
-func (x *SauceIngerdientPBDataQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientPBDataQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientIdQueryType struct {
+type SauceIngredientIdQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) Id() *SauceIngerdientIdQueryType {
-	return &SauceIngerdientIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+func (x *SauceIngredientDBQueryUnsafe) Id() *SauceIngredientIdQueryType {
+	return &SauceIngredientIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
 }
 
-func (x *SauceIngerdientIdQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientIdQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientCreatedAtQueryType struct {
+type SauceIngredientCreatedAtQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) CreatedAt() *SauceIngerdientCreatedAtQueryType {
-	return &SauceIngerdientCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+func (x *SauceIngredientDBQueryUnsafe) CreatedAt() *SauceIngredientCreatedAtQueryType {
+	return &SauceIngredientCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
 }
 
-func (x *SauceIngerdientCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientCreatedAtQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientUpdatedAtQueryType struct {
+type SauceIngredientUpdatedAtQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) UpdatedAt() *SauceIngerdientUpdatedAtQueryType {
-	return &SauceIngerdientUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+func (x *SauceIngredientDBQueryUnsafe) UpdatedAt() *SauceIngredientUpdatedAtQueryType {
+	return &SauceIngredientUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
 }
 
-func (x *SauceIngerdientUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngerdientDeletedAtQueryType struct {
+type SauceIngredientDeletedAtQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *SauceIngerdientDBQueryUnsafe) DeletedAt() *SauceIngerdientDeletedAtQueryType {
-	return &SauceIngerdientDeletedAtQueryType{tableName: x.tableName, column: "pb$" + "deleted_at"}
+func (x *SauceIngredientDBQueryUnsafe) DeletedAt() *SauceIngredientDeletedAtQueryType {
+	return &SauceIngredientDeletedAtQueryType{tableName: x.tableName, column: "pb$" + "deleted_at"}
 }
 
-func (x *SauceIngerdientDeletedAtQueryType) Identifier() exp.IdentifierExpression {
+func (x *SauceIngredientDeletedAtQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *SauceIngerdientDBColumns) WithTable(t string) *SauceIngerdientDBColumns {
-	return &SauceIngerdientDBColumns{tableName: t}
+func (x *SauceIngredientDBColumns) WithTable(t string) *SauceIngredientDBColumns {
+	return &SauceIngredientDBColumns{tableName: t}
 }
 
-func (x *SauceIngerdientDBColumns) TenantId() exp.Expression {
+func (x *SauceIngredientDBColumns) TenantId() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
 }
 
-func (x *SauceIngerdientDBColumns) PKSK() exp.Expression {
+func (x *SauceIngredientDBColumns) PKSK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "pksk")
 }
 
-func (x *SauceIngerdientDBColumns) PK() exp.Expression {
+func (x *SauceIngredientDBColumns) PK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "pk")
 }
 
-func (x *SauceIngerdientDBColumns) SK() exp.Expression {
+func (x *SauceIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
-func (x *SauceIngerdientDBColumns) FTSData() exp.Expression {
+func (x *SauceIngredientDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
 
-func (x *SauceIngerdientDBColumns) PBData() exp.Expression {
+func (x *SauceIngredientDBColumns) PBData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
 }
 
-func (x *SauceIngerdientDBColumns) Id() exp.Expression {
+func (x *SauceIngredientDBColumns) Id() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
-func (x *SauceIngerdientDBColumns) CreatedAt() exp.Expression {
+func (x *SauceIngredientDBColumns) CreatedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
 
-func (x *SauceIngerdientDBColumns) UpdatedAt() exp.Expression {
+func (x *SauceIngredientDBColumns) UpdatedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
 }
 
-func (x *SauceIngerdientDBColumns) DeletedAt() exp.Expression {
+func (x *SauceIngredientDBColumns) DeletedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
 }

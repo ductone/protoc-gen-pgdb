@@ -25,7 +25,7 @@ message Pasta {
 }
 
 message PastaIngredient {
-  option (pgdb.v1.msg).partitioned = false;
+  option (pgdb.v1.msg).partitioned = true;
   option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id",
