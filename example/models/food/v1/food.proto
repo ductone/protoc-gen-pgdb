@@ -6,7 +6,7 @@ import "dynamo/v1/dynamo.proto";
 import "google/protobuf/timestamp.proto";
 import "pgdb/v1/pgdb.proto";
 
-option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/zoo/v1";
+option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/food/v1";
 
 message Pasta {
   option (pgdb.v1.msg).partitioned = true;
@@ -18,8 +18,8 @@ message Pasta {
     sk_const: "example"
   };
   string tenant_id = 1;
-  string id = 2 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_EXACT
-  }];
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
   google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
 }
