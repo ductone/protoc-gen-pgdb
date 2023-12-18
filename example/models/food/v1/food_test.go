@@ -69,6 +69,9 @@ func TestSchemaFoodPasta(t *testing.T) {
 		require.NoError(t, err, "TestSchemaFoodPasta: failed to create partitioned table")
 	}
 	verifySubTables(t, pg, protoTableName, fakeTenantIds)
+	// Insert data into master table
+	fields := smsg.DB().Query()
+	testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, fields.TenantId().column)
 
 }
 
@@ -134,5 +137,76 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one sub-partition table per fake tenant")
 	for _, tenantId := range fakeTenantIds {
 		require.Contains(t, selectedSubTableNames, fmt.Sprintf("%s_%s", tableName, tenantId), "Should have a sub-partition table for tenant %s", tenantId)
+	}
+}
+
+func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, selectColStr string) {
+	ctx := context.Background()
+	// Insert data into master table
+	// Verify data in master table
+	// Verify data in sub tables
+	pasta1 := &Pasta{
+		TenantId: "t1",
+		Id:       "p1",
+	}
+	pasta2 := &Pasta{
+		TenantId: "t2",
+		Id:       "p2",
+	}
+	pasta3 := &Pasta{
+		TenantId: "t3",
+		Id:       "p3",
+	}
+	sql, args, err := pgdb_v1.Insert(pasta1)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, sql, args...)
+	require.NoError(t, err)
+
+	sql, args, err = pgdb_v1.Insert(pasta2)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, sql, args...)
+	require.NoError(t, err)
+
+	sql, args, err = pgdb_v1.Insert(pasta3)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, sql, args...)
+	require.NoError(t, err)
+
+	var tenantIdSelect string
+	// Test select from master table
+	masterSelectSql := `SELECT %s FROM %s`
+	fmtSql := fmt.Sprintf(masterSelectSql, selectColStr, tableName)
+	rows, err := pg.DB.Query(ctx, fmtSql)
+	require.NoError(t, err)
+	defer rows.Close()
+	rowCount := 0
+	for rows.Next() {
+		err = rows.Scan(&tenantIdSelect)
+		require.NoError(t, err)
+		fmt.Printf("%s ", tenantIdSelect)
+		rowCount += 1
+	}
+	fmt.Println()
+	require.NoError(t, rows.Err())
+	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one row per tenant")
+	fmt.Printf("Master table rows: %d\n", rowCount)
+
+	// Test select each tenant
+	for _, tenantId := range fakeTenantIds {
+		selectSql := `SELECT %s FROM %s_%s`
+		fmtSql := fmt.Sprintf(selectSql, selectColStr, tableName, tenantId)
+		rows, err := pg.DB.Query(ctx, fmtSql)
+		require.NoError(t, err)
+		defer rows.Close()
+		rowCount := 0
+		for rows.Next() {
+			err = rows.Scan(&tenantIdSelect)
+			require.NoError(t, err)
+			require.Equal(t, tenantId, tenantIdSelect, "TenantId did not match proto")
+			rowCount += 1
+		}
+		require.NoError(t, rows.Err())
+		require.Equal(t, 1, rowCount, "Should have one row per tenant table")
+		fmt.Printf("Sub-table %s table rows: %d\n", fmt.Sprintf("%s_%s", tableName, tenantId), rowCount)
 	}
 }
