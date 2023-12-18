@@ -57,6 +57,8 @@ func TestSchemaFoodPasta(t *testing.T) {
 	ct = schema[0]
 	require.Contains(t, ct, "CREATE TABLE")
 
+	// TODO(scott) makes helper functions and move to pgdb_v1
+
 	// Verify number of master partition tables
 	partTablesQuery := `SELECT count(t.tablename), t.tablename
 		FROM pg_tables t
@@ -78,5 +80,50 @@ func TestSchemaFoodPasta(t *testing.T) {
 
 	require.NoError(t, rows.Err())
 	require.Equal(t, 1, partTableCount, "Should have one master partition table")
+	require.Equal(t, smsg.DBReflect().Descriptor().TableName(), tableName, "Table name did not match proto")
+
+	// Test sub-tables for partitions
+	fakeTenantIds := []string{"t1", "t2", "t3"}
+	protoTableName := smsg.DBReflect().Descriptor().TableName()
+	// Create sub-tables
+	for _, tenantId := range fakeTenantIds {
+		_, err = pg.DB.Exec(ctx, fmt.Sprintf("CREATE TABLE %s_%s PARTITION OF %s FOR VALUES IN ('%s')", protoTableName, tenantId, protoTableName, tenantId))
+		require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to create partitioned table: '\n%s\n'", ct)
+	}
+
+	// Verify sub-partition tables
+	sqlSubTables := `SELECT
+			parent.relname      AS parent,
+			child.relname       AS child
+		FROM pg_inherits
+			JOIN pg_class parent            ON pg_inherits.inhparent = parent.oid
+			JOIN pg_class child             ON pg_inherits.inhrelid   = child.oid
+			JOIN pg_namespace nmsp_parent   ON nmsp_parent.oid  = parent.relnamespace
+			JOIN pg_namespace nmsp_child    ON nmsp_child.oid   = child.relnamespace
+		WHERE parent.relname='%s';`
+
+	rows, err = pg.DB.Query(ctx, fmt.Sprintf(sqlSubTables, protoTableName))
+	require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to count partitioned tables query: '\n%s\n'", sqlSubTables)
+	defer rows.Close()
+
+	var parentTable string
+	var childTable string
+	rowCount := 0
+	selectedSubTableNames := make([]string, 0, len(fakeTenantIds))
+
+	for rows.Next() {
+		err = rows.Scan(&parentTable, &childTable)
+		require.NoError(t, err)
+		fmt.Printf("%s: %s\n", parentTable, childTable)
+		require.Equal(t, protoTableName, parentTable, "Parent table name did not match proto")
+		selectedSubTableNames = append(selectedSubTableNames, childTable)
+		rowCount += 1
+	}
+
+	require.NoError(t, rows.Err())
+	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one sub-partition table per fake tenant")
+	for _, tenantId := range fakeTenantIds {
+		require.Contains(t, selectedSubTableNames, fmt.Sprintf("%s_%s", protoTableName, tenantId), "Should have a sub-partition table for tenant %s", tenantId)
+	}
 
 }
