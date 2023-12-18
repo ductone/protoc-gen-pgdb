@@ -58,10 +58,17 @@ func TestSchemaFoodPasta(t *testing.T) {
 	require.Contains(t, ct, "CREATE TABLE")
 
 	fakeTenantIds := []string{"t1", "t2", "t3"}
+	protoTableName := smsg.DBReflect().Descriptor().TableName()
 
 	// TODO(scott) makes helper functions and move to pgdb_v1
-	verifyMasterPartition(t, pg, smsg.DBReflect().Descriptor().TableName(), fakeTenantIds)
-	verifySubTables(t, pg, smsg.DBReflect().Descriptor().TableName(), fakeTenantIds)
+	verifyMasterPartition(t, pg, protoTableName, fakeTenantIds)
+	// Test sub-tables for partitions
+	// Create sub-tables
+	for _, tenantId := range fakeTenantIds {
+		_, err = pg.DB.Exec(ctx, fmt.Sprintf("CREATE TABLE %s_%s PARTITION OF %s FOR VALUES IN ('%s')", protoTableName, tenantId, protoTableName, tenantId))
+		require.NoError(t, err, "TestSchemaFoodPasta: failed to create partitioned table")
+	}
+	verifySubTables(t, pg, protoTableName, fakeTenantIds)
 
 }
 
@@ -89,13 +96,6 @@ func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTe
 	require.NoError(t, rows.Err())
 	require.Equal(t, 1, partTableCount, "Should have one master partition table")
 	require.Equal(t, tableName, queryTableName, "Table name did not match proto")
-
-	// Test sub-tables for partitions
-	// Create sub-tables
-	for _, tenantId := range fakeTenantIds {
-		_, err = pg.DB.Exec(ctx, fmt.Sprintf("CREATE TABLE %s_%s PARTITION OF %s FOR VALUES IN ('%s')", tableName, tenantId, tableName, tenantId))
-		require.NoError(t, err, "TestSchemaFoodPasta: failed to create partitioned table")
-	}
 }
 
 func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
