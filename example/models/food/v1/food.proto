@@ -42,7 +42,7 @@ message PastaIngredient {
   string pasta_id = 6 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
 }
 
-message SauceIngerdient {
+message SauceIngredient {
   option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id",
