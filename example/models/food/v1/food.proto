@@ -23,3 +23,21 @@ message Pasta {
   google.protobuf.Timestamp updated_at = 4;
   google.protobuf.Timestamp deleted_at = 5;
 }
+
+message PastaIngredient {
+  option (pgdb.v1.msg).partitioned = false;
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "pasta_id",
+      "ingredient_id"
+    ]
+    sk_const: "example"
+  };
+  string tenant_id = 1;
+  string pasta_id = 2;
+  string ingredient_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp deleted_at = 6;
+}

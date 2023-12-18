@@ -120,6 +120,22 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		Default:            "",
 	})
 
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("deleted_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
 	return rv
 }
 
@@ -140,7 +156,7 @@ func (d *pgdbDescriptorPasta) SearchField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorPasta) VersioningField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_pasta_models_food_v1_29fd1107", Name: "pb$created_at", Type: "timestamptz"}
+	return &pgdb_v1.Column{Table: "pb_pasta_models_food_v1_29fd1107", Name: "pb$updated_at", Type: "timestamptz"}
 }
 
 func (d *pgdbDescriptorPasta) TenantField() *pgdb_v1.Column {
@@ -361,6 +377,30 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
 		rv[ro.ColumnName("created_at")] = v2
+	}
+
+	var v3 *time.Time
+	if m.self.GetUpdatedAt().IsValid() {
+		v3tmp := m.self.GetUpdatedAt().AsTime()
+		v3 = &v3tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v3
+	}
+
+	var v4 *time.Time
+	if m.self.GetDeletedAt().IsValid() {
+		v4tmp := m.self.GetDeletedAt().AsTime()
+		v4 = &v4tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("deleted_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("deleted_at")] = v4
 	}
 
 	return rv, nil
@@ -788,6 +828,32 @@ func (x *PastaCreatedAtQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PastaUpdatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaDBQueryUnsafe) UpdatedAt() *PastaUpdatedAtQueryType {
+	return &PastaUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+}
+
+func (x *PastaUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaDeletedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaDBQueryUnsafe) DeletedAt() *PastaDeletedAtQueryType {
+	return &PastaDeletedAtQueryType{tableName: x.tableName, column: "pb$" + "deleted_at"}
+}
+
+func (x *PastaDeletedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 func (x *PastaDBColumns) WithTable(t string) *PastaDBColumns {
 	return &PastaDBColumns{tableName: t}
 }
@@ -822,4 +888,919 @@ func (x *PastaDBColumns) Id() exp.Expression {
 
 func (x *PastaDBColumns) CreatedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *PastaDBColumns) UpdatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+}
+
+func (x *PastaDBColumns) DeletedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
+}
+
+type pgdbDescriptorPastaIngredient struct{}
+
+var (
+	instancepgdbDescriptorPastaIngredient pgdb_v1.Descriptor = &pgdbDescriptorPastaIngredient{}
+)
+
+func (d *pgdbDescriptorPastaIngredient) TableName() string {
+	return "pb_pasta_ingredient_models_food_v1_0565c036"
+}
+
+func (d *pgdbDescriptorPastaIngredient) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("pasta_id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("ingredient_id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("deleted_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorPastaIngredient) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_pasta_ingredient_models_food_v1_0565c036",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorPastaIngredient) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_pasta_ingredient_models_food_v1_0565c036", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorPastaIngredient) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_pasta_ingredient_models_food_v1_0565c036", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorPastaIngredient) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_pasta_ingredient_models_food_v1_0565c036", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorPastaIngredient) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_pasta_ingredient_models_food_v1_0565c036", Name: "pb$tenant_id", Type: "varchar"}
+}
+
+func (d *pgdbDescriptorPastaIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_pasta_ingredient_models_food_v1_401e5d6d"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_pasta_ingredient_models_food_v1_401e5d6d"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_pasta_ingredient_models_food_3a6d51a9"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_pasta_ingredient_models_foo_abfc90b5"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_pasta_ingredient_models_food_v_39d92e94"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+		})
+
+	}
+
+	return rv
+}
+
+type pgdbMessagePastaIngredient struct {
+	self *PastaIngredient
+}
+
+func (dbr *PastaIngredient) DBReflect() pgdb_v1.Message {
+	return &pgdbMessagePastaIngredient{
+		self: dbr,
+	}
+}
+
+func (m *pgdbMessagePastaIngredient) Descriptor() pgdb_v1.Descriptor {
+	return instancepgdbDescriptorPastaIngredient
+}
+
+func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := string(m.self.TenantId)
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_food_v1_pasta_ingredient")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.TenantId)
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.PastaId)
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.IngredientId)
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("example")
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv4 := exp.NewLiteralExpression("NULL")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv4
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv5
+		}
+
+	}
+
+	v1 := string(m.self.GetPastaId())
+
+	if ro.Nulled {
+		rv[ro.ColumnName("pasta_id")] = nullExp
+	} else {
+		rv[ro.ColumnName("pasta_id")] = v1
+	}
+
+	v2 := string(m.self.GetIngredientId())
+
+	if ro.Nulled {
+		rv[ro.ColumnName("ingredient_id")] = nullExp
+	} else {
+		rv[ro.ColumnName("ingredient_id")] = v2
+	}
+
+	var v3 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v3tmp := m.self.GetCreatedAt().AsTime()
+		v3 = &v3tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v3
+	}
+
+	var v4 *time.Time
+	if m.self.GetUpdatedAt().IsValid() {
+		v4tmp := m.self.GetUpdatedAt().AsTime()
+		v4 = &v4tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v4
+	}
+
+	var v5 *time.Time
+	if m.self.GetDeletedAt().IsValid() {
+		v5tmp := m.self.GetDeletedAt().AsTime()
+		v5 = &v5tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("deleted_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("deleted_at")] = v5
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessagePastaIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+type PastaIngredientDB struct {
+	tableName string
+}
+
+type PastaIngredientDBQueryBuilder struct {
+	tableName string
+}
+
+type PastaIngredientDBQueryUnsafe struct {
+	tableName string
+}
+
+type PastaIngredientDBColumns struct {
+	tableName string
+}
+
+func (x *PastaIngredient) DB() *PastaIngredientDB {
+	return &PastaIngredientDB{tableName: x.DBReflect().Descriptor().TableName()}
+}
+
+func (x *PastaIngredientDB) TableName() string {
+	return x.tableName
+}
+
+func (x *PastaIngredientDB) Query() *PastaIngredientDBQueryBuilder {
+	return &PastaIngredientDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *PastaIngredientDB) Columns() *PastaIngredientDBColumns {
+	return &PastaIngredientDBColumns{tableName: x.tableName}
+}
+
+func (x *PastaIngredientDB) WithTable(t string) *PastaIngredientDB {
+	return &PastaIngredientDB{tableName: t}
+}
+
+func (x *PastaIngredientDBQueryBuilder) WithTable(t string) *PastaIngredientDBQueryBuilder {
+	return &PastaIngredientDBQueryBuilder{tableName: t}
+}
+
+func (x *PastaIngredientDBQueryBuilder) Unsafe() *PastaIngredientDBQueryUnsafe {
+	return &PastaIngredientDBQueryUnsafe{tableName: x.tableName}
+}
+
+type PastaIngredientTenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientDBQueryBuilder) TenantId() *PastaIngredientTenantIdSafeOperators {
+	return &PastaIngredientTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type PastaIngredientPKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaIngredientPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaIngredientPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaIngredientPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaIngredientPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaIngredientPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaIngredientPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaIngredientPKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaIngredientPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaIngredientPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientDBQueryBuilder) PKSK() *PastaIngredientPKSKSafeOperators {
+	return &PastaIngredientPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type PastaIngredientPKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaIngredientPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaIngredientPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaIngredientPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaIngredientPKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaIngredientPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaIngredientPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaIngredientPKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaIngredientPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaIngredientPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientDBQueryBuilder) PK() *PastaIngredientPKSafeOperators {
+	return &PastaIngredientPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type PastaIngredientSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaIngredientSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaIngredientSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaIngredientSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaIngredientSKSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaIngredientSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaIngredientSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaIngredientSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaIngredientSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaIngredientSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientDBQueryBuilder) SK() *PastaIngredientSKSafeOperators {
+	return &PastaIngredientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type PastaIngredientFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientDBQueryBuilder) FTSData() *PastaIngredientFTSDataSafeOperators {
+	return &PastaIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type PastaIngredientTenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) TenantId() *PastaIngredientTenantIdQueryType {
+	return &PastaIngredientTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *PastaIngredientTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientPKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) PKSK() *PastaIngredientPKSKQueryType {
+	return &PastaIngredientPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *PastaIngredientPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientPKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) PK() *PastaIngredientPKQueryType {
+	return &PastaIngredientPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *PastaIngredientPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) SK() *PastaIngredientSKQueryType {
+	return &PastaIngredientSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *PastaIngredientSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientFTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) FTSData() *PastaIngredientFTSDataQueryType {
+	return &PastaIngredientFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *PastaIngredientFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientPBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) PBData() *PastaIngredientPBDataQueryType {
+	return &PastaIngredientPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *PastaIngredientPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientPastaIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) PastaId() *PastaIngredientPastaIdQueryType {
+	return &PastaIngredientPastaIdQueryType{tableName: x.tableName, column: "pb$" + "pasta_id"}
+}
+
+func (x *PastaIngredientPastaIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientIngredientIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) IngredientId() *PastaIngredientIngredientIdQueryType {
+	return &PastaIngredientIngredientIdQueryType{tableName: x.tableName, column: "pb$" + "ingredient_id"}
+}
+
+func (x *PastaIngredientIngredientIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientCreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) CreatedAt() *PastaIngredientCreatedAtQueryType {
+	return &PastaIngredientCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *PastaIngredientCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientUpdatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) UpdatedAt() *PastaIngredientUpdatedAtQueryType {
+	return &PastaIngredientUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+}
+
+func (x *PastaIngredientUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type PastaIngredientDeletedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) DeletedAt() *PastaIngredientDeletedAtQueryType {
+	return &PastaIngredientDeletedAtQueryType{tableName: x.tableName, column: "pb$" + "deleted_at"}
+}
+
+func (x *PastaIngredientDeletedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientDBColumns) WithTable(t string) *PastaIngredientDBColumns {
+	return &PastaIngredientDBColumns{tableName: t}
+}
+
+func (x *PastaIngredientDBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *PastaIngredientDBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *PastaIngredientDBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *PastaIngredientDBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *PastaIngredientDBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *PastaIngredientDBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *PastaIngredientDBColumns) PastaId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pasta_id")
+}
+
+func (x *PastaIngredientDBColumns) IngredientId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "ingredient_id")
+}
+
+func (x *PastaIngredientDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *PastaIngredientDBColumns) UpdatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+}
+
+func (x *PastaIngredientDBColumns) DeletedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
 }
