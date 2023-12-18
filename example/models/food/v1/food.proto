@@ -32,12 +32,27 @@ message PastaIngredient {
       "pasta_id",
       "ingredient_id"
     ]
-    sk_const: "example"
+    sk_const: "exampleingredient"
   };
   string tenant_id = 1;
-  string pasta_id = 2;
-  string ingredient_id = 3;
-  google.protobuf.Timestamp created_at = 4;
-  google.protobuf.Timestamp updated_at = 5;
-  google.protobuf.Timestamp deleted_at = 6;
+  string ingredient_id = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
+  string pasta_id = 6 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+}
+
+message SauceIngerdient {
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "id"
+    ]
+    sk_const: "examplesauce"
+  };
+  string tenant_id = 1;
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
 }
