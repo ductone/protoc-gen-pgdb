@@ -18,9 +18,7 @@ message Shop {
     sk_const: "example"
   };
   string tenant_id = 1;
-  string id = 2 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_EXACT
-  }];
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
   google.protobuf.Timestamp created_at = 3;
   oneof medium {
     models.animals.v1.PaperBook paper = 50;
