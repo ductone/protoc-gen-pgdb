@@ -14,7 +14,7 @@ func index2sql(desc Descriptor, idx *Index) string {
 		_, _ = buf.WriteString("DROP INDEX")
 		// WARNING: unique indexes cannot be dropped
 		// concurrently.  Maybe unsafe?
-		if !idx.IsUnique || !desc.IsPartitioned() {
+		if !idx.IsUnique && !desc.IsPartitioned() {
 			_, _ = buf.WriteString(" CONCURRENTLY")
 		}
 		_, _ = buf.WriteString(" IF EXISTS ")
