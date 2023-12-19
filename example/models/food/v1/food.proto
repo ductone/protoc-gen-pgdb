@@ -30,9 +30,37 @@ message PastaIngredient {
     pk_fields: [
       "tenant_id",
       "pasta_id",
-      "ingredient_id"
+      "ingredient_id",
+      "id"
     ]
     sk_const: "exampleingredient"
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "pastas"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "tenant_id",
+      "pasta_id",
+      "id"
+    ]
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "ingredients"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "tenant_id",
+      "ingredient_id",
+      "id"
+    ]
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "everythingggg"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "ingredient_id",
+      "pasta_id",
+      "id"
+    ]
   };
   string tenant_id = 1;
   string ingredient_id = 2;
@@ -40,6 +68,7 @@ message PastaIngredient {
   google.protobuf.Timestamp updated_at = 4;
   google.protobuf.Timestamp deleted_at = 5;
   string pasta_id = 6 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+  string id = 7 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
 }
 
 message SauceIngredient {

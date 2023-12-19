@@ -141,6 +141,40 @@ func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 	return indexes, nil
 }
 
+// Get a list of the provided descriptor's partition sub tables
+func readPartitionSubTables(ctx context.Context, db sqlScanner, desc Descriptor) ([]string, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_inherits")
+	qb = qb.Select("child.relname").As("child")
+	qb = qb.Join(goqu.T("pg_class").As("parent"), goqu.On(goqu.I("pg_inherits.inhparent").Eq(goqu.I("parent.oid"))))
+	qb = qb.Join(goqu.T("pg_class").As("child"), goqu.On(goqu.I("pg_inherits.inhrelid").Eq(goqu.I("child.oid"))))
+	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_parent"), goqu.On(goqu.I("nmsp_parent.oid").Eq(goqu.I("parent.relnamespace"))))
+	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_child"), goqu.On(goqu.I("nmsp_child.oid").Eq(goqu.I("child.relnamespace"))))
+	qb = qb.Where(goqu.L("parent.relname = ?", desc.TableName()))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	tables := make([]string, 0)
+	for rows.Next() {
+		var tableName string
+		err = rows.Scan(&tableName)
+		if err != nil {
+			return nil, err
+		}
+		tables = append(tables, tableName)
+	}
+
+	return tables, nil
+}
+
 func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
 	rv := make([]string, 0)
 	dbr := msg.DBReflect()
@@ -190,5 +224,113 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 			continue
 		}
 	}
+	return rv, nil
+}
+
+// For partitioning only alter columns and dont do indexing on master
+func MigratePartitions(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
+	dbr := msg.DBReflect()
+	desc := dbr.Descriptor()
+	rv := make([]string, 0)
+	if !desc.IsPartitioned() {
+		return rv, nil
+	}
+
+	// Do migration on master table first
+	haveCols, err := readColumns(ctx, db, desc)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(haveCols) == 0 {
+		return CreateSchema(msg)
+	}
+
+	for _, field := range desc.Fields() {
+		if _, ok := haveCols[field.Name]; ok {
+			continue
+		}
+		query := col2alter(desc, field)
+		rv = append(rv, query)
+	}
+
+	return rv, nil
+}
+
+func readIndexesForPartition(ctx context.Context, db sqlScanner, tableName string) (map[string]struct{}, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_indexes")
+	qb = qb.Select("indexname")
+	qb = qb.Where(goqu.L("tablename = ?", tableName))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	indexes := make(map[string]struct{})
+	for rows.Next() {
+		var indexName string
+		err = rows.Scan(&indexName)
+		if err != nil {
+			return nil, err
+		}
+		indexes[indexName] = struct{}{}
+	}
+	return indexes, nil
+}
+
+// Index the sub tables
+func IndexPartitions(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
+	dbr := msg.DBReflect()
+	desc := dbr.Descriptor()
+	rv := make([]string, 0)
+	if !desc.IsPartitioned() {
+		return rv, nil
+	}
+
+	// Now update indexes on all sub tables
+	subTables, err := readPartitionSubTables(ctx, db, desc)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, tableName := range subTables {
+		indexes, err := readIndexesForPartition(ctx, db, tableName)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, idx := range desc.Indexes() {
+			if idx.IsPrimary {
+				continue
+			}
+
+			_, exists := indexes[idx.Name]
+			query := index2sqlPartition(tableName, idx)
+
+			// fmt.Printf("List of queries %v\n", queries)
+
+			if idx.IsDropped {
+				// if it should be dropped, and its still here, byeeee
+				if exists {
+					rv = append(rv, query)
+				}
+				continue
+			}
+
+			// doesn't exist, but should, lets go!
+			if !exists {
+				rv = append(rv, query)
+				continue
+			}
+		}
+	}
+
 	return rv, nil
 }

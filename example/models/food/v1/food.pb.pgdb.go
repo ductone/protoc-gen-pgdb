@@ -1030,6 +1030,14 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Default:            "''",
 	})
 
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+	})
+
 	return rv
 }
 
@@ -1134,6 +1142,36 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 
 	}
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("pastas_pasta_ingredient_models_food_v1_e3bd47ef"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pasta_id"), io.ColumnName("id")},
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("ingredients_pasta_ingredient_models_foo_cc57095e"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("ingredient_id"), io.ColumnName("id")},
+		OverrideExpression: "",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("everythingggg_pasta_ingredient_models_f_30c0b1c3"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("ingredient_id"), io.ColumnName("pasta_id"), io.ColumnName("id")},
+		OverrideExpression: "",
+	})
+
 	return rv
 }
 
@@ -1195,6 +1233,10 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		_, _ = sb.WriteString(m.self.IngredientId)
 
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.Id)
+
 		cfv2 := sb.String()
 
 		if ro.Nulled {
@@ -1229,6 +1271,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
 				Value:  m.self.GetPastaId(),
+			},
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+				Value:  m.self.GetId(),
 			},
 		}
 
@@ -1309,6 +1357,14 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		rv[ro.ColumnName("pasta_id")] = v5
 	}
 
+	v6 := string(m.self.GetId())
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v6
+	}
+
 	return rv, nil
 }
 
@@ -1319,6 +1375,12 @@ func (m *pgdbMessagePastaIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFun
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
 			Value:  m.self.GetPastaId(),
+		},
+
+		{
+			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+			Value:  m.self.GetId(),
 		},
 	}
 
@@ -1630,6 +1692,189 @@ func (x *PastaIngredientDBQueryBuilder) FTSData() *PastaIngredientFTSDataSafeOpe
 	return &PastaIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
+type PastaIngredientIngredientIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientIngredientIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientDBQueryBuilder) IngredientId() *PastaIngredientIngredientIdSafeOperators {
+	return &PastaIngredientIngredientIdSafeOperators{tableName: x.tableName, column: "pb$" + "ingredient_id"}
+}
+
+type PastaIngredientPastaIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientPastaIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientDBQueryBuilder) PastaId() *PastaIngredientPastaIdSafeOperators {
+	return &PastaIngredientPastaIdSafeOperators{tableName: x.tableName, column: "pb$" + "pasta_id"}
+}
+
+type PastaIngredientIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaIngredientIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaIngredientIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaIngredientIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaIngredientIdSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaIngredientIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaIngredientIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaIngredientIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaIngredientIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaIngredientIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientDBQueryBuilder) Id() *PastaIngredientIdSafeOperators {
+	return &PastaIngredientIdSafeOperators{tableName: x.tableName, column: "pb$" + "id"}
+}
+
 type PastaIngredientTenantIdQueryType struct {
 	column    string
 	tableName string
@@ -1773,6 +2018,19 @@ func (x *PastaIngredientPastaIdQueryType) Identifier() exp.IdentifierExpression 
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PastaIngredientIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) Id() *PastaIngredientIdQueryType {
+	return &PastaIngredientIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *PastaIngredientIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 func (x *PastaIngredientDBColumns) WithTable(t string) *PastaIngredientDBColumns {
 	return &PastaIngredientDBColumns{tableName: t}
 }
@@ -1819,6 +2077,10 @@ func (x *PastaIngredientDBColumns) DeletedAt() exp.Expression {
 
 func (x *PastaIngredientDBColumns) PastaId() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "pasta_id")
+}
+
+func (x *PastaIngredientDBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
 type pgdbDescriptorSauceIngredient struct{}
