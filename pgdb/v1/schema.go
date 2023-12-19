@@ -278,11 +278,11 @@ func TenantPartitionsUpdate(ctx context.Context, msg DBReflectMessage, iteratorF
 			break
 		}
 		partitionTableName := createPartitionTableName(tableName, tenantId)
-		//fmt.Printf("Creating partition table %s for %s\n", partitionTableName, tenantId)
+		// fmt.Printf("Creating partition table %s for %s\n", partitionTableName, tenantId)
 		builtSchema := fmt.Sprintf(createPartitionSchema, partitionTableName, tableName, tenantId)
 		updateErr := updateFunc(ctx, tenantId, builtSchema)
 		if updateErr != nil {
-			panic(err)
+			panic(updateErr)
 		}
 	}
 }
