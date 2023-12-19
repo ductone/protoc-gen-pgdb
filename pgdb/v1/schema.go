@@ -227,36 +227,6 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	return rv, nil
 }
 
-// For partitioning only alter columns and dont do indexing on master
-func MigratePartitions(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
-	dbr := msg.DBReflect()
-	desc := dbr.Descriptor()
-	rv := make([]string, 0)
-	if !desc.IsPartitioned() {
-		return rv, nil
-	}
-
-	// Do migration on master table first
-	haveCols, err := readColumns(ctx, db, desc)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(haveCols) == 0 {
-		return CreateSchema(msg)
-	}
-
-	for _, field := range desc.Fields() {
-		if _, ok := haveCols[field.Name]; ok {
-			continue
-		}
-		query := col2alter(desc, field)
-		rv = append(rv, query)
-	}
-
-	return rv, nil
-}
-
 func readIndexesForPartition(ctx context.Context, db sqlScanner, tableName string) (map[string]struct{}, error) {
 	dialect := goqu.Dialect("postgres")
 
@@ -283,54 +253,4 @@ func readIndexesForPartition(ctx context.Context, db sqlScanner, tableName strin
 		indexes[indexName] = struct{}{}
 	}
 	return indexes, nil
-}
-
-// Index the sub tables
-func IndexPartitions(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
-	dbr := msg.DBReflect()
-	desc := dbr.Descriptor()
-	rv := make([]string, 0)
-	if !desc.IsPartitioned() {
-		return rv, nil
-	}
-
-	// Now update indexes on all sub tables
-	subTables, err := readPartitionSubTables(ctx, db, desc)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, tableName := range subTables {
-		indexes, err := readIndexesForPartition(ctx, db, tableName)
-		if err != nil {
-			return nil, err
-		}
-
-		for _, idx := range desc.Indexes() {
-			if idx.IsPrimary {
-				continue
-			}
-
-			_, exists := indexes[idx.Name]
-			query := index2sqlPartition(tableName, idx)
-
-			// fmt.Printf("List of queries %v\n", queries)
-
-			if idx.IsDropped {
-				// if it should be dropped, and its still here, byeeee
-				if exists {
-					rv = append(rv, query)
-				}
-				continue
-			}
-
-			// doesn't exist, but should, lets go!
-			if !exists {
-				rv = append(rv, query)
-				continue
-			}
-		}
-	}
-
-	return rv, nil
 }

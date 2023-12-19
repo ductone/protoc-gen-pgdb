@@ -57,7 +57,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 		_, err = pg.DB.Exec(ctx, `ALTER TABLE `+smsg.DBReflect().Descriptor().TableName()+` DROP COLUMN "pb$id"`)
 		require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to drop col id")
 
-		schema, err = pgdb_v1.MigratePartitions(ctx, pg.DB, smsg)
+		schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
 		require.NoError(t, err)
 		for _, line := range schema {
 			//fmt.Println(line)
@@ -86,66 +86,10 @@ func TestSchemaFoodPasta(t *testing.T) {
 			verifySubTables(t, pg, protoTableName, fakeTenantIds)
 			// Insert data into master table
 			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, smsg)
-			testPartitionIndexing(t, pg, smsg)
-			verifyPartitionIndexes(t, pg, smsg, fakeTenantIds)
 
 		}
 	}
 
-}
-
-func testPartitionIndexing(t *testing.T, pg *pgtest.PG, smsg pgdb_v1.DBReflectMessage) {
-	ctx := context.Background()
-	// Update indexes on sub tables
-	schema, err := pgdb_v1.IndexPartitions(ctx, pg.DB, smsg)
-	require.NoError(t, err)
-	for _, line := range schema {
-		fmt.Printf("%s \n", line)
-		fmt.Println("END INDEXING")
-		_, err := pg.DB.Exec(ctx, line)
-		require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
-	}
-}
-
-// TODO(scott) this is correct but whats currently failing is that the indexes need to be unique per
-// partitioned table.  So we need to add the tenantId or some hash to the index name.
-func verifyPartitionIndexes(t *testing.T, pg *pgtest.PG, smsg pgdb_v1.DBReflectMessage, fakeTenantIds []string) {
-	ctx := context.Background()
-	// Verify number of sub tables
-	// Verify sub-partition tables
-	indexSql := `SELECT indexname, indexdef
-	FROM pg_indexes
-	WHERE tablename = $1;`
-
-	tableName := smsg.DBReflect().Descriptor().TableName()
-	expectedIndxs := smsg.DBReflect().Descriptor().Indexes()
-	for _, idx := range expectedIndxs {
-		fmt.Printf("Expected: %s\n", idx.Name)
-	}
-
-	for _, tenantId := range fakeTenantIds {
-		fmt.Printf("FOR TENANT %s\n", tenantId)
-		rows, err := pg.DB.Query(ctx, indexSql, fmt.Sprintf("%s_%s", tableName, tenantId))
-		require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to count partitioned tables query: '\n%s\n'", indexSql)
-		defer rows.Close()
-		var indexName string
-		var indexDef string
-		rowCount := 0
-		for rows.Next() {
-			err = rows.Scan(&indexName, &indexDef)
-			require.NoError(t, err)
-			fmt.Printf("%s\n", indexName)
-			//fmt.Printf("%s: %s\n", parentTable, childTable)
-			//require.Equal(t, tableName, indexName, "Parent table name did not match proto")
-			rowCount += 1
-		}
-		fmt.Println()
-		require.NoError(t, rows.Err())
-		fmt.Printf("Index rows: %d\n", rowCount)
-		// expectedIndxs has 2 names for pksk labeled split1 and split2 while
-		// the names in the select are combined into 1 as pb$pk_pb$sk_idx
-		require.Equal(t, len(expectedIndxs), rowCount+1, "Should have one sub-partition table per fake tenant")
-	}
 }
 
 func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
