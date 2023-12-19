@@ -144,7 +144,7 @@ func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 	return indexes, nil
 }
 
-// Get a list of the provided descriptor's partition sub tables
+// Get a list of the provided descriptor's partition sub tables.
 func ReadPartitionSubTables(ctx context.Context, db sqlScanner, desc Descriptor) ([]string, error) {
 	dialect := goqu.Dialect("postgres")
 
@@ -241,7 +241,7 @@ func sha256String(input string) string {
 // So we split the table name and create the new ending hashes like so 0565c036_12345678
 // Then if its over limit we but down the table name in order to append the new ending hashes.
 // (this isnt over 63 but for example)
-// pb_pasta_ingredient_models_food_v1_0565c036 -> pb_pasta_ingredient_models_0565c036_12345678
+// pb_pasta_ingredient_models_food_v1_0565c036 -> pb_pasta_ingredient_models_0565c036_12345678.
 func createPartitionTableName(tableName string, tenantId string) string {
 	const pgMaxTableNameLen = 63
 	tenantHash := sha256String(tenantId)[0:8]
@@ -257,7 +257,7 @@ func createPartitionTableName(tableName string, tenantId string) string {
 	return nameWithoutHash + "_" + combinedHashes
 }
 
-// This will be passed in in C1
+// This will be passed in in C1.
 type TenantIteratorFunc func(ctx context.Context) (string, error)
 type SchemaUpdateFunc func(ctx context.Context, tenantId string, schema string) error
 
@@ -278,7 +278,7 @@ func TenantPartitionsUpdate(ctx context.Context, msg DBReflectMessage, iteratorF
 			break
 		}
 		partitionTableName := createPartitionTableName(tableName, tenantId)
-		fmt.Printf("Creating partition table %s for %s\n", partitionTableName, tenantId)
+		//fmt.Printf("Creating partition table %s for %s\n", partitionTableName, tenantId)
 		builtSchema := fmt.Sprintf(createPartitionSchema, partitionTableName, tableName, tenantId)
 		updateErr := updateFunc(ctx, tenantId, builtSchema)
 		if updateErr != nil {
