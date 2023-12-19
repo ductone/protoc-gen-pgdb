@@ -3,6 +3,9 @@ package v1
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
 	"strings"
 
 	"github.com/doug-martin/goqu/v9"
@@ -142,7 +145,7 @@ func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 }
 
 // Get a list of the provided descriptor's partition sub tables
-func readPartitionSubTables(ctx context.Context, db sqlScanner, desc Descriptor) ([]string, error) {
+func ReadPartitionSubTables(ctx context.Context, db sqlScanner, desc Descriptor) ([]string, error) {
 	dialect := goqu.Dialect("postgres")
 
 	qb := dialect.From("pg_inherits")
@@ -227,30 +230,59 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	return rv, nil
 }
 
-func readIndexesForPartition(ctx context.Context, db sqlScanner, tableName string) (map[string]struct{}, error) {
-	dialect := goqu.Dialect("postgres")
+func sha256String(input string) string {
+	h := sha256.New()
+	_, _ = h.Write([]byte(input))
+	return hex.EncodeToString(h.Sum(nil))
+}
 
-	qb := dialect.From("pg_indexes")
-	qb = qb.Select("indexname")
-	qb = qb.Where(goqu.L("tablename = ?", tableName))
-	query, params, err := qb.ToSQL()
-	if err != nil {
-		return nil, err
+// This appends a new hash of the tenantId to the end of the table name.
+// If the length is over PGs max table name length then we want to preserve the original hash.
+// So we split the table name and create the new ending hashes like so 0565c036_12345678
+// Then if its over limit we but down the table name in order to append the new ending hashes.
+// (this isnt over 63 but for example)
+// pb_pasta_ingredient_models_food_v1_0565c036 -> pb_pasta_ingredient_models_0565c036_12345678
+func createPartitionTableName(tableName string, tenantId string) string {
+	const pgMaxTableNameLen = 63
+	tenantHash := sha256String(tenantId)[0:8]
+	newName := tableName + "_" + tenantHash
+	if len(newName) < pgMaxTableNameLen {
+		return newName
 	}
+	tableSplit := strings.Split(tableName, "_")
+	originalHash := tableSplit[len(tableSplit)-1]
+	nameWithoutHash := strings.Join(tableSplit[0:len(tableSplit)-1], "_")
+	combinedHashes := originalHash + "_" + tenantHash
+	nameWithoutHash = nameWithoutHash[0 : pgMaxTableNameLen-len(combinedHashes)]
+	return nameWithoutHash + "_" + combinedHashes
+}
 
-	rows, err := db.Query(ctx, query, params...)
-	if err != nil {
-		return nil, err
-	}
+// This will be passed in in C1
+type TenantIteratorFunc func(ctx context.Context) (string, error)
+type SchemaUpdateFunc func(ctx context.Context, tenantId string, schema string) error
 
-	indexes := make(map[string]struct{})
-	for rows.Next() {
-		var indexName string
-		err = rows.Scan(&indexName)
+func TenantPartitionsUpdate(ctx context.Context, msg DBReflectMessage, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) {
+	tableName := msg.DBReflect().Descriptor().TableName()
+
+	// We'll only need to attach partitions if the table already exists as a regular table.
+	// but this shouldn't happen.
+	// As for detaching we'll only need to do that if we want to preserve data in a partitioned table.
+	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES IN ('%s');`
+
+	for {
+		tenantId, err := iteratorFunc(ctx)
 		if err != nil {
-			return nil, err
+			panic(err)
 		}
-		indexes[indexName] = struct{}{}
+		if tenantId == "" {
+			break
+		}
+		partitionTableName := createPartitionTableName(tableName, tenantId)
+		fmt.Printf("Creating partition table %s for %s\n", partitionTableName, tenantId)
+		builtSchema := fmt.Sprintf(createPartitionSchema, partitionTableName, tableName, tenantId)
+		updateErr := updateFunc(ctx, tenantId, builtSchema)
+		if updateErr != nil {
+			panic(err)
+		}
 	}
-	return indexes, nil
 }

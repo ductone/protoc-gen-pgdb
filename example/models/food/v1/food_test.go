@@ -79,10 +79,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 			verifyMasterPartition(t, pg, protoTableName, fakeTenantIds)
 			// Test sub-tables for partitions
 			// Create sub-tables
-			for _, tenantId := range fakeTenantIds {
-				_, err = pg.DB.Exec(ctx, fmt.Sprintf("CREATE TABLE %s_%s PARTITION OF %s FOR VALUES IN ('%s')", protoTableName, tenantId, protoTableName, tenantId))
-				require.NoError(t, err, "TestSchemaFoodPasta: failed to create partitioned table")
-			}
+			testCreatePartitionTables(t, pg, smsg, fakeTenantIds)
 			verifySubTables(t, pg, protoTableName, fakeTenantIds)
 			// Insert data into master table
 			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, smsg)
@@ -90,6 +87,18 @@ func TestSchemaFoodPasta(t *testing.T) {
 		}
 	}
 
+}
+
+func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflectMessage, fakeTenantIds []string) {
+	ctx := context.Background()
+	// Create sub-tables
+	tenantIter := TestTenantIterator(ctx, fakeTenantIds)
+	// Don't really need tenantId in update func but good for logging purposes.
+	pgdb_v1.TenantPartitionsUpdate(ctx, msg, tenantIter, func(ctx context.Context, tenantId string, schema string) error {
+		_, err := pg.DB.Exec(ctx, schema)
+		require.NoError(t, err)
+		return nil
+	})
 }
 
 func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
@@ -144,6 +153,7 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 
 	for rows.Next() {
 		err = rows.Scan(&parentTable, &childTable)
+		fmt.Printf("parent: %s, child: %s\n", parentTable, childTable)
 		require.NoError(t, err)
 		require.Equal(t, tableName, parentTable, "Parent table name did not match proto")
 		selectedSubTableNames = append(selectedSubTableNames, childTable)
@@ -152,9 +162,6 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 
 	require.NoError(t, rows.Err())
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one sub-partition table per fake tenant")
-	for _, tenantId := range fakeTenantIds {
-		require.Contains(t, selectedSubTableNames, fmt.Sprintf("%s_%s", tableName, tenantId), "Should have a sub-partition table for tenant %s", tenantId)
-	}
 }
 
 func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, msg pgdb_v1.DBReflectMessage) {
@@ -239,10 +246,13 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	require.NoError(t, rows.Err())
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one row per tenant")
 
+	subTables, err := pgdb_v1.ReadPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
+	require.NoError(t, err)
+
 	// Test select each tenant
-	for _, tenantId := range fakeTenantIds {
-		selectSql := `SELECT %s FROM %s_%s`
-		fmtSql := fmt.Sprintf(selectSql, selectColStr, tableName, tenantId)
+	for _, subTable := range subTables {
+		selectSql := `SELECT %s FROM %s`
+		fmtSql := fmt.Sprintf(selectSql, selectColStr, subTable)
 		rows, err := pg.DB.Query(ctx, fmtSql)
 		require.NoError(t, err)
 		defer rows.Close()
@@ -250,10 +260,23 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 		for rows.Next() {
 			err = rows.Scan(&tenantIdSelect)
 			require.NoError(t, err)
-			require.Equal(t, tenantId, tenantIdSelect, "TenantId did not match proto")
 			rowCount += 1
 		}
 		require.NoError(t, rows.Err())
 		require.Equal(t, 1, rowCount, "Should have one row per tenant table")
 	}
+}
+
+func TestTenantIterator(ctx context.Context, tenantList []string) pgdb_v1.TenantIteratorFunc {
+	index := 0
+
+	return func(ctx context.Context) (string, error) {
+		if index >= len(tenantList) {
+			return "", nil
+		}
+		tenantId := tenantList[index]
+		index += 1
+		return tenantId, nil
+	}
+
 }
