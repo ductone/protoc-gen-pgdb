@@ -352,8 +352,8 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 		panic(err)
 	}
 
+	// The table exists but is not a parent partition.
 	if exists && !isPartitioned {
-		fmt.Printf("Skipping creating partitioned tables for a table that is not marked as a parent (partitioned) table: %s", tableName)
 		return
 	}
 
