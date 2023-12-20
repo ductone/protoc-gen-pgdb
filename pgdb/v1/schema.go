@@ -176,29 +176,6 @@ func ReadPartitionSubTables(ctx context.Context, db sqlScanner, desc Descriptor)
 	return tables, nil
 }
 
-func tableExists(ctx context.Context, db sqlScanner, tableName string) (bool, error) {
-	dialect := goqu.Dialect("postgres")
-
-	qb := dialect.From("pg_tables")
-	qb = qb.Select("tablename")
-	qb = qb.Where(goqu.And(goqu.L("tablename = ?", tableName), goqu.L("schemaname = ?", "public")))
-	query, params, err := qb.ToSQL()
-	if err != nil {
-		return false, err
-	}
-
-	rows, err := db.Query(ctx, query, params...)
-	if err != nil {
-		return false, err
-	}
-
-	if rows.Next() {
-		return true, nil
-	}
-
-	return false, nil
-}
-
 func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string) (bool, error) {
 	dialect := goqu.Dialect("postgres")
 
@@ -343,17 +320,13 @@ type SchemaUpdateFunc func(ctx context.Context, tenantId string, schema string) 
 func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) {
 	tableName := msg.DBReflect().Descriptor().TableName()
 
-	exists, err := tableExists(ctx, db, tableName)
-	if err != nil {
-		panic(err)
-	}
-	isPartitioned, err := tableIsParentPartition(ctx, db, tableName)
+	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
 	if err != nil {
 		panic(err)
 	}
 
 	// The table exists but is not a parent partition.
-	if exists && !isPartitioned {
+	if !isParentPartition {
 		return
 	}
 
