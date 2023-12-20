@@ -51,8 +51,6 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 
 	rv := []string{buf.String()}
 
-	// We must first create indexes on the partitioned tables and then create an index on the main table
-	// TODO(scott)
 	more, err := IndexSchema(msg)
 	if err != nil {
 		return nil, err

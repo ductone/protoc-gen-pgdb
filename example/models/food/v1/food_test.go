@@ -75,7 +75,6 @@ func TestSchemaFoodPasta(t *testing.T) {
 		protoTableName := smsg.DBReflect().Descriptor().TableName()
 
 		if smsg.DBReflect().Descriptor().IsPartitioned() {
-			// TODO(scott) makes helper functions and move to pgdb_v1
 			verifyMasterPartition(t, pg, protoTableName, fakeTenantIds)
 			// Test sub-tables for partitions
 			// Create sub-tables
