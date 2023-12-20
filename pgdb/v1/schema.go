@@ -176,6 +176,87 @@ func ReadPartitionSubTables(ctx context.Context, db sqlScanner, desc Descriptor)
 	return tables, nil
 }
 
+func tableExists(ctx context.Context, db sqlScanner, tableName string) (bool, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_tables")
+	qb = qb.Select("tablename")
+	qb = qb.Where(goqu.And(goqu.L("tablename = ?", tableName), goqu.L("schemaname = ?", "public")))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return false, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return false, err
+	}
+
+	if rows.Next() {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func tableIsPartitioned(ctx context.Context, db sqlScanner, tableName string) (bool, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_class")
+	qb = qb.Select("relname")
+	qb = qb.Join(goqu.T("pg_partitioned_table"), goqu.On(goqu.I("pg_partitioned_table.partrelid").Eq(goqu.I("pg_class.oid"))))
+	qb = qb.Where(goqu.L("relname = ?", tableName))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return false, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return false, err
+	}
+
+	if rows.Next() {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+// Get a list of the provided descriptor's partition sub tables.
+func ReadPartitionTable(ctx context.Context, db sqlScanner, desc Descriptor) ([]string, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_inherits")
+	qb = qb.Select("parent.relname").As("parent")
+	qb = qb.Join(goqu.T("pg_class").As("parent"), goqu.On(goqu.I("pg_inherits.inhparent").Eq(goqu.I("parent.oid"))))
+	qb = qb.Join(goqu.T("pg_class").As("child"), goqu.On(goqu.I("pg_inherits.inhrelid").Eq(goqu.I("child.oid"))))
+	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_parent"), goqu.On(goqu.I("nmsp_parent.oid").Eq(goqu.I("parent.relnamespace"))))
+	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_child"), goqu.On(goqu.I("nmsp_child.oid").Eq(goqu.I("child.relnamespace"))))
+	qb = qb.Where(goqu.L("parent.relname = ?", desc.TableName()))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	tables := make([]string, 0)
+	for rows.Next() {
+		var tableName string
+		err = rows.Scan(&tableName)
+		if err != nil {
+			return nil, err
+		}
+		tables = append(tables, tableName)
+	}
+
+	return tables, nil
+}
+
 func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
 	rv := make([]string, 0)
 	dbr := msg.DBReflect()
@@ -259,8 +340,22 @@ func createPartitionTableName(tableName string, tenantId string) string {
 type TenantIteratorFunc func(ctx context.Context) (string, error)
 type SchemaUpdateFunc func(ctx context.Context, tenantId string, schema string) error
 
-func TenantPartitionsUpdate(ctx context.Context, msg DBReflectMessage, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) {
+func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) {
 	tableName := msg.DBReflect().Descriptor().TableName()
+
+	exists, err := tableExists(ctx, db, tableName)
+	if err != nil {
+		panic(err)
+	}
+	isPartitioned, err := tableIsPartitioned(ctx, db, tableName)
+	if err != nil {
+		panic(err)
+	}
+
+	if exists && !isPartitioned {
+		fmt.Printf("Skipping creating partitioned tables for a table that is not marked as a parent (partitioned) table: %s", tableName)
+		return
+	}
 
 	// We'll only need to attach partitions if the table already exists as a regular table.
 	// but this shouldn't happen.

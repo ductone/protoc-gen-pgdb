@@ -83,8 +83,6 @@ func TestSchemaFoodPasta(t *testing.T) {
 			//fmt.Printf("%s \n", line)
 			_, err := pg.DB.Exec(ctx, line)
 			require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
-			// os.Stderr.WriteString(line)
-			// os.Stderr.WriteString("\n------\n")
 		}
 		ct := schema[0]
 		require.Contains(t, ct, "CREATE TABLE")
@@ -113,8 +111,6 @@ func TestSchemaFoodPasta(t *testing.T) {
 			//fmt.Println(line)
 			_, err := pg.DB.Exec(ctx, line)
 			require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
-			// os.Stderr.WriteString(line)
-			// os.Stderr.WriteString("\n------\n")
 		}
 		if len(schema) > 0 {
 			ct = schema[0]
@@ -132,7 +128,6 @@ func TestSchemaFoodPasta(t *testing.T) {
 			verifySubTables(t, pg, protoTableName, fakeTenantIds)
 			// Insert data into master table
 			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, testobj.objects)
-
 		}
 	}
 
@@ -143,7 +138,7 @@ func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflec
 	// Create sub-tables
 	tenantIter := TenantIteratorTest(ctx, fakeTenantIds)
 	// Don't really need tenantId in update func but good for logging purposes.
-	pgdb_v1.TenantPartitionsUpdate(ctx, msg, tenantIter, func(ctx context.Context, tenantId string, schema string) error {
+	pgdb_v1.TenantPartitionsUpdate(ctx, pg.DB, msg, tenantIter, func(ctx context.Context, tenantId string, schema string) error {
 		_, err := pg.DB.Exec(ctx, schema)
 		require.NoError(t, err)
 		return nil
@@ -157,7 +152,7 @@ func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTe
 	partTablesQuery := `SELECT count(t.tablename), t.tablename
 		FROM pg_tables t
 		LEFT JOIN pg_partitioned_table p ON p.partrelid = (SELECT oid FROM pg_class WHERE relname = t.tablename)
-		WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema') AND p.partrelid IS NOT NULL AND t.tablename = $1
+		WHERE t.schemaname = 'public' AND p.partrelid IS NOT NULL AND t.tablename = $1
 		GROUP BY t.tablename;`
 
 	rows, err := pg.DB.Query(ctx, partTablesQuery, tableName)
@@ -173,7 +168,7 @@ func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTe
 
 	require.NoError(t, rows.Err())
 	require.Equal(t, 1, partTableCount, "Should have one master partition table")
-	require.Equal(t, tableName, queryTableName, "Should have one master partition table")
+	require.Equal(t, tableName, queryTableName, "Should have matching table names")
 
 }
 
