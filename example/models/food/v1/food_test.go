@@ -11,6 +11,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+type testTable struct {
+	objects []pgdb_v1.DBReflectMessage
+}
+
 func TestSchemaFoodPasta(t *testing.T) {
 	ctx := context.Background()
 	pg, err := pgtest.Start()
@@ -20,13 +24,59 @@ func TestSchemaFoodPasta(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	msgs := []pgdb_v1.DBReflectMessage{
-		&Pasta{},
-		&SauceIngredient{},
-		&PastaIngredient{},
+	testobjects := []testTable{
+		{
+			objects: []pgdb_v1.DBReflectMessage{
+				&Pasta{
+					TenantId: "t1",
+					Id:       "p1",
+				},
+				&Pasta{
+					TenantId: "t2",
+					Id:       "p2",
+				},
+				&Pasta{
+					TenantId: "t3",
+					Id:       "p3",
+				},
+			},
+		},
+		{
+			objects: []pgdb_v1.DBReflectMessage{
+				&SauceIngredient{
+					TenantId: "t1",
+					Id:       "s1",
+				},
+				&SauceIngredient{
+					TenantId: "t2",
+					Id:       "s2",
+				},
+				&SauceIngredient{
+					TenantId: "t3",
+					Id:       "s3",
+				},
+			},
+		},
+		{
+			objects: []pgdb_v1.DBReflectMessage{
+				&PastaIngredient{
+					TenantId: "t1",
+					Id:       "pi1",
+				},
+				&PastaIngredient{
+					TenantId: "t2",
+					Id:       "pi2",
+				},
+				&PastaIngredient{
+					TenantId: "t3",
+					Id:       "pi3",
+				},
+			},
+		},
 	}
 
-	for _, smsg := range msgs {
+	for _, testobj := range testobjects {
+		smsg := testobj.objects[0]
 		schema, err := pgdb_v1.CreateSchema(smsg)
 		require.NoError(t, err)
 		for _, line := range schema {
@@ -81,7 +131,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 			testCreatePartitionTables(t, pg, smsg, fakeTenantIds)
 			verifySubTables(t, pg, protoTableName, fakeTenantIds)
 			// Insert data into master table
-			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, smsg)
+			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, testobj.objects)
 
 		}
 	}
@@ -91,7 +141,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflectMessage, fakeTenantIds []string) {
 	ctx := context.Background()
 	// Create sub-tables
-	tenantIter := TestTenantIterator(ctx, fakeTenantIds)
+	tenantIter := TenantIteratorTest(ctx, fakeTenantIds)
 	// Don't really need tenantId in update func but good for logging purposes.
 	pgdb_v1.TenantPartitionsUpdate(ctx, msg, tenantIter, func(ctx context.Context, tenantId string, schema string) error {
 		_, err := pg.DB.Exec(ctx, schema)
@@ -163,66 +213,23 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one sub-partition table per fake tenant")
 }
 
-func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, msg pgdb_v1.DBReflectMessage) {
+func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, objects []pgdb_v1.DBReflectMessage) {
 	ctx := context.Background()
 	// Insert data into master table
 	// Verify data in master table
 	// Verify data in sub tables
-	var obj1 pgdb_v1.DBReflectMessage
-	var obj2 pgdb_v1.DBReflectMessage
-	var obj3 pgdb_v1.DBReflectMessage
-	switch msg.(type) {
-	case *Pasta:
-		obj1 = &Pasta{
-			TenantId: "t1",
-			Id:       "p1",
-		}
-		obj2 = &Pasta{
-			TenantId: "t2",
-			Id:       "p2",
-		}
-		obj3 = &Pasta{
-			TenantId: "t3",
-			Id:       "p3",
-		}
-	case *SauceIngredient:
-		obj1 = &SauceIngredient{
-			TenantId: "t1",
-			Id:       "p1",
-		}
-		obj2 = &SauceIngredient{
-			TenantId: "t2",
-			Id:       "p2",
-		}
-		obj3 = &SauceIngredient{
-			TenantId: "t3",
-			Id:       "p3",
-		}
-	case *PastaIngredient:
-		obj1 = &PastaIngredient{
-			TenantId:     "t1",
-			IngredientId: "p1",
-		}
-		obj2 = &PastaIngredient{
-			TenantId:     "t2",
-			IngredientId: "p2",
-		}
-		obj3 = &PastaIngredient{
-			TenantId:     "t3",
-			IngredientId: "p3",
-		}
-	}
-	sql, args, err := pgdb_v1.Insert(obj1)
+	msg := objects[0]
+	sql, args, err := pgdb_v1.Insert(objects[0])
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
-	sql, args, err = pgdb_v1.Insert(obj2)
+	sql, args, err = pgdb_v1.Insert(objects[1])
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
-	sql, args, err = pgdb_v1.Insert(obj3)
+	sql, args, err = pgdb_v1.Insert(objects[2])
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
@@ -266,7 +273,7 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	}
 }
 
-func TestTenantIterator(ctx context.Context, tenantList []string) pgdb_v1.TenantIteratorFunc {
+func TenantIteratorTest(ctx context.Context, tenantList []string) pgdb_v1.TenantIteratorFunc {
 	index := 0
 
 	return func(ctx context.Context) (string, error) {
