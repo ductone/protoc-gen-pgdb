@@ -199,7 +199,7 @@ func tableExists(ctx context.Context, db sqlScanner, tableName string) (bool, er
 	return false, nil
 }
 
-func tableIsPartitioned(ctx context.Context, db sqlScanner, tableName string) (bool, error) {
+func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string) (bool, error) {
 	dialect := goqu.Dialect("postgres")
 
 	qb := dialect.From("pg_class")
@@ -347,7 +347,7 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 	if err != nil {
 		panic(err)
 	}
-	isPartitioned, err := tableIsPartitioned(ctx, db, tableName)
+	isPartitioned, err := tableIsParentPartition(ctx, db, tableName)
 	if err != nil {
 		panic(err)
 	}
