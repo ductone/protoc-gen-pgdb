@@ -138,11 +138,12 @@ func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflec
 	// Create sub-tables
 	tenantIter := TenantIteratorTest(ctx, fakeTenantIds)
 	// Don't really need tenantId in update func but good for logging purposes.
-	pgdb_v1.TenantPartitionsUpdate(ctx, pg.DB, msg, tenantIter, func(ctx context.Context, tenantId string, schema string) error {
+	err := pgdb_v1.TenantPartitionsUpdate(ctx, pg.DB, msg, tenantIter, func(ctx context.Context, tenantId string, schema string) error {
 		_, err := pg.DB.Exec(ctx, schema)
 		require.NoError(t, err)
 		return nil
 	})
+	require.NoError(t, err)
 }
 
 func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {

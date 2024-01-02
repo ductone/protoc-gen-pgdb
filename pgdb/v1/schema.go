@@ -317,7 +317,7 @@ func createPartitionTableName(tableName string, tenantId string) string {
 type TenantIteratorFunc func(ctx context.Context) (string, error)
 type SchemaUpdateFunc func(ctx context.Context, tenantId string, schema string) error
 
-func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) {
+func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) error {
 	tableName := msg.DBReflect().Descriptor().TableName()
 
 	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
@@ -327,7 +327,7 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 
 	// The table exists but is not a parent partition.
 	if !isParentPartition {
-		return
+		return nil
 	}
 
 	// We'll only need to attach partitions if the table already exists as a regular table.
@@ -338,7 +338,7 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 	for {
 		tenantId, err := iteratorFunc(ctx)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if tenantId == "" {
 			break
@@ -348,7 +348,9 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 		builtSchema := fmt.Sprintf(createPartitionSchema, partitionTableName, tableName, tenantId)
 		updateErr := updateFunc(ctx, tenantId, builtSchema)
 		if updateErr != nil {
-			panic(updateErr)
+			return updateErr
 		}
 	}
+
+	return nil
 }
