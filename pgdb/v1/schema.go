@@ -200,8 +200,8 @@ func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string
 	return false, nil
 }
 
-// Get a list of the provided descriptor's partition sub tables.
-func ReadPartitionTable(ctx context.Context, db sqlScanner, desc Descriptor) ([]string, error) {
+// Get a list of the provided descriptor's partition parent tables.
+func GetParentTables(ctx context.Context, db sqlScanner, desc Descriptor) ([]string, error) {
 	dialect := goqu.Dialect("postgres")
 
 	qb := dialect.From("pg_inherits")
