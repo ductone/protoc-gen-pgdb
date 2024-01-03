@@ -315,7 +315,7 @@ func createPartitionTableName(tableName string, tenantId string) string {
 
 // This will be passed in in C1.
 type TenantIteratorFunc func(ctx context.Context) (string, error)
-type SchemaUpdateFunc func(ctx context.Context, tenantId string, schema string) error
+type SchemaUpdateFunc func(ctx context.Context, schema string, args ...interface{}) error
 
 func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) error {
 	tableName := msg.DBReflect().Descriptor().TableName()
@@ -333,7 +333,7 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 	// We'll only need to attach partitions if the table already exists as a regular table.
 	// but this shouldn't happen.
 	// As for detaching we'll only need to do that if we want to preserve data in a partitioned table.
-	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES IN ('%s');`
+	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES IN ($1);`
 
 	for {
 		tenantId, err := iteratorFunc(ctx)
@@ -345,8 +345,8 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 		}
 		partitionTableName := createPartitionTableName(tableName, tenantId)
 		// fmt.Printf("Creating partition table %s for %s\n", partitionTableName, tenantId)
-		builtSchema := fmt.Sprintf(createPartitionSchema, partitionTableName, tableName, tenantId)
-		updateErr := updateFunc(ctx, tenantId, builtSchema)
+		builtSchema := fmt.Sprintf(createPartitionSchema, partitionTableName, tableName)
+		updateErr := updateFunc(ctx, builtSchema, tenantId)
 		if updateErr != nil {
 			return updateErr
 		}
