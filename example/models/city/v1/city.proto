@@ -12,9 +12,7 @@ option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/city/v1";
 
 message Attractions {
   option (dynamo.v1.msg).key = {
-    pk_fields: [
-      "tenant_id"
-    ]
+    pk_fields: ["tenant_id"]
     sk_fields: [
       "id",
       "numid"
@@ -57,7 +55,7 @@ message Attractions {
     method: INDEX_METHOD_BTREE,
     columns: [
       "tenant_id",
-      "medium.medium" 
+      "medium.medium"
     ]
   };
   option (pgdb.v1.msg).indexes = {
@@ -65,7 +63,7 @@ message Attractions {
     method: INDEX_METHOD_GIN,
     columns: [
       "tenant_id",
-      "pet.profile" 
+      "pet.profile"
     ]
   };
   option (pgdb.v1.msg).indexes = {
@@ -73,13 +71,11 @@ message Attractions {
     method: INDEX_METHOD_BTREE,
     columns: [
       "tenant_id",
-      "id" 
+      "id"
     ]
   };
   string tenant_id = 1;
-  string id = 2 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_EXACT
-  }];
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
   int32 numid = 3;
   google.protobuf.Timestamp created_at = 4;
   oneof what {

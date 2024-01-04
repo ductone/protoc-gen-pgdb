@@ -25,6 +25,10 @@ func (d *pgdbDescriptorPet) TableName() string {
 	return "pb_pet_models_animals_v1_8a3723d5"
 }
 
+func (d *pgdbDescriptorPet) IsPartitioned() bool {
+	return false
+}
+
 func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -1311,6 +1315,10 @@ var (
 
 func (d *pgdbDescriptorScalarValue) TableName() string {
 	return "pb_scalar_value_models_animals_v1_35025835"
+}
+
+func (d *pgdbDescriptorScalarValue) IsPartitioned() bool {
+	return false
 }
 
 func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -3585,6 +3593,10 @@ func (d *pgdbDescriptorEBook) TableName() string {
 	return "pb_e_book_models_animals_v1_a344683d"
 }
 
+func (d *pgdbDescriptorEBook) IsPartitioned() bool {
+	return false
+}
+
 func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -3756,6 +3768,10 @@ func (d *pgdbDescriptorPaperBook) TableName() string {
 	return "pb_paper_book_models_animals_v1_ba82559d"
 }
 
+func (d *pgdbDescriptorPaperBook) IsPartitioned() bool {
+	return false
+}
+
 func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -3925,6 +3941,10 @@ var (
 
 func (d *pgdbDescriptorBook) TableName() string {
 	return "pb_book_models_animals_v1_d871ffce"
+}
+
+func (d *pgdbDescriptorBook) IsPartitioned() bool {
+	return false
 }
 
 func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -4866,6 +4886,10 @@ var (
 
 func (d *pgdbDescriptorNewspaper) TableName() string {
 	return "pb_newspaper_models_animals_v1_f52e04fd"
+}
+
+func (d *pgdbDescriptorNewspaper) IsPartitioned() bool {
+	return false
 }
 
 func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

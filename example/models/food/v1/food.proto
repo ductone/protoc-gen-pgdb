@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package models.food.v1;
+
+import "dynamo/v1/dynamo.proto";
+import "google/protobuf/timestamp.proto";
+import "pgdb/v1/pgdb.proto";
+
+option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/food/v1";
+
+message Pasta {
+  option (pgdb.v1.msg).partitioned = true;
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "id"
+    ]
+    sk_const: "example"
+  };
+  string tenant_id = 1;
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
+}
+
+message PastaIngredient {
+  option (pgdb.v1.msg).partitioned = true;
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "pasta_id",
+      "ingredient_id",
+      "id"
+    ]
+    sk_const: "exampleingredient"
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "pastas"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "tenant_id",
+      "pasta_id",
+      "id"
+    ]
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "ingredients"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "tenant_id",
+      "ingredient_id",
+      "id"
+    ]
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "everythingggg"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "ingredient_id",
+      "pasta_id",
+      "id"
+    ]
+  };
+  string tenant_id = 1;
+  string ingredient_id = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
+  string pasta_id = 6 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+  string id = 7 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+}
+
+message SauceIngredient {
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "id"
+    ]
+    sk_const: "examplesauce"
+  };
+  string tenant_id = 1;
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
+}

@@ -23,6 +23,10 @@ func (d *pgdbDescriptorShop) TableName() string {
 	return "pb_shop_models_zoo_v1_ca2425f6"
 }
 
+func (d *pgdbDescriptorShop) IsPartitioned() bool {
+	return false
+}
+
 func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -1020,6 +1024,10 @@ var (
 
 func (d *pgdbDescriptorShop_Manager) TableName() string {
 	return "pb_manager_models_zoo_v1_6ccf2214"
+}
+
+func (d *pgdbDescriptorShop_Manager) IsPartitioned() bool {
+	return false
 }
 
 func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

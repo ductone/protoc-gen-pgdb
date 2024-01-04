@@ -28,6 +28,10 @@ func (d *pgdbDescriptorAttractions) TableName() string {
 	return "pb_attractions_models_city_v1_e136cbfc"
 }
 
+func (d *pgdbDescriptorAttractions) IsPartitioned() bool {
+	return false
+}
+
 func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df

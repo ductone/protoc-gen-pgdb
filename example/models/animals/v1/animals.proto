@@ -34,9 +34,7 @@ message Pet {
     ]
   };
   string tenant_id = 1;
-  string id = 2 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_EXACT
-  }];
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp updated_at = 4;
   google.protobuf.Timestamp deleted_at = 5;
@@ -44,9 +42,7 @@ message Pet {
     full_text_type: FULL_TEXT_TYPE_ENGLISH
     full_text_weight: FULL_TEXT_WEIGHT_HIGH
   }];
-  string description = 7 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_ENGLISH
-  }];
+  string description = 7 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_ENGLISH}];
   bool system_builtin = 9;
   google.protobuf.Duration elapsed = 10;
   google.protobuf.Struct profile = 11;
@@ -58,12 +54,8 @@ message Pet {
 
 message ScalarValue {
   option (dynamo.v1.msg).key = {
-    pk_fields: [
-      "tenant_id"
-    ],
-    sk_fields: [
-      "id"
-    ],
+    pk_fields: ["tenant_id"],
+    sk_fields: ["id"],
   };
   option (pgdb.v1.msg).indexes = {
     name: "repeated_sfixed32"
@@ -77,7 +69,6 @@ message ScalarValue {
       "string_map"
     ]
   };
-
 
   string tenant_id = 1;
   string id = 2;
@@ -121,9 +112,7 @@ message ScalarValue {
   repeated bytes repeated_bytes = 37;
   repeated FurType repeated_enum = 38;
 
-  map<string, string> string_map = 39 [(pgdb.v1.options) = {
-    message_behavoir: MESSAGE_BEHAVOIR_JSONB
-  }];
+  map<string, string> string_map = 39 [(pgdb.v1.options) = {message_behavoir: MESSAGE_BEHAVOIR_JSONB}];
 
   google.protobuf.Timestamp created_at = 40;
   google.protobuf.StringValue str_ptr = 100;
@@ -149,9 +138,7 @@ message Book {
     sk_const: "example"
   };
   string tenant_id = 1;
-  string id = 2 [(pgdb.v1.options) = {
-    full_text_type: FULL_TEXT_TYPE_EXACT
-  }];
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
   google.protobuf.Timestamp created_at = 3;
   oneof medium {
     PaperBook paper = 50;
