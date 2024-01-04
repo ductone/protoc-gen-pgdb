@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	pg_internal "github.com/ductone/protoc-gen-pgdb/internal/pgdb"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/stretchr/testify/require"
@@ -248,7 +249,7 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	require.NoError(t, rows.Err())
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one row per tenant")
 
-	subTables, err := pgdb_v1.ReadPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
+	subTables, err := pg_internal.ReadPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
 	require.NoError(t, err)
 
 	// Test select each tenant
