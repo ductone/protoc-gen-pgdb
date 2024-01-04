@@ -258,25 +258,28 @@ func sha256String(input string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-// This appends a new hash of the tenantId to the end of the table name.
-// If the length is over PGs max table name length then we want to preserve the original hash.
-// So we split the table name and create the new ending hashes like so 0565c036_12345678
-// Then if its over limit we but down the table name in order to append the new ending hashes.
-// (this isnt over 63 but for example)
-// pb_pasta_ingredient_models_food_v1_0565c036 -> pb_pasta_ingredient_models_0565c036_12345678.
+// Child table names
+//
+//	pbchild_<parentHash>_<tenantId>
+//
+// If too long then
+//
+//	pbchild_<parentHash>_<tenantHash>
 func createPartitionTableName(tableName string, tenantId string) string {
+	newNameFormat := "pbchild_%s_%s"
+
 	const pgMaxTableNameLen = 63
 	tenantHash := sha256String(tenantId)[0:8]
-	newName := tableName + "_" + tenantHash
-	if len(newName) < pgMaxTableNameLen {
-		return newName
-	}
+
 	tableSplit := strings.Split(tableName, "_")
 	originalHash := tableSplit[len(tableSplit)-1]
-	nameWithoutHash := strings.Join(tableSplit[0:len(tableSplit)-1], "_")
-	combinedHashes := originalHash + "_" + tenantHash
-	nameWithoutHash = nameWithoutHash[0 : pgMaxTableNameLen-len(combinedHashes)]
-	return nameWithoutHash + "_" + combinedHashes
+
+	childTableName := fmt.Sprintf(newNameFormat, originalHash, tenantId)
+	// These shouldnt ever be over max length because "pgchild_<8chars>_<27chars>" is 43.
+	if len(childTableName) > pgMaxTableNameLen {
+		childTableName = fmt.Sprintf(newNameFormat, originalHash, tenantHash)
+	}
+	return childTableName
 }
 
 // This will be passed in in C1.
@@ -288,7 +291,7 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 
 	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	// The table exists but is not a parent partition.
