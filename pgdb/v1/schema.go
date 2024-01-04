@@ -102,6 +102,8 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	haveCols := make(map[string]struct{})
 	for rows.Next() {
 		var columnName string
@@ -129,6 +131,8 @@ func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	indexes := make(map[string]struct{})
 	for rows.Next() {
@@ -158,6 +162,8 @@ func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string
 	if err != nil {
 		return false, err
 	}
+
+	defer rows.Close()
 
 	if rows.Next() {
 		return true, nil

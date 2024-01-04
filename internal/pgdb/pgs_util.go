@@ -67,6 +67,8 @@ func ReadPartitionSubTables(ctx context.Context, db sqlScanner, desc pgdb_v1.Des
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	tables := make([]string, 0)
 	for rows.Next() {
 		var tableName string
