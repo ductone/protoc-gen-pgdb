@@ -166,40 +166,6 @@ func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string
 	return false, nil
 }
 
-// Get a list of the provided descriptor's partition parent tables.
-func GetParentTables(ctx context.Context, db sqlScanner, desc Descriptor) ([]string, error) {
-	dialect := goqu.Dialect("postgres")
-
-	qb := dialect.From("pg_inherits")
-	qb = qb.Select("parent.relname").As("parent")
-	qb = qb.Join(goqu.T("pg_class").As("parent"), goqu.On(goqu.I("pg_inherits.inhparent").Eq(goqu.I("parent.oid"))))
-	qb = qb.Join(goqu.T("pg_class").As("child"), goqu.On(goqu.I("pg_inherits.inhrelid").Eq(goqu.I("child.oid"))))
-	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_parent"), goqu.On(goqu.I("nmsp_parent.oid").Eq(goqu.I("parent.relnamespace"))))
-	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_child"), goqu.On(goqu.I("nmsp_child.oid").Eq(goqu.I("child.relnamespace"))))
-	qb = qb.Where(goqu.L("parent.relname = ?", desc.TableName()))
-	query, params, err := qb.ToSQL()
-	if err != nil {
-		return nil, err
-	}
-
-	rows, err := db.Query(ctx, query, params...)
-	if err != nil {
-		return nil, err
-	}
-
-	tables := make([]string, 0)
-	for rows.Next() {
-		var tableName string
-		err = rows.Scan(&tableName)
-		if err != nil {
-			return nil, err
-		}
-		tables = append(tables, tableName)
-	}
-
-	return tables, nil
-}
-
 func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
 	rv := make([]string, 0)
 	dbr := msg.DBReflect()
