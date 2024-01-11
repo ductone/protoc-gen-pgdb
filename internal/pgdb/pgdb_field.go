@@ -417,7 +417,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 				continue
 			}
 
-			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), field.Message().Name().String())
+			// assuming enum starts with MODEL?
+			prefixStr := field.Message().Name().String() + "_MODEL"
+
+			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), prefixStr)
 
 			tempCtx := &fieldContext{
 				ExcludeNested: true,
