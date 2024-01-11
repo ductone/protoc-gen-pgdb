@@ -7,7 +7,7 @@ github.com/clipperhouse/jargon/filters/stemmer
 github.com/clipperhouse/jargon/filters/synonyms
 github.com/clipperhouse/jargon/filters/synonyms/trie
 github.com/clipperhouse/jargon/tokenqueue
-# github.com/clipperhouse/uax29 v1.12.4
+# github.com/clipperhouse/uax29 v1.12.5
 ## explicit; go 1.14
 github.com/clipperhouse/uax29/graphemes
 github.com/clipperhouse/uax29/iterators
@@ -17,7 +17,7 @@ github.com/clipperhouse/uax29/words
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/doug-martin/goqu/v9 v9.18.0
+# github.com/doug-martin/goqu/v9 v9.19.0
 ## explicit; go 1.12
 github.com/doug-martin/goqu/v9
 github.com/doug-martin/goqu/v9/dialect/postgres
@@ -28,7 +28,7 @@ github.com/doug-martin/goqu/v9/internal/sb
 github.com/doug-martin/goqu/v9/internal/tag
 github.com/doug-martin/goqu/v9/internal/util
 github.com/doug-martin/goqu/v9/sqlgen
-# github.com/golang/protobuf v1.5.2
+# github.com/golang/protobuf v1.5.3
 ## explicit; go 1.9
 github.com/golang/protobuf/internal/gengogrpc
 github.com/golang/protobuf/proto
@@ -38,28 +38,28 @@ github.com/golang/protobuf/protoc-gen-go/plugin
 # github.com/jackc/pgpassfile v1.0.0
 ## explicit; go 1.12
 github.com/jackc/pgpassfile
-# github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a
+# github.com/jackc/pgservicefile v0.0.0-20231201235250-de7065d80cb9
 ## explicit; go 1.14
 github.com/jackc/pgservicefile
-# github.com/jackc/pgx/v5 v5.3.0
+# github.com/jackc/pgx/v5 v5.5.1
 ## explicit; go 1.19
 github.com/jackc/pgx/v5
 github.com/jackc/pgx/v5/internal/anynil
 github.com/jackc/pgx/v5/internal/iobufpool
-github.com/jackc/pgx/v5/internal/nbconn
 github.com/jackc/pgx/v5/internal/pgio
 github.com/jackc/pgx/v5/internal/sanitize
 github.com/jackc/pgx/v5/internal/stmtcache
 github.com/jackc/pgx/v5/pgconn
+github.com/jackc/pgx/v5/pgconn/internal/bgreader
 github.com/jackc/pgx/v5/pgconn/internal/ctxwatch
 github.com/jackc/pgx/v5/pgproto3
 github.com/jackc/pgx/v5/pgtype
 github.com/jackc/pgx/v5/pgxpool
-# github.com/jackc/puddle/v2 v2.2.0
+# github.com/jackc/puddle/v2 v2.2.1
 ## explicit; go 1.19
 github.com/jackc/puddle/v2
 github.com/jackc/puddle/v2/internal/genstack
-# github.com/kljensen/snowball v0.8.0
+# github.com/kljensen/snowball v0.9.0
 ## explicit; go 1.15
 github.com/kljensen/snowball/english
 github.com/kljensen/snowball/french
@@ -69,6 +69,8 @@ github.com/kljensen/snowball/russian
 github.com/kljensen/snowball/snowballword
 github.com/kljensen/snowball/spanish
 github.com/kljensen/snowball/swedish
+# github.com/kr/text v0.2.0
+## explicit
 # github.com/lib/pq v1.10.2
 ## explicit; go 1.13
 # github.com/lyft/protoc-gen-star v0.6.2
@@ -83,8 +85,8 @@ github.com/pmezard/go-difflib/difflib
 github.com/pquerna/protoc-gen-dynamo/dynamo/v1
 # github.com/rogpeppe/go-internal v1.9.0
 ## explicit; go 1.17
-# github.com/spf13/afero v1.9.4
-## explicit; go 1.16
+# github.com/spf13/afero v1.11.0
+## explicit; go 1.19
 github.com/spf13/afero
 github.com/spf13/afero/internal/common
 github.com/spf13/afero/mem
@@ -92,29 +94,26 @@ github.com/spf13/afero/mem
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# golang.org/x/crypto v0.6.0
-## explicit; go 1.17
-golang.org/x/crypto/pbkdf2
-# golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2
+# golang.org/x/crypto v0.18.0
 ## explicit; go 1.18
+golang.org/x/crypto/pbkdf2
+# golang.org/x/exp v0.0.0-20240110193028-0dcbfd608b1e
+## explicit; go 1.20
 golang.org/x/exp/constraints
-# golang.org/x/mod v0.8.0
-## explicit; go 1.17
+# golang.org/x/mod v0.14.0
+## explicit; go 1.18
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.7.0
-## explicit; go 1.17
+# golang.org/x/net v0.20.0
+## explicit; go 1.18
 golang.org/x/net/html
 golang.org/x/net/html/atom
-# golang.org/x/sync v0.1.0
-## explicit
+# golang.org/x/sync v0.6.0
+## explicit; go 1.18
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.5.0
-## explicit; go 1.17
-golang.org/x/sys/execabs
-# golang.org/x/text v0.7.0
-## explicit; go 1.17
+# golang.org/x/text v0.14.0
+## explicit; go 1.18
 golang.org/x/text/cases
 golang.org/x/text/internal
 golang.org/x/text/internal/language
@@ -129,7 +128,7 @@ golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/unicode/rangetable
 golang.org/x/text/width
-# golang.org/x/tools v0.6.0
+# golang.org/x/tools v0.16.1
 ## explicit; go 1.18
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/imports
@@ -137,13 +136,12 @@ golang.org/x/tools/internal/event
 golang.org/x/tools/internal/event/core
 golang.org/x/tools/internal/event/keys
 golang.org/x/tools/internal/event/label
-golang.org/x/tools/internal/fastwalk
+golang.org/x/tools/internal/event/tag
 golang.org/x/tools/internal/gocommand
 golang.org/x/tools/internal/gopathwalk
 golang.org/x/tools/internal/imports
-golang.org/x/tools/internal/typeparams
-# google.golang.org/protobuf v1.28.1
-## explicit; go 1.11
+# google.golang.org/protobuf v1.32.0
+## explicit; go 1.17
 google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo
 google.golang.org/protobuf/compiler/protogen
 google.golang.org/protobuf/encoding/prototext
@@ -161,6 +159,7 @@ google.golang.org/protobuf/internal/filetype
 google.golang.org/protobuf/internal/flags
 google.golang.org/protobuf/internal/genid
 google.golang.org/protobuf/internal/impl
+google.golang.org/protobuf/internal/msgfmt
 google.golang.org/protobuf/internal/order
 google.golang.org/protobuf/internal/pragma
 google.golang.org/protobuf/internal/set
@@ -168,11 +167,14 @@ google.golang.org/protobuf/internal/strs
 google.golang.org/protobuf/internal/version
 google.golang.org/protobuf/proto
 google.golang.org/protobuf/reflect/protodesc
+google.golang.org/protobuf/reflect/protopath
+google.golang.org/protobuf/reflect/protorange
 google.golang.org/protobuf/reflect/protoreflect
 google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
 google.golang.org/protobuf/runtime/protoimpl
 google.golang.org/protobuf/types/descriptorpb
+google.golang.org/protobuf/types/dynamicpb
 google.golang.org/protobuf/types/pluginpb
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
