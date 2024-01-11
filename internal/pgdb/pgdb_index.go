@@ -189,42 +189,10 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		if ext.MessageBehavoir != pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_VECTOR {
 			continue
 		}
-		if !field.Type().IsRepeated() {
-			panic(fmt.Errorf("pgdb: vector behavior only supported on repeated fields: %s", field.FullyQualifiedName()))
-		}
-		subMsg := field.Type().Element().Embed()
-		if subMsg == nil {
-			panic(fmt.Errorf("pgdb: vector behavior only supported on message fields: %s", field.FullyQualifiedName()))
-		}
-		allFields := subMsg.Fields()
-		if len(allFields) != 2 {
-			panic(fmt.Errorf("pgdb: vector message must only have model enum and float array: %s", field.FullyQualifiedName()))
-		}
 
-		var enumField pgs.Field
-
-		for _, subField := range allFields {
-			switch subField.Descriptor().GetNumber() {
-			case 1:
-				// enum
-				if subField.Type().ProtoType() != pgs.EnumT {
-					panic(fmt.Errorf("pgdb: vector message must have model enum as first field: %s", field.FullyQualifiedName()))
-				}
-				enumField = subField
-			case 2:
-				// repeated float
-				if !subField.Type().IsRepeated() || subField.Type().Element().ProtoType() != pgs.FloatT {
-					panic(fmt.Errorf("pgdb: vector message must have repeated float as second field: %s", field.FullyQualifiedName()))
-				}
-				subExt := pgdb_v1.FieldOptions{}
-				_, err := subField.Extension(pgdb_v1.E_Options, &subExt)
-				if err != nil {
-					return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
-				}
-				if subExt.VectorSize == 0 {
-					panic(fmt.Errorf("pgdb: vector message must have vector_size set on repeated float field: %s", field.FullyQualifiedName()))
-				}
-			}
+		enumField, _, _, err := pgdb_v1.GetFieldVectorShape(field)
+		if err != nil {
+			return nil, err
 		}
 
 		pgColName, err := getColumnName(field)
