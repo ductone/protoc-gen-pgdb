@@ -410,17 +410,18 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 				field.Type().ProtoType(), field.FullyQualifiedName(), field.Descriptor().GetType()))
 		}
 
+		var unspecifiedEnum pgs.EnumValue
 		// enum values
 		for _, enumValue := range enumField.Type().Enum().Values() {
 			if enumValue.Value() == 0 {
 				// skip the zero value
+				unspecifiedEnum = enumValue
 				continue
 			}
 
-			// assuming enum starts with MODEL?
-			prefixStr := field.Message().Name().String() + "_MODEL"
+			toTrim := strings.TrimSuffix(ctx.Name(unspecifiedEnum).String(), "_UNSPECIFIED")
 
-			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), prefixStr)
+			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), toTrim)
 
 			tempCtx := &fieldContext{
 				ExcludeNested: true,
