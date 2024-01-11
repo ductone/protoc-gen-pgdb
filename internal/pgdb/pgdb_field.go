@@ -2,7 +2,6 @@ package pgdb
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
@@ -420,10 +419,6 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), field.Message().Name().String())
 
-			os.Stderr.WriteString(strings.TrimPrefix(ctx.Name(enumValue).String(), "MODEL_") + "\n")
-			os.Stderr.WriteString(field.Message().Name().String() + "\n")
-
-			// TODO fix nullibity
 			tempCtx := &fieldContext{
 				ExcludeNested: true,
 				IsVirtual:     true,
