@@ -6,9 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	pg_internal "github.com/ductone/protoc-gen-pgdb/internal/pgdb"
+	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/require"
 )
 
@@ -286,7 +287,7 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	require.NoError(t, rows.Err())
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one row per tenant")
 
-	subTables, err := pg_internal.ReadPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
+	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
 	require.NoError(t, err)
 
 	// Test select each tenant
@@ -319,4 +320,44 @@ func TenantIteratorTest(ctx context.Context, tenantList []string) pgdb_v1.Tenant
 		return tenantId, nil
 	}
 
+}
+
+type sqlScanner interface {
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+}
+
+// this
+func readPartitionSubTables(ctx context.Context, db sqlScanner, desc pgdb_v1.Descriptor) ([]string, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_inherits")
+	qb = qb.Select("child.relname").As("child")
+	qb = qb.Join(goqu.T("pg_class").As("parent"), goqu.On(goqu.I("pg_inherits.inhparent").Eq(goqu.I("parent.oid"))))
+	qb = qb.Join(goqu.T("pg_class").As("child"), goqu.On(goqu.I("pg_inherits.inhrelid").Eq(goqu.I("child.oid"))))
+	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_parent"), goqu.On(goqu.I("nmsp_parent.oid").Eq(goqu.I("parent.relnamespace"))))
+	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_child"), goqu.On(goqu.I("nmsp_child.oid").Eq(goqu.I("child.relnamespace"))))
+	qb = qb.Where(goqu.L("parent.relname = ?", desc.TableName()))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	tables := make([]string, 0)
+	for rows.Next() {
+		var tableName string
+		err = rows.Scan(&tableName)
+		if err != nil {
+			return nil, err
+		}
+		tables = append(tables, tableName)
+	}
+
+	return tables, nil
 }

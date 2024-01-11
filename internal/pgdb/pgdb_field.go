@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
@@ -390,9 +391,18 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			continue
 		}
 
-		enumField, floatField, vectorSize, err := pgdb_v1.GetFieldVectorShape(field)
+		enumField, floatField, err := GetFieldVectorShape(field)
 		if err != nil {
 			return nil, err
+		}
+
+		subExt := pgdb_v1.FieldOptions{}
+		_, err = floatField.Extension(pgdb_v1.E_Options, &subExt)
+		if err != nil {
+			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
+		}
+		if subExt.VectorSize == 0 {
+			panic(fmt.Errorf("pgdb: vector message must have vector_size set on repeated float field: %s", field.FullyQualifiedName()))
 		}
 
 		pgColName, err := getColumnName(field)
@@ -408,7 +418,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 				continue
 			}
 
-			goNameString := ctx.Name(field).String() + "_" + strings.TrimPrefix(ctx.Name(enumValue).String(), "MODEL_")
+			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), field.Message().Name().String())
+
+			os.Stderr.WriteString(strings.TrimPrefix(ctx.Name(enumValue).String(), "MODEL_") + "\n")
+			os.Stderr.WriteString(field.Message().Name().String() + "\n")
 
 			// TODO fix nullibity
 			tempCtx := &fieldContext{
@@ -418,7 +431,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 					Name:               fmt.Sprintf("%s_%d", pgColName, enumValue.Value()),
 					Type:               "vector",
 					Nullable:           true,
-					OverrideExpression: fmt.Sprintf("vector(%d)", vectorSize),
+					OverrideExpression: fmt.Sprintf("vector(%d)", subExt.VectorSize),
 				},
 				GoName:   goNameString, // Generated go struct name
 				DataType: nil,

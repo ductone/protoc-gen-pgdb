@@ -190,7 +190,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			continue
 		}
 
-		enumField, _, _, err := pgdb_v1.GetFieldVectorShape(field)
+		enumField, _, err := GetFieldVectorShape(field)
 		if err != nil {
 			return nil, err
 		}
