@@ -3,5 +3,8 @@ for _, v := range m.self.{{.GoName}} {
     if v.{{.EnumName}} != {{.EnumModelValue}} {
         continue
     }
-    {{.VarName}} = pgdb_v1.FloatArrayToVectorString(v.{{.FloatArrayName}})
+    if len(v.{{.FloatArrayName}}) == 0 {
+        break
+    }
+    {{.VarName}} = pgdb_v1.FloatToVector(v.{{.FloatArrayName}})
 }

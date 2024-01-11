@@ -65,7 +65,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 					Id:       "pi1",
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
 						{
-							Embedding: []float32{1.0, 2.0, 3.0},
+							Embedding: []float32{},
 							Model:     PastaIngredient_MODEL_GPT_4_0_XXX,
 						},
 					},
@@ -118,6 +118,20 @@ func TestSchemaFoodPasta(t *testing.T) {
 			require.Contains(t, ct, "PARTITION BY LIST")
 		} else {
 			require.NotContains(t, ct, "PARTITION BY LIST")
+		}
+
+		hnswIndexCount := 0
+		for _, line := range schema {
+			if strings.Contains(line, "HNSW") {
+				fmt.Printf("%s \n", line)
+				hnswIndexCount += 1
+			}
+		}
+		fmt.Printf("hnswIndexCount: %d\n", hnswIndexCount)
+		if _, ok := smsg.(*PastaIngredient); ok {
+			require.Equal(t, 2, hnswIndexCount, "Should have 2 hnsw indexes") // 2 enums = 2 indexes
+		} else {
+			require.Equal(t, 0, hnswIndexCount, "Should have 0 hnsw indexes")
 		}
 
 		require.Equal(t, 1,
@@ -240,6 +254,7 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	msg := objects[0]
 	sql, args, err := pgdb_v1.Insert(objects[0])
 	require.NoError(t, err)
+	fmt.Printf("sql: %s\n\n%v\n", sql, args)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 

@@ -175,5 +175,94 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		},
 	}
 
-	return []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}, nil
+	// again loop through and look for vector / hnsw indexes
+
+	rv := []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}
+
+	// iterate message for vector behavior options
+	for _, field := range m.Fields() {
+		ext := pgdb_v1.FieldOptions{}
+		_, err := field.Extension(pgdb_v1.E_Options, &ext)
+		if err != nil {
+			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
+		}
+		if ext.MessageBehavoir != pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_VECTOR {
+			continue
+		}
+		if !field.Type().IsRepeated() {
+			panic(fmt.Errorf("pgdb: vector behavior only supported on repeated fields: %s", field.FullyQualifiedName()))
+		}
+		subMsg := field.Type().Element().Embed()
+		if subMsg == nil {
+			panic(fmt.Errorf("pgdb: vector behavior only supported on message fields: %s", field.FullyQualifiedName()))
+		}
+		allFields := subMsg.Fields()
+		if len(allFields) != 2 {
+			panic(fmt.Errorf("pgdb: vector message must only have model enum and float array: %s", field.FullyQualifiedName()))
+		}
+
+		var enumField pgs.Field
+
+		for _, subField := range allFields {
+			switch subField.Descriptor().GetNumber() {
+			case 1:
+				// enum
+				if subField.Type().ProtoType() != pgs.EnumT {
+					panic(fmt.Errorf("pgdb: vector message must have model enum as first field: %s", field.FullyQualifiedName()))
+				}
+				enumField = subField
+			case 2:
+				// repeated float
+				if !subField.Type().IsRepeated() || subField.Type().Element().ProtoType() != pgs.FloatT {
+					panic(fmt.Errorf("pgdb: vector message must have repeated float as second field: %s", field.FullyQualifiedName()))
+				}
+				subExt := pgdb_v1.FieldOptions{}
+				_, err := subField.Extension(pgdb_v1.E_Options, &subExt)
+				if err != nil {
+					return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
+				}
+				if subExt.VectorSize == 0 {
+					panic(fmt.Errorf("pgdb: vector message must have vector_size set on repeated float field: %s", field.FullyQualifiedName()))
+				}
+			}
+		}
+
+		pgColName, err := getColumnName(field)
+		if err != nil {
+			panic(fmt.Errorf("pgdb: getColumnName failed for: %v: %s (of type %s)",
+				field.Type().ProtoType(), field.FullyQualifiedName(), field.Descriptor().GetType()))
+		}
+
+		// enum values
+		for _, enumValue := range enumField.Type().Enum().Values() {
+			if enumValue.Value() == 0 {
+				// skip the zero value
+				continue
+			}
+
+			vectorIndexName, err := getIndexName(m, fmt.Sprintf("vector_index_%s", enumValue.Name().String()))
+			if err != nil {
+				return nil, err
+			}
+
+			vectorCol := fmt.Sprintf("%s_%d", pgColName, enumValue.Value())
+
+			tempCtx := &indexContext{
+				ExcludeNested: true,
+				DB: pgdb_v1.Index{
+					Name:   vectorIndexName,
+					Method: pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
+					Columns: []string{
+						vectorCol,
+					},
+					OverrideExpression: fmt.Sprintf("pb$%s vector_cosine_ops", vectorCol),
+				},
+			}
+			rv = append(rv, tempCtx)
+		}
+
+		break
+	}
+
+	return rv, nil
 }

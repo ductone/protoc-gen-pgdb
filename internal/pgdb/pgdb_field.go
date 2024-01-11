@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"fmt"
+	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -443,7 +444,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 				continue
 			}
 
-			goNameString := fmt.Sprintf("%s_%s", field.Name(), enumValue.Name())
+			goNameString := ctx.Name(field).String() + "_" + strings.TrimPrefix(ctx.Name(enumValue).String(), "MODEL_")
 
 			// TODO fix nullibity
 			tempCtx := &fieldContext{

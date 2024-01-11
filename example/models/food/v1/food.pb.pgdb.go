@@ -1166,6 +1166,34 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("vector_index_model_gpt_3_5_xxx_pasta_in_48588d23"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("model_embeddings_1")},
+			OverrideExpression: "pb$model_embeddings_1 vector_cosine_ops",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("vector_index_model_gpt_4_0_xxx_pasta_in_1eaeefe1"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("model_embeddings_2")},
+			OverrideExpression: "pb$model_embeddings_2 vector_cosine_ops",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("pastas_pasta_ingredient_models_food_v1_e3bd47ef"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
@@ -1336,7 +1364,10 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 			if v.Model != PastaIngredient_MODEL_GPT_3_5_XXX {
 				continue
 			}
-			cfv5 = pgdb_v1.FloatArrayToVectorString(v.Embedding)
+			if len(v.Embedding) == 0 {
+				break
+			}
+			cfv5 = pgdb_v1.FloatToVector(v.Embedding)
 		}
 
 		if ro.Nulled {
@@ -1354,7 +1385,10 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 			if v.Model != PastaIngredient_MODEL_GPT_4_0_XXX {
 				continue
 			}
-			cfv5 = pgdb_v1.FloatArrayToVectorString(v.Embedding)
+			if len(v.Embedding) == 0 {
+				break
+			}
+			cfv5 = pgdb_v1.FloatToVector(v.Embedding)
 		}
 
 		if ro.Nulled {
@@ -1752,6 +1786,32 @@ func (x *PastaIngredientDBQueryBuilder) FTSData() *PastaIngredientFTSDataSafeOpe
 	return &PastaIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
+type PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXXSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXXSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientDBQueryBuilder) ModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXX() *PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXXSafeOperators {
+	return &PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXXSafeOperators{tableName: x.tableName, column: "pb$" + "model_embeddings_1"}
+}
+
+type PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXXSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXXSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientDBQueryBuilder) ModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXX() *PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXXSafeOperators {
+	return &PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXXSafeOperators{tableName: x.tableName, column: "pb$" + "model_embeddings_2"}
+}
+
 type PastaIngredientIngredientIdSafeOperators struct {
 	column    string
 	tableName string
@@ -2013,29 +2073,29 @@ func (x *PastaIngredientPBDataQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type PastaIngredientmodel_embeddings_MODEL_GPT_3_5_XXXQueryType struct {
+type PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXXQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *PastaIngredientDBQueryUnsafe) model_embeddings_MODEL_GPT_3_5_XXX() *PastaIngredientmodel_embeddings_MODEL_GPT_3_5_XXXQueryType {
-	return &PastaIngredientmodel_embeddings_MODEL_GPT_3_5_XXXQueryType{tableName: x.tableName, column: "pb$" + "model_embeddings_1"}
+func (x *PastaIngredientDBQueryUnsafe) ModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXX() *PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXXQueryType {
+	return &PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXXQueryType{tableName: x.tableName, column: "pb$" + "model_embeddings_1"}
 }
 
-func (x *PastaIngredientmodel_embeddings_MODEL_GPT_3_5_XXXQueryType) Identifier() exp.IdentifierExpression {
+func (x *PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXXQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type PastaIngredientmodel_embeddings_MODEL_GPT_4_0_XXXQueryType struct {
+type PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXXQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *PastaIngredientDBQueryUnsafe) model_embeddings_MODEL_GPT_4_0_XXX() *PastaIngredientmodel_embeddings_MODEL_GPT_4_0_XXXQueryType {
-	return &PastaIngredientmodel_embeddings_MODEL_GPT_4_0_XXXQueryType{tableName: x.tableName, column: "pb$" + "model_embeddings_2"}
+func (x *PastaIngredientDBQueryUnsafe) ModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXX() *PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXXQueryType {
+	return &PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXXQueryType{tableName: x.tableName, column: "pb$" + "model_embeddings_2"}
 }
 
-func (x *PastaIngredientmodel_embeddings_MODEL_GPT_4_0_XXXQueryType) Identifier() exp.IdentifierExpression {
+func (x *PastaIngredientModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXXQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
@@ -2145,11 +2205,11 @@ func (x *PastaIngredientDBColumns) PBData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
 }
 
-func (x *PastaIngredientDBColumns) model_embeddings_MODEL_GPT_3_5_XXX() exp.Expression {
+func (x *PastaIngredientDBColumns) ModelEmbeddings_PastaIngredient_MODEL_GPT_3_5_XXX() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "model_embeddings_1")
 }
 
-func (x *PastaIngredientDBColumns) model_embeddings_MODEL_GPT_4_0_XXX() exp.Expression {
+func (x *PastaIngredientDBColumns) ModelEmbeddings_PastaIngredient_MODEL_GPT_4_0_XXX() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "model_embeddings_2")
 }
 

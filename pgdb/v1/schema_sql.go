@@ -49,6 +49,8 @@ func index2sql(desc Descriptor, idx *Index) string {
 		// noramlly supporte dy gin, eg, varchar,
 		// but its not actually a new index type!
 		_, _ = buf.WriteString("GIN")
+	case MessageOptions_Index_INDEX_METHOD_HNSW_COSINE:
+		_, _ = buf.WriteString("HNSW")
 	}
 	_, _ = buf.WriteString("\n(\n")
 	if idx.OverrideExpression != "" {
