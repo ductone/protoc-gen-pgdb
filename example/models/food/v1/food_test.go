@@ -22,7 +22,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 	require.NoError(t, err)
 	defer pg.Stop()
 
-	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin; CREATE EXTENSION IF NOT EXISTS vector;")
 	require.NoError(t, err)
 
 	testobjects := []testTable{
@@ -63,14 +63,36 @@ func TestSchemaFoodPasta(t *testing.T) {
 				&PastaIngredient{
 					TenantId: "t1",
 					Id:       "pi1",
+					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
+						{
+							Embedding: []float32{1.0, 2.0, 3.0},
+							Model:     PastaIngredient_MODEL_GPT_4_0_XXX,
+						},
+					},
 				},
 				&PastaIngredient{
 					TenantId: "t2",
 					Id:       "pi2",
+					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
+						{
+							Embedding: []float32{4.0, 5.0, 6.0},
+							Model:     PastaIngredient_MODEL_GPT_3_5_XXX,
+						},
+					},
 				},
 				&PastaIngredient{
 					TenantId: "t3",
 					Id:       "pi3",
+					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
+						{
+							Embedding: []float32{1.0, 2.0, 3.0},
+							Model:     PastaIngredient_MODEL_GPT_4_0_XXX,
+						},
+						{
+							Embedding: []float32{4.0, 5.0, 6.0},
+							Model:     PastaIngredient_MODEL_GPT_3_5_XXX,
+						},
+					},
 				},
 			},
 		},

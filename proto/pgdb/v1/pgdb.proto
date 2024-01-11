@@ -70,6 +70,10 @@ message FieldOptions {
     MESSAGE_BEHAVOIR_EXPAND = 1;
     MESSAGE_BEHAVOIR_OMIT = 2;
     MESSAGE_BEHAVOIR_JSONB = 3;
+    MESSAGE_BEHAVOIR_VECTOR = 4;
   }
   MessageBehavoir message_behavoir = 3;
+
+  // vector size options
+  int32 vector_size = 4;
 }

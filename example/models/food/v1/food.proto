@@ -69,6 +69,30 @@ message PastaIngredient {
   google.protobuf.Timestamp deleted_at = 5;
   string pasta_id = 6 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
   string id = 7 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+  
+  // Map model embedding to their own columns
+  // for each model embedding, add a column to the table
+  // xxx_embedding_1
+  // xxx_embedding_2 
+  // etc for each enum value
+  // testing
+  enum Model {
+    MODEL_UNSPECIFIED = 0;
+    MODEL_GPT_3_5_XXX = 1;
+    MODEL_GPT_4_0_XXX = 2;
+  }
+
+  message ModelEmbedding {
+    option (pgdb.v1.msg).nested_only = true;
+    Model model = 1;
+    repeated float embedding = 2 [(pgdb.v1.options) = {vector_size: 3}];
+  }
+
+  // We want to verify 
+  // 1. Type is repeated
+  // 2. Type is a nested message
+  // 3. Message type has 2 fields, enum type and repeated float type
+  repeated ModelEmbedding model_embeddings = 8 [(pgdb.v1.options) = {message_behavoir: MESSAGE_BEHAVOIR_VECTOR}];
 }
 
 message SauceIngredient {

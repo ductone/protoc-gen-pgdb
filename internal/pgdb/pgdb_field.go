@@ -176,6 +176,8 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			convertDef.IsArray = isArray
 			convertDef.PostgresTypeName = pgTypeJSONB
 			convertDef.TypeConversion = gtPbGenericMsg
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_VECTOR:
+			return nil, nil
 		default:
 			return nil, fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
 				pt, f.FullyQualifiedName(), f.Descriptor().GetType())
@@ -373,5 +375,103 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		},
 		QueryTypeName: ctx.Name(m).String() + "PBData" + "QueryType",
 	}
-	return []*fieldContext{tenantIdField, pkskField, pkField, skField, ftsDataField, pbDataField}, nil
+
+	rv := []*fieldContext{tenantIdField, pkskField, pkField, skField, ftsDataField, pbDataField}
+
+	// iterate message for vector behavior options
+	for _, field := range m.Fields() {
+		ext := pgdb_v1.FieldOptions{}
+		_, err := field.Extension(pgdb_v1.E_Options, &ext)
+		if err != nil {
+			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
+		}
+		if ext.MessageBehavoir != pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_VECTOR {
+			continue
+		}
+		if !field.Type().IsRepeated() {
+			panic(fmt.Errorf("pgdb: vector behavior only supported on repeated fields: %s", field.FullyQualifiedName()))
+		}
+		subMsg := field.Type().Element().Embed()
+		if subMsg == nil {
+			panic(fmt.Errorf("pgdb: vector behavior only supported on message fields: %s", field.FullyQualifiedName()))
+		}
+		allFields := subMsg.Fields()
+		if len(allFields) != 2 {
+			panic(fmt.Errorf("pgdb: vector message must only have model enum and float array: %s", field.FullyQualifiedName()))
+		}
+
+		var enumField pgs.Field
+		var floatField pgs.Field
+		var vectorSize int32
+
+		for _, subField := range allFields {
+			switch subField.Descriptor().GetNumber() {
+			case 1:
+				// enum
+				if subField.Type().ProtoType() != pgs.EnumT {
+					panic(fmt.Errorf("pgdb: vector message must have model enum as first field: %s", field.FullyQualifiedName()))
+				}
+				enumField = subField
+			case 2:
+				// repeated float
+				if !subField.Type().IsRepeated() || subField.Type().Element().ProtoType() != pgs.FloatT {
+					panic(fmt.Errorf("pgdb: vector message must have repeated float as second field: %s", field.FullyQualifiedName()))
+				}
+				subExt := pgdb_v1.FieldOptions{}
+				_, err := subField.Extension(pgdb_v1.E_Options, &subExt)
+				if err != nil {
+					return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
+				}
+				if subExt.VectorSize == 0 {
+					panic(fmt.Errorf("pgdb: vector message must have vector_size set on repeated float field: %s", field.FullyQualifiedName()))
+				}
+				vectorSize = subExt.VectorSize
+				floatField = subField
+			}
+		}
+
+		pgColName, err := getColumnName(field)
+		if err != nil {
+			panic(fmt.Errorf("pgdb: getColumnName failed for: %v: %s (of type %s)",
+				field.Type().ProtoType(), field.FullyQualifiedName(), field.Descriptor().GetType()))
+		}
+
+		// enum values
+		for _, enumValue := range enumField.Type().Enum().Values() {
+			if enumValue.Value() == 0 {
+				// skip the zero value
+				continue
+			}
+
+			goNameString := fmt.Sprintf("%s_%s", field.Name(), enumValue.Name())
+
+			// TODO fix nullibity
+			tempCtx := &fieldContext{
+				ExcludeNested: true,
+				IsVirtual:     true,
+				DB: &pgdb_v1.Column{
+					Name:               fmt.Sprintf("%s_%d", pgColName, enumValue.Value()),
+					Type:               "vector",
+					Nullable:           true,
+					OverrideExpression: fmt.Sprintf("vector(%d)", vectorSize),
+				},
+				GoName:   goNameString, // Generated go struct name
+				DataType: nil,
+				// new struct to implement this
+				Convert: &pbVectorConvert{
+					VarName:        vn.String(),
+					EnumName:       ctx.Name(enumField).String(), // Generated enum name
+					GoName:         ctx.Name(field).String(),     // Generated go struct name
+					EnumModelValue: ctx.Name(enumValue).String(),
+					FloatArrayName: ctx.Name(floatField).String(), // Generated float array name
+				},
+				QueryTypeName: ctx.Name(m).String() + goNameString + "QueryType",
+			}
+			rv = append(rv, tempCtx)
+		}
+
+		break
+	}
+
+	return rv, nil
 }
