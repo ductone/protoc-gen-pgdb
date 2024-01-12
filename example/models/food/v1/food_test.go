@@ -6,9 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	pg_internal "github.com/ductone/protoc-gen-pgdb/internal/pgdb"
+	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,7 +23,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 	require.NoError(t, err)
 	defer pg.Stop()
 
-	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin; CREATE EXTENSION IF NOT EXISTS vector;")
 	require.NoError(t, err)
 
 	testobjects := []testTable{
@@ -63,14 +64,36 @@ func TestSchemaFoodPasta(t *testing.T) {
 				&PastaIngredient{
 					TenantId: "t1",
 					Id:       "pi1",
+					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
+						{
+							Embedding: []float32{},
+							Model:     PastaIngredient_MODEL_GPT_4_0_XXX,
+						},
+					},
 				},
 				&PastaIngredient{
 					TenantId: "t2",
 					Id:       "pi2",
+					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
+						{
+							Embedding: []float32{4.0, 5.0, 6.0},
+							Model:     PastaIngredient_MODEL_GPT_3_5_XXX,
+						},
+					},
 				},
 				&PastaIngredient{
 					TenantId: "t3",
 					Id:       "pi3",
+					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
+						{
+							Embedding: []float32{1.0, 2.0, 3.0},
+							Model:     PastaIngredient_MODEL_GPT_4_0_XXX,
+						},
+						{
+							Embedding: []float32{4.0, 5.0, 6.0},
+							Model:     PastaIngredient_MODEL_GPT_3_5_XXX,
+						},
+					},
 				},
 			},
 		},
@@ -96,6 +119,20 @@ func TestSchemaFoodPasta(t *testing.T) {
 			require.Contains(t, ct, "PARTITION BY LIST")
 		} else {
 			require.NotContains(t, ct, "PARTITION BY LIST")
+		}
+
+		hnswIndexCount := 0
+		for _, line := range schema {
+			if strings.Contains(line, "HNSW") {
+				fmt.Printf("%s \n", line)
+				hnswIndexCount += 1
+			}
+		}
+		fmt.Printf("hnswIndexCount: %d\n", hnswIndexCount)
+		if _, ok := smsg.(*PastaIngredient); ok {
+			require.Equal(t, 2, hnswIndexCount, "Should have 2 hnsw indexes") // 2 enums = 2 indexes
+		} else {
+			require.Equal(t, 0, hnswIndexCount, "Should have 0 hnsw indexes")
 		}
 
 		require.Equal(t, 1,
@@ -218,6 +255,7 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	msg := objects[0]
 	sql, args, err := pgdb_v1.Insert(objects[0])
 	require.NoError(t, err)
+	fmt.Printf("sql: %s\n\n%v\n", sql, args)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
@@ -249,7 +287,7 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	require.NoError(t, rows.Err())
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one row per tenant")
 
-	subTables, err := pg_internal.ReadPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
+	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
 	require.NoError(t, err)
 
 	// Test select each tenant
@@ -282,4 +320,44 @@ func TenantIteratorTest(ctx context.Context, tenantList []string) pgdb_v1.Tenant
 		return tenantId, nil
 	}
 
+}
+
+type sqlScanner interface {
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+}
+
+// this
+func readPartitionSubTables(ctx context.Context, db sqlScanner, desc pgdb_v1.Descriptor) ([]string, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_inherits")
+	qb = qb.Select("child.relname").As("child")
+	qb = qb.Join(goqu.T("pg_class").As("parent"), goqu.On(goqu.I("pg_inherits.inhparent").Eq(goqu.I("parent.oid"))))
+	qb = qb.Join(goqu.T("pg_class").As("child"), goqu.On(goqu.I("pg_inherits.inhrelid").Eq(goqu.I("child.oid"))))
+	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_parent"), goqu.On(goqu.I("nmsp_parent.oid").Eq(goqu.I("parent.relnamespace"))))
+	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_child"), goqu.On(goqu.I("nmsp_child.oid").Eq(goqu.I("child.relnamespace"))))
+	qb = qb.Where(goqu.L("parent.relname = ?", desc.TableName()))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	tables := make([]string, 0)
+	for rows.Next() {
+		var tableName string
+		err = rows.Scan(&tableName)
+		if err != nil {
+			return nil, err
+		}
+		tables = append(tables, tableName)
+	}
+
+	return tables, nil
 }

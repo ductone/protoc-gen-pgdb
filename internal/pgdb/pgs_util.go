@@ -1,12 +1,8 @@
 package pgdb
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/doug-martin/goqu/v9"
-	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	"github.com/jackc/pgx/v5"
 	pgs "github.com/lyft/protoc-gen-star"
 )
 
@@ -41,43 +37,40 @@ func getVersioningField(msg pgs.Message) (string, error) {
 	return "", fmt.Errorf("pgdb: getVersioningField: must have one of %v from '%s'", possibleFields, msg.FullyQualifiedName())
 }
 
-type sqlScanner interface {
-	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
-}
-
-// Get a list of the provided descriptor's partition sub tables.
-
-func ReadPartitionSubTables(ctx context.Context, db sqlScanner, desc pgdb_v1.Descriptor) ([]string, error) {
-	dialect := goqu.Dialect("postgres")
-
-	qb := dialect.From("pg_inherits")
-	qb = qb.Select("child.relname").As("child")
-	qb = qb.Join(goqu.T("pg_class").As("parent"), goqu.On(goqu.I("pg_inherits.inhparent").Eq(goqu.I("parent.oid"))))
-	qb = qb.Join(goqu.T("pg_class").As("child"), goqu.On(goqu.I("pg_inherits.inhrelid").Eq(goqu.I("child.oid"))))
-	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_parent"), goqu.On(goqu.I("nmsp_parent.oid").Eq(goqu.I("parent.relnamespace"))))
-	qb = qb.Join(goqu.T("pg_namespace").As("nmsp_child"), goqu.On(goqu.I("nmsp_child.oid").Eq(goqu.I("child.relnamespace"))))
-	qb = qb.Where(goqu.L("parent.relname = ?", desc.TableName()))
-	query, params, err := qb.ToSQL()
-	if err != nil {
-		return nil, err
+// Checks if the field is a valid vector field shape and if so returns the field data enum, float array, and vector size.
+// Otherwise panics.
+func GetFieldVectorShape(field pgs.Field) (pgs.Field, pgs.Field, error) {
+	if !field.Type().IsRepeated() {
+		panic(fmt.Errorf("pgdb: vector behavior only supported on repeated fields: %s", field.FullyQualifiedName()))
+	}
+	subMsg := field.Type().Element().Embed()
+	if subMsg == nil {
+		panic(fmt.Errorf("pgdb: vector behavior only supported on message fields: %s", field.FullyQualifiedName()))
+	}
+	allFields := subMsg.Fields()
+	if len(allFields) != 2 {
+		panic(fmt.Errorf("pgdb: vector message must only have model enum and float array: %s", field.FullyQualifiedName()))
 	}
 
-	rows, err := db.Query(ctx, query, params...)
-	if err != nil {
-		return nil, err
-	}
+	var enumField pgs.Field
+	var floatField pgs.Field
 
-	defer rows.Close()
-
-	tables := make([]string, 0)
-	for rows.Next() {
-		var tableName string
-		err = rows.Scan(&tableName)
-		if err != nil {
-			return nil, err
+	for _, subField := range allFields {
+		switch subField.Descriptor().GetNumber() {
+		case 1:
+			// enum
+			if subField.Type().ProtoType() != pgs.EnumT {
+				panic(fmt.Errorf("pgdb: vector message must have model enum as first field: %s", field.FullyQualifiedName()))
+			}
+			enumField = subField
+		case 2:
+			// repeated float
+			if !subField.Type().IsRepeated() || subField.Type().Element().ProtoType() != pgs.FloatT {
+				panic(fmt.Errorf("pgdb: vector message must have repeated float as second field: %s", field.FullyQualifiedName()))
+			}
+			floatField = subField
 		}
-		tables = append(tables, tableName)
 	}
 
-	return tables, nil
+	return enumField, floatField, nil
 }

@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"fmt"
+	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -176,6 +177,8 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			convertDef.IsArray = isArray
 			convertDef.PostgresTypeName = pgTypeJSONB
 			convertDef.TypeConversion = gtPbGenericMsg
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_VECTOR:
+			return nil, nil
 		default:
 			return nil, fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
 				pt, f.FullyQualifiedName(), f.Descriptor().GetType())
@@ -373,5 +376,79 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		},
 		QueryTypeName: ctx.Name(m).String() + "PBData" + "QueryType",
 	}
-	return []*fieldContext{tenantIdField, pkskField, pkField, skField, ftsDataField, pbDataField}, nil
+
+	rv := []*fieldContext{tenantIdField, pkskField, pkField, skField, ftsDataField, pbDataField}
+
+	// iterate message for vector behavior options
+	for _, field := range m.Fields() {
+		ext := pgdb_v1.FieldOptions{}
+		_, err := field.Extension(pgdb_v1.E_Options, &ext)
+		if err != nil {
+			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
+		}
+		if ext.MessageBehavoir != pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_VECTOR {
+			continue
+		}
+
+		enumField, floatField, err := GetFieldVectorShape(field)
+		if err != nil {
+			return nil, err
+		}
+
+		subExt := pgdb_v1.FieldOptions{}
+		_, err = floatField.Extension(pgdb_v1.E_Options, &subExt)
+		if err != nil {
+			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
+		}
+		if subExt.VectorSize == 0 {
+			panic(fmt.Errorf("pgdb: vector message must have vector_size set on repeated float field: %s", field.FullyQualifiedName()))
+		}
+
+		pgColName, err := getColumnName(field)
+		if err != nil {
+			panic(fmt.Errorf("pgdb: getColumnName failed for: %v: %s (of type %s)",
+				field.Type().ProtoType(), field.FullyQualifiedName(), field.Descriptor().GetType()))
+		}
+
+		var unspecifiedEnum pgs.EnumValue
+		// enum values
+		for _, enumValue := range enumField.Type().Enum().Values() {
+			if enumValue.Value() == 0 {
+				// skip the zero value
+				unspecifiedEnum = enumValue
+				continue
+			}
+
+			toTrim := strings.TrimSuffix(ctx.Name(unspecifiedEnum).String(), "_UNSPECIFIED")
+
+			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), toTrim)
+
+			tempCtx := &fieldContext{
+				ExcludeNested: true,
+				IsVirtual:     true,
+				DB: &pgdb_v1.Column{
+					Name:               fmt.Sprintf("%s_%d", pgColName, enumValue.Value()),
+					Type:               "vector",
+					Nullable:           true,
+					OverrideExpression: fmt.Sprintf("vector(%d)", subExt.VectorSize),
+				},
+				GoName:   goNameString, // Generated go struct name
+				DataType: nil,
+				// new struct to implement this
+				Convert: &pbVectorConvert{
+					VarName:        vn.String(),
+					EnumName:       ctx.Name(enumField).String(), // Generated enum name
+					GoName:         ctx.Name(field).String(),     // Generated go struct name
+					EnumModelValue: ctx.Name(enumValue).String(),
+					FloatArrayName: ctx.Name(floatField).String(), // Generated float array name
+				},
+				QueryTypeName: ctx.Name(m).String() + goNameString + "QueryType",
+			}
+			rv = append(rv, tempCtx)
+		}
+
+		break
+	}
+
+	return rv, nil
 }
