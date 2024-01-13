@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package models.llm.v1;
+
+option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1";
+
+// Map model embedding to their own columns
+// for each model embedding, add a column to the table
+// xxx_embedding_1
+// xxx_embedding_2
+// etc for each enum value
+// testing
+enum Model {
+  MODEL_UNSPECIFIED = 0;
+  MODEL_GPT_3_5_XXX = 1;
+  MODEL_GPT_4_0_XXX = 2;
+}

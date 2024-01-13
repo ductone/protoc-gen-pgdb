@@ -33,12 +33,21 @@ func (c *importTracker) Type(f pgs.Field) pgsgo.TypeName {
 	return t
 }
 
+func (ix *importTracker) EnumValue(f pgs.Entity, ev pgs.EnumValue) pgsgo.TypeName {
+	if ix.ctx.ImportPath(ev) == ix.ctx.ImportPath(ix.input) {
+		return pgsgo.TypeName(ix.ctx.Name(ev))
+	}
+
+	return pgsgo.TypeName(fmt.Sprintf("%s.%s", ix.importablePackageName(f, ev), ix.ctx.Name(ev).String()))
+}
+
 func (ix *importTracker) importableTypeName(f pgs.Entity, containingEntity pgs.Entity) pgsgo.TypeName {
 	t := pgsgo.TypeName(ix.ctx.Name(containingEntity))
 
 	if ix.ctx.ImportPath(containingEntity) == ix.ctx.ImportPath(f) {
 		return t
 	}
+
 	return pgsgo.TypeName(fmt.Sprintf("%s.%s", ix.importablePackageName(f, containingEntity), t))
 }
 
@@ -47,6 +56,7 @@ func (ix *importTracker) importablePackageName(f pgs.Entity, containingEntity pg
 	if ctx.ImportPath(containingEntity) == ctx.ImportPath(f) {
 		return ""
 	}
+
 	pkgName := ctx.PackageName(containingEntity)
 	importName := ctx.ImportPath(containingEntity)
 	matched, err := regexp.MatchString(`^v(\d)+$`, pkgName.String())

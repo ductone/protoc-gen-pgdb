@@ -439,7 +439,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 					VarName:        vn.String(),
 					EnumName:       ctx.Name(enumField).String(), // Generated enum name
 					GoName:         ctx.Name(field).String(),     // Generated go struct name
-					EnumModelValue: ctx.Name(enumValue).String(),
+					EnumModelValue: ix.EnumValue(field, enumValue).String(),
 					FloatArrayName: ctx.Name(floatField).String(), // Generated float array name
 				},
 				QueryTypeName: ctx.Name(m).String() + goNameString + "QueryType",

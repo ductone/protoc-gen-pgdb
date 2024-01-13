@@ -11,6 +11,8 @@ import (
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/require"
+
+	llm_v1 "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1"
 )
 
 type testTable struct {
@@ -67,7 +69,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
 						{
 							Embedding: []float32{},
-							Model:     PastaIngredient_MODEL_GPT_4_0_XXX,
+							Model:     llm_v1.Model_MODEL_GPT_3_5_XXX,
 						},
 					},
 				},
@@ -77,7 +79,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
 						{
 							Embedding: []float32{4.0, 5.0, 6.0},
-							Model:     PastaIngredient_MODEL_GPT_3_5_XXX,
+							Model:     llm_v1.Model_MODEL_GPT_3_5_XXX,
 						},
 					},
 				},
@@ -87,11 +89,11 @@ func TestSchemaFoodPasta(t *testing.T) {
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
 						{
 							Embedding: []float32{1.0, 2.0, 3.0},
-							Model:     PastaIngredient_MODEL_GPT_4_0_XXX,
+							Model:     llm_v1.Model_MODEL_GPT_4_0_XXX,
 						},
 						{
 							Embedding: []float32{4.0, 5.0, 6.0},
-							Model:     PastaIngredient_MODEL_GPT_3_5_XXX,
+							Model:     llm_v1.Model_MODEL_GPT_3_5_XXX,
 						},
 					},
 				},
