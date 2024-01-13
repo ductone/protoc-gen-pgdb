@@ -6,6 +6,8 @@ import (
 
 	"time"
 
+	llm_v1 "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1"
+
 	"github.com/doug-martin/goqu/v9/exp"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq"
@@ -1361,7 +1363,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		var cfv5 interface{} = nullExp
 		for _, v := range m.self.ModelEmbeddings {
-			if v.Model != PastaIngredient_MODEL_GPT_3_5_XXX {
+			if v.Model != llm_v1.Model_MODEL_GPT_3_5_XXX {
 				continue
 			}
 			if len(v.Embedding) == 0 {
@@ -1382,7 +1384,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		var cfv5 interface{} = nullExp
 		for _, v := range m.self.ModelEmbeddings {
-			if v.Model != PastaIngredient_MODEL_GPT_4_0_XXX {
+			if v.Model != llm_v1.Model_MODEL_GPT_4_0_XXX {
 				continue
 			}
 			if len(v.Embedding) == 0 {

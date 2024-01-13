@@ -12,7 +12,6 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -285,18 +284,19 @@ func findBinPath(binDir string) (string, error) {
 	if binDir == "" {
 		p, err := exec.LookPath("initdb")
 		if err == nil {
-			return path.Dir(p), nil
+			return filepath.Dir(p), nil
 		}
 	}
 
 	folders := []string{
-		binDir,
-		// Look for a PostgreSQL in one of the folders Ubuntu uses
-		"/usr/lib/postgresql",
+		"/usr/lib/postgresql/16/bin",
+		"/usr/lib/postgresql/15/bin",
+		"/usr/lib/postgresql/14/bin",
 		// homebrew!
 		"/usr/local/bin",
 		"/opt/homebrew/bin",
 	}
+
 	for _, folder := range folders {
 		f, err := os.Stat(folder)
 		if os.IsNotExist(err) {
@@ -305,25 +305,9 @@ func findBinPath(binDir string) (string, error) {
 		if !f.IsDir() {
 			continue
 		}
-
-		files, err := os.ReadDir(folder)
-		if err != nil {
-			return "", err
-		}
-		for _, fi := range files {
-			if !fi.IsDir() && fi.Name() == "initdb" {
-				return folder, nil
-			}
-
-			if !fi.IsDir() {
-				continue
-			}
-
-			binPath := filepath.Join(folder, fi.Name(), "bin")
-			_, err := os.Stat(filepath.Join(binPath, "initdb"))
-			if err == nil {
-				return binPath, nil
-			}
+		_, err = os.Stat(filepath.Join(folder, "initdb"))
+		if err == nil {
+			return folder, nil
 		}
 	}
 
