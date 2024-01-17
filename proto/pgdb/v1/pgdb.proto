@@ -74,6 +74,8 @@ message FieldOptions {
     MESSAGE_BEHAVOIR_VECTOR = 4;
   }
   MessageBehavoir message_behavoir = 3;
+  reserved 4;
+  reserved "vector_size";
 }
 
 extend google.protobuf.EnumValueOptions {
