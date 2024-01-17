@@ -74,7 +74,7 @@ message PastaIngredient {
   message ModelEmbedding {
     option (pgdb.v1.msg).nested_only = true;
     models.llm.v1.Model model = 1;
-    repeated float embedding = 2 [(pgdb.v1.options) = {vector_size: 3}];
+    repeated float embedding = 2;
   }
 
   // We want to verify

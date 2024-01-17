@@ -395,15 +395,6 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			return nil, err
 		}
 
-		subExt := pgdb_v1.FieldOptions{}
-		_, err = floatField.Extension(pgdb_v1.E_Options, &subExt)
-		if err != nil {
-			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
-		}
-		if subExt.VectorSize == 0 {
-			panic(fmt.Errorf("pgdb: vector message must have vector_size set on repeated float field: %s", field.FullyQualifiedName()))
-		}
-
 		pgColName, err := getColumnName(field)
 		if err != nil {
 			panic(fmt.Errorf("pgdb: getColumnName failed for: %v: %s (of type %s)",
@@ -419,6 +410,12 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 				continue
 			}
 
+			enumExt := pgdb_v1.EnumValueOptions{}
+			_, err := enumValue.Extension(pgdb_v1.E_Enum, &enumExt)
+			if err != nil {
+				return nil, fmt.Errorf("pgdb: getField: failed to extract enum extension from '%s': %w", enumValue.FullyQualifiedName(), err)
+			}
+
 			toTrim := strings.TrimSuffix(ctx.Name(unspecifiedEnum).String(), "_UNSPECIFIED")
 
 			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), toTrim)
@@ -430,7 +427,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 					Name:               fmt.Sprintf("%s_%d", pgColName, enumValue.Value()),
 					Type:               "vector",
 					Nullable:           true,
-					OverrideExpression: fmt.Sprintf("vector(%d)", subExt.VectorSize),
+					OverrideExpression: fmt.Sprintf("vector(%d)", enumExt.VectorSize),
 				},
 				GoName:   goNameString, // Generated go struct name
 				DataType: nil,

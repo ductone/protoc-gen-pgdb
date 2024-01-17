@@ -998,7 +998,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Name:               df.ColumnName("model_embeddings_1"),
 			Type:               "vector",
 			Nullable:           df.Nullable(true),
-			OverrideExpression: "vector(3)",
+			OverrideExpression: "vector(1536)",
 			Default:            "",
 		})
 
@@ -1010,7 +1010,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Name:               df.ColumnName("model_embeddings_2"),
 			Type:               "vector",
 			Nullable:           df.Nullable(true),
-			OverrideExpression: "vector(3)",
+			OverrideExpression: "vector(736)",
 			Default:            "",
 		})
 
