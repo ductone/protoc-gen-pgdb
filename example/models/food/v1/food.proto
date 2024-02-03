@@ -63,6 +63,10 @@ message PastaIngredient {
       "id"
     ]
   };
+  option (pgdb.v1.msg).stats = {
+    name: "tenant_id_ingredient_id",
+    columns: ["tenant_id", "ingredient_id"],
+  };
   string tenant_id = 1;
   string ingredient_id = 2;
   google.protobuf.Timestamp created_at = 3;

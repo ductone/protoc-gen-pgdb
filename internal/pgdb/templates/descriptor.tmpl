@@ -123,3 +123,26 @@ func (d *{{.ReceiverType}}) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 
   return rv
 }
+
+func (d *{{.ReceiverType}}) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+  io := pgdb_v1.NewStatisticOption(opts)
+  _ = io
+  rv := make([]*pgdb_v1.Statistic, 0)
+  {{ range .Statistics }}
+    {{ if .ExcludeNested }}
+    if !io.IsNested {
+    {{ end }}
+    rv = append(rv, &pgdb_v1.Statistic{
+      Name: io.StatsName("{{ .DB.Name }}"),
+      IsDropped: {{ .DB.IsDropped }},
+      Kinds: []pgdb_v1.MessageOptions_Stat_StatsKind{ {{- range .DB.Kinds -}} pgdb_v1.MessageOptions_Stat_StatsKind({{- .Number -}}), {{- end -}} },
+      Columns: []string{ {{- range .DB.Columns -}} io.ColumnName("{{- . -}}"), {{- end -}} },
+    })
+    {{ if .ExcludeNested }}
+    }
+    {{ end }}
+
+  {{ end }}
+
+  return rv
+}

@@ -252,6 +252,14 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 	return rv
 }
 
+func (d *pgdbDescriptorShop) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
 type ShopMediumType int32
 
 var ShopMedium = struct {
@@ -1083,6 +1091,14 @@ func (d *pgdbDescriptorShop_Manager) Indexes(opts ...pgdb_v1.IndexOptionsFunc) [
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
 	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorShop_Manager) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
 
 	return rv
 }

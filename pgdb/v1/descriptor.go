@@ -19,6 +19,8 @@ type Descriptor interface {
 
 	Indexes(opts ...IndexOptionsFunc) []*Index
 	IndexPrimaryKey(opts ...IndexOptionsFunc) *Index
+
+	Statistics(opts ...StatisticOptionsFunc) []*Statistic
 }
 
 type DescriptorFieldOption struct {
@@ -94,4 +96,12 @@ type Index struct {
 	// OverrideExpression if set, this string is used to render indexes contents, instead of the Columns list.
 	OverrideExpression string
 	WherePredicate     string
+}
+
+type Statistic struct {
+	Name string
+	// this indivates the Stats by this name MAY be dropped, once in IsDropped state, other fields may be empty.
+	IsDropped bool
+	Kinds     []MessageOptions_Stat_StatsKind
+	Columns   []string
 }

@@ -42,6 +42,21 @@ message MessageOptions {
   // if this message is used then we create a partitioned table and partition by
   // tenant_id.
   bool partitioned = 5;
+
+  message Stat {
+    enum StatsKind {
+      STATS_KIND_UNSPECIFIED = 0;
+      STATS_KIND_NDISTINCT = 1;
+      STATS_KIND_DEPENDENCIES = 2;
+      STATS_KIND_MCV = 3;
+    }
+    string name = 1;
+    repeated StatsKind kinds = 2;
+    repeated string columns = 3;
+    // used to indicate the stats by this name can be dropped
+    bool dropped = 4;
+  }
+  repeated Stat stats = 6;
 }
 
 extend google.protobuf.FieldOptions {
@@ -79,10 +94,10 @@ message FieldOptions {
 }
 
 extend google.protobuf.EnumValueOptions {
-    EnumValueOptions enum = 6010;
+  EnumValueOptions enum = 6010;
 }
 
 message EnumValueOptions {
-    // vector size options
-    int32 vector_size = 1;
+  // vector size options
+  int32 vector_size = 1;
 }

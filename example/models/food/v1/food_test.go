@@ -69,7 +69,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
 						{
 							Embedding: []float32{},
-							Model:     llm_v1.Model_MODEL_GPT_3_5_XXX,
+							Model:     llm_v1.Model_MODEL_3DIMS,
 						},
 					},
 				},
@@ -79,7 +79,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
 						{
 							Embedding: []float32{4.0, 5.0, 6.0},
-							Model:     llm_v1.Model_MODEL_GPT_3_5_XXX,
+							Model:     llm_v1.Model_MODEL_3DIMS,
 						},
 					},
 				},
@@ -89,11 +89,11 @@ func TestSchemaFoodPasta(t *testing.T) {
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
 						{
 							Embedding: []float32{1.0, 2.0, 3.0},
-							Model:     llm_v1.Model_MODEL_GPT_4_0_XXX,
+							Model:     llm_v1.Model_MODEL_3DIMS,
 						},
 						{
 							Embedding: []float32{4.0, 5.0, 6.0},
-							Model:     llm_v1.Model_MODEL_GPT_3_5_XXX,
+							Model:     llm_v1.Model_MODEL_3DIMS,
 						},
 					},
 				},
@@ -126,11 +126,11 @@ func TestSchemaFoodPasta(t *testing.T) {
 		hnswIndexCount := 0
 		for _, line := range schema {
 			if strings.Contains(line, "HNSW") {
-				fmt.Printf("%s \n", line)
+				// fmt.Printf("%s \n", line)
 				hnswIndexCount += 1
 			}
 		}
-		fmt.Printf("hnswIndexCount: %d\n", hnswIndexCount)
+		// fmt.Printf("hnswIndexCount: %d\n", hnswIndexCount)
 		if _, ok := smsg.(*PastaIngredient); ok {
 			require.Equal(t, 2, hnswIndexCount, "Should have 2 hnsw indexes") // 2 enums = 2 indexes
 		} else {
@@ -188,7 +188,7 @@ func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflec
 
 func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
 	ctx := context.Background()
-	fmt.Println(tableName)
+	// fmt.Println(tableName)
 	// Verify number of master partition tables
 	partTablesQuery := `SELECT count(t.tablename), t.tablename
 		FROM pg_tables t
@@ -238,7 +238,7 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 
 	for rows.Next() {
 		err = rows.Scan(&parentTable, &childTable)
-		fmt.Printf("parent: %s, child: %s\n", parentTable, childTable)
+		// fmt.Printf("parent: %s, child: %s\n", parentTable, childTable)
 		require.NoError(t, err)
 		require.Equal(t, tableName, parentTable, "Parent table name did not match proto")
 		selectedSubTableNames = append(selectedSubTableNames, childTable)
@@ -246,7 +246,7 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 	}
 
 	require.NoError(t, rows.Err())
-	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one sub-partition table per fake tenant")
+	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one sub-partition table per fake tenant: %v", selectedSubTableNames)
 }
 
 func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, objects []pgdb_v1.DBReflectMessage) {
@@ -257,14 +257,14 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	msg := objects[0]
 	sql, args, err := pgdb_v1.Insert(objects[0])
 	require.NoError(t, err)
-	fmt.Printf("sql: %s\n\n%v\n", sql, args)
+	// fmt.Printf("sql: %s\n\n%v\n", sql, args)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
 	sql, args, err = pgdb_v1.Insert(objects[1])
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
-	require.NoError(t, err)
+	require.NoError(t, err, "Failed to insert object: %v", objects[1])
 
 	sql, args, err = pgdb_v1.Insert(objects[2])
 	require.NoError(t, err)

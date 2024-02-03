@@ -116,6 +116,36 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 	return haveCols, nil
 }
 
+func readStats(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_stats_ext")
+	qb = qb.Select("statistics_name")
+	qb = qb.Where(goqu.L("tablename = ?", desc.TableName()))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	statNames := make(map[string]struct{})
+	for rows.Next() {
+		var stName string
+		err = rows.Scan(&stName)
+		if err != nil {
+			return nil, err
+		}
+		statNames[stName] = struct{}{}
+	}
+	return statNames, nil
+}
+
 func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
 	dialect := goqu.Dialect("postgres")
 
@@ -221,6 +251,31 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 			continue
 		}
 	}
+
+	existingStats, err := readStats(ctx, db, desc)
+	if err != nil {
+		return nil, err
+	}
+	for _, st := range desc.Statistics() {
+
+		_, exists := existingStats[st.Name]
+		query := statistics2sql(desc, st)
+
+		if st.IsDropped {
+			// if it should be dropped, and its still here, byeeee
+			if exists {
+				rv = append(rv, query)
+			}
+			continue
+		}
+
+		// doesn't exist, but should, lets go!
+		if !exists {
+			rv = append(rv, query)
+			continue
+		}
+	}
+
 	return rv, nil
 }
 
