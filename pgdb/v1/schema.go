@@ -256,8 +256,8 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	if err != nil {
 		return nil, err
 	}
-	for _, st := range desc.Statistics() {
 
+	for _, st := range desc.Statistics() {
 		_, exists := existingStats[st.Name]
 		query := statistics2sql(desc, st)
 
