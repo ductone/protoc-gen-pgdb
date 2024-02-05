@@ -16,6 +16,7 @@ type descriptorTemplateContext struct {
 	Fields          []*fieldContext
 	NestedFields    []*nestedFieldContext
 	Indexes         []*indexContext
+	Statistics      []*statsContext
 	VersioningField string
 	IsPartitioned   bool
 }
@@ -52,6 +53,7 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		Fields:          fields,
 		NestedFields:    mestedFields,
 		Indexes:         module.getMessageIndexes(ctx, m, ix),
+		Statistics:      module.getMessageStatistics(ctx, m, ix),
 		TableName:       tableName,
 		VersioningField: vf,
 		IsPartitioned:   fext.Partitioned,

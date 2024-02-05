@@ -328,6 +328,14 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 	return rv
 }
 
+func (d *pgdbDescriptorPet) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
 type pgdbMessagePet struct {
 	self *Pet
 }
@@ -1800,6 +1808,14 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("repeated_sfixed32"), io.ColumnName("repeated_sfixed64"), io.ColumnName("repeated_double"), io.ColumnName("repeated_bytes"), io.ColumnName("string_map")},
 		OverrideExpression: "",
 	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorScalarValue) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
 
 	return rv
 }
@@ -3654,6 +3670,14 @@ func (d *pgdbDescriptorEBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_
 	return rv
 }
 
+func (d *pgdbDescriptorEBook) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
 type pgdbMessageEBook struct {
 	self *EBook
 }
@@ -3825,6 +3849,14 @@ func (d *pgdbDescriptorPaperBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*p
 	io := pgdb_v1.NewIndexOptions(opts)
 	_ = io
 	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorPaperBook) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
 
 	return rv
 }
@@ -4158,6 +4190,14 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 		})
 
 	}
+
+	return rv
+}
+
+func (d *pgdbDescriptorBook) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
 
 	return rv
 }
@@ -5089,6 +5129,14 @@ func (d *pgdbDescriptorNewspaper) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*p
 		})
 
 	}
+
+	return rv
+}
+
+func (d *pgdbDescriptorNewspaper) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
 
 	return rv
 }

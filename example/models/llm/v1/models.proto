@@ -14,6 +14,6 @@ option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1";
 // testing
 enum Model {
   MODEL_UNSPECIFIED = 0;
-  MODEL_GPT_3_5_XXX = 1 [(pgdb.v1.enum).vector_size = 1536];
-  MODEL_GPT_4_0_XXX = 2 [(pgdb.v1.enum).vector_size = 736];
+  MODEL_3DIMS= 1 [(pgdb.v1.enum).vector_size = 3];
+  MODEL_4DIMS = 2 [(pgdb.v1.enum).vector_size = 4];
 }

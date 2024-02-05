@@ -116,6 +116,56 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 	return haveCols, nil
 }
 
+func readStats(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
+	dialect := goqu.Dialect("postgres")
+
+	/*
+		SELECT
+		  se.stxname AS statistics_name,
+		  n.nspname AS schema_name,
+		  c.relname AS table_name
+		FROM
+		  pg_statistic_ext se
+		JOIN
+		  pg_class c ON c.oid = se.stxrelid
+		JOIN
+		  pg_namespace n ON n.oid = c.relnamespace
+		WHERE
+		  c.relname = 'pb_pasta_ingredient_models_food_v1_0565c036'
+		  AND n.nspname = 'public';
+	*/
+	qb := dialect.From("pg_statistic_ext")
+	qb = qb.Select("pg_statistic_ext.stxname")
+	qb = qb.Join(goqu.T("pg_class"), goqu.On(goqu.I("pg_class.oid").Eq(goqu.I("pg_statistic_ext.stxrelid"))))
+	qb = qb.Join(goqu.T("pg_namespace"), goqu.On(goqu.I("pg_namespace.oid").Eq(goqu.I("pg_class.relnamespace"))))
+	qb = qb.Where(goqu.L("pg_class.relname = ?", desc.TableName()))
+	qb = qb.Where(goqu.L("pg_namespace.nspname = ?", "public"))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+	// spew.Dump(query, params)
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	// CREATE STATISTICS IF NOT EXISTS "pq_test_stat" ON "pb$tenant_id","pb$lifecycle" FROM "pb_tenant_c1_models_innkeeper_v1_d0c77352"
+	statNames := make(map[string]struct{})
+	for rows.Next() {
+		var stName string
+		err = rows.Scan(&stName)
+		if err != nil {
+			return nil, err
+		}
+		statNames[stName] = struct{}{}
+	}
+	// spew.Dump(statNames)
+	return statNames, nil
+}
+
 func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
 	dialect := goqu.Dialect("postgres")
 
@@ -221,6 +271,31 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 			continue
 		}
 	}
+
+	existingStats, err := readStats(ctx, db, desc)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, st := range desc.Statistics() {
+		_, exists := existingStats[st.Name]
+		query := statistics2sql(desc, st)
+
+		if st.IsDropped {
+			// if it should be dropped, and its still here, byeeee
+			if exists {
+				rv = append(rv, query)
+			}
+			continue
+		}
+
+		// doesn't exist, but should, lets go!
+		if !exists {
+			rv = append(rv, query)
+			continue
+		}
+	}
+
 	return rv, nil
 }
 

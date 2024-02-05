@@ -69,6 +69,47 @@ func index2sql(desc Descriptor, idx *Index) string {
 	return buf.String()
 }
 
+func statistics2sql(desc Descriptor, st *Statistic) string {
+	buf := &bytes.Buffer{}
+
+	if st.IsDropped {
+		_, _ = buf.WriteString("DROP STATISTICS")
+		_, _ = buf.WriteString(" IF EXISTS ")
+		pgWriteString(buf, st.Name)
+		return buf.String()
+	}
+
+	_, _ = buf.WriteString("CREATE STATISTICS")
+	_, _ = buf.WriteString(" IF NOT EXISTS ")
+	pgWriteString(buf, st.Name)
+	kinds := st.Kinds
+	if len(kinds) != 0 {
+		_, _ = buf.WriteString("(")
+		_, _ = buf.WriteString(strings.Join(slice.Convert(kinds, func(in MessageOptions_Stat_StatsKind) string {
+			switch in {
+			case MessageOptions_Stat_STATS_KIND_NDISTINCT:
+				return "ndistinct"
+			case MessageOptions_Stat_STATS_KIND_DEPENDENCIES:
+				return "dependencies"
+			case MessageOptions_Stat_STATS_KIND_MCV:
+				return "mcv"
+			default:
+				panic("MessageOptions_Stat_STATS_KIND_UNSPECIFIED found on " + st.Name)
+			}
+		}), ","))
+
+		_, _ = buf.WriteString(")")
+	}
+	_, _ = buf.WriteString(" ON ")
+	_, _ = buf.WriteString(strings.Join(slice.Convert(st.Columns, func(in string) string {
+		return `"` + in + `"`
+	}), ","))
+	_, _ = buf.WriteString(" FROM ")
+	pgWriteString(buf, desc.TableName())
+	_, _ = buf.WriteString("\n")
+	return buf.String()
+}
+
 func pgWriteString(buf *bytes.Buffer, input string) {
 	_, _ = buf.WriteString(`"`)
 	// TODO(pquerna): not completely correct escaping
