@@ -210,6 +210,7 @@ func start(config *PGConfig) (*PG, error) {
 	if config.IsPersistent {
 		fmt.Printf("pg dsn: %v\n", dsn) //nolint:forbidigo
 	}
+	// spew.Dump(dsn)
 
 	pgConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {

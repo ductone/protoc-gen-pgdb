@@ -82,6 +82,24 @@ func statistics2sql(desc Descriptor, st *Statistic) string {
 	_, _ = buf.WriteString("CREATE STATISTICS")
 	_, _ = buf.WriteString(" IF NOT EXISTS ")
 	pgWriteString(buf, st.Name)
+	kinds := st.Kinds
+	if len(kinds) != 0 {
+		_, _ = buf.WriteString("(")
+		_, _ = buf.WriteString(strings.Join(slice.Convert(kinds, func(in MessageOptions_Stat_StatsKind) string {
+			switch in {
+			case MessageOptions_Stat_STATS_KIND_NDISTINCT:
+				return "ndistinct"
+			case MessageOptions_Stat_STATS_KIND_DEPENDENCIES:
+				return "dependencies"
+			case MessageOptions_Stat_STATS_KIND_MCV:
+				return "mcv"
+			default:
+				panic("MessageOptions_Stat_STATS_KIND_UNSPECIFIED found on " + st.Name)
+			}
+		}), ","))
+
+		_, _ = buf.WriteString(")")
+	}
 	_, _ = buf.WriteString(" ON ")
 	_, _ = buf.WriteString(strings.Join(slice.Convert(st.Columns, func(in string) string {
 		return `"` + in + `"`

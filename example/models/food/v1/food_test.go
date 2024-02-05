@@ -143,7 +143,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 		)
 
 		_, err = pg.DB.Exec(ctx, `ALTER TABLE `+smsg.DBReflect().Descriptor().TableName()+` DROP COLUMN "pb$id"`)
-		require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to drop col id")
+		require.NoError(t, err, "TestSchemaFoodPasta: failed to drop col id")
 
 		schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
 		require.NoError(t, err)
@@ -156,6 +156,14 @@ func TestSchemaFoodPasta(t *testing.T) {
 			ct = schema[0]
 			require.Contains(t, ct, "ALTER TABLE")
 		}
+
+		for _, line := range schema {
+			_, err = pg.DB.Exec(ctx, line)
+			require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to repair table: '%s'", line)
+		}
+		schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
+		require.NoError(t, err)
+		require.Len(t, schema, 0, "Should have no migrations after repair")
 
 		fakeTenantIds := []string{"t1", "t2", "t3"}
 		protoTableName := smsg.DBReflect().Descriptor().TableName()
