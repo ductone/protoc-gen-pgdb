@@ -1,0 +1,9 @@
+var {{ .VarName }} *string
+if {{ .InputName }} != "" {
+    {{ .VarName }}tmp, err := netip.ParseAddr({{ .InputName }})
+    if err != nil {
+        return nil, err
+    }
+    {{ .VarName }}val := {{ .VarName }}tmp.String()
+    {{ .VarName }} = &{{ .VarName }}val
+}

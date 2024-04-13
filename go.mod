@@ -7,6 +7,7 @@ require (
 	github.com/clipperhouse/uax29 v1.12.5
 	github.com/davecgh/go-spew v1.1.1
 	github.com/doug-martin/goqu/v9 v9.19.0
+	github.com/gaissmai/extnetip v0.4.0
 	github.com/jackc/pgx/v5 v5.5.5
 	github.com/lyft/protoc-gen-star v0.6.2
 	github.com/pquerna/protoc-gen-dynamo v0.4.0

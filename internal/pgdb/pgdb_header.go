@@ -22,6 +22,7 @@ type importTracker struct {
 	Strconv              bool
 	Time                 bool
 	PgType               bool
+	NetIP                bool
 
 	ctx   pgsgo.Context
 	input pgs.File

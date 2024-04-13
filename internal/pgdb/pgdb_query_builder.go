@@ -65,6 +65,9 @@ type safeOps struct {
 	In    bool
 	NotIn bool
 
+	// For Inet types, special case a IPNet Range matcher
+	InIPNet bool
+
 	// exp.Isable -- we only export a subset to support IS NULL / NOT NULL, use Eq for equality
 	IsNull    bool
 	IsNotNull bool
@@ -184,18 +187,21 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 
 		isArray := false
 		isJSONB := false
+		isInet := false
 		isText := false
 
 		if f.DB != nil {
 			isArray = f.DB.Type[0] == '_'
 			isJSONB = f.DB.Type == "jsonb"
 			isText = f.DB.Type == "text" || f.DB.Type == "varchar"
+			isInet = f.DB.Type == "inet"
 		}
 		_, isSupportedArrayType := xpq.SupportedArrayGoTypes[inputType]
-		ops := safeOpsForIndexTypes(methods, isArray && isSupportedArrayType, isJSONB, isText)
+		ops := safeOpsForIndexTypes(methods, isArray && isSupportedArrayType, isJSONB, isText, isInet)
 
 		ix.JSON = ix.JSON || isJSONB
-		ix.XPQ = ix.XPQ || ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists || (isArray && isSupportedArrayType)
+		ix.XPQ = ix.XPQ || ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists || (isArray && isSupportedArrayType) || isInet
+		ix.NetIP = ix.NetIP || isInet
 
 		rv = append(rv, &safeFieldContext{
 			InputType:   inputType,
@@ -211,7 +217,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 	return rv
 }
 
-func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSuportedArrayType bool, isJSONB bool, isText bool) *safeOps {
+func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSuportedArrayType bool, isJSONB bool, isText bool, isInet bool) *safeOps {
 	indexMethods := make(map[pgdb_v1.MessageOptions_Index_IndexMethod]bool)
 	for _, m := range input {
 		indexMethods[m] = true
@@ -230,6 +236,7 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 		Lt:           safeOpCheck(indexMethods, btree),
 		Lte:          safeOpCheck(indexMethods, btree),
 		In:           safeOpCheck(indexMethods, btree),
+		InIPNet:      safeOpCheck(indexMethods, btree) && isInet,
 		NotIn:        safeOpCheck(indexMethods, btree),
 		IsNull:       safeOpCheck(indexMethods, btree),
 		IsNotNull:    safeOpCheck(indexMethods, btree),

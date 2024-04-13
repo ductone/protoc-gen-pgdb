@@ -116,14 +116,28 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		defaultValue = "false"
 		nullable = false
 	case pgs.StringT:
-		// TODO(pquerna): annotations for max size
-		convertDef.PostgresTypeName = "text"
-		convertDef.IsArray = isArray
-		convertDef.TypeConversion = gtString
-		convertDef.FullTextType = ext.FullTextType
-		convertDef.FullTextWeight = ext.FullTextWeight
-		defaultValue = "''"
-		nullable = false
+		switch ext.MessageBehavoir {
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
+			// TODO(pquerna): annotations for max size
+			convertDef.PostgresTypeName = "text"
+			convertDef.IsArray = isArray
+			convertDef.TypeConversion = gtString
+			convertDef.FullTextType = ext.FullTextType
+			convertDef.FullTextWeight = ext.FullTextWeight
+			defaultValue = "''"
+			nullable = false
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_INET_ADDR:
+			if isArray {
+				return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s: arrays of inet addr not supported", pt, f.FullyQualifiedName())
+			}
+
+			convertDef.PostgresTypeName = "inet"
+			convertDef.TypeConversion = gtInetAddr
+			defaultValue = "NULL"
+			nullable = true
+		default:
+			return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s: MessageBehavoir not supported on string type", pt, f.FullyQualifiedName())
+		}
 	case pgs.MessageT:
 		switch ext.MessageBehavoir {
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
