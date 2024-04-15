@@ -60,8 +60,8 @@ func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 		pt := field.Type().ProtoType()
 		if pt == pgs.MessageT {
 			if !strings.HasPrefix(field.Descriptor().GetTypeName(), ".google.protobuf") &&
-				(ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_EXPAND ||
-					ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED) {
+				(ext.MessageBehavior == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_EXPAND ||
+					ext.MessageBehavior == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED) {
 				fdc.NestedFieldNames = append(fdc.NestedFieldNames, fdc.ctx.Name(field).String())
 			}
 		}
