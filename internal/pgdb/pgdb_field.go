@@ -45,7 +45,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err)
 	}
 
-	if ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_OMIT {
+	if ext.MessageBehavior == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_OMIT {
 		// explict option to just not store this in postgres
 		return nil, nil
 	}
@@ -116,7 +116,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		defaultValue = "false"
 		nullable = false
 	case pgs.StringT:
-		switch ext.MessageBehavoir {
+		switch ext.MessageBehavior {
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED:
 			// TODO(pquerna): annotations for max size
 			convertDef.PostgresTypeName = "text"
@@ -136,10 +136,10 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			defaultValue = "NULL"
 			nullable = true
 		default:
-			return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s: MessageBehavoir not supported on string type", pt, f.FullyQualifiedName())
+			return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s: MessageBehavior not supported on string type", pt, f.FullyQualifiedName())
 		}
 	case pgs.MessageT:
-		switch ext.MessageBehavoir {
+		switch ext.MessageBehavior {
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED:
 			switch f.Descriptor().GetTypeName() {
 			case ".google.protobuf.Any":
@@ -400,7 +400,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		if err != nil {
 			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
 		}
-		if ext.MessageBehavoir != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
+		if ext.MessageBehavior != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
 			continue
 		}
 

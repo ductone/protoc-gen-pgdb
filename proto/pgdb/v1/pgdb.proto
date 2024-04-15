@@ -93,7 +93,7 @@ message FieldOptions {
     // Must be a string representation of an IP address.
     MESSAGE_BEHAVIOR_INET_ADDR = 5;
   }
-  MessageBehavior message_behavoir = 3;
+  MessageBehavior message_behavior = 3;
   reserved 4;
   reserved "vector_size";
 }

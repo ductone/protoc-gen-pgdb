@@ -186,7 +186,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		if err != nil {
 			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
 		}
-		if ext.MessageBehavoir != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
+		if ext.MessageBehavior != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
 			continue
 		}
 
