@@ -65,8 +65,8 @@ type safeOps struct {
 	In    bool
 	NotIn bool
 
-	// For Inet types, special case a IPNet Range matcher
-	InIPNet bool
+	// For Inet types, special case a IP Prefix Range matcher (using BETWEEN for btree purposes)
+	InNetworkPrefix bool
 
 	// exp.Isable -- we only export a subset to support IS NULL / NOT NULL, use Eq for equality
 	IsNull    bool
@@ -230,19 +230,19 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 		Eq: safeOpCheck(indexMethods, btree, btreeGin, gin),
 		// not acutally safe!
 		// Neq:                safeOpCheck(indexMethods, btree),
-		IsNotEmpty:   safeOpCheck(indexMethods, btree) && isText,
-		Gt:           safeOpCheck(indexMethods, btree),
-		Gte:          safeOpCheck(indexMethods, btree),
-		Lt:           safeOpCheck(indexMethods, btree),
-		Lte:          safeOpCheck(indexMethods, btree),
-		In:           safeOpCheck(indexMethods, btree),
-		InIPNet:      safeOpCheck(indexMethods, btree) && isInet,
-		NotIn:        safeOpCheck(indexMethods, btree),
-		IsNull:       safeOpCheck(indexMethods, btree),
-		IsNotNull:    safeOpCheck(indexMethods, btree),
-		Between:      safeOpCheck(indexMethods, btree),
-		NotBetween:   safeOpCheck(indexMethods, btree),
-		ArrayOverlap: safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,
+		IsNotEmpty:      safeOpCheck(indexMethods, btree) && isText,
+		Gt:              safeOpCheck(indexMethods, btree),
+		Gte:             safeOpCheck(indexMethods, btree),
+		Lt:              safeOpCheck(indexMethods, btree),
+		Lte:             safeOpCheck(indexMethods, btree),
+		In:              safeOpCheck(indexMethods, btree),
+		InNetworkPrefix: safeOpCheck(indexMethods, btree) && isInet,
+		NotIn:           safeOpCheck(indexMethods, btree),
+		IsNull:          safeOpCheck(indexMethods, btree),
+		IsNotNull:       safeOpCheck(indexMethods, btree),
+		Between:         safeOpCheck(indexMethods, btree),
+		NotBetween:      safeOpCheck(indexMethods, btree),
+		ArrayOverlap:    safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,
 		// This is a bit of a misnomer. It's usually unsafe, but we want to include it if ArrayOverlap exists
 		ArrayNotOverlap: safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,
 		ArrayContains:   safeOpCheck(indexMethods, btreeGin, gin) && isSuportedArrayType,

@@ -2686,7 +2686,7 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if err != nil {
 			return nil, err
 		}
-		v5val := v5tmp.String()
+		v5val := v5tmp.Unmap().String()
 		v5 = &v5val
 	}
 

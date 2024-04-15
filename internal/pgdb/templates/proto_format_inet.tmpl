@@ -4,6 +4,6 @@ if {{ .InputName }} != "" {
     if err != nil {
         return nil, err
     }
-    {{ .VarName }}val := {{ .VarName }}tmp.String()
+    {{ .VarName }}val := {{ .VarName }}tmp.Unmap().String()
     {{ .VarName }} = &{{ .VarName }}val
 }

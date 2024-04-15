@@ -7,5 +7,6 @@ import (
 )
 
 func NetworkRange(p netip.Prefix) (netip.Addr, netip.Addr) {
-	return extnetip.Range(p)
+	start, end := extnetip.Range(p)
+	return start.Unmap(), end.Unmap()
 }

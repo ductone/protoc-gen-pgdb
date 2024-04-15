@@ -112,7 +112,7 @@ message ScalarValue {
   repeated bytes repeated_bytes = 37;
   repeated FurType repeated_enum = 38;
 
-  map<string, string> string_map = 39 [(pgdb.v1.options) = {message_behavoir: MESSAGE_BEHAVOIR_JSONB}];
+  map<string, string> string_map = 39 [(pgdb.v1.options) = {message_behavoir: MESSAGE_BEHAVIOR_JSONB}];
 
   google.protobuf.Timestamp created_at = 40;
   google.protobuf.StringValue str_ptr = 100;
