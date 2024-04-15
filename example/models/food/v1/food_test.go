@@ -3,10 +3,12 @@ package v1
 import (
 	"context"
 	"fmt"
+	"net/netip"
 	"strings"
 	"testing"
 
 	"github.com/doug-martin/goqu/v9"
+	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/jackc/pgx/v5"
@@ -48,16 +50,19 @@ func TestSchemaFoodPasta(t *testing.T) {
 		{
 			objects: []pgdb_v1.DBReflectMessage{
 				&SauceIngredient{
-					TenantId: "t1",
-					Id:       "s1",
+					TenantId:   "t1",
+					Id:         "s1",
+					SourceAddr: "127.0.0.1",
 				},
 				&SauceIngredient{
-					TenantId: "t2",
-					Id:       "s2",
+					TenantId:   "t2",
+					Id:         "s2",
+					SourceAddr: "1.2.3.4",
 				},
 				&SauceIngredient{
-					TenantId: "t3",
-					Id:       "s3",
+					TenantId:   "t3",
+					Id:         "s3",
+					SourceAddr: "2001:db8:abcd:12::1",
 				},
 			},
 		},
@@ -370,4 +375,76 @@ func readPartitionSubTables(ctx context.Context, db sqlScanner, desc pgdb_v1.Des
 	}
 
 	return tables, nil
+}
+
+func TestSchemaSauceIngredientNetworkRange(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	require.NoError(t, err)
+
+	schema, err := pgdb_v1.CreateSchema(&SauceIngredient{})
+	require.NoError(t, err)
+	for _, line := range schema {
+		// fmt.Printf("%s \n", line)
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "TestSchemaSauceIngredientNetworkRange: failed to execute sql: '\n%s\n'", line)
+	}
+
+	data := []*SauceIngredient{
+		{
+			TenantId:   "t1",
+			Id:         "s1",
+			SourceAddr: "127.0.0.1",
+		},
+		{
+			TenantId:   "t2",
+			Id:         "s2",
+			SourceAddr: "1.2.3.4",
+		},
+		{
+			TenantId:   "t3",
+			Id:         "s3",
+			SourceAddr: "2001:db8:abcd:12::1",
+		},
+	}
+
+	for _, row := range data {
+		sql, args, err := pgdb_v1.Insert(row)
+		require.NoError(t, err)
+		_, err = pg.DB.Exec(ctx, sql, args...)
+		require.NoError(t, err)
+	}
+
+	nilSI := (*SauceIngredient)(nil)
+	tableName := nilSI.DB().TableName()
+	fields := nilSI.DB().Query()
+
+	inRange := fields.SourceAddr().InNetworkPrefix(netip.MustParsePrefix("1.2.3.0/24"))
+
+	qb := goqu.Dialect("postgres")
+	query, args, err := qb.Select(
+		exp.NewAliasExpression(fields.TenantId().Identifier(), "tenant_id"),
+		exp.NewAliasExpression(fields.SourceAddr().Identifier(), "source_addr"),
+	).From(tableName).
+		Where(inRange).
+		ToSQL()
+	require.NoError(t, err)
+	rows, err := pg.DB.Query(ctx, query, args...)
+	require.NoError(t, err)
+	defer rows.Close()
+	count := 0
+	for rows.Next() {
+		count++
+		values, err := rows.Values()
+		require.NoError(t, err)
+		require.Equal(t, []any{
+			"t2",
+			netip.MustParsePrefix("1.2.3.4/32"),
+		}, values)
+	}
+	require.Equal(t, 1, count)
 }

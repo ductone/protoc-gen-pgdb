@@ -125,6 +125,14 @@ func  (x *{{ .OpsTypeName }}) IsNotNull() exp.BooleanExpression {
 }
 {{end}}
 
+{{if .Op.InNetworkPrefix }}
+func  (x *{{ .OpsTypeName }}) InNetworkPrefix(cidr netip.Prefix) exp.RangeExpression {
+    start, end := xpq.NetworkRange(cidr)
+    return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start.String(), end.String()))
+}
+{{end}}
+
+
 {{if .Op.Between }}
 func  (x *{{ .OpsTypeName }}) Between(start {{.InputType}}, end {{.InputType}}) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))

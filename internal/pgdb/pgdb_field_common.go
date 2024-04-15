@@ -48,6 +48,7 @@ const (
 	gtPbNestedMsg      goTypeConversion = 16
 	gtPbWktBoolValue   goTypeConversion = 17
 	gtPbWktStringValue goTypeConversion = 18
+	gtInetAddr         goTypeConversion = 19
 )
 
 type formatContext struct {
@@ -95,6 +96,8 @@ func (fc *fieldConvert) GoType() (string, error) {
 		return "invalid", nil
 	case gtPbNestedMsg:
 		return string(fc.ctx.Type(fc.F)), nil
+	case gtInetAddr:
+		return "string", nil
 	default:
 		panic(fmt.Errorf("pgdb: Implement fieldConvert.GoType for %v", fc.TypeConversion))
 	}
@@ -158,6 +161,12 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			InputName: selfName,
 			CastType:  fieldConvertString,
 			IsArray:   fc.IsArray,
+		})
+	case gtInetAddr:
+		fc.ix.NetIP = true
+		return templateExecToString("proto_format_inet.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
 		})
 	case gtBytes:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{

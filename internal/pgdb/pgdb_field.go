@@ -45,7 +45,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err)
 	}
 
-	if ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT {
+	if ext.MessageBehavoir == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_OMIT {
 		// explict option to just not store this in postgres
 		return nil, nil
 	}
@@ -116,17 +116,31 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		defaultValue = "false"
 		nullable = false
 	case pgs.StringT:
-		// TODO(pquerna): annotations for max size
-		convertDef.PostgresTypeName = "text"
-		convertDef.IsArray = isArray
-		convertDef.TypeConversion = gtString
-		convertDef.FullTextType = ext.FullTextType
-		convertDef.FullTextWeight = ext.FullTextWeight
-		defaultValue = "''"
-		nullable = false
+		switch ext.MessageBehavoir {
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED:
+			// TODO(pquerna): annotations for max size
+			convertDef.PostgresTypeName = "text"
+			convertDef.IsArray = isArray
+			convertDef.TypeConversion = gtString
+			convertDef.FullTextType = ext.FullTextType
+			convertDef.FullTextWeight = ext.FullTextWeight
+			defaultValue = "''"
+			nullable = false
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_INET_ADDR:
+			if isArray {
+				return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s: arrays of inet addr not supported", pt, f.FullyQualifiedName())
+			}
+
+			convertDef.PostgresTypeName = "inet"
+			convertDef.TypeConversion = gtInetAddr
+			defaultValue = "NULL"
+			nullable = true
+		default:
+			return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s: MessageBehavoir not supported on string type", pt, f.FullyQualifiedName())
+		}
 	case pgs.MessageT:
 		switch ext.MessageBehavoir {
-		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_UNSPECIFIED:
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED:
 			switch f.Descriptor().GetTypeName() {
 			case ".google.protobuf.Any":
 				if isArray {
@@ -163,21 +177,21 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 				convertDef.TypeConversion = gtPbNestedMsg
 				convertDef.NestedPrefix = getNestedName(f)
 			}
-		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_OMIT:
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_OMIT:
 			// explict option to just not store this in postgres
 			return nil, nil
-		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_EXPAND:
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_EXPAND:
 			if isArray {
 				return nil, fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s): Arrays cannot be nested; consider jsonb",
 					pt, f.FullyQualifiedName(), f.Descriptor().GetType())
 			}
 			convertDef.TypeConversion = gtPbNestedMsg
 			convertDef.NestedPrefix = getNestedName(f)
-		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_JSONB:
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_JSONB:
 			convertDef.IsArray = isArray
 			convertDef.PostgresTypeName = pgTypeJSONB
 			convertDef.TypeConversion = gtPbGenericMsg
-		case pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_VECTOR:
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR:
 			return nil, nil
 		default:
 			return nil, fmt.Errorf("pgdb: unsupported message field type: %v: %s (of type %s)",
@@ -386,7 +400,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		if err != nil {
 			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
 		}
-		if ext.MessageBehavoir != pgdb_v1.FieldOptions_MESSAGE_BEHAVOIR_VECTOR {
+		if ext.MessageBehavoir != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
 			continue
 		}
 

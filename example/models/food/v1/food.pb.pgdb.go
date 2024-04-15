@@ -4,6 +4,7 @@ package v1
 import (
 	"strings"
 
+	"net/netip"
 	"time"
 
 	llm_v1 "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1"
@@ -2386,6 +2387,14 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Default:            "",
 	})
 
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("source_addr"),
+		Type:               "inet",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "NULL",
+	})
+
 	return rv
 }
 
@@ -2489,6 +2498,16 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 		})
 
 	}
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("source_addr_index_sauce_ingredient_mode_af6b7a10"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("source_addr")},
+		OverrideExpression: "",
+	})
 
 	return rv
 }
@@ -2659,6 +2678,22 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		rv[ro.ColumnName("deleted_at")] = nullExp
 	} else {
 		rv[ro.ColumnName("deleted_at")] = v4
+	}
+
+	var v5 *string
+	if m.self.GetSourceAddr() != "" {
+		v5tmp, err := netip.ParseAddr(m.self.GetSourceAddr())
+		if err != nil {
+			return nil, err
+		}
+		v5val := v5tmp.Unmap().String()
+		v5 = &v5val
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("source_addr")] = nullExp
+	} else {
+		rv[ro.ColumnName("source_addr")] = v5
 	}
 
 	return rv, nil
@@ -2982,6 +3017,68 @@ func (x *SauceIngredientDBQueryBuilder) FTSData() *SauceIngredientFTSDataSafeOpe
 	return &SauceIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
+type SauceIngredientSourceAddrSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) In(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) InNetworkPrefix(cidr netip.Prefix) exp.RangeExpression {
+	start, end := xpq.NetworkRange(cidr)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start.String(), end.String()))
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *SauceIngredientSourceAddrSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *SauceIngredientDBQueryBuilder) SourceAddr() *SauceIngredientSourceAddrSafeOperators {
+	return &SauceIngredientSourceAddrSafeOperators{tableName: x.tableName, column: "pb$" + "source_addr"}
+}
+
 type SauceIngredientTenantIdQueryType struct {
 	column    string
 	tableName string
@@ -3112,6 +3209,19 @@ func (x *SauceIngredientDeletedAtQueryType) Identifier() exp.IdentifierExpressio
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type SauceIngredientSourceAddrQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *SauceIngredientDBQueryUnsafe) SourceAddr() *SauceIngredientSourceAddrQueryType {
+	return &SauceIngredientSourceAddrQueryType{tableName: x.tableName, column: "pb$" + "source_addr"}
+}
+
+func (x *SauceIngredientSourceAddrQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 func (x *SauceIngredientDBColumns) WithTable(t string) *SauceIngredientDBColumns {
 	return &SauceIngredientDBColumns{tableName: t}
 }
@@ -3154,6 +3264,10 @@ func (x *SauceIngredientDBColumns) UpdatedAt() exp.Expression {
 
 func (x *SauceIngredientDBColumns) DeletedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
+}
+
+func (x *SauceIngredientDBColumns) SourceAddr() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "source_addr")
 }
 
 type pgdbDescriptorPastaIngredient_ModelEmbedding struct{}

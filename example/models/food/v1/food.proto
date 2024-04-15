@@ -85,7 +85,7 @@ message PastaIngredient {
   // 1. Type is repeated
   // 2. Type is a nested message
   // 3. Message type has 2 fields, enum type and repeated float type
-  repeated ModelEmbedding model_embeddings = 8 [(pgdb.v1.options) = {message_behavoir: MESSAGE_BEHAVOIR_VECTOR}];
+  repeated ModelEmbedding model_embeddings = 8 [(pgdb.v1.options) = {message_behavoir: MESSAGE_BEHAVIOR_VECTOR}];
 }
 
 message SauceIngredient {
@@ -96,9 +96,18 @@ message SauceIngredient {
     ]
     sk_const: "examplesauce"
   };
+  option (pgdb.v1.msg).indexes = {
+    name: "source_addr_index"
+    method: INDEX_METHOD_BTREE,
+    columns: [
+      "tenant_id",
+      "source_addr"
+    ]
+  };
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp updated_at = 4;
   google.protobuf.Timestamp deleted_at = 5;
+  string source_addr = 6 [(pgdb.v1.options) = {message_behavoir: MESSAGE_BEHAVIOR_INET_ADDR}];
 }

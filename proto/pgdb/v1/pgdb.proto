@@ -81,14 +81,19 @@ message FieldOptions {
   FullTextType full_text_type = 1;
   FullTextWeight full_text_weight = 2;
 
-  enum MessageBehavoir {
-    MESSAGE_BEHAVOIR_UNSPECIFIED = 0;
-    MESSAGE_BEHAVOIR_EXPAND = 1;
-    MESSAGE_BEHAVOIR_OMIT = 2;
-    MESSAGE_BEHAVOIR_JSONB = 3;
-    MESSAGE_BEHAVOIR_VECTOR = 4;
+  enum MessageBehavior {
+    MESSAGE_BEHAVIOR_UNSPECIFIED = 0;
+    MESSAGE_BEHAVIOR_EXPAND = 1;
+    MESSAGE_BEHAVIOR_OMIT = 2;
+    MESSAGE_BEHAVIOR_JSONB = 3;
+
+    // Must be a repeated sub-Message which contains a model id and a repeated float vector.
+    MESSAGE_BEHAVIOR_VECTOR = 4;
+
+    // Must be a string representation of an IP address.
+    MESSAGE_BEHAVIOR_INET_ADDR = 5;
   }
-  MessageBehavoir message_behavoir = 3;
+  MessageBehavior message_behavoir = 3;
   reserved 4;
   reserved "vector_size";
 }
