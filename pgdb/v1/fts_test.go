@@ -19,11 +19,17 @@ func TestSearchBigQueryDoc(t *testing.T) {
 
 	// example compound document, a "ID", a "display name", and a "description"
 	someObjectID := "2DmNjwzqyfzisCFmt0OrPvwJ3gT"
+	someAliasName := "gcp_prod_thing"
 	vector := FullTextSearchVectors([]*SearchContent{
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_EXACT,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
 			Value:  someObjectID,
+		},
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_EXACT,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  someAliasName,
 		},
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
@@ -40,6 +46,9 @@ func TestSearchBigQueryDoc(t *testing.T) {
 
 	// Test exact ID matching
 	requireQueryTrue(t, pg, vector, someObjectID)
+
+	// Test exact Alias matching
+	requireQueryTrue(t, pg, vector, someAliasName)
 
 	// this is a new random ksuid, and... it shouldn't match!
 	requireQueryFalse(t, pg, vector, "2DmnMTq8tK41cqz1b1KSnVkDUmr")
