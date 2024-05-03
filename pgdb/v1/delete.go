@@ -29,9 +29,7 @@ func Delete(msg DBReflectMessage) (string, []any, error) {
 
 	qb := goqu.Dialect("postgres")
 	q := qb.Delete(tableName).Prepared(true).Where(
-		exp.NewLiteralExpression("?", versionField.Name).Eq(
-			record[versionField.Name],
-		),
+		goqu.I(versionField.Name).Eq(record[versionField.Name]),
 	)
 
 	for _, colName := range primaryIndex.Columns {
@@ -40,14 +38,14 @@ func Delete(msg DBReflectMessage) (string, []any, error) {
 			if err != nil {
 				return "", nil, err
 			}
-			q = q.Where(exp.NewLiteralExpression("?", colName).Eq(pksk))
+			q = q.Where(goqu.I(colName).Eq(pksk))
 		} else {
 			colValue, ok := record[colName]
 			if !ok {
 				return "", nil, errors.New("pgdb_v1: primary key missing from message; unable to delete without " + colName)
 			}
 
-			q = q.Where(exp.NewLiteralExpression("?", colName).Eq(
+			q = q.Where(goqu.I(colName).Eq(
 				colValue,
 			))
 		}

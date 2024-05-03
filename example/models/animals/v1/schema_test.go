@@ -5,12 +5,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
-	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/stretchr/testify/require"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
+
+	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
 
 func TestSchemaPet(t *testing.T) {
@@ -122,9 +123,9 @@ func TestSchemaPet(t *testing.T) {
 
 	query, params, err = pgdb_v1.Delete(insertMsg2)
 	require.NoError(t, err)
-	_, err = pg.DB.Exec(ctx, query, params...)
+	res, err := pg.DB.Exec(ctx, query, params...)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
-	// require.Equal(t, 1, res.RowsAffected())
+	require.Equal(t, int64(1), res.RowsAffected())
 }
 
 func TestSchemaBook(t *testing.T) {
