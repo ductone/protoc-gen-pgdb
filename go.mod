@@ -1,6 +1,6 @@
 module github.com/ductone/protoc-gen-pgdb
 
-go 1.21
+go 1.22
 
 require (
 	github.com/clipperhouse/jargon v1.0.9
@@ -10,10 +10,10 @@ require (
 	github.com/gaissmai/extnetip v0.4.0
 	github.com/jackc/pgx/v5 v5.5.5
 	github.com/lyft/protoc-gen-star v0.6.2
-	github.com/pquerna/protoc-gen-dynamo v0.4.0
+	github.com/pquerna/protoc-gen-dynamo v0.5.0
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8
-	google.golang.org/protobuf v1.33.0
+	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
+	google.golang.org/protobuf v1.34.0
 )
 
 require (
@@ -31,7 +31,7 @@ require (
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/text v0.15.0 // indirect
 	golang.org/x/tools v0.20.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
