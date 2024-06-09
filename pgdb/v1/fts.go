@@ -357,12 +357,19 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
 	filters = append(filters, additionalFilters...)
 
-	jargon.TokenizeString(input)
 	terms, _ := jargon.TokenizeString(input).Filter(filters...).String()
 	stemmedTerms, _ := jargon.TokenizeString(input).Filter(stemmer.English).String()
 
 	terms = cleanToken(terms)
 	stemmedTerms = cleanToken(stemmedTerms)
+
+	// often for simple queries, once fully stemmed, we get the same values!
+	if terms == stemmedTerms {
+		return exp.NewLiteralExpression(
+			"(websearch_to_tsquery('simple', ?))",
+			terms)
+	}
+
 	return exp.NewLiteralExpression(
 		"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
 		terms, stemmedTerms)
