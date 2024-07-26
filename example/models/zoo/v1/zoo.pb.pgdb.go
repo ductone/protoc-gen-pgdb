@@ -134,7 +134,7 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
-		Default:            "",
+		Default:            "0",
 	})
 
 	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
