@@ -30,6 +30,7 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 			Name:     pgColName,
 			Type:     dbTypeRef.Name,
 			Nullable: false,
+			Default:  "0",
 		},
 		DataType: dbTypeRef,
 		Convert: &oneofDataConvert{
