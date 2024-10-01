@@ -77,6 +77,7 @@ func (ofdc *oneofDataConvert) CodeForValue() (string, error) {
 	}
 	for _, field := range ofdc.oneof.Fields() {
 		c.Fields = append(c.Fields, &oneofMemberField{
+			//nolint:gosec // overflow not possible
 			FieldNumber: uint32(*field.Descriptor().Number),
 			GoType:      ofdc.ctx.OneofOption(field).String(),
 			Field:       field,
@@ -115,6 +116,7 @@ func (ofdc *oneofDataConvert) EnumForValue() (string, error) {
 	}
 	for _, field := range ofdc.oneof.Fields() {
 		c.Fields = append(c.Fields, &oneofMemberField{
+			//nolint:gosec // overflow not possible
 			FieldNumber: uint32(*field.Descriptor().Number),
 			GoType:      field.Name().UpperCamelCase().String(),
 			Field:       field,
