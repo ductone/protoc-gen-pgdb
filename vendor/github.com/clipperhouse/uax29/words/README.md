@@ -1,4 +1,4 @@
-An implementation of word boundaries from [Unicode text segmentation](https://unicode.org/reports/tr29/#Word_Boundaries) (UAX 29), for Unicode version 13.0.0.
+An implementation of word boundaries from [Unicode text segmentation](https://unicode.org/reports/tr29/#Word_Boundaries) (UAX 29), for Unicode version 15.0.0.
 
 ## Quick start
 
@@ -30,7 +30,7 @@ _Note: this package will return all tokens, including whitespace and punctuation
 
 We use the Unicode [test suite](https://unicode.org/reports/tr41/tr41-26.html#Tests29). Status:
 
-![Go](https://github.com/clipperhouse/uax29/workflows/Go/badge.svg)
+![Go](https://github.com/clipperhouse/uax29/actions/workflows/gotest.yml/badge.svg)
 
 ## APIs
 
@@ -79,7 +79,7 @@ if scanner.Err() != nil {                       // Check the error
 
 ### Performance
 
-On a Mac laptop, we see around 100MB/s, which works out to around 30 million words (tokens, really) per second.
+On a Mac M2 laptop, we see around 160MB/s, which works out to around 40 million words (tokens, really) per second.
 
 You should see approximately constant memory when using `Segmenter` or `Scanner`, independent of data size. When using `SegmentAll()`, expect memory to be `O(n)` on the number of words (one slice per word, 24 bytes).
 

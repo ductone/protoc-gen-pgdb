@@ -1,4 +1,4 @@
-An implementation of grapheme cluster boundaries from [Unicode text segmentation](https://unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries) (UAX 29), for Unicode version 13.0.0.
+An implementation of grapheme cluster boundaries from [Unicode text segmentation](https://unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries) (UAX 29), for Unicode version 15.0.0.
 
 ## Quick start
 
@@ -30,7 +30,7 @@ _A grapheme is a “single visible character”, which might be a simple as a si
 
 We use the Unicode [test suite](https://unicode.org/reports/tr41/tr41-26.html#Tests29). Status:
 
-![Go](https://github.com/clipperhouse/uax29/workflows/Go/badge.svg)
+![Go](https://github.com/clipperhouse/uax29/actions/workflows/gotest.yml/badge.svg)
 
 ## APIs
 
