@@ -93,13 +93,6 @@ func sha256String(input string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 var initCachedConnInfo sync.Once
 var cachedConnInfo *pgtype.Map
 
