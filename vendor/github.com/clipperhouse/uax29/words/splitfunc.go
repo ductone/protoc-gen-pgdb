@@ -1,7 +1,5 @@
 package words
 
-import "unicode/utf8"
-
 var trie = newWordsTrie(0)
 
 // is determines if lookup intersects propert(ies)
@@ -25,8 +23,27 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 	var pos, w int
 	var current property
 
+	var lastExIgnore property     // "last excluding ignored categories"
+	var lastLastExIgnore property // "the last one before that"
+	var regionalIndicatorCount int
+
+	// https://unicode.org/reports/tr29/#WB1
+	{
+		// Start of text always advances
+		current, w = trie.lookup(data[pos:])
+		if w == 0 {
+			if !atEOF {
+				// Rune extends past current data, request more
+				return 0, nil, nil
+			}
+			pos = len(data)
+			return pos, data[:pos], nil
+		}
+
+		pos += w
+	}
+
 	for {
-		sot := pos == 0         // "start of text"
 		eot := pos == len(data) // "end of text"
 
 		if eot {
@@ -43,6 +60,10 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 		// to the right of the ×, from which we look back or forward
 
 		last := current
+		if !last.is(_Ignore) {
+			lastLastExIgnore = lastExIgnore
+			lastExIgnore = last
+		}
 
 		current, w = trie.lookup(data[pos:])
 		if w == 0 {
@@ -53,12 +74,6 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 			}
 			// Rune extends past current data, request more
 			return 0, nil, nil
-		}
-
-		// https://unicode.org/reports/tr29/#WB1
-		if sot {
-			pos += w
-			continue
 		}
 
 		// Optimization: no rule can possibly apply
@@ -101,201 +116,115 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 		// The previous/subsequent methods are shorthand for "seek a property but skip over Extend|Format|ZWJ on the way"
 
 		// https://unicode.org/reports/tr29/#WB5
+		if current.is(_AHLetter) && lastExIgnore.is(_AHLetter) {
+			pos += w
+			continue
+		}
+
+		// https://unicode.org/reports/tr29/#WB6
+		if current.is(_MidLetter|_MidNumLetQ) && lastExIgnore.is(_AHLetter) {
+			found, more := subsequent(_AHLetter, data[pos+w:], atEOF)
+
+			if more {
+				// Token extends past current data, request more
+				return 0, nil, nil
+			}
+
+			if found {
+				pos += w
+				continue
+			}
+		}
+
+		// https://unicode.org/reports/tr29/#WB7
+		if current.is(_AHLetter) && lastExIgnore.is(_MidLetter|_MidNumLetQ|_Ignore) && lastLastExIgnore.is(_AHLetter) {
+			pos += w
+			continue
+		}
+
+		// https://unicode.org/reports/tr29/#WB7a
+		if current.is(_SingleQuote) && lastExIgnore.is(_HebrewLetter) {
+			pos += w
+			continue
+		}
+
+		// https://unicode.org/reports/tr29/#WB7b
+		if current.is(_DoubleQuote) && lastExIgnore.is(_HebrewLetter|_Ignore) {
+			found, more := subsequent(_HebrewLetter, data[pos+w:], atEOF)
+
+			if more {
+				// Token extends past current data, request more
+				return 0, nil, nil
+			}
+
+			if found {
+				pos += w
+				continue
+			}
+		}
+
+		// https://unicode.org/reports/tr29/#WB7c
+		if current.is(_HebrewLetter) && lastExIgnore.is(_DoubleQuote|_Ignore) && lastLastExIgnore.is(_HebrewLetter) {
+			pos += w
+			continue
+		}
+
 		// https://unicode.org/reports/tr29/#WB8
 		// https://unicode.org/reports/tr29/#WB9
 		// https://unicode.org/reports/tr29/#WB10
-		if current.is(_Numeric|_AHLetter) && last.is(_Numeric|_AHLetter|_Ignore) {
-			// Hot path: WB5/8/9/10 applies, and maybe a run
-			if last.is(_Numeric | _AHLetter) {
-				pos += w
-				for pos < len(data) {
-					lookup, w2 := trie.lookup(data[pos:])
-
-					if !lookup.is(_Numeric | _AHLetter) {
-						break
-					}
-
-					// Update stateful vars
-					current = lookup
-					w = w2
-
-					pos += w
-				}
-				continue
-			}
-
-			// Otherwise, do proper lookback
-			if previous(_Numeric|_AHLetter, data[:pos]) {
-				pos += w
-				continue
-			}
+		if current.is(_Numeric|_AHLetter) && lastExIgnore.is(_Numeric|_AHLetter) {
+			pos += w
+			continue
 		}
-
-		// Optimization: determine if WB6 can possibly apply
-		maybeWB6 := current.is(_MidLetter|_MidNumLetQ) && last.is(_AHLetter|_Ignore)
-
-		// https://unicode.org/reports/tr29/#WB6
-		if maybeWB6 {
-			if subsequent(_AHLetter, data[pos+w:]) && previous(_AHLetter, data[:pos]) {
-				pos += w
-				continue
-			}
-		}
-
-		// Optimization: determine if WB7 can possibly apply
-		maybeWB7 := current.is(_AHLetter) && last.is(_MidLetter|_MidNumLetQ|_Ignore)
-
-		// https://unicode.org/reports/tr29/#WB7
-		if maybeWB7 {
-			i := previousIndex(_MidLetter|_MidNumLetQ, data[:pos])
-			if i > 0 && previous(_AHLetter, data[:i]) {
-				pos += w
-				continue
-			}
-		}
-
-		// Optimization: determine if WB7a can possibly apply
-		maybeWB7a := current.is(_SingleQuote) && last.is(_HebrewLetter|_Ignore)
-
-		// https://unicode.org/reports/tr29/#WB7a
-		if maybeWB7a {
-			if previous(_HebrewLetter, data[:pos]) {
-				pos += w
-				continue
-			}
-		}
-
-		// Optimization: determine if WB7b can possibly apply
-		maybeWB7b := current.is(_DoubleQuote) && last.is(_HebrewLetter|_Ignore)
-
-		// https://unicode.org/reports/tr29/#WB7b
-		if maybeWB7b {
-			if subsequent(_HebrewLetter, data[pos+w:]) && previous(_HebrewLetter, data[:pos]) {
-				pos += w
-				continue
-			}
-		}
-
-		// Optimization: determine if WB7c can possibly apply
-		maybeWB7c := current.is(_HebrewLetter) && last.is(_DoubleQuote|_Ignore)
-
-		// https://unicode.org/reports/tr29/#WB7c
-		if maybeWB7c {
-			i := previousIndex(_DoubleQuote, data[:pos])
-			if i > 0 && previous(_HebrewLetter, data[:i]) {
-				pos += w
-				continue
-			}
-		}
-
-		// Optimization: determine if WB11 can possibly apply
-		maybeWB11 := current.is(_Numeric) && last.is(_MidNum|_MidNumLetQ|_Ignore)
 
 		// https://unicode.org/reports/tr29/#WB11
-		if maybeWB11 {
-			i := previousIndex(_MidNum|_MidNumLetQ, data[:pos])
-			if i > 0 && previous(_Numeric, data[:i]) {
-				pos += w
-				continue
-			}
+		if current.is(_Numeric) && lastExIgnore.is(_MidNum|_MidNumLetQ) && lastLastExIgnore.is(_Numeric) {
+			pos += w
+			continue
 		}
 
-		// Optimization: determine if WB12 can possibly apply
-		maybeWB12 := current.is(_MidNum|_MidNumLetQ) && last.is(_Numeric|_Ignore)
-
 		// https://unicode.org/reports/tr29/#WB12
-		if maybeWB12 {
-			if subsequent(_Numeric, data[pos+w:]) && previous(_Numeric, data[:pos]) {
+		if current.is(_MidNum|_MidNumLetQ) && lastExIgnore.is(_Numeric) {
+			found, more := subsequent(_Numeric, data[pos+w:], atEOF)
+
+			if more {
+				// Token extends past current data, request more
+				return 0, nil, nil
+			}
+
+			if found {
 				pos += w
 				continue
 			}
 		}
 
 		// https://unicode.org/reports/tr29/#WB13
-		if current.is(_Katakana) && last.is(_Katakana|_Ignore) {
-			// Hot path: WB13 applies, and maybe a run
-			if last.is(_Katakana) {
-				pos += w
-				for pos < len(data) {
-					lookup, w2 := trie.lookup(data[pos:])
-
-					if !lookup.is(_Katakana) {
-						break
-					}
-
-					// Update stateful vars
-					current = lookup
-					w = w2
-
-					pos += w
-				}
-				continue
-			}
-
-			// Otherwise, do proper lookback
-			if previous(_Katakana, data[:pos]) {
-				pos += w
-				continue
-			}
+		if current.is(_Katakana) && lastExIgnore.is(_Katakana) {
+			pos += w
+			continue
 		}
-
-		// Optimization: determine if WB13a can possibly apply
-		maybeWB13a := current.is(_ExtendNumLet) && last.is(_AHLetter|_Numeric|_Katakana|_ExtendNumLet|_Ignore)
 
 		// https://unicode.org/reports/tr29/#WB13a
-		if maybeWB13a {
-			if previous(_AHLetter|_Numeric|_Katakana|_ExtendNumLet, data[:pos]) {
-				pos += w
-				continue
-			}
+		if current.is(_ExtendNumLet) && lastExIgnore.is(_AHLetter|_Numeric|_Katakana|_ExtendNumLet) {
+			pos += w
+			continue
 		}
-
-		// Optimization: determine if WB13b can possibly apply
-		maybeWB13b := current.is(_AHLetter|_Numeric|_Katakana) && last.is(_ExtendNumLet|_Ignore)
 
 		// https://unicode.org/reports/tr29/#WB13b
-		if maybeWB13b {
-			if previous(_ExtendNumLet, data[:pos]) {
-				pos += w
-				continue
-			}
+		if current.is(_AHLetter|_Numeric|_Katakana) && lastExIgnore.is(_ExtendNumLet) {
+			pos += w
+			continue
 		}
 
-		// Optimization: determine if WB15 or WB16 can possibly apply
-		maybeWB1516 := current.is(_RegionalIndicator) && last.is(_RegionalIndicator|_Ignore)
+		maybeWB1516 := current.is(_RegionalIndicator) && lastExIgnore.is(_RegionalIndicator)
 
 		// https://unicode.org/reports/tr29/#WB15 and
 		// https://unicode.org/reports/tr29/#WB16
 		if maybeWB1516 {
-			// WB15: Odd number of RI before hitting start of text
-			// WB16: Odd number of RI before hitting [^RI], aka "not RI"
+			regionalIndicatorCount++
 
-			i := pos
-			count := 0
-
-			for i > 0 {
-				_, w := utf8.DecodeLastRune(data[:i])
-				i -= w
-
-				lookup, _ := trie.lookup(data[i:])
-
-				if lookup.is(_Ignore) {
-					continue
-				}
-
-				if !lookup.is(_RegionalIndicator) {
-					// It's WB16
-					break
-				}
-
-				count++
-			}
-
-			// If i == 0, we fell through and hit sot (start of text), so WB15 applies
-			// If i > 0, we hit a non-RI, so WB16 applies
-
-			oddRI := count%2 == 1
-			if oddRI {
+			odd := regionalIndicatorCount%2 == 1
+			if odd {
 				pos += w
 				continue
 			}

@@ -1,7 +1,5 @@
 package graphemes
 
-import "unicode/utf8"
-
 var trie = newGraphemesTrie(0)
 
 // is determines if lookup intersects propert(ies)
@@ -20,9 +18,27 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 	// These vars are stateful across loop iterations
 	var pos, w int
 	var current property
+	var lastExIgnore property = 0     // "last excluding ignored categories"
+	var lastLastExIgnore property = 0 // "last one before that"
+	var regionalIndicatorCount int
+
+	// https://unicode.org/reports/tr29/#GB1
+	{
+		// Start of text always advances
+		current, w = trie.lookup(data[pos:])
+		if w == 0 {
+			if !atEOF {
+				// Rune extends past current data, request more
+				return 0, nil, nil
+			}
+			pos = len(data)
+			return pos, data[:pos], nil
+		}
+
+		pos += w
+	}
 
 	for {
-		sot := pos == 0         // "start of text"
 		eot := pos == len(data) // "end of text"
 
 		if eot {
@@ -45,7 +61,10 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 		// to the right of the ×, from which we look back or forward
 
 		last := current
-		lastw := w
+		if !last.is(_Ignore) {
+			lastLastExIgnore = lastExIgnore
+			lastExIgnore = last
+		}
 
 		current, w = trie.lookup(data[pos:])
 		if w == 0 {
@@ -56,12 +75,6 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 			}
 			// Rune extends past current data, request more
 			return 0, nil, nil
-		}
-
-		// https://unicode.org/reports/tr29/#GB1
-		if sot {
-			pos += w
-			continue
 		}
 
 		// Optimization: no rule can possibly apply
@@ -76,12 +89,8 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 		}
 
 		// https://unicode.org/reports/tr29/#GB4
-		if last.is(_Control | _CR | _LF) {
-			break
-		}
-
 		// https://unicode.org/reports/tr29/#GB5
-		if current.is(_Control | _CR | _LF) {
+		if (current | last).is(_Control | _CR | _LF) {
 			break
 		}
 
@@ -121,37 +130,26 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 			continue
 		}
 
+		// https://unicode.org/reports/tr29/#GB9c
+		// TODO(clipperhouse):
+		// It appears to be added in Unicode 15.1.0:
+		// https://unicode.org/versions/Unicode15.1.0/#Migration
+		// This package currently supports Unicode 15.0.0, so
+		// out of scope for now
+
 		// https://unicode.org/reports/tr29/#GB11
-		if current.is(_ExtendedPictographic) && last.is(_ZWJ) && previous(_ExtendedPictographic, data[:pos-lastw]) {
+		if current.is(_ExtendedPictographic) && last.is(_ZWJ) && lastLastExIgnore.is(_ExtendedPictographic) {
 			pos += w
 			continue
 		}
 
-		// https://unicode.org/reports/tr29/#GB12 and
+		// https://unicode.org/reports/tr29/#GB12
 		// https://unicode.org/reports/tr29/#GB13
 		if (current & last).is(_RegionalIndicator) {
-			i := pos
-			count := 0
+			regionalIndicatorCount++
 
-			for i > 0 {
-				_, w := utf8.DecodeLastRune(data[:i])
-				i -= w
-
-				lookup, _ := trie.lookup(data[i:])
-
-				if !lookup.is(_RegionalIndicator) {
-					// It's GB13
-					break
-				}
-
-				count++
-			}
-
-			// If i == 0, we fell through and hit sot (start of text), so GB12 applies
-			// If i > 0, we hit a non-RI, so GB13 applies
-
-			oddRI := count%2 == 1
-			if oddRI {
+			odd := regionalIndicatorCount%2 == 1
+			if odd {
 				pos += w
 				continue
 			}
