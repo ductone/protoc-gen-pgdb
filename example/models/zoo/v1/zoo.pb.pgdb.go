@@ -619,10 +619,16 @@ func (x *ShopTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *ShopTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ShopTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -680,10 +686,16 @@ func (x *ShopPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *ShopPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ShopPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -741,10 +753,16 @@ func (x *ShopPKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *ShopPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ShopPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -802,10 +820,16 @@ func (x *ShopSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *ShopSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ShopSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 

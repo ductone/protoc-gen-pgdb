@@ -664,10 +664,16 @@ func (x *AttractionsTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *AttractionsTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -725,10 +731,16 @@ func (x *AttractionsPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *AttractionsPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -786,10 +798,16 @@ func (x *AttractionsPKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *AttractionsPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -847,10 +865,16 @@ func (x *AttractionsSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *AttractionsSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -925,10 +949,16 @@ func (x *AttractionsWhatSafeOperators) Lte(v AttractionsWhatType) exp.BooleanExp
 }
 
 func (x *AttractionsWhatSafeOperators) In(v []AttractionsWhatType) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsWhatSafeOperators) NotIn(v []AttractionsWhatType) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -982,10 +1012,16 @@ func (x *AttractionsIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *AttractionsIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1103,10 +1139,16 @@ func (x *AttractionsZooShopMediumSafeOperators) Lte(v zoo_v1.ShopMediumType) exp
 }
 
 func (x *AttractionsZooShopMediumSafeOperators) In(v []zoo_v1.ShopMediumType) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsZooShopMediumSafeOperators) NotIn(v []zoo_v1.ShopMediumType) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1194,10 +1236,16 @@ func (x *AttractionsMediumMediumSafeOperators) Lte(v zoo_v1.ShopMediumType) exp.
 }
 
 func (x *AttractionsMediumMediumSafeOperators) In(v []zoo_v1.ShopMediumType) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *AttractionsMediumMediumSafeOperators) NotIn(v []zoo_v1.ShopMediumType) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 

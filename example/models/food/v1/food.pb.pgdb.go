@@ -504,10 +504,16 @@ func (x *PastaTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PastaTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -565,10 +571,16 @@ func (x *PastaPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PastaPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -626,10 +638,16 @@ func (x *PastaPKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PastaPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -687,10 +705,16 @@ func (x *PastaSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PastaSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1581,10 +1605,16 @@ func (x *PastaIngredientTenantIdSafeOperators) Lte(v string) exp.BooleanExpressi
 }
 
 func (x *PastaIngredientTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaIngredientTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1642,10 +1672,16 @@ func (x *PastaIngredientPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PastaIngredientPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaIngredientPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1703,10 +1739,16 @@ func (x *PastaIngredientPKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PastaIngredientPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaIngredientPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1764,10 +1806,16 @@ func (x *PastaIngredientSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PastaIngredientSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaIngredientSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1868,10 +1916,16 @@ func (x *PastaIngredientIngredientIdSafeOperators) Lte(v string) exp.BooleanExpr
 }
 
 func (x *PastaIngredientIngredientIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaIngredientIngredientIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1929,10 +1983,16 @@ func (x *PastaIngredientPastaIdSafeOperators) Lte(v string) exp.BooleanExpressio
 }
 
 func (x *PastaIngredientPastaIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaIngredientPastaIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -1990,10 +2050,16 @@ func (x *PastaIngredientIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PastaIngredientIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PastaIngredientIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -2786,10 +2852,16 @@ func (x *SauceIngredientTenantIdSafeOperators) Lte(v string) exp.BooleanExpressi
 }
 
 func (x *SauceIngredientTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *SauceIngredientTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -2847,10 +2919,16 @@ func (x *SauceIngredientPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *SauceIngredientPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *SauceIngredientPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -2908,10 +2986,16 @@ func (x *SauceIngredientPKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *SauceIngredientPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *SauceIngredientPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -2969,10 +3053,16 @@ func (x *SauceIngredientSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *SauceIngredientSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *SauceIngredientSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -3047,10 +3137,16 @@ func (x *SauceIngredientSourceAddrSafeOperators) Lte(v string) exp.BooleanExpres
 }
 
 func (x *SauceIngredientSourceAddrSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *SauceIngredientSourceAddrSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 

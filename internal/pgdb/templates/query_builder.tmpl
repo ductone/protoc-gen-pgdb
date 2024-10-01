@@ -96,12 +96,18 @@ func  (x *{{ .OpsTypeName }}) Lte(v {{.InputType}}) exp.BooleanExpression {
 
 {{if .Op.In }}
 func  (x *{{ .OpsTypeName }}) In(v []{{.InputType}}) exp.BooleanExpression {
+    if len(v) == 0 {
+        return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+    }
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 {{end}}
 
 {{if .Op.NotIn }}
 func  (x *{{ .OpsTypeName }}) NotIn(v []{{.InputType}}) exp.BooleanExpression {
+    if len(v) == 0 {
+        return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+    }
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 {{end}}
