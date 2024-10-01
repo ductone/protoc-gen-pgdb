@@ -377,13 +377,9 @@ func readPartitionSubTables(ctx context.Context, db sqlScanner, desc pgdb_v1.Des
 	return tables, nil
 }
 
-func TestSchemaSauceIngredientNetworkRange(t *testing.T) {
+func fxitureSchemaSauceIngredient(t *testing.T, pg *pgtest.PG) {
 	ctx := context.Background()
-	pg, err := pgtest.Start()
-	require.NoError(t, err)
-	defer pg.Stop()
-
-	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	_, err := pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
 	schema, err := pgdb_v1.CreateSchema(&SauceIngredient{})
@@ -418,6 +414,15 @@ func TestSchemaSauceIngredientNetworkRange(t *testing.T) {
 		_, err = pg.DB.Exec(ctx, sql, args...)
 		require.NoError(t, err)
 	}
+}
+
+func TestSchemaSauceIngredientNetworkRange(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	fxitureSchemaSauceIngredient(t, pg)
 
 	nilSI := (*SauceIngredient)(nil)
 	tableName := nilSI.DB().TableName()
@@ -447,4 +452,56 @@ func TestSchemaSauceIngredientNetworkRange(t *testing.T) {
 		}, values)
 	}
 	require.Equal(t, 1, count)
+
+}
+
+func TestSchemaSauceIngredientInBehavoirs(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+	fxitureSchemaSauceIngredient(t, pg)
+
+	nilSI := (*SauceIngredient)(nil)
+	tableName := nilSI.DB().TableName()
+	fields := nilSI.DB().Query()
+
+	tc := []struct {
+		name  string
+		count int
+		query exp.Expression
+	}{
+		{
+			name:  "emptyInQuery",
+			count: 0,
+			query: fields.SourceAddr().In([]string{}),
+		},
+	}
+
+	qb := goqu.Dialect("postgres")
+
+	for _, tx := range tc {
+		t.Run(tx.name, func(t *testing.T) {
+			query, args, err := qb.Select(
+				exp.NewAliasExpression(fields.TenantId().Identifier(), "tenant_id"),
+				exp.NewAliasExpression(fields.SourceAddr().Identifier(), "source_addr"),
+			).From(tableName).
+				Where(tx.query).
+				ToSQL()
+			require.NoError(t, err)
+
+			rows, err := pg.DB.Query(ctx, query, args...)
+			require.NoError(t, err)
+			defer rows.Close()
+
+			count := 0
+			for rows.Next() {
+				count++
+				_, err := rows.Values()
+				require.NoError(t, err)
+			}
+			require.Equal(t, tx.count, count)
+		})
+
+	}
 }

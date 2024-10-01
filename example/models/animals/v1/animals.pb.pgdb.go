@@ -697,10 +697,16 @@ func (x *PetTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PetTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PetTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -758,10 +764,16 @@ func (x *PetPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PetPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PetPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -819,10 +831,16 @@ func (x *PetPKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PetPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PetPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -880,10 +898,16 @@ func (x *PetSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *PetSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *PetSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -2390,10 +2414,16 @@ func (x *ScalarValueTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *ScalarValueTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ScalarValueTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -2451,10 +2481,16 @@ func (x *ScalarValuePKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *ScalarValuePKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ScalarValuePKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -2512,10 +2548,16 @@ func (x *ScalarValuePKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *ScalarValuePKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ScalarValuePKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -2573,10 +2615,16 @@ func (x *ScalarValueSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *ScalarValueSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *ScalarValueSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -4530,10 +4578,16 @@ func (x *BookTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *BookTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *BookTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -4591,10 +4645,16 @@ func (x *BookPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *BookPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *BookPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -4652,10 +4712,16 @@ func (x *BookPKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *BookPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *BookPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -4713,10 +4779,16 @@ func (x *BookSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *BookSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *BookSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -5347,10 +5419,16 @@ func (x *NewspaperTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *NewspaperTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *NewspaperTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -5408,10 +5486,16 @@ func (x *NewspaperPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *NewspaperPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *NewspaperPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -5469,10 +5553,16 @@ func (x *NewspaperPKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *NewspaperPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *NewspaperPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
@@ -5530,10 +5620,16 @@ func (x *NewspaperSKSafeOperators) Lte(v string) exp.BooleanExpression {
 }
 
 func (x *NewspaperSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
 func (x *NewspaperSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
