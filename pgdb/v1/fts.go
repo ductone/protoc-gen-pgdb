@@ -21,8 +21,8 @@ type SearchContent struct {
 }
 
 const (
-	maxBytes    = 2000
 	minWordSize = 3
+	maxBytes    = 2000
 )
 
 func interfaceToValue(in interface{}) string {
@@ -411,7 +411,7 @@ func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string 
 		return result[:maxBytes]
 	}
 
-	return result
+	return sb.String()
 }
 
 func weightToString(weight FieldOptions_FullTextWeight) string {
