@@ -349,12 +349,7 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 
 	sb := strings.Builder{}
 	for _, v := range rv {
-		lexeme := pgLexeme(v.value, v.pos, v.weight)
-
-		if len(sb.String())+len(lexeme) >= maxBytes {
-			break
-		}
-		_, _ = sb.WriteString(lexeme)
+		_, _ = sb.WriteString(pgLexeme(v.value, v.pos, v.weight))
 		_, _ = sb.WriteString(" ")
 	}
 
@@ -410,7 +405,13 @@ func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string 
 	_, _ = sb.WriteString(":")
 	_, _ = sb.WriteString(strconv.FormatInt(int64(pos), 10))
 	_, _ = sb.WriteString(weightToString(weight))
-	return sb.String()
+
+	result := sb.String()
+	if len(result) > maxBytes {
+		return result[:maxBytes]
+	}
+
+	return result
 }
 
 func weightToString(weight FieldOptions_FullTextWeight) string {

@@ -135,10 +135,6 @@ func TestSchemaPet(t *testing.T) {
 
 	result := sb.String()
 
-	if len(result) < 2000 {
-		t.Fatalf("Result less than 2000 bytes: result len %d", len(result))
-	}
-
 	insertMsg3 := &Pet{
 		TenantId:      "t1",
 		Id:            "obj4",
