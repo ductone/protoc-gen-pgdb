@@ -21,8 +21,9 @@ type SearchContent struct {
 }
 
 const (
-	minWordSize = 3
-	maxBytes    = 2000
+	minWordSize          = 3
+	lexemeMaxBytes       = 2000
+	tsvectorMaxMegabytes = 1000000
 )
 
 func interfaceToValue(in interface{}) string {
@@ -349,11 +350,16 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 
 	sb := strings.Builder{}
 	for _, v := range rv {
+		// Tsvector must be less than 1 mb
+		if len(sb.String()) > tsvectorMaxMegabytes {
+			break
+		}
+
 		_, _ = sb.WriteString(pgLexeme(v.value, v.pos, v.weight))
 		_, _ = sb.WriteString(" ")
 	}
 
-	return exp.NewLiteralExpression("?::tsvector", sb.String())
+	return exp.NewLiteralExpression("?::tsvector", sb)
 }
 
 func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
@@ -407,8 +413,8 @@ func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string 
 	_, _ = sb.WriteString(weightToString(weight))
 
 	result := sb.String()
-	if len(result) > maxBytes {
-		return result[:maxBytes]
+	if len(result) > lexemeMaxBytes {
+		return result[:lexemeMaxBytes]
 	}
 
 	return sb.String()
