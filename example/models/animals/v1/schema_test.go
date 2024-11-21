@@ -130,7 +130,7 @@ func TestSchemaPet(t *testing.T) {
 
 	var sb strings.Builder
 	for i := 0; i < 2100; i++ {
-		sb.WriteString("ab")
+		sb.WriteString("a")
 	}
 
 	result := sb.String()
