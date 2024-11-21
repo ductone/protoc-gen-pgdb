@@ -20,7 +20,10 @@ type SearchContent struct {
 	Value  interface{}
 }
 
-const minWordSize = 3
+const (
+	maxBytes    = 2000
+	minWordSize = 3
+)
 
 func interfaceToValue(in interface{}) string {
 	if in == nil {
@@ -346,7 +349,12 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 
 	sb := strings.Builder{}
 	for _, v := range rv {
-		_, _ = sb.WriteString(pgLexeme(v.value, v.pos, v.weight))
+		lexeme := pgLexeme(v.value, v.pos, v.weight)
+
+		if len(sb.String())+len(lexeme) >= maxBytes {
+			break
+		}
+		_, _ = sb.WriteString(lexeme)
 		_, _ = sb.WriteString(" ")
 	}
 
