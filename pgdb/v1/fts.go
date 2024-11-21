@@ -352,7 +352,7 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 	sb := strings.Builder{}
 	for _, v := range rv {
 		// Tsvector must be less than 1 mb
-		if len(sb.String()) > tsvectorMaxMegabytes {
+		if sb.Len() > tsvectorMaxMegabytes {
 			break
 		}
 
