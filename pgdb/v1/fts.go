@@ -409,11 +409,13 @@ func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string 
 	p := strconv.FormatInt(int64(pos), 10)
 	w := weightToString(weight)
 
+	// Count the bytes to be added to format the lexeme
 	extraBytes := len(p) + len(w) + len("'") + len("'") + len(":")
 
 	// Tsvector must be less than 2kb
 	totalLength := len(value) + extraBytes
 	if totalLength > lexemeMaxBytes {
+		// Truncate the lexeme to fit in 2kb (minus the extra bytes which will be added later)
 		value = value[:lexemeMaxBytes-extraBytes]
 	}
 
