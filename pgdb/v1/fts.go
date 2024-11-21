@@ -359,7 +359,7 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 		_, _ = sb.WriteString(" ")
 	}
 
-	return exp.NewLiteralExpression("?::tsvector", sb)
+	return exp.NewLiteralExpression("?::tsvector", sb.String())
 }
 
 func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
@@ -413,11 +413,12 @@ func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string 
 	_, _ = sb.WriteString(weightToString(weight))
 
 	result := sb.String()
+	// Tsvector must be less than 2kb
 	if len(result) > lexemeMaxBytes {
 		return result[:lexemeMaxBytes]
 	}
 
-	return sb.String()
+	return result
 }
 
 func weightToString(weight FieldOptions_FullTextWeight) string {
