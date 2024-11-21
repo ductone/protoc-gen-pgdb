@@ -405,21 +405,27 @@ const specialReplaceChar = '�'
 
 func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string {
 	value = cleanToken(value)
+
+	p := strconv.FormatInt(int64(pos), 10)
+	w := weightToString(weight)
+
+	extraBytes := len(p) + len(w) + len("'") + len("'") + len(":")
+
+	// Tsvector must be less than 2kb
+	totalLength := len(value) + extraBytes
+	if totalLength > lexemeMaxBytes {
+		value = value[:lexemeMaxBytes-extraBytes]
+	}
+
 	sb := strings.Builder{}
 	_, _ = sb.WriteString("'")
 	_, _ = sb.WriteString(value)
 	_, _ = sb.WriteString("'")
 	_, _ = sb.WriteString(":")
-	_, _ = sb.WriteString(strconv.FormatInt(int64(pos), 10))
-	_, _ = sb.WriteString(weightToString(weight))
+	_, _ = sb.WriteString(p)
+	_, _ = sb.WriteString(w)
 
-	result := sb.String()
-	// Tsvector must be less than 2kb
-	if len(result) > lexemeMaxBytes {
-		return result[:lexemeMaxBytes]
-	}
-
-	return result
+	return sb.String()
 }
 
 func weightToString(weight FieldOptions_FullTextWeight) string {
