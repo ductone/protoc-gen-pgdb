@@ -22,8 +22,9 @@ type SearchContent struct {
 
 const (
 	minWordSize          = 3
-	lexemeMaxBytes       = 2000
-	tsvectorMaxMegabytes = 1000000
+	KILO_BYTE            = 1000
+	lexemeMaxBytes       = KILO_BYTE * 2
+	tsvectorMaxMegabytes = KILO_BYTE * 1000
 )
 
 func interfaceToValue(in interface{}) string {
