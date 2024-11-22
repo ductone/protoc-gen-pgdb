@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 
@@ -126,6 +127,50 @@ func TestSchemaPet(t *testing.T) {
 	res, err := pg.DB.Exec(ctx, query, params...)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
 	require.Equal(t, int64(1), res.RowsAffected())
+
+	var sb strings.Builder
+	for i := 0; i < 2100; i++ {
+		sb.WriteString("a")
+	}
+
+	result := sb.String()
+
+	insertMsg3 := &Pet{
+		TenantId:      "t1",
+		Id:            "obj4",
+		CreatedAt:     timestamppb.Now(),
+		UpdatedAt:     timestamppb.Now(),
+		DisplayName:   result,
+		Description:   result,
+		SystemBuiltin: false,
+		Elapsed:       durationpb.New(time.Hour),
+		Profile:       &structpb.Struct{},
+		Cuteness:      1.0,
+		Price:         9000.0,
+		ExtraProfiles: []*structpb.Struct{
+			{
+				Fields: map[string]*structpb.Value{
+					"foo": {
+						Kind: &structpb.Value_BoolValue{
+							BoolValue: true,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	query, params, err = pgdb_v1.Insert(insertMsg3)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, query, params...)
+	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
+
+	query, params, err = pgdb_v1.Delete(insertMsg3)
+	require.NoError(t, err)
+	res, err = pg.DB.Exec(ctx, query, params...)
+	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
+	require.Equal(t, int64(1), res.RowsAffected())
+
 }
 
 func TestSchemaBook(t *testing.T) {

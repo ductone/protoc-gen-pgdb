@@ -20,7 +20,12 @@ type SearchContent struct {
 	Value  interface{}
 }
 
-const minWordSize = 3
+const (
+	minWordSize          = 3
+	kiloByte             = 1000
+	lexemeMaxBytes       = kiloByte * 2
+	tsvectorMaxMegabytes = kiloByte * 1000
+)
 
 func interfaceToValue(in interface{}) string {
 	if in == nil {
@@ -346,6 +351,11 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 
 	sb := strings.Builder{}
 	for _, v := range rv {
+		// Tsvector must be less than 1 mb
+		if sb.Len() > tsvectorMaxMegabytes {
+			break
+		}
+
 		_, _ = sb.WriteString(pgLexeme(v.value, v.pos, v.weight))
 		_, _ = sb.WriteString(" ")
 	}
@@ -395,13 +405,28 @@ const specialReplaceChar = '�'
 
 func pgLexeme(value string, pos int, weight FieldOptions_FullTextWeight) string {
 	value = cleanToken(value)
+
+	p := strconv.FormatInt(int64(pos), 10)
+	w := weightToString(weight)
+
+	// Count the bytes to be added to format the lexeme
+	extraBytes := len(p) + len(w) + len("'") + len("'") + len(":")
+
+	// Tsvector must be less than 2kb
+	totalLength := len(value) + extraBytes
+	if totalLength > lexemeMaxBytes {
+		// Truncate the lexeme to fit in 2kb (minus the extra bytes which will be added later)
+		value = value[:lexemeMaxBytes-extraBytes]
+	}
+
 	sb := strings.Builder{}
 	_, _ = sb.WriteString("'")
 	_, _ = sb.WriteString(value)
 	_, _ = sb.WriteString("'")
 	_, _ = sb.WriteString(":")
-	_, _ = sb.WriteString(strconv.FormatInt(int64(pos), 10))
-	_, _ = sb.WriteString(weightToString(weight))
+	_, _ = sb.WriteString(p)
+	_, _ = sb.WriteString(w)
+
 	return sb.String()
 }
 
