@@ -303,7 +303,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
 		} else {
-			rv[ro.ColumnName("tenant_id")] = cfv0
+			var val interface{} = cfv0
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("tenant_id")] = val
 		}
 
 	}
@@ -331,7 +336,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
 		} else {
-			rv[ro.ColumnName("pk")] = cfv2
+			var val interface{} = cfv2
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pk")] = val
 		}
 
 	}
@@ -347,7 +357,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
 		} else {
-			rv[ro.ColumnName("sk")] = cfv3
+			var val interface{} = cfv3
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("sk")] = val
 		}
 
 	}
@@ -376,7 +391,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			var val interface{} = cfv4
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("fts_data")] = val
 		}
 
 	}
@@ -391,7 +411,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pb_data")] = val
 		}
 
 	}
@@ -401,7 +426,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
-		rv[ro.ColumnName("id")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("id")] = val
 	}
 
 	var v2 *time.Time
@@ -413,7 +443,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	if ro.Nulled {
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("created_at")] = val
 	}
 
 	v3tmp := m.self.GetPaper()
@@ -478,7 +513,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	if ro.Nulled {
 		rv[ro.ColumnName("fur")] = nullExp
 	} else {
-		rv[ro.ColumnName("fur")] = v6
+		var val interface{} = v6
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("fur")] = val
 	}
 
 	v7tmp := m.self.GetMgr()
@@ -518,7 +558,12 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	if ro.Nulled {
 		rv[ro.ColumnName("medium_oneof")] = nullExp
 	} else {
-		rv[ro.ColumnName("medium_oneof")] = oneof1
+		var val interface{} = oneof1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("medium_oneof")] = val
 	}
 
 	return rv, nil
@@ -1154,7 +1199,12 @@ func (m *pgdbMessageShop_Manager) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
-		rv[ro.ColumnName("id")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("id")] = val
 	}
 
 	return rv, nil

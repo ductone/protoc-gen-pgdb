@@ -285,7 +285,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
 		} else {
-			rv[ro.ColumnName("tenant_id")] = cfv0
+			var val interface{} = cfv0
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("tenant_id")] = val
 		}
 
 	}
@@ -313,7 +318,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
 		} else {
-			rv[ro.ColumnName("pk")] = cfv2
+			var val interface{} = cfv2
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pk")] = val
 		}
 
 	}
@@ -329,7 +339,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
 		} else {
-			rv[ro.ColumnName("sk")] = cfv3
+			var val interface{} = cfv3
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("sk")] = val
 		}
 
 	}
@@ -350,7 +365,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			var val interface{} = cfv4
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("fts_data")] = val
 		}
 
 	}
@@ -365,7 +385,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pb_data")] = val
 		}
 
 	}
@@ -375,7 +400,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
-		rv[ro.ColumnName("id")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("id")] = val
 	}
 
 	var v2 *time.Time
@@ -387,7 +417,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 	if ro.Nulled {
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("created_at")] = val
 	}
 
 	var v3 *time.Time
@@ -399,7 +434,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 	if ro.Nulled {
 		rv[ro.ColumnName("updated_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("updated_at")] = v3
+		var val interface{} = v3
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("updated_at")] = val
 	}
 
 	var v4 *time.Time
@@ -411,7 +451,12 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 	if ro.Nulled {
 		rv[ro.ColumnName("deleted_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("deleted_at")] = v4
+		var val interface{} = v4
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("deleted_at")] = val
 	}
 
 	return rv, nil
@@ -1308,7 +1353,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
 		} else {
-			rv[ro.ColumnName("tenant_id")] = cfv0
+			var val interface{} = cfv0
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("tenant_id")] = val
 		}
 
 	}
@@ -1344,7 +1394,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
 		} else {
-			rv[ro.ColumnName("pk")] = cfv2
+			var val interface{} = cfv2
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pk")] = val
 		}
 
 	}
@@ -1360,7 +1415,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
 		} else {
-			rv[ro.ColumnName("sk")] = cfv3
+			var val interface{} = cfv3
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("sk")] = val
 		}
 
 	}
@@ -1387,7 +1447,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			var val interface{} = cfv4
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("fts_data")] = val
 		}
 
 	}
@@ -1402,7 +1467,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pb_data")] = val
 		}
 
 	}
@@ -1423,7 +1493,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("model_embeddings_1")] = nullExp
 		} else {
-			rv[ro.ColumnName("model_embeddings_1")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("model_embeddings_1")] = val
 		}
 
 	}
@@ -1444,7 +1519,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("model_embeddings_2")] = nullExp
 		} else {
-			rv[ro.ColumnName("model_embeddings_2")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("model_embeddings_2")] = val
 		}
 
 	}
@@ -1454,7 +1534,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("ingredient_id")] = nullExp
 	} else {
-		rv[ro.ColumnName("ingredient_id")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("ingredient_id")] = val
 	}
 
 	var v2 *time.Time
@@ -1466,7 +1551,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("created_at")] = val
 	}
 
 	var v3 *time.Time
@@ -1478,7 +1568,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("updated_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("updated_at")] = v3
+		var val interface{} = v3
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("updated_at")] = val
 	}
 
 	var v4 *time.Time
@@ -1490,7 +1585,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("deleted_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("deleted_at")] = v4
+		var val interface{} = v4
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("deleted_at")] = val
 	}
 
 	v5 := string(m.self.GetPastaId())
@@ -1498,7 +1598,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("pasta_id")] = nullExp
 	} else {
-		rv[ro.ColumnName("pasta_id")] = v5
+		var val interface{} = v5
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("pasta_id")] = val
 	}
 
 	v6 := string(m.self.GetId())
@@ -1506,7 +1611,12 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
-		rv[ro.ColumnName("id")] = v6
+		var val interface{} = v6
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("id")] = val
 	}
 
 	return rv, nil
@@ -2617,7 +2727,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
 		} else {
-			rv[ro.ColumnName("tenant_id")] = cfv0
+			var val interface{} = cfv0
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("tenant_id")] = val
 		}
 
 	}
@@ -2645,7 +2760,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
 		} else {
-			rv[ro.ColumnName("pk")] = cfv2
+			var val interface{} = cfv2
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pk")] = val
 		}
 
 	}
@@ -2661,7 +2781,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
 		} else {
-			rv[ro.ColumnName("sk")] = cfv3
+			var val interface{} = cfv3
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("sk")] = val
 		}
 
 	}
@@ -2682,7 +2807,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			var val interface{} = cfv4
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("fts_data")] = val
 		}
 
 	}
@@ -2697,7 +2827,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pb_data")] = val
 		}
 
 	}
@@ -2707,7 +2842,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
-		rv[ro.ColumnName("id")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("id")] = val
 	}
 
 	var v2 *time.Time
@@ -2719,7 +2859,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("created_at")] = val
 	}
 
 	var v3 *time.Time
@@ -2731,7 +2876,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("updated_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("updated_at")] = v3
+		var val interface{} = v3
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("updated_at")] = val
 	}
 
 	var v4 *time.Time
@@ -2743,7 +2893,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("deleted_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("deleted_at")] = v4
+		var val interface{} = v4
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("deleted_at")] = val
 	}
 
 	var v5 *string
@@ -2759,7 +2914,12 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if ro.Nulled {
 		rv[ro.ColumnName("source_addr")] = nullExp
 	} else {
-		rv[ro.ColumnName("source_addr")] = v5
+		var val interface{} = v5
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("source_addr")] = val
 	}
 
 	return rv, nil
@@ -3480,7 +3640,12 @@ func (m *pgdbMessagePastaIngredient_ModelEmbedding) Record(opts ...pgdb_v1.Recor
 	if ro.Nulled {
 		rv[ro.ColumnName("model")] = nullExp
 	} else {
-		rv[ro.ColumnName("model")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("model")] = val
 	}
 
 	v2 := make(xpq.Array[float32], 0, len(m.self.GetEmbedding()))
@@ -3491,7 +3656,12 @@ func (m *pgdbMessagePastaIngredient_ModelEmbedding) Record(opts ...pgdb_v1.Recor
 	if ro.Nulled {
 		rv[ro.ColumnName("embedding")] = nullExp
 	} else {
-		rv[ro.ColumnName("embedding")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("embedding")] = val
 	}
 
 	return rv, nil

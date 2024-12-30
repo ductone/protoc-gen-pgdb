@@ -37,7 +37,12 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
             if ro.Nulled {
                 rv[ro.ColumnName("{{.DB.Name}}")] = nullExp
             } else {
-                rv[ro.ColumnName("{{.DB.Name}}")] =  {{ $VarForValue }}
+                var val interface{} = {{ $VarForValue }}
+                if s, ok := val.(string); ok {
+                    val = strings.ReplaceAll(s, "\u0000", "")
+                }
+
+                rv[ro.ColumnName("{{.DB.Name}}")] = val
             }
         {{ end }}
 

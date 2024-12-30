@@ -367,7 +367,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
 		} else {
-			rv[ro.ColumnName("tenant_id")] = cfv0
+			var val interface{} = cfv0
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("tenant_id")] = val
 		}
 
 	}
@@ -395,7 +400,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
 		} else {
-			rv[ro.ColumnName("pk")] = cfv2
+			var val interface{} = cfv2
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pk")] = val
 		}
 
 	}
@@ -411,7 +421,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
 		} else {
-			rv[ro.ColumnName("sk")] = cfv3
+			var val interface{} = cfv3
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("sk")] = val
 		}
 
 	}
@@ -444,7 +459,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			var val interface{} = cfv4
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("fts_data")] = val
 		}
 
 	}
@@ -459,7 +479,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pb_data")] = val
 		}
 
 	}
@@ -469,7 +494,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
-		rv[ro.ColumnName("id")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("id")] = val
 	}
 
 	var v2 *time.Time
@@ -481,7 +511,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("created_at")] = val
 	}
 
 	var v3 *time.Time
@@ -493,7 +528,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("updated_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("updated_at")] = v3
+		var val interface{} = v3
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("updated_at")] = val
 	}
 
 	var v4 *time.Time
@@ -505,7 +545,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("deleted_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("deleted_at")] = v4
+		var val interface{} = v4
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("deleted_at")] = val
 	}
 
 	v5 := string(m.self.GetDisplayName())
@@ -513,7 +558,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("display_name")] = nullExp
 	} else {
-		rv[ro.ColumnName("display_name")] = v5
+		var val interface{} = v5
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("display_name")] = val
 	}
 
 	v6 := string(m.self.GetDescription())
@@ -521,7 +571,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("description")] = nullExp
 	} else {
-		rv[ro.ColumnName("description")] = v6
+		var val interface{} = v6
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("description")] = val
 	}
 
 	v7 := bool(m.self.GetSystemBuiltin())
@@ -529,7 +584,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("system_builtin")] = nullExp
 	} else {
-		rv[ro.ColumnName("system_builtin")] = v7
+		var val interface{} = v7
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("system_builtin")] = val
 	}
 
 	v8 := &pgtype.Interval{}
@@ -541,7 +601,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("elapsed")] = nullExp
 	} else {
-		rv[ro.ColumnName("elapsed")] = v8
+		var val interface{} = v8
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("elapsed")] = val
 	}
 
 	v9tmp, err := protojson.Marshal(m.self.GetProfile())
@@ -553,7 +618,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("profile")] = nullExp
 	} else {
-		rv[ro.ColumnName("profile")] = v9
+		var val interface{} = v9
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("profile")] = val
 	}
 
 	v10 := float32(m.self.GetCuteness())
@@ -561,7 +631,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("cuteness")] = nullExp
 	} else {
-		rv[ro.ColumnName("cuteness")] = v10
+		var val interface{} = v10
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("cuteness")] = val
 	}
 
 	v11 := float64(m.self.GetPrice())
@@ -569,7 +644,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("price")] = nullExp
 	} else {
-		rv[ro.ColumnName("price")] = v11
+		var val interface{} = v11
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("price")] = val
 	}
 
 	v12 := bool(m.self.GetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame())
@@ -577,7 +657,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("14")] = nullExp
 	} else {
-		rv[ro.ColumnName("14")] = v12
+		var val interface{} = v12
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("14")] = val
 	}
 
 	v13 := make(xpq.Array[string], 0, len(m.self.GetExtraProfiles()))
@@ -592,7 +677,12 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	if ro.Nulled {
 		rv[ro.ColumnName("extra_profiles")] = nullExp
 	} else {
-		rv[ro.ColumnName("extra_profiles")] = v13
+		var val interface{} = v13
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("extra_profiles")] = val
 	}
 
 	return rv, nil
@@ -1875,7 +1965,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
 		} else {
-			rv[ro.ColumnName("tenant_id")] = cfv0
+			var val interface{} = cfv0
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("tenant_id")] = val
 		}
 
 	}
@@ -1899,7 +1994,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
 		} else {
-			rv[ro.ColumnName("pk")] = cfv2
+			var val interface{} = cfv2
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pk")] = val
 		}
 
 	}
@@ -1915,7 +2015,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
 		} else {
-			rv[ro.ColumnName("sk")] = cfv3
+			var val interface{} = cfv3
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("sk")] = val
 		}
 
 	}
@@ -1942,7 +2047,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			var val interface{} = cfv4
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("fts_data")] = val
 		}
 
 	}
@@ -1957,7 +2067,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pb_data")] = val
 		}
 
 	}
@@ -1967,7 +2082,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
-		rv[ro.ColumnName("id")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("id")] = val
 	}
 
 	v2 := float64(m.self.GetDouble())
@@ -1975,7 +2095,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("double")] = nullExp
 	} else {
-		rv[ro.ColumnName("double")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("double")] = val
 	}
 
 	v3 := float32(m.self.GetFloat())
@@ -1983,7 +2108,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("float")] = nullExp
 	} else {
-		rv[ro.ColumnName("float")] = v3
+		var val interface{} = v3
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("float")] = val
 	}
 
 	v4 := int32(m.self.GetInt32())
@@ -1991,7 +2121,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("int_32")] = nullExp
 	} else {
-		rv[ro.ColumnName("int_32")] = v4
+		var val interface{} = v4
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("int_32")] = val
 	}
 
 	v5 := int64(m.self.GetInt64())
@@ -1999,7 +2134,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("int_64")] = nullExp
 	} else {
-		rv[ro.ColumnName("int_64")] = v5
+		var val interface{} = v5
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("int_64")] = val
 	}
 
 	v6 := uint32(m.self.GetUint32())
@@ -2007,7 +2147,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("uint_32")] = nullExp
 	} else {
-		rv[ro.ColumnName("uint_32")] = v6
+		var val interface{} = v6
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("uint_32")] = val
 	}
 
 	v7 := uint64(m.self.GetUint64())
@@ -2015,7 +2160,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("uint_64")] = nullExp
 	} else {
-		rv[ro.ColumnName("uint_64")] = v7
+		var val interface{} = v7
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("uint_64")] = val
 	}
 
 	v8 := int32(m.self.GetSint32())
@@ -2023,7 +2173,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("sint_32")] = nullExp
 	} else {
-		rv[ro.ColumnName("sint_32")] = v8
+		var val interface{} = v8
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("sint_32")] = val
 	}
 
 	v9 := int64(m.self.GetSint64())
@@ -2031,7 +2186,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("sint_64")] = nullExp
 	} else {
-		rv[ro.ColumnName("sint_64")] = v9
+		var val interface{} = v9
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("sint_64")] = val
 	}
 
 	v10 := uint32(m.self.GetFixed32())
@@ -2039,7 +2199,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("fixed_32")] = nullExp
 	} else {
-		rv[ro.ColumnName("fixed_32")] = v10
+		var val interface{} = v10
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("fixed_32")] = val
 	}
 
 	v11 := uint64(m.self.GetFixed64())
@@ -2047,7 +2212,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("fixed_64")] = nullExp
 	} else {
-		rv[ro.ColumnName("fixed_64")] = v11
+		var val interface{} = v11
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("fixed_64")] = val
 	}
 
 	v12 := int32(m.self.GetSfixed32())
@@ -2055,7 +2225,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("sfixed_32")] = nullExp
 	} else {
-		rv[ro.ColumnName("sfixed_32")] = v12
+		var val interface{} = v12
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("sfixed_32")] = val
 	}
 
 	v13 := int64(m.self.GetSfixed64())
@@ -2063,7 +2238,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("sfixed_64")] = nullExp
 	} else {
-		rv[ro.ColumnName("sfixed_64")] = v13
+		var val interface{} = v13
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("sfixed_64")] = val
 	}
 
 	v14 := bool(m.self.GetBool())
@@ -2071,7 +2251,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("bool")] = nullExp
 	} else {
-		rv[ro.ColumnName("bool")] = v14
+		var val interface{} = v14
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("bool")] = val
 	}
 
 	v15 := string(m.self.GetString_())
@@ -2079,7 +2264,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("string")] = nullExp
 	} else {
-		rv[ro.ColumnName("string")] = v15
+		var val interface{} = v15
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("string")] = val
 	}
 
 	v16 := []byte(m.self.GetBytes())
@@ -2087,7 +2277,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("bytes")] = nullExp
 	} else {
-		rv[ro.ColumnName("bytes")] = v16
+		var val interface{} = v16
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("bytes")] = val
 	}
 
 	v17 := make(xpq.Array[float64], 0, len(m.self.GetRepeatedDouble()))
@@ -2098,7 +2293,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_double")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_double")] = v17
+		var val interface{} = v17
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_double")] = val
 	}
 
 	v18 := make(xpq.Array[float32], 0, len(m.self.GetRepeatedFloat()))
@@ -2109,7 +2309,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_float")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_float")] = v18
+		var val interface{} = v18
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_float")] = val
 	}
 
 	v19 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedInt32()))
@@ -2120,7 +2325,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_int32")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_int32")] = v19
+		var val interface{} = v19
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_int32")] = val
 	}
 
 	v20 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedInt64()))
@@ -2131,7 +2341,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_int64")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_int64")] = v20
+		var val interface{} = v20
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_int64")] = val
 	}
 
 	v21 := make(xpq.Array[uint32], 0, len(m.self.GetRepeatedUint32()))
@@ -2142,7 +2357,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_uint32")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_uint32")] = v21
+		var val interface{} = v21
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_uint32")] = val
 	}
 
 	v22 := make(xpq.Array[uint64], 0, len(m.self.GetRepeatedUint64()))
@@ -2153,7 +2373,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_uint64")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_uint64")] = v22
+		var val interface{} = v22
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_uint64")] = val
 	}
 
 	v23 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedSint32()))
@@ -2164,7 +2389,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_sint32")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_sint32")] = v23
+		var val interface{} = v23
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_sint32")] = val
 	}
 
 	v24 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedSint64()))
@@ -2175,7 +2405,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_sint64")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_sint64")] = v24
+		var val interface{} = v24
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_sint64")] = val
 	}
 
 	v25 := make(xpq.Array[uint32], 0, len(m.self.GetRepeatedFixed32()))
@@ -2186,7 +2421,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_fixed32")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_fixed32")] = v25
+		var val interface{} = v25
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_fixed32")] = val
 	}
 
 	v26 := make(xpq.Array[uint64], 0, len(m.self.GetRepeatedFixed64()))
@@ -2197,7 +2437,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_fixed64")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_fixed64")] = v26
+		var val interface{} = v26
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_fixed64")] = val
 	}
 
 	v27 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedSfixed32()))
@@ -2208,7 +2453,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_sfixed32")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_sfixed32")] = v27
+		var val interface{} = v27
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_sfixed32")] = val
 	}
 
 	v28 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedSfixed64()))
@@ -2219,7 +2469,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_sfixed64")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_sfixed64")] = v28
+		var val interface{} = v28
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_sfixed64")] = val
 	}
 
 	v29 := make(xpq.Array[bool], 0, len(m.self.GetRepeatedBool()))
@@ -2230,7 +2485,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_bool")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_bool")] = v29
+		var val interface{} = v29
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_bool")] = val
 	}
 
 	v30 := make(xpq.Array[string], 0, len(m.self.GetRepeatedString()))
@@ -2241,7 +2501,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_string")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_string")] = v30
+		var val interface{} = v30
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_string")] = val
 	}
 
 	v31 := make(xpq.Array[[]byte], 0, len(m.self.GetRepeatedBytes()))
@@ -2252,7 +2517,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_bytes")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_bytes")] = v31
+		var val interface{} = v31
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_bytes")] = val
 	}
 
 	v32 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedEnum()))
@@ -2263,7 +2533,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("repeated_enum")] = nullExp
 	} else {
-		rv[ro.ColumnName("repeated_enum")] = v32
+		var val interface{} = v32
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("repeated_enum")] = val
 	}
 
 	v33tmp, err := json.Marshal(m.self.GetStringMap())
@@ -2275,7 +2550,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("string_map")] = nullExp
 	} else {
-		rv[ro.ColumnName("string_map")] = v33
+		var val interface{} = v33
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("string_map")] = val
 	}
 
 	var v34 *time.Time
@@ -2287,7 +2567,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v34
+		var val interface{} = v34
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("created_at")] = val
 	}
 
 	var v35 exp.LiteralExpression
@@ -2301,7 +2586,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("str_ptr")] = nullExp
 	} else {
-		rv[ro.ColumnName("str_ptr")] = v35
+		var val interface{} = v35
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("str_ptr")] = val
 	}
 
 	var v36 exp.LiteralExpression
@@ -2315,7 +2605,12 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	if ro.Nulled {
 		rv[ro.ColumnName("bool_ptr")] = nullExp
 	} else {
-		rv[ro.ColumnName("bool_ptr")] = v36
+		var val interface{} = v36
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("bool_ptr")] = val
 	}
 
 	return rv, nil
@@ -3753,7 +4048,12 @@ func (m *pgdbMessageEBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 	if ro.Nulled {
 		rv[ro.ColumnName("size")] = nullExp
 	} else {
-		rv[ro.ColumnName("size")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("size")] = val
 	}
 
 	return rv, nil
@@ -3936,7 +4236,12 @@ func (m *pgdbMessagePaperBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 	if ro.Nulled {
 		rv[ro.ColumnName("pages")] = nullExp
 	} else {
-		rv[ro.ColumnName("pages")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("pages")] = val
 	}
 
 	return rv, nil
@@ -4293,7 +4598,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
 		} else {
-			rv[ro.ColumnName("tenant_id")] = cfv0
+			var val interface{} = cfv0
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("tenant_id")] = val
 		}
 
 	}
@@ -4321,7 +4631,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
 		} else {
-			rv[ro.ColumnName("pk")] = cfv2
+			var val interface{} = cfv2
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pk")] = val
 		}
 
 	}
@@ -4337,7 +4652,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
 		} else {
-			rv[ro.ColumnName("sk")] = cfv3
+			var val interface{} = cfv3
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("sk")] = val
 		}
 
 	}
@@ -4364,7 +4684,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			var val interface{} = cfv4
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("fts_data")] = val
 		}
 
 	}
@@ -4379,7 +4704,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pb_data")] = val
 		}
 
 	}
@@ -4389,7 +4719,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
-		rv[ro.ColumnName("id")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("id")] = val
 	}
 
 	var v2 *time.Time
@@ -4401,7 +4736,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	if ro.Nulled {
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("created_at")] = val
 	}
 
 	v3tmp := m.self.GetPaper()
@@ -4479,7 +4819,12 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	if ro.Nulled {
 		rv[ro.ColumnName("medium_oneof")] = nullExp
 	} else {
-		rv[ro.ColumnName("medium_oneof")] = oneof1
+		var val interface{} = oneof1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("medium_oneof")] = val
 	}
 
 	return rv, nil
@@ -5244,7 +5589,12 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
 		} else {
-			rv[ro.ColumnName("tenant_id")] = cfv0
+			var val interface{} = cfv0
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("tenant_id")] = val
 		}
 
 	}
@@ -5268,7 +5618,12 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
 		} else {
-			rv[ro.ColumnName("pk")] = cfv2
+			var val interface{} = cfv2
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pk")] = val
 		}
 
 	}
@@ -5284,7 +5639,12 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
 		} else {
-			rv[ro.ColumnName("sk")] = cfv3
+			var val interface{} = cfv3
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("sk")] = val
 		}
 
 	}
@@ -5296,7 +5656,12 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			var val interface{} = cfv4
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("fts_data")] = val
 		}
 
 	}
@@ -5311,7 +5676,12 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			var val interface{} = cfv5
+			if s, ok := val.(string); ok {
+				val = strings.ReplaceAll(s, "\u0000", "")
+			}
+
+			rv[ro.ColumnName("pb_data")] = val
 		}
 
 	}
@@ -5321,7 +5691,12 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 	if ro.Nulled {
 		rv[ro.ColumnName("name")] = nullExp
 	} else {
-		rv[ro.ColumnName("name")] = v1
+		var val interface{} = v1
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("name")] = val
 	}
 
 	var v2 *time.Time
@@ -5333,7 +5708,12 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 	if ro.Nulled {
 		rv[ro.ColumnName("created_at")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v2
+		var val interface{} = v2
+		if s, ok := val.(string); ok {
+			val = strings.ReplaceAll(s, "\u0000", "")
+		}
+
+		rv[ro.ColumnName("created_at")] = val
 	}
 
 	return rv, nil
