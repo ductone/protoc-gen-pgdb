@@ -64,16 +64,6 @@ func TestCleanJSON(t *testing.T) {
 	}
 }
 
-func TestCleanString(t *testing.T) {
-	t.Run("clean string", func(t *testing.T) {
-		str := "fjdsjflkdsjkfjl:faksddjflasjdkfljafskljd:sdlfjlskdjfjsdkjlkj"
-		strCleaned := strings.ReplaceAll(str, "\u0000", "")
-		if strCleaned != str {
-			t.Errorf("Unexpected result. Got: %s, Expected: %s", strCleaned, str)
-		}
-	})
-}
-
 func TestMarshalProtoJSON(t *testing.T) {
 	msg := &pstruct.Struct{
 		Fields: map[string]*pstruct.Value{
