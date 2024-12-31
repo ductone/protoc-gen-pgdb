@@ -1,7 +1,11 @@
 var {{ .VarName }} exp.LiteralExpression
 
 if {{ .InputName }} != nil {
-    {{ .VarName }} = exp.NewLiteralExpression("?", {{ .InputName }}.GetValue())
+    {{ if eq .CastType "string" }}
+        {{ .VarName }} = exp.NewLiteralExpression("?", strings.ReplaceAll({{ .InputName }}.GetValue(), "\u0000", ""))
+    {{ else }}
+        {{ .VarName }} = exp.NewLiteralExpression("?", {{ .InputName }}.GetValue())
+    {{ end }}
 } else {
     {{ .VarName }} = exp.NewLiteralExpression("NULL")
 }

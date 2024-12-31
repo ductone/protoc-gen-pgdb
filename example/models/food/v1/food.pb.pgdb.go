@@ -280,7 +280,7 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -370,7 +370,7 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -1303,7 +1303,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -1449,7 +1449,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 	}
 
-	v1 := string(m.self.GetIngredientId())
+	v1 := strings.ReplaceAll(string(m.self.GetIngredientId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("ingredient_id")] = nullExp
@@ -1493,7 +1493,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		rv[ro.ColumnName("deleted_at")] = v4
 	}
 
-	v5 := string(m.self.GetPastaId())
+	v5 := strings.ReplaceAll(string(m.self.GetPastaId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("pasta_id")] = nullExp
@@ -1501,7 +1501,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		rv[ro.ColumnName("pasta_id")] = v5
 	}
 
-	v6 := string(m.self.GetId())
+	v6 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -2612,7 +2612,7 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -2702,7 +2702,7 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -3485,7 +3485,9 @@ func (m *pgdbMessagePastaIngredient_ModelEmbedding) Record(opts ...pgdb_v1.Recor
 
 	v2 := make(xpq.Array[float32], 0, len(m.self.GetEmbedding()))
 	for _, v2arrTmp := range m.self.GetEmbedding() {
+
 		v2 = append(v2, float32(v2arrTmp))
+
 	}
 
 	if ro.Nulled {

@@ -362,7 +362,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -464,7 +464,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -508,7 +508,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		rv[ro.ColumnName("deleted_at")] = v4
 	}
 
-	v5 := string(m.self.GetDisplayName())
+	v5 := strings.ReplaceAll(string(m.self.GetDisplayName()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("display_name")] = nullExp
@@ -516,7 +516,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		rv[ro.ColumnName("display_name")] = v5
 	}
 
-	v6 := string(m.self.GetDescription())
+	v6 := strings.ReplaceAll(string(m.self.GetDescription()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("description")] = nullExp
@@ -544,7 +544,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		rv[ro.ColumnName("elapsed")] = v8
 	}
 
-	v9tmp, err := protojson.Marshal(m.self.GetProfile())
+	v9tmp, err := pgdb_v1.MarshalProtoJSON(m.self.GetProfile())
 	if err != nil {
 		return nil, err
 	}
@@ -582,7 +582,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	v13 := make(xpq.Array[string], 0, len(m.self.GetExtraProfiles()))
 	for _, v13arrTmp := range m.self.GetExtraProfiles() {
-		v13tmp, err := protojson.Marshal(v13arrTmp)
+		v13tmp, err := pgdb_v1.MarshalProtoJSON(v13arrTmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1870,7 +1870,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -1962,7 +1962,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -2074,7 +2074,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		rv[ro.ColumnName("bool")] = v14
 	}
 
-	v15 := string(m.self.GetString_())
+	v15 := strings.ReplaceAll(string(m.self.GetString_()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("string")] = nullExp
@@ -2092,7 +2092,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v17 := make(xpq.Array[float64], 0, len(m.self.GetRepeatedDouble()))
 	for _, v17arrTmp := range m.self.GetRepeatedDouble() {
+
 		v17 = append(v17, float64(v17arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2103,7 +2105,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v18 := make(xpq.Array[float32], 0, len(m.self.GetRepeatedFloat()))
 	for _, v18arrTmp := range m.self.GetRepeatedFloat() {
+
 		v18 = append(v18, float32(v18arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2114,7 +2118,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v19 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedInt32()))
 	for _, v19arrTmp := range m.self.GetRepeatedInt32() {
+
 		v19 = append(v19, int32(v19arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2125,7 +2131,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v20 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedInt64()))
 	for _, v20arrTmp := range m.self.GetRepeatedInt64() {
+
 		v20 = append(v20, int64(v20arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2136,7 +2144,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v21 := make(xpq.Array[uint32], 0, len(m.self.GetRepeatedUint32()))
 	for _, v21arrTmp := range m.self.GetRepeatedUint32() {
+
 		v21 = append(v21, uint32(v21arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2147,7 +2157,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v22 := make(xpq.Array[uint64], 0, len(m.self.GetRepeatedUint64()))
 	for _, v22arrTmp := range m.self.GetRepeatedUint64() {
+
 		v22 = append(v22, uint64(v22arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2158,7 +2170,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v23 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedSint32()))
 	for _, v23arrTmp := range m.self.GetRepeatedSint32() {
+
 		v23 = append(v23, int32(v23arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2169,7 +2183,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v24 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedSint64()))
 	for _, v24arrTmp := range m.self.GetRepeatedSint64() {
+
 		v24 = append(v24, int64(v24arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2180,7 +2196,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v25 := make(xpq.Array[uint32], 0, len(m.self.GetRepeatedFixed32()))
 	for _, v25arrTmp := range m.self.GetRepeatedFixed32() {
+
 		v25 = append(v25, uint32(v25arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2191,7 +2209,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v26 := make(xpq.Array[uint64], 0, len(m.self.GetRepeatedFixed64()))
 	for _, v26arrTmp := range m.self.GetRepeatedFixed64() {
+
 		v26 = append(v26, uint64(v26arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2202,7 +2222,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v27 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedSfixed32()))
 	for _, v27arrTmp := range m.self.GetRepeatedSfixed32() {
+
 		v27 = append(v27, int32(v27arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2213,7 +2235,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v28 := make(xpq.Array[int64], 0, len(m.self.GetRepeatedSfixed64()))
 	for _, v28arrTmp := range m.self.GetRepeatedSfixed64() {
+
 		v28 = append(v28, int64(v28arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2224,7 +2248,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v29 := make(xpq.Array[bool], 0, len(m.self.GetRepeatedBool()))
 	for _, v29arrTmp := range m.self.GetRepeatedBool() {
+
 		v29 = append(v29, bool(v29arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2235,7 +2261,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v30 := make(xpq.Array[string], 0, len(m.self.GetRepeatedString()))
 	for _, v30arrTmp := range m.self.GetRepeatedString() {
-		v30 = append(v30, string(v30arrTmp))
+
+		v30 = append(v30, strings.ReplaceAll(string(v30arrTmp), "\u0000", ""))
+
 	}
 
 	if ro.Nulled {
@@ -2246,7 +2274,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v31 := make(xpq.Array[[]byte], 0, len(m.self.GetRepeatedBytes()))
 	for _, v31arrTmp := range m.self.GetRepeatedBytes() {
+
 		v31 = append(v31, []byte(v31arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2257,7 +2287,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	v32 := make(xpq.Array[int32], 0, len(m.self.GetRepeatedEnum()))
 	for _, v32arrTmp := range m.self.GetRepeatedEnum() {
+
 		v32 = append(v32, int32(v32arrTmp))
+
 	}
 
 	if ro.Nulled {
@@ -2266,7 +2298,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		rv[ro.ColumnName("repeated_enum")] = v32
 	}
 
-	v33tmp, err := json.Marshal(m.self.GetStringMap())
+	v33tmp, err := pgdb_v1.MarshalJSON(m.self.GetStringMap())
 	if err != nil {
 		return nil, err
 	}
@@ -2293,7 +2325,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	var v35 exp.LiteralExpression
 
 	if m.self.GetStrPtr() != nil {
-		v35 = exp.NewLiteralExpression("?", m.self.GetStrPtr().GetValue())
+
+		v35 = exp.NewLiteralExpression("?", strings.ReplaceAll(m.self.GetStrPtr().GetValue(), "\u0000", ""))
+
 	} else {
 		v35 = exp.NewLiteralExpression("NULL")
 	}
@@ -2307,7 +2341,9 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	var v36 exp.LiteralExpression
 
 	if m.self.GetBoolPtr() != nil {
+
 		v36 = exp.NewLiteralExpression("?", m.self.GetBoolPtr().GetValue())
+
 	} else {
 		v36 = exp.NewLiteralExpression("NULL")
 	}
@@ -4288,7 +4324,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -4384,7 +4420,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
@@ -5239,7 +5275,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.Id)
+		cfv0 := strings.ReplaceAll(string(m.self.Id), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -5316,7 +5352,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 	}
 
-	v1 := string(m.self.GetName())
+	v1 := strings.ReplaceAll(string(m.self.GetName()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("name")] = nullExp

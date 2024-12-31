@@ -2,14 +2,14 @@
 {{ if .IsArray }}
 {{ .VarName }} := make(xpq.Array[string], 0, len({{.InputName}}))
 for _, {{ .VarName -}}arrTmp := range {{.InputName}} {
-    {{ .VarName -}}tmp, err := protojson.Marshal({{ .VarName -}}arrTmp)
+    {{ .VarName -}}tmp, err := pgdb_v1.MarshalProtoJSON({{ .VarName -}}arrTmp)
     if err != nil {
         return nil, err
     }
     {{ .VarName }} = append({{ .VarName }}, string({{ .VarName -}}tmp))
 }
 {{ else }}
-{{ .VarName -}}tmp, err := protojson.Marshal({{.InputName}})
+{{ .VarName -}}tmp, err := pgdb_v1.MarshalProtoJSON({{.InputName}})
 if err != nil {
     return nil, err
 }

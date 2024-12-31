@@ -1,4 +1,4 @@
-{{ .VarName -}}tmp, err := json.Marshal({{.InputName}})
+{{ .VarName -}}tmp, err := pgdb_v1.MarshalJSON({{.InputName}})
 if err != nil {
     return nil, err
 }

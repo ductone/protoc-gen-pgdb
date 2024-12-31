@@ -194,7 +194,13 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 			VarName:   fc.varName,
 			InputName: selfName,
 		})
-	case gtPbWktStringValue, gtPbWktBoolValue:
+	case gtPbWktStringValue:
+		return templateExecToString("proto_format_wrapper.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			CastType:  fieldConvertString,
+		})
+	case gtPbWktBoolValue:
 		return templateExecToString("proto_format_wrapper.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
@@ -212,7 +218,6 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		}
 
 		if useProtoJSON {
-			fc.ix.ProtobufEncodingJSON = true
 			if fc.IsArray {
 				fc.ix.Bytes = true
 			}

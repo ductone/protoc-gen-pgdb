@@ -1,8 +1,16 @@
 {{ if .IsArray }}
 {{ .VarName }} := make(xpq.Array[{{.CastType}}], 0, len({{.InputName}}))
 for _, {{ .VarName -}}arrTmp := range {{.InputName}} {
-    {{ .VarName }} = append({{ .VarName }}, {{.CastType}}({{ .VarName -}}arrTmp))
+    {{ if eq .CastType "string" }}
+        {{ .VarName }} = append({{ .VarName }}, strings.ReplaceAll({{.CastType}}({{ .VarName -}}arrTmp), "\u0000", ""))
+    {{ else }}
+        {{ .VarName }} = append({{ .VarName }}, {{.CastType}}({{ .VarName -}}arrTmp))
+    {{ end }}
 }
 {{ else }}
-{{ .VarName }} := {{.CastType}}({{.InputName}})
+    {{ if eq .CastType "string" }}
+        {{ .VarName }} := strings.ReplaceAll({{.CastType}}({{.InputName}}), "\u0000", "")
+    {{ else }}
+        {{ .VarName }} := {{.CastType}}({{.InputName}})
+    {{ end }}
 {{ end }}

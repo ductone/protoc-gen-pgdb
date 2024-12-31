@@ -369,7 +369,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	if !ro.IsNested {
 
-		cfv0 := string(m.self.TenantId)
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -465,7 +465,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	}
 
-	v1 := string(m.self.GetId())
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("id")] = nullExp
