@@ -94,7 +94,7 @@ func TestMarshalProtoJSON(t *testing.T) {
 			},
 		},
 	}
-	msg_expected := &pstruct.Struct{
+	msgExpected := &pstruct.Struct{
 		Fields: map[string]*pstruct.Value{
 			"PK:SK": {
 				Kind: &pstruct.Value_StringValue{
@@ -109,13 +109,13 @@ func TestMarshalProtoJSON(t *testing.T) {
 		},
 	}
 
-	msg_expected_bytes, err := protojson.Marshal(msg_expected)
+	msgExpectedBytes, err := protojson.Marshal(msgExpected)
 	if err != nil {
 		t.Errorf("Failed to marshal expected message: %v", err)
 	}
 
-	expected := string(msg_expected_bytes)
-	expected_no_space := strings.ReplaceAll(expected, " ", "")
+	expected := string(msgExpectedBytes)
+	expectedNoSpace := strings.ReplaceAll(expected, " ", "")
 
 	tests := []struct {
 		name     string
@@ -125,7 +125,7 @@ func TestMarshalProtoJSON(t *testing.T) {
 		{
 			name:     "With null bytes",
 			input:    msg,
-			expected: expected_no_space,
+			expected: expectedNoSpace,
 		},
 		{
 			name:     "Without null bytes",
