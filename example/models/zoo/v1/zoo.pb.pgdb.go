@@ -203,6 +203,7 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -217,6 +218,7 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -231,6 +233,7 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -245,6 +248,7 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}

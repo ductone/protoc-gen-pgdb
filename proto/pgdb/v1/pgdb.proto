@@ -29,6 +29,8 @@ message MessageOptions {
     repeated string columns = 3;
     // used to indicate the index by this name can be dropped
     bool dropped = 4;
+    // generates a deleted_at IS NULL partial index
+    bool partial_deleted_at_is_null = 5;
   }
   repeated Index indexes = 2;
   // defaults to `tenant_id`.  Must be set if an object does not have a

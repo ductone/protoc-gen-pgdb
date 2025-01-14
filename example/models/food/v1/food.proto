@@ -38,7 +38,7 @@ message PastaIngredient {
   };
   option (pgdb.v1.msg).indexes = {
     name: "pastas"
-    method: INDEX_METHOD_BTREE,
+    method: INDEX_METHOD_BTREE
     columns: [
       "tenant_id",
       "pasta_id",
@@ -47,7 +47,7 @@ message PastaIngredient {
   };
   option (pgdb.v1.msg).indexes = {
     name: "ingredients"
-    method: INDEX_METHOD_BTREE,
+    method: INDEX_METHOD_BTREE
     columns: [
       "tenant_id",
       "ingredient_id",
@@ -56,16 +56,29 @@ message PastaIngredient {
   };
   option (pgdb.v1.msg).indexes = {
     name: "everythingggg"
-    method: INDEX_METHOD_BTREE,
+    method: INDEX_METHOD_BTREE
     columns: [
       "ingredient_id",
       "pasta_id",
       "id"
     ]
   };
+  option (pgdb.v1.msg).indexes = {
+    name: "everythingggg_alive_only"
+    method: INDEX_METHOD_BTREE
+    columns: [
+      "ingredient_id",
+      "pasta_id",
+      "id"
+    ]
+    partial_deleted_at_is_null: true
+  };
   option (pgdb.v1.msg).stats = {
-    name: "tenant_id_ingredient_id",
-    columns: ["tenant_id", "ingredient_id"],
+    name: "tenant_id_ingredient_id"
+    columns: [
+      "tenant_id",
+      "ingredient_id"
+    ]
   };
   string tenant_id = 1;
   string ingredient_id = 2;
@@ -98,7 +111,7 @@ message SauceIngredient {
   };
   option (pgdb.v1.msg).indexes = {
     name: "source_addr_index"
-    method: INDEX_METHOD_BTREE,
+    method: INDEX_METHOD_BTREE
     columns: [
       "tenant_id",
       "source_addr"

@@ -98,6 +98,21 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
 		}
 	}
+
+	if idx.PartialDeletedAtIsNull {
+		if f, ok := tryFieldByName(m, "deleted_at"); ok {
+			name, err := getColumnName(f)
+			if err != nil {
+				panic(err)
+			}
+			_ = name
+			rv.DB.WherePredicate = fmt.Sprintf(
+				`" + io.ColumnName("%s") + " IS NULL`,
+				name,
+			)
+			//			rv.DB.WherePredicate = "false"
+		}
+	}
 	return rv
 }
 

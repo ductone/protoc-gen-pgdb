@@ -129,17 +129,23 @@ func TestSchemaFoodPasta(t *testing.T) {
 		}
 
 		hnswIndexCount := 0
+		partialIndexCount := 0
 		for _, line := range schema {
 			if strings.Contains(line, "HNSW") {
 				// fmt.Printf("%s \n", line)
 				hnswIndexCount += 1
 			}
+			if strings.Contains(line, "deleted_at IS NULL") {
+				partialIndexCount += 1
+			}
 		}
 		// fmt.Printf("hnswIndexCount: %d\n", hnswIndexCount)
 		if _, ok := smsg.(*PastaIngredient); ok {
 			require.Equal(t, 2, hnswIndexCount, "Should have 2 hnsw indexes") // 2 enums = 2 indexes
+			require.Equal(t, 1, partialIndexCount, "Should have 1 partial index")
 		} else {
 			require.Equal(t, 0, hnswIndexCount, "Should have 0 hnsw indexes")
+			require.Equal(t, 0, partialIndexCount, "Should have 0 partial index")
 		}
 
 		require.Equal(t, 1,

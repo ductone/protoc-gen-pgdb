@@ -206,6 +206,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -220,6 +221,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -234,6 +236,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -248,6 +251,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -260,6 +264,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("11$fur")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -270,6 +275,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("11$52$sfixed_64")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -280,6 +286,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("what_oneof")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -290,6 +297,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("11$medium_oneof")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -300,6 +308,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("12$medium_oneof")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -310,6 +319,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("10$profile")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -320,6 +330,7 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("id")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	return rv
