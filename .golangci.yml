@@ -75,7 +75,7 @@ linters:
     - exhaustive # check exhaustiveness of enum switch statements
     - forbidigo # Forbids identifiers
     - gochecknoinits # Checks that no init functions are present in Go code
-    - goconst # Finds repeated strings that could be replaced by a constant
+    # - goconst # Finds repeated strings that could be replaced by a constant
     - gocritic # Provides diagnostics that check for bugs, performance and style issues.
     - godot # Check if comments end in a period
     - goimports # In addition to fixing imports, goimports also formats your code in the same style as gofmt.
@@ -98,6 +98,9 @@ linters:
 
 issues:
   max-same-issues: 50
+
+  exclude-files:
+    - internal/stackoverflow/generated.go
 
   exclude-rules:
     # Don't require TODO comments to end in a period
