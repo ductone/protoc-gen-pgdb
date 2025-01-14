@@ -110,7 +110,8 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 				`" + io.ColumnName("%s") + " IS NULL`,
 				name,
 			)
-			//			rv.DB.WherePredicate = "false"
+		} else {
+			panic(fmt.Sprintf("%s ould not find field for partial index: deleted_at", m.FullyQualifiedName()))
 		}
 	}
 	return rv
