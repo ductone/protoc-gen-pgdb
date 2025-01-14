@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"google.golang.org/protobuf/encoding/protojson"
+	pstruct "google.golang.org/protobuf/types/known/structpb"
 
 	jsoniter "github.com/json-iterator/go"
 )

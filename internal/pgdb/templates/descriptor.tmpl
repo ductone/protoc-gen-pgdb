@@ -113,6 +113,7 @@ func (d *{{.ReceiverType}}) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
       IsDropped: {{ .DB.IsDropped }},
       Columns: []string{ {{- range .DB.Columns -}} io.ColumnName("{{- . -}}"), {{- end -}} },
       OverrideExpression: "{{ .DB.OverrideExpression }}",
+      WherePredicate: "{{ .DB.WherePredicate }}",
     })
     {{ end }}
     {{ if .ExcludeNested }}

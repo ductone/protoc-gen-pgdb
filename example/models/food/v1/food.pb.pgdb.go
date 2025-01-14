@@ -197,6 +197,7 @@ func (d *pgdbDescriptorPasta) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -211,6 +212,7 @@ func (d *pgdbDescriptorPasta) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -225,6 +227,7 @@ func (d *pgdbDescriptorPasta) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -239,6 +242,7 @@ func (d *pgdbDescriptorPasta) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1155,6 +1159,7 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1169,6 +1174,7 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1183,6 +1189,7 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1197,6 +1204,7 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1211,6 +1219,7 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("model_embeddings_1")},
 			OverrideExpression: "pb$model_embeddings_1 vector_cosine_ops",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1225,6 +1234,7 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("model_embeddings_2")},
 			OverrideExpression: "pb$model_embeddings_2 vector_cosine_ops",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1237,6 +1247,7 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pasta_id"), io.ColumnName("id")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -1247,6 +1258,7 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("ingredient_id"), io.ColumnName("id")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -1257,6 +1269,18 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("ingredient_id"), io.ColumnName("pasta_id"), io.ColumnName("id")},
 		OverrideExpression: "",
+		WherePredicate:     "",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("everythingggg_alive_only_pasta_ingredie_8f1dedc7"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("ingredient_id"), io.ColumnName("pasta_id"), io.ColumnName("id")},
+		OverrideExpression: "",
+		WherePredicate:     "" + io.ColumnName("deleted_at") + " IS NULL",
 	})
 
 	return rv
@@ -2519,6 +2543,7 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -2533,6 +2558,7 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -2547,6 +2573,7 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -2561,6 +2588,7 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -2573,6 +2601,7 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("source_addr")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	return rv

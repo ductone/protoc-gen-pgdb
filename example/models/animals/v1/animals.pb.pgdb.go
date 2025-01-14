@@ -269,6 +269,7 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -283,6 +284,7 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -297,6 +299,7 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -311,6 +314,7 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -323,6 +327,7 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("profile")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	return rv
@@ -1777,6 +1782,7 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1791,6 +1797,7 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1805,6 +1812,7 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1819,6 +1827,7 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -1831,6 +1840,7 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 		IsDropped:          false,
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("repeated_sfixed32"), io.ColumnName("repeated_sfixed64"), io.ColumnName("repeated_double"), io.ColumnName("repeated_bytes"), io.ColumnName("string_map")},
 		OverrideExpression: "",
+		WherePredicate:     "",
 	})
 
 	return rv
@@ -4229,6 +4239,7 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -4243,6 +4254,7 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -4257,6 +4269,7 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -4271,6 +4284,7 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -5192,6 +5206,7 @@ func (d *pgdbDescriptorNewspaper) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*p
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -5206,6 +5221,7 @@ func (d *pgdbDescriptorNewspaper) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*p
 			IsDropped:          true,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -5220,6 +5236,7 @@ func (d *pgdbDescriptorNewspaper) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*p
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}
@@ -5234,6 +5251,7 @@ func (d *pgdbDescriptorNewspaper) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*p
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
+			WherePredicate:     "",
 		})
 
 	}

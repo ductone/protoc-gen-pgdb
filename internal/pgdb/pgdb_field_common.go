@@ -97,7 +97,7 @@ func (fc *fieldConvert) GoType() (string, error) {
 	case gtPbNestedMsg:
 		return string(fc.ctx.Type(fc.F)), nil
 	case gtInetAddr:
-		return "string", nil
+		return fieldConvertString, nil
 	default:
 		panic(fmt.Errorf("pgdb: Implement fieldConvert.GoType for %v", fc.TypeConversion))
 	}
