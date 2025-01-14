@@ -91,7 +91,10 @@ func appendArrayQuotedBytes(b, v []byte) []byte {
 // is case-sensitive.
 //
 // See http://www.postgresql.org/docs/current/static/arrays.html#ARRAYS-IO
-func parseArray(src, del []byte) (dims []int, elems [][]byte, err error) {
+func parseArray(src, del []byte) ([]int, [][]byte, error) {
+	var dims []int
+	var elems [][]byte
+	var err error
 	var depth, i int
 
 	if len(src) < 1 || src[0] != '{' {
@@ -161,15 +164,16 @@ Element:
 	}
 
 	for i < len(src) {
-		if bytes.HasPrefix(src[i:], del) && depth > 0 {
+		switch {
+		case bytes.HasPrefix(src[i:], del) && depth > 0:
 			dims[depth-1]++
 			i += len(del)
 			goto Element
-		} else if src[i] == '}' && depth > 0 {
+		case src[i] == '}' && depth > 0:
 			dims[depth-1]++
 			depth--
 			i++
-		} else {
+		default:
 			return nil, nil, fmt.Errorf("pq: unable to parse array; unexpected %q at offset %d", src[i], i)
 		}
 	}
@@ -193,7 +197,7 @@ Close:
 			}
 		}
 	}
-	return
+	return dims, elems, err
 }
 
 func scanLinearArray(src, del []byte, typ string) (elems [][]byte, err error) {
@@ -202,7 +206,14 @@ func scanLinearArray(src, del []byte, typ string) (elems [][]byte, err error) {
 		return nil, err
 	}
 	if len(dims) > 1 {
-		return nil, fmt.Errorf("pq: cannot convert ARRAY%s to %s", strings.Replace(fmt.Sprint(dims), " ", "][", -1), typ)
+		return nil, fmt.Errorf(
+			"pq: cannot convert ARRAY%s to %s",
+			strings.ReplaceAll(
+				fmt.Sprint(dims),
+				" ", "][",
+			),
+			typ,
+		)
 	}
 	return elems, err
 }
