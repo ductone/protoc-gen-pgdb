@@ -200,7 +200,7 @@ Close:
 	return dims, elems, err
 }
 
-func scanLinearArray(src, del []byte, typ string) (elems [][]byte, err error) {
+func scanLinearArray(src, del []byte, typ string) ([][]byte, error) {
 	dims, elems, err := parseArray(src, del)
 	if err != nil {
 		return nil, err
