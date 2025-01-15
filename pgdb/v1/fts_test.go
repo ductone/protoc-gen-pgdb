@@ -9,6 +9,7 @@ import (
 	_ "github.com/doug-martin/goqu/v9/dialect/postgres"
 	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -49,6 +50,66 @@ func TestSearchBigQueryDoc(t *testing.T) {
 
 	// make sure basic query also misses
 	requireQueryFalse(t, pg, vector, "github")
+}
+
+func TestSearchSymbols(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	dotVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "Example.THING-PROD.Group29",
+		},
+	})
+
+	pathVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "/some/file/path/foo33",
+		},
+	})
+
+	queries := []struct {
+		input   string
+		matched bool
+		vectors exp.Expression
+	}{
+		{
+			"THING", true, dotVector,
+		},
+		{
+			"THING-PROD", true, dotVector,
+		},
+		{
+			"Group29", true, dotVector,
+		},
+		{
+			"Example", false, pathVector,
+		},
+		{
+			"foo33", true, pathVector,
+		},
+		{
+			"file", true, pathVector,
+		},
+		{
+			"path/foo", true, pathVector,
+		},
+		{
+			"path/foo33", true, pathVector,
+		},
+	}
+
+	for _, q := range queries {
+		// run each in test suite
+		t.Run(q.input, func(t *testing.T) {
+			requireQueryIs(t, pg, q.vectors, q.input, q.matched)
+		})
+	}
 }
 
 func TestSearchEmpty(t *testing.T) {
@@ -771,15 +832,17 @@ func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input s
 	qb := goqu.Dialect("postgres")
 	ctx := context.Background()
 	q := FullTextSearchQuery(input)
+	_ = q
 	query, args, err := qb.Select(
 		goqu.L("? @@ ?", vectors, q),
 	).ToSQL()
 	require.NoError(t, err)
 
 	var result bool
+
 	err = pg.DB.QueryRow(ctx, query, args...).Scan(&result)
-	require.NoError(t, err)
-	require.Equal(t, matched, result, "Expected query matching failed: '%s'", input)
+	require.NoError(t, err, "Failed to execute query: %s\nQUERY: %s\n", err, query)
+	assert.Equal(t, matched, result, "Expected query matching failed: '%s'\nQUERY: %s\n\n", input, query)
 }
 
 func requireQueryTrue(t *testing.T, pg *pgtest.PG, vectors exp.Expression, query string) {
