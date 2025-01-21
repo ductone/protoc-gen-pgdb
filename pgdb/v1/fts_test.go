@@ -3,6 +3,8 @@ package v1
 import (
 	"bytes"
 	"context"
+	"fmt"
+	"slices"
 	"testing"
 
 	"github.com/doug-martin/goqu/v9"
@@ -73,6 +75,14 @@ func TestSearchSymbols(t *testing.T) {
 		},
 	})
 
+	underscoreVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "foo_bar_baz_21_quux",
+		},
+	})
+
 	queries := []struct {
 		input   string
 		matched bool
@@ -88,10 +98,19 @@ func TestSearchSymbols(t *testing.T) {
 			"Group29", true, dotVector,
 		},
 		{
+			"Group30", false, dotVector,
+		},
+		{
+			"Group", true, dotVector,
+		},
+		{
 			"Example", false, pathVector,
 		},
 		{
 			"foo33", true, pathVector,
+		},
+		{
+			"file/path", true, pathVector,
 		},
 		{
 			"file", true, pathVector,
@@ -101,6 +120,21 @@ func TestSearchSymbols(t *testing.T) {
 		},
 		{
 			"path/foo33", true, pathVector,
+		},
+		{
+			"foo", true, underscoreVector,
+		},
+		{
+			"foo_bar", true, underscoreVector,
+		},
+		{
+			"foo_baz", false, underscoreVector,
+		},
+		{
+			"baz", true, underscoreVector,
+		},
+		{
+			"quux", true, underscoreVector,
 		},
 	}
 
@@ -129,6 +163,96 @@ func TestSearchEmpty(t *testing.T) {
 	require.Equal(t, `''::tsvector`, vector.(exp.LiteralExpression).Literal())
 	requireQueryFalse(t, pg, vector, "2DmNjwzqyfzisCFmt0OrPvwJ3gT")
 	requireQueryFalse(t, pg, vector, " ")
+}
+
+func TestStemming(t *testing.T) {
+	testVectors := map[string][]string{
+		"carri": []string{
+			"carry",
+			"carrying",
+			"carried",
+			"carries",
+		},
+		"danc": []string{
+			"dance",
+			"dancing",
+			"danced",
+			"dances",
+		},
+		"confus": []string{
+			"confuse",
+			"confused",
+			"confusing",
+			"confusingly",
+			"confuser",
+			"confuses",
+		},
+	}
+
+	// Test stemming for tsvector
+	for expectedStem, inputs := range testVectors {
+		for _, term := range inputs {
+			t.Run(fmt.Sprintf("tsvector %s", term), func(t *testing.T) {
+				vector := FullTextSearchVectors([]*SearchContent{
+					{
+						Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+						Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+						Value:  term,
+					},
+				}).(exp.LiteralExpression)
+
+				for _, term := range vector.Args() {
+					assert.Contains(t, term, fmt.Sprintf("'%s':1", expectedStem))
+				}
+			})
+		}
+	}
+
+	// Test stemming for tsquery
+	for expectedStem, inputs := range testVectors {
+		for _, term := range inputs {
+			t.Run(fmt.Sprintf("tsquery %s", term), func(t *testing.T) {
+				exp := FullTextSearchQuery(term).(exp.LiteralExpression)
+				var args []string
+				for _, arg := range exp.Args() {
+					args = append(args, arg.(string))
+				}
+
+				assert.True(t, slices.Contains(args, expectedStem))
+			})
+		}
+	}
+}
+
+func TestFullSentence(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	vector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "This is a full sentence with fewer than 100 billion words, I shouldn't have /any/ _problems_ matching any part of it, right?! Yeah!",
+		},
+	})
+
+	requireQueryTrue(t, pg, vector, "sentence")
+	requireQueryTrue(t, pg, vector, "sentences")
+	requireQueryTrue(t, pg, vector, "full sentence")
+	requireQueryTrue(t, pg, vector, "few")
+	requireQueryTrue(t, pg, vector, "fewer")
+	requireQueryTrue(t, pg, vector, "100")
+	requireQueryTrue(t, pg, vector, "should")
+	// requireQueryTrue(t, pg, vector, "shouldn't") // it would be nice if this matched
+	requireQueryTrue(t, pg, vector, "any")
+	requireQueryTrue(t, pg, vector, "problem")
+	requireQueryTrue(t, pg, vector, "match")
+	requireQueryTrue(t, pg, vector, "right")
+	requireQueryTrue(t, pg, vector, "YEAH")
+
+	requireQueryFalse(t, pg, vector, "false")
+	requireQueryFalse(t, pg, vector, "problemz")
 }
 
 func TestSearchCamelCase(t *testing.T) {
@@ -191,6 +315,49 @@ func TestSearchSnakeCase(t *testing.T) {
 	requireQueryTrue(t, pg, vector, "aws_prod_us_east_auth_sns_test_sqs")
 	requireQueryTrue(t, pg, vector, "aws_prod_us_east")
 	requireQueryTrue(t, pg, vector, "foo_bar_lol_foobar_sos_test_nope_")
+	requireQueryTrue(t, pg, vector, "prod")
+	requireQueryTrue(t, pg, vector, "east")
+	requireQueryTrue(t, pg, vector, "auth")
+	requireQueryTrue(t, pg, vector, "test")
+	requireQueryTrue(t, pg, vector, "foo")
+	requireQueryTrue(t, pg, vector, "bar")
+	requireQueryTrue(t, pg, vector, "foobar")
+	requireQueryTrue(t, pg, vector, "test")
+	requireQueryTrue(t, pg, vector, "cheeze")
+	requireQueryTrue(t, pg, vector, "breeze")
+	requireQueryTrue(t, pg, vector, "aws")
+	requireQueryTrue(t, pg, vector, "sns")
+	requireQueryTrue(t, pg, vector, "sqs")
+	requireQueryTrue(t, pg, vector, "lol")
+	requireQueryTrue(t, pg, vector, "sos")
+	requireQueryTrue(t, pg, vector, "nope")
+
+	requireQueryFalse(t, pg, vector, "github")
+	requireQueryFalse(t, pg, vector, "spro")
+	requireQueryFalse(t, pg, vector, "snste")
+	requireQueryFalse(t, pg, vector, "zebre")
+	requireQueryFalse(t, pg, vector, "lfoo")
+	requireQueryFalse(t, pg, vector, "seast")
+	requireQueryFalse(t, pg, vector, "easta")
+	requireQueryFalse(t, pg, vector, "arsoste")
+	requireQueryFalse(t, pg, vector, "zebree")
+	requireQueryFalse(t, pg, vector, "testsq")
+}
+
+func TestSearchPathsFull(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	vector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "AWS/Prod/US/east/auth/sns/test/sqs foo/bar/LOL/foobar/SOS/Test/NOPE/ /Cheeze/breeze/",
+		},
+	})
+
+	requireQueryTrue(t, pg, vector, "aws/prod/us/east/auth/sns/test/sqs")
 	requireQueryTrue(t, pg, vector, "prod")
 	requireQueryTrue(t, pg, vector, "east")
 	requireQueryTrue(t, pg, vector, "auth")
