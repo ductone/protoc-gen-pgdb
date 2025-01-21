@@ -318,7 +318,7 @@ func acronymSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchConten
 	return rv
 }
 
-// split foo-bar, foo.bar, and foo/bar into [foo bar]
+// split foo-bar, foo.bar, and foo/bar into [foo bar].
 func punctuationSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
 	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
@@ -331,13 +331,11 @@ func punctuationSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchCo
 				pos = i + 2 // i is zero indexed, and we want to skip this current rune, so add 2 for the true start of the next token
 			}
 			wordBuffer.Reset()
-		} else {
-			if unicode.IsLetter(r) || unicode.IsDigit(r) { // || unicode.IsSpace(r) {
-				_, e := wordBuffer.WriteRune(r)
-				if e != nil {
-					wordBuffer.Reset()
-					continue
-				}
+		} else if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			_, e := wordBuffer.WriteRune(r)
+			if e != nil {
+				wordBuffer.Reset()
+				continue
 			}
 		}
 	}
