@@ -715,6 +715,34 @@ func TestCamelSplitDoc(t *testing.T) {
 	}
 }
 
+func TestPunctuationSplitDoc(t *testing.T) {
+	testCases := []struct {
+		searchContent   *SearchContent
+		expectedLexemes []lexeme
+	}{
+		{
+			searchContent: &SearchContent{
+				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+				Value:  "foo.bar-baz/quux_eek35!",
+			},
+			expectedLexemes: []lexeme{
+				{"foo", 1, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"bar", 5, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"baz", 9, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"quux", 13, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"eek35", 18, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		var wordBuffer bytes.Buffer
+		lexemes := punctuationSplitDoc(tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
+		require.Equal(t, tc.expectedLexemes, lexemes)
+	}
+}
+
 func TestAcronymSplitDoc(t *testing.T) {
 	testCases := []struct {
 		searchContent   *SearchContent

@@ -319,6 +319,38 @@ func acronymSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchConten
 	return rv
 }
 
+// split foo-bar, foo.bar, and foo/bar into [foo bar]
+func punctuationSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
+	wordBuffer.Reset()
+	rv := make([]lexeme, 0, 8)
+	var pos = 1
+
+	for i, r := range docValue {
+		if unicode.IsPunct(r) {
+			if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+				rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+				pos = i + 2 // i is zero indexed, and we want to skip this current rune, so add 2 for the true start of the next token
+			}
+			wordBuffer.Reset()
+		} else {
+			if unicode.IsLetter(r) || unicode.IsDigit(r) { // || unicode.IsSpace(r) {
+				_, e := wordBuffer.WriteRune(r)
+				if e != nil {
+					wordBuffer.Reset()
+					continue
+				}
+			}
+		}
+	}
+
+	// leftover since last append
+	if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+		rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+	}
+
+	return rv
+}
+
 // normalizeVectorDocs - converts a set of input documents into a set of lexemes matching common patterns such as camel case, snake case and accronyms.
 func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
