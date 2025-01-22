@@ -11,7 +11,6 @@ import (
 	"github.com/clipperhouse/jargon/filters/ascii"
 	"github.com/clipperhouse/jargon/filters/stemmer"
 	"github.com/doug-martin/goqu/v9/exp"
-	"github.com/ductone/protoc-gen-pgdb/internal/stackoverflow"
 )
 
 type SearchContent struct {
@@ -66,7 +65,7 @@ func interfaceToValue(in interface{}) string {
 
 func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []lexeme {
 	edgeGramFilter := edgegramStream(3)
-	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
+	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold}
 	filters = append(filters, additionalFilters...)
 	rv := make([]lexeme, 0, 8)
 	pos := 1
@@ -319,6 +318,36 @@ func acronymSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchConten
 	return rv
 }
 
+// split foo-bar, foo.bar, and foo/bar into [foo bar].
+func punctuationSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
+	wordBuffer.Reset()
+	rv := make([]lexeme, 0, 8)
+	var pos = 1
+
+	for i, r := range docValue {
+		if unicode.IsPunct(r) {
+			if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+				rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+				pos = i + 2 // i is zero indexed, and we want to skip this current rune, so add 2 for the true start of the next token
+			}
+			wordBuffer.Reset()
+		} else if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			_, e := wordBuffer.WriteRune(r)
+			if e != nil {
+				wordBuffer.Reset()
+				continue
+			}
+		}
+	}
+
+	// leftover since last append
+	if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+		rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
+	}
+
+	return rv
+}
+
 // normalizeVectorDocs - converts a set of input documents into a set of lexemes matching common patterns such as camel case, snake case and accronyms.
 func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
@@ -331,6 +360,7 @@ func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 		rv = append(rv, camelSplitDoc(docValue, wordBuffer, doc)...)
 		rv = append(rv, snakeSubTokensSplitDoc(docValue, wordBuffer, doc)...)
 		rv = append(rv, snakeFullTokensSplitDoc(docValue, wordBuffer, doc)...)
+		rv = append(rv, punctuationSplitDoc(docValue, wordBuffer, doc)...)
 		rv = append(rv, acronymSplitDoc(docValue, wordBuffer, doc)...)
 	}
 	return rv
@@ -364,25 +394,44 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 }
 
 func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
-	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold, stackoverflow.Tags}
+	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold}
 	filters = append(filters, additionalFilters...)
+	tokens := jargon.TokenizeString(input).Filter(filters...).Words()
 
-	terms, _ := jargon.TokenizeString(input).Filter(filters...).String()
-	stemmedTerms, _ := jargon.TokenizeString(input).Filter(stemmer.English).String()
+	var searchTerms []string
 
-	terms = cleanToken(terms)
-	stemmedTerms = cleanToken(stemmedTerms)
+	for {
+		token, err := tokens.Next()
+		if err != nil {
+			continue
+		}
 
-	// often for simple queries, once fully stemmed, we get the same values!
-	if terms == stemmedTerms {
-		return exp.NewLiteralExpression(
-			"(websearch_to_tsquery('simple', ?))",
-			terms)
+		if token == nil {
+			break
+		}
+
+		t := strings.Map(func(r rune) rune {
+			if unicode.IsDigit(r) || unicode.IsLetter(r) || unicode.IsSpace(r) {
+				return r // keep these
+			}
+
+			return -1 // drop everything else
+		}, token.String())
+
+		searchTerms = append(searchTerms, t)
+	}
+
+	searchText := strings.Join(searchTerms, " ")
+	stemmedSearchText, _ := jargon.TokenizeString(searchText).Filter(stemmer.English).String()
+
+	if searchText == stemmedSearchText {
+		return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", searchText)
 	}
 
 	return exp.NewLiteralExpression(
 		"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
-		terms, stemmedTerms)
+		searchText,
+		stemmedSearchText)
 }
 
 type lexeme struct {
