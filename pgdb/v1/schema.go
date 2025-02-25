@@ -49,7 +49,7 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 		_, _ = buf.WriteString(desc.TenantField().Name)
 		_, _ = buf.WriteString(")\n")
 	} else if desc.IsPartitionedByCreatedAt() {
-		_, _ = buf.WriteString("PARTITION BY RANGE(created_at)\n")
+		_, _ = buf.WriteString("PARTITION BY RANGE(pb$created_at)\n")
 	}
 
 	rv := []string{buf.String()}
@@ -403,9 +403,6 @@ func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessa
 
 	// Get partition interval
 	interval := desc.GetPartitionDateRange()
-	if interval == MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED {
-		interval = MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH // Default to monthly
-	}
 
 	// Iterate through the date range and create partitions
 	current := startDate

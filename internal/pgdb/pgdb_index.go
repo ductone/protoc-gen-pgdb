@@ -145,6 +145,10 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		},
 	}
 
+	if fext.PartitionedByCreatedAt {
+		primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, "created_at")
+	}
+
 	// So, we learned early in our deployment that having a second unique index
 	// doesn't work well with Upserts in Postgres.
 	//

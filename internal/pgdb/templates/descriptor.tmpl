@@ -16,6 +16,10 @@ func (d *{{.ReceiverType}}) IsPartitionedByCreatedAt() bool {
     return {{.IsPartitionedByCreatedAt}}
 }
 
+func (d *{{.ReceiverType}}) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+    return {{.PartitionDateRange}}
+}
+
 func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
   df := pgdb_v1.NewDescriptorFieldOption(opts)
   _ = df
@@ -149,8 +153,4 @@ func (d *{{.ReceiverType}}) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*
   {{ end }}
 
   return rv
-}
-
-func (d *{{.ReceiverType}}) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
-    return {{.PartitionDateRange}}
 }

@@ -29,6 +29,14 @@ func (d *pgdbDescriptorPasta) IsPartitioned() bool {
 	return true
 }
 
+func (d *pgdbDescriptorPasta) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPasta) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
 func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -949,6 +957,14 @@ func (d *pgdbDescriptorPastaIngredient) TableName() string {
 
 func (d *pgdbDescriptorPastaIngredient) IsPartitioned() bool {
 	return true
+}
+
+func (d *pgdbDescriptorPastaIngredient) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPastaIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
 func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -2367,6 +2383,14 @@ func (d *pgdbDescriptorSauceIngredient) IsPartitioned() bool {
 	return false
 }
 
+func (d *pgdbDescriptorSauceIngredient) IsPartitionedByCreatedAt() bool {
+	return true
+}
+
+func (d *pgdbDescriptorSauceIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
+}
+
 func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -2522,7 +2546,7 @@ func (d *pgdbDescriptorSauceIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOpt
 		IsPrimary:          true,
 		IsUnique:           true,
 		IsDropped:          false,
-		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
 		OverrideExpression: "",
 	}
 
@@ -2541,7 +2565,7 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsPrimary:          true,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -3136,6 +3160,69 @@ func (x *SauceIngredientDBQueryBuilder) FTSData() *SauceIngredientFTSDataSafeOpe
 	return &SauceIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
+type SauceIngredientCreatedAtSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *SauceIngredientCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *SauceIngredientDBQueryBuilder) CreatedAt() *SauceIngredientCreatedAtSafeOperators {
+	return &SauceIngredientCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
 type SauceIngredientSourceAddrSafeOperators struct {
 	column    string
 	tableName string
@@ -3407,6 +3494,14 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) TableName() string {
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) IsPartitioned() bool {
 	return false
+}
+
+func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

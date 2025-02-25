@@ -29,6 +29,14 @@ func (d *pgdbDescriptorPet) IsPartitioned() bool {
 	return false
 }
 
+func (d *pgdbDescriptorPet) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPet) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
 func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -1356,6 +1364,14 @@ func (d *pgdbDescriptorScalarValue) TableName() string {
 
 func (d *pgdbDescriptorScalarValue) IsPartitioned() bool {
 	return false
+}
+
+func (d *pgdbDescriptorScalarValue) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorScalarValue) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
 func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -3707,6 +3723,14 @@ func (d *pgdbDescriptorEBook) IsPartitioned() bool {
 	return false
 }
 
+func (d *pgdbDescriptorEBook) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorEBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
 func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -3890,6 +3914,14 @@ func (d *pgdbDescriptorPaperBook) IsPartitioned() bool {
 	return false
 }
 
+func (d *pgdbDescriptorPaperBook) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPaperBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
 func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -4071,6 +4103,14 @@ func (d *pgdbDescriptorBook) TableName() string {
 
 func (d *pgdbDescriptorBook) IsPartitioned() bool {
 	return false
+}
+
+func (d *pgdbDescriptorBook) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
 func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -5052,6 +5092,14 @@ func (d *pgdbDescriptorNewspaper) TableName() string {
 
 func (d *pgdbDescriptorNewspaper) IsPartitioned() bool {
 	return false
+}
+
+func (d *pgdbDescriptorNewspaper) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorNewspaper) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
 func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

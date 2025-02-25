@@ -28,7 +28,7 @@ func index2sql(desc Descriptor, idx *Index) string {
 	}
 	_, _ = buf.WriteString(" INDEX")
 	// Note cannot drop or add indexes concurrently on the master partition tables
-	if !desc.IsPartitioned() {
+	if !desc.IsPartitioned() && !desc.IsPartitionedByCreatedAt() {
 		_, _ = buf.WriteString(" CONCURRENTLY")
 	}
 	_, _ = buf.WriteString(" IF NOT EXISTS\n  ")
