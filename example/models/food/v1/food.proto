@@ -102,6 +102,10 @@ message PastaIngredient {
 }
 
 message SauceIngredient {
+  option (pgdb.v1.msg) = {
+    partitioned_by_created_at: true
+    partitioned_by_date_range: PARTITIONED_BY_DATE_RANGE_MONTH
+  };
   option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id",

@@ -45,6 +45,20 @@ message MessageOptions {
   // tenant_id.
   bool partitioned = 5;
 
+  // if this message is used then we create a partitioned table and partition by
+  // created_at.
+  bool partitioned_by_created_at = 7;
+
+  // if this message is used then we create a partitioned table and partition by
+  // a date field.
+  enum PartitionedByDateRange {
+    PARTITIONED_BY_DATE_RANGE_UNSPECIFIED = 0;
+    PARTITIONED_BY_DATE_RANGE_DAY = 1;
+    PARTITIONED_BY_DATE_RANGE_MONTH = 2;
+    PARTITIONED_BY_DATE_RANGE_YEAR = 3;
+  }
+  PartitionedByDateRange partitioned_by_date_range = 8;
+
   message Stat {
     enum StatsKind {
       STATS_KIND_UNSPECIFIED = 0;

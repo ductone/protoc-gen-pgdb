@@ -10,15 +10,17 @@ import (
 )
 
 type descriptorTemplateContext struct {
-	Type            string
-	ReceiverType    string
-	TableName       string
-	Fields          []*fieldContext
-	NestedFields    []*nestedFieldContext
-	Indexes         []*indexContext
-	Statistics      []*statsContext
-	VersioningField string
-	IsPartitioned   bool
+	Type                     string
+	ReceiverType             string
+	TableName                string
+	Fields                   []*fieldContext
+	NestedFields             []*nestedFieldContext
+	Indexes                  []*indexContext
+	Statistics               []*statsContext
+	VersioningField          string
+	IsPartitioned            bool
+	IsPartitionedByCreatedAt bool
+	PartitionDateRange       string
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -48,15 +50,17 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 	}
 
 	c := &descriptorTemplateContext{
-		Type:            mt,
-		ReceiverType:    mt,
-		Fields:          fields,
-		NestedFields:    mestedFields,
-		Indexes:         module.getMessageIndexes(ctx, m, ix),
-		Statistics:      module.getMessageStatistics(ctx, m, ix),
-		TableName:       tableName,
-		VersioningField: vf,
-		IsPartitioned:   fext.Partitioned,
+		Type:                     mt,
+		ReceiverType:             mt,
+		Fields:                   fields,
+		NestedFields:             mestedFields,
+		Indexes:                  module.getMessageIndexes(ctx, m, ix),
+		Statistics:               module.getMessageStatistics(ctx, m, ix),
+		TableName:                tableName,
+		VersioningField:          vf,
+		IsPartitioned:            fext.Partitioned,
+		IsPartitionedByCreatedAt: fext.PartitionedByCreatedAt,
+		PartitionDateRange:       "pgdb_v1.MessageOptions_" + fext.PartitionedByDateRange.String(),
 	}
 
 	return templates["descriptor.tmpl"].Execute(w, c)

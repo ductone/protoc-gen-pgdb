@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
@@ -47,6 +48,8 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 		_, _ = buf.WriteString("PARTITION BY LIST(")
 		_, _ = buf.WriteString(desc.TenantField().Name)
 		_, _ = buf.WriteString(")\n")
+	} else if desc.IsPartitionedByCreatedAt() {
+		_, _ = buf.WriteString("PARTITION BY RANGE(created_at)\n")
 	}
 
 	rv := []string{buf.String()}
@@ -369,4 +372,75 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 	}
 
 	return nil
+}
+
+// DatePartitionsUpdate creates partitions for date ranges based on the partitioning scheme
+func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
+	desc := msg.DBReflect().Descriptor()
+	tableName := desc.TableName()
+
+	// Validate that created_at column exists
+	columns, err := readColumns(ctx, db, desc)
+	if err != nil {
+		return err
+	}
+	if _, hasCreatedAt := columns["created_at"]; !hasCreatedAt {
+		return fmt.Errorf("table %s is configured for date partitioning but missing created_at column", tableName)
+	}
+
+	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
+	if err != nil {
+		return err
+	}
+
+	// The table exists but is not a parent partition
+	if !isParentPartition {
+		return nil
+	}
+
+	// Create partition schema template
+	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES FROM ($1) TO ($2);`
+
+	// Get partition interval
+	interval := desc.GetPartitionDateRange()
+	if interval == MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED {
+		interval = MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH // Default to monthly
+	}
+
+	// Iterate through the date range and create partitions
+	current := startDate
+	for current.Before(endDate) {
+		var nextDate time.Time
+		var partitionTableName string
+
+		// Calculate the next partition boundary based on interval
+		switch interval {
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_DAY:
+			nextDate = current.AddDate(0, 0, 1)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006_01_02"))
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH:
+			nextDate = current.AddDate(0, 1, 0)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006_01"))
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_YEAR:
+			nextDate = current.AddDate(1, 0, 0)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006"))
+		default:
+			return fmt.Errorf("unsupported partition interval: %v", interval)
+		}
+
+		builtSchema := fmt.Sprintf(createPartitionSchema, partitionTableName, tableName)
+		err := updateFunc(ctx, builtSchema, current, nextDate)
+		if err != nil {
+			return err
+		}
+
+		current = nextDate
+	}
+
+	return nil
+}
+
+// Helper function to create a partition table name for date ranges
+func createDatePartitionTableName(tableName string, date time.Time) string {
+	return fmt.Sprintf("%s_%s", tableName, date.Format("2006_01"))
 }
