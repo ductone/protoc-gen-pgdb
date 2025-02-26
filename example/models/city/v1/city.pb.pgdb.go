@@ -36,6 +36,10 @@ func (d *pgdbDescriptorAttractions) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
+func (d *pgdbDescriptorAttractions) IsPartitionedByEventId() bool {
+	return false
+}
+
 func (d *pgdbDescriptorAttractions) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }

@@ -33,6 +33,10 @@ func (d *pgdbDescriptorPet) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
+func (d *pgdbDescriptorPet) IsPartitionedByEventId() bool {
+	return false
+}
+
 func (d *pgdbDescriptorPet) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
@@ -1367,6 +1371,10 @@ func (d *pgdbDescriptorScalarValue) IsPartitioned() bool {
 }
 
 func (d *pgdbDescriptorScalarValue) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorScalarValue) IsPartitionedByEventId() bool {
 	return false
 }
 
@@ -3727,6 +3735,10 @@ func (d *pgdbDescriptorEBook) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
+func (d *pgdbDescriptorEBook) IsPartitionedByEventId() bool {
+	return false
+}
+
 func (d *pgdbDescriptorEBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
@@ -3918,6 +3930,10 @@ func (d *pgdbDescriptorPaperBook) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
+func (d *pgdbDescriptorPaperBook) IsPartitionedByEventId() bool {
+	return false
+}
+
 func (d *pgdbDescriptorPaperBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
@@ -4106,6 +4122,10 @@ func (d *pgdbDescriptorBook) IsPartitioned() bool {
 }
 
 func (d *pgdbDescriptorBook) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorBook) IsPartitionedByEventId() bool {
 	return false
 }
 
@@ -5095,6 +5115,10 @@ func (d *pgdbDescriptorNewspaper) IsPartitioned() bool {
 }
 
 func (d *pgdbDescriptorNewspaper) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorNewspaper) IsPartitionedByEventId() bool {
 	return false
 }
 

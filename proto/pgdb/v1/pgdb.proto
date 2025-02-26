@@ -59,6 +59,10 @@ message MessageOptions {
   }
   PartitionedByDateRange partitioned_by_date_range = 8;
 
+  // if this message is used then we create a partitioned table and partition by
+  // event_id.
+  bool partitioned_by_event_id = 9;
+
   message Stat {
     enum StatsKind {
       STATS_KIND_UNSPECIFIED = 0;

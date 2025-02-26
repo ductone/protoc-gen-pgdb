@@ -33,6 +33,10 @@ func (d *pgdbDescriptorPasta) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
+func (d *pgdbDescriptorPasta) IsPartitionedByEventId() bool {
+	return false
+}
+
 func (d *pgdbDescriptorPasta) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
@@ -960,6 +964,10 @@ func (d *pgdbDescriptorPastaIngredient) IsPartitioned() bool {
 }
 
 func (d *pgdbDescriptorPastaIngredient) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPastaIngredient) IsPartitionedByEventId() bool {
 	return false
 }
 
@@ -2387,6 +2395,10 @@ func (d *pgdbDescriptorSauceIngredient) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
+func (d *pgdbDescriptorSauceIngredient) IsPartitionedByEventId() bool {
+	return false
+}
+
 func (d *pgdbDescriptorSauceIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
@@ -3419,29 +3431,33 @@ func (x *SauceIngredientDBColumns) SourceAddr() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "source_addr")
 }
 
-type pgdbDescriptorCheeseIngredient struct{}
+type pgdbDescriptorGarlicIngredient struct{}
 
 var (
-	instancepgdbDescriptorCheeseIngredient pgdb_v1.Descriptor = &pgdbDescriptorCheeseIngredient{}
+	instancepgdbDescriptorGarlicIngredient pgdb_v1.Descriptor = &pgdbDescriptorGarlicIngredient{}
 )
 
-func (d *pgdbDescriptorCheeseIngredient) TableName() string {
-	return "pb_cheese_ingredient_models_food_v1_886942a1"
+func (d *pgdbDescriptorGarlicIngredient) TableName() string {
+	return "pb_garlic_ingredient_models_food_v1_9fa66ee2"
 }
 
-func (d *pgdbDescriptorCheeseIngredient) IsPartitioned() bool {
+func (d *pgdbDescriptorGarlicIngredient) IsPartitioned() bool {
 	return false
 }
 
-func (d *pgdbDescriptorCheeseIngredient) IsPartitionedByCreatedAt() bool {
+func (d *pgdbDescriptorGarlicIngredient) IsPartitionedByCreatedAt() bool {
 	return true
 }
 
-func (d *pgdbDescriptorCheeseIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+func (d *pgdbDescriptorGarlicIngredient) IsPartitionedByEventId() bool {
+	return false
+}
+
+func (d *pgdbDescriptorGarlicIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
 }
 
-func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
 
@@ -3562,6 +3578,1123 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	return rv
 }
 
+func (d *pgdbDescriptorGarlicIngredient) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorGarlicIngredient) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorGarlicIngredient) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorGarlicIngredient) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorGarlicIngredient) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2", Name: "pb$tenant_id", Type: "varchar"}
+}
+
+func (d *pgdbDescriptorGarlicIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_garlic_ingredient_models_food_v1_d39f3594"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorGarlicIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_garlic_ingredient_models_food_v1_d39f3594"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_garlic_ingredient_models_foo_8e7a2d06"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_garlic_ingredient_models_fo_a1249d6f"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_garlic_ingredient_models_food_949a787d"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("source_addr_index_garlic_ingredient_mod_914c0e80"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("source_addr")},
+		OverrideExpression: "",
+		WherePredicate:     "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorGarlicIngredient) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageGarlicIngredient struct {
+	self *GarlicIngredient
+}
+
+func (dbr *GarlicIngredient) DBReflect() pgdb_v1.Message {
+	return &pgdbMessageGarlicIngredient{
+		self: dbr,
+	}
+}
+
+func (m *pgdbMessageGarlicIngredient) Descriptor() pgdb_v1.Descriptor {
+	return instancepgdbDescriptorGarlicIngredient
+}
+
+func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_food_v1_garlic_ingredient")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.TenantId)
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.Id)
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("examplecheese")
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv4tmp := []*pgdb_v1.SearchContent{
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+				Value:  m.self.GetId(),
+			},
+		}
+
+		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv4
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv5
+		}
+
+	}
+
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
+
+	var v2 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v2tmp := m.self.GetCreatedAt().AsTime()
+		v2 = &v2tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v2
+	}
+
+	var v3 *time.Time
+	if m.self.GetUpdatedAt().IsValid() {
+		v3tmp := m.self.GetUpdatedAt().AsTime()
+		v3 = &v3tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v3
+	}
+
+	var v4 *time.Time
+	if m.self.GetDeletedAt().IsValid() {
+		v4tmp := m.self.GetDeletedAt().AsTime()
+		v4 = &v4tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("deleted_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("deleted_at")] = v4
+	}
+
+	var v5 *string
+	if m.self.GetSourceAddr() != "" {
+		v5tmp, err := netip.ParseAddr(m.self.GetSourceAddr())
+		if err != nil {
+			return nil, err
+		}
+		v5val := v5tmp.Unmap().String()
+		v5 = &v5val
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("source_addr")] = nullExp
+	} else {
+		rv[ro.ColumnName("source_addr")] = v5
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageGarlicIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{
+
+		{
+			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+			Value:  m.self.GetId(),
+		},
+	}
+
+	return rv
+}
+
+type GarlicIngredientDB struct {
+	tableName string
+}
+
+type GarlicIngredientDBQueryBuilder struct {
+	tableName string
+}
+
+type GarlicIngredientDBQueryUnsafe struct {
+	tableName string
+}
+
+type GarlicIngredientDBColumns struct {
+	tableName string
+}
+
+func (x *GarlicIngredient) DB() *GarlicIngredientDB {
+	return &GarlicIngredientDB{tableName: x.DBReflect().Descriptor().TableName()}
+}
+
+func (x *GarlicIngredientDB) TableName() string {
+	return x.tableName
+}
+
+func (x *GarlicIngredientDB) Query() *GarlicIngredientDBQueryBuilder {
+	return &GarlicIngredientDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *GarlicIngredientDB) Columns() *GarlicIngredientDBColumns {
+	return &GarlicIngredientDBColumns{tableName: x.tableName}
+}
+
+func (x *GarlicIngredientDB) WithTable(t string) *GarlicIngredientDB {
+	return &GarlicIngredientDB{tableName: t}
+}
+
+func (x *GarlicIngredientDBQueryBuilder) WithTable(t string) *GarlicIngredientDBQueryBuilder {
+	return &GarlicIngredientDBQueryBuilder{tableName: t}
+}
+
+func (x *GarlicIngredientDBQueryBuilder) Unsafe() *GarlicIngredientDBQueryUnsafe {
+	return &GarlicIngredientDBQueryUnsafe{tableName: x.tableName}
+}
+
+type GarlicIngredientTenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientDBQueryBuilder) TenantId() *GarlicIngredientTenantIdSafeOperators {
+	return &GarlicIngredientTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type GarlicIngredientPKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientDBQueryBuilder) PKSK() *GarlicIngredientPKSKSafeOperators {
+	return &GarlicIngredientPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type GarlicIngredientPKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *GarlicIngredientPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *GarlicIngredientPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *GarlicIngredientPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *GarlicIngredientPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *GarlicIngredientPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *GarlicIngredientPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *GarlicIngredientPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *GarlicIngredientPKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *GarlicIngredientPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *GarlicIngredientPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientDBQueryBuilder) PK() *GarlicIngredientPKSafeOperators {
+	return &GarlicIngredientPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type GarlicIngredientSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *GarlicIngredientSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *GarlicIngredientSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *GarlicIngredientSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *GarlicIngredientSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *GarlicIngredientSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *GarlicIngredientSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *GarlicIngredientSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *GarlicIngredientSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *GarlicIngredientSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *GarlicIngredientSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientDBQueryBuilder) SK() *GarlicIngredientSKSafeOperators {
+	return &GarlicIngredientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type GarlicIngredientFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *GarlicIngredientDBQueryBuilder) FTSData() *GarlicIngredientFTSDataSafeOperators {
+	return &GarlicIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type GarlicIngredientCreatedAtSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientDBQueryBuilder) CreatedAt() *GarlicIngredientCreatedAtSafeOperators {
+	return &GarlicIngredientCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+type GarlicIngredientSourceAddrSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) InNetworkPrefix(cidr netip.Prefix) exp.RangeExpression {
+	start, end := xpq.NetworkRange(cidr)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start.String(), end.String()))
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientSourceAddrSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientDBQueryBuilder) SourceAddr() *GarlicIngredientSourceAddrSafeOperators {
+	return &GarlicIngredientSourceAddrSafeOperators{tableName: x.tableName, column: "pb$" + "source_addr"}
+}
+
+type GarlicIngredientTenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) TenantId() *GarlicIngredientTenantIdQueryType {
+	return &GarlicIngredientTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *GarlicIngredientTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientPKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) PKSK() *GarlicIngredientPKSKQueryType {
+	return &GarlicIngredientPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *GarlicIngredientPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientPKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) PK() *GarlicIngredientPKQueryType {
+	return &GarlicIngredientPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *GarlicIngredientPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) SK() *GarlicIngredientSKQueryType {
+	return &GarlicIngredientSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *GarlicIngredientSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientFTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) FTSData() *GarlicIngredientFTSDataQueryType {
+	return &GarlicIngredientFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *GarlicIngredientFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientPBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) PBData() *GarlicIngredientPBDataQueryType {
+	return &GarlicIngredientPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *GarlicIngredientPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) Id() *GarlicIngredientIdQueryType {
+	return &GarlicIngredientIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *GarlicIngredientIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientCreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) CreatedAt() *GarlicIngredientCreatedAtQueryType {
+	return &GarlicIngredientCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *GarlicIngredientCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientUpdatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) UpdatedAt() *GarlicIngredientUpdatedAtQueryType {
+	return &GarlicIngredientUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+}
+
+func (x *GarlicIngredientUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientDeletedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) DeletedAt() *GarlicIngredientDeletedAtQueryType {
+	return &GarlicIngredientDeletedAtQueryType{tableName: x.tableName, column: "pb$" + "deleted_at"}
+}
+
+func (x *GarlicIngredientDeletedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type GarlicIngredientSourceAddrQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) SourceAddr() *GarlicIngredientSourceAddrQueryType {
+	return &GarlicIngredientSourceAddrQueryType{tableName: x.tableName, column: "pb$" + "source_addr"}
+}
+
+func (x *GarlicIngredientSourceAddrQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientDBColumns) WithTable(t string) *GarlicIngredientDBColumns {
+	return &GarlicIngredientDBColumns{tableName: t}
+}
+
+func (x *GarlicIngredientDBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *GarlicIngredientDBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *GarlicIngredientDBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *GarlicIngredientDBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *GarlicIngredientDBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *GarlicIngredientDBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *GarlicIngredientDBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *GarlicIngredientDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *GarlicIngredientDBColumns) UpdatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+}
+
+func (x *GarlicIngredientDBColumns) DeletedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
+}
+
+func (x *GarlicIngredientDBColumns) SourceAddr() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "source_addr")
+}
+
+type pgdbDescriptorCheeseIngredient struct{}
+
+var (
+	instancepgdbDescriptorCheeseIngredient pgdb_v1.Descriptor = &pgdbDescriptorCheeseIngredient{}
+)
+
+func (d *pgdbDescriptorCheeseIngredient) TableName() string {
+	return "pb_cheese_ingredient_models_food_v1_886942a1"
+}
+
+func (d *pgdbDescriptorCheeseIngredient) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorCheeseIngredient) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorCheeseIngredient) IsPartitionedByEventId() bool {
+	return true
+}
+
+func (d *pgdbDescriptorCheeseIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
+}
+
+func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("event_id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("deleted_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("source_addr"),
+		Type:               "inet",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "NULL",
+	})
+
+	return rv
+}
+
 func (d *pgdbDescriptorCheeseIngredient) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_cheese_ingredient_models_food_v1_886942a1",
@@ -3596,7 +4729,7 @@ func (d *pgdbDescriptorCheeseIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOp
 		IsPrimary:          true,
 		IsUnique:           true,
 		IsDropped:          false,
-		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("event_id")},
 		OverrideExpression: "",
 	}
 
@@ -3615,7 +4748,7 @@ func (d *pgdbDescriptorCheeseIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFun
 			IsPrimary:          true,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("event_id")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -3813,16 +4946,12 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 		rv[ro.ColumnName("id")] = v1
 	}
 
-	var v2 *time.Time
-	if m.self.GetCreatedAt().IsValid() {
-		v2tmp := m.self.GetCreatedAt().AsTime()
-		v2 = &v2tmp
-	}
+	v2 := strings.ReplaceAll(string(m.self.GetEventId()), "\u0000", "")
 
 	if ro.Nulled {
-		rv[ro.ColumnName("created_at")] = nullExp
+		rv[ro.ColumnName("event_id")] = nullExp
 	} else {
-		rv[ro.ColumnName("created_at")] = v2
+		rv[ro.ColumnName("event_id")] = v2
 	}
 
 	var v3 *time.Time
@@ -4210,67 +5339,71 @@ func (x *CheeseIngredientDBQueryBuilder) FTSData() *CheeseIngredientFTSDataSafeO
 	return &CheeseIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
-type CheeseIngredientCreatedAtSafeOperators struct {
+type CheeseIngredientEventIdSafeOperators struct {
 	column    string
 	tableName string
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+func (x *CheeseIngredientEventIdSafeOperators) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) Eq(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) Gt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) Gte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) Lt(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) Lte(v string) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) In(v []string) exp.BooleanExpression {
 	if len(v) == 0 {
 		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
 	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
 	if len(v) == 0 {
 		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
 	}
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) IsNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+func (x *CheeseIngredientEventIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *CheeseIngredientEventIdSafeOperators) IsNotNull() exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+func (x *CheeseIngredientEventIdSafeOperators) Between(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
 }
 
-func (x *CheeseIngredientCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+func (x *CheeseIngredientEventIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-func (x *CheeseIngredientDBQueryBuilder) CreatedAt() *CheeseIngredientCreatedAtSafeOperators {
-	return &CheeseIngredientCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + "created_at"}
+func (x *CheeseIngredientDBQueryBuilder) EventId() *CheeseIngredientEventIdSafeOperators {
+	return &CheeseIngredientEventIdSafeOperators{tableName: x.tableName, column: "pb$" + "event_id"}
 }
 
 type CheeseIngredientSourceAddrSafeOperators struct {
@@ -4432,16 +5565,16 @@ func (x *CheeseIngredientIdQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type CheeseIngredientCreatedAtQueryType struct {
+type CheeseIngredientEventIdQueryType struct {
 	column    string
 	tableName string
 }
 
-func (x *CheeseIngredientDBQueryUnsafe) CreatedAt() *CheeseIngredientCreatedAtQueryType {
-	return &CheeseIngredientCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+func (x *CheeseIngredientDBQueryUnsafe) EventId() *CheeseIngredientEventIdQueryType {
+	return &CheeseIngredientEventIdQueryType{tableName: x.tableName, column: "pb$" + "event_id"}
 }
 
-func (x *CheeseIngredientCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+func (x *CheeseIngredientEventIdQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
@@ -4516,8 +5649,8 @@ func (x *CheeseIngredientDBColumns) Id() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "id")
 }
 
-func (x *CheeseIngredientDBColumns) CreatedAt() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+func (x *CheeseIngredientDBColumns) EventId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "event_id")
 }
 
 func (x *CheeseIngredientDBColumns) UpdatedAt() exp.Expression {
@@ -4547,6 +5680,10 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) IsPartitioned() bool {
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) IsPartitionedByEventId() bool {
 	return false
 }
 

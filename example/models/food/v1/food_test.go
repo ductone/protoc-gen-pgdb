@@ -16,6 +16,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	llm_v1 "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1"
+	"github.com/segmentio/ksuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -523,7 +524,7 @@ func TestDatePartitionsUpdate(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	msg := &CheeseIngredient{
+	msg := &GarlicIngredient{
 		TenantId: "t1",
 		Id:       "pi1",
 	}
@@ -566,7 +567,7 @@ func TestDatePartitionsUpdate(t *testing.T) {
 	}
 
 	// Test data insertion into partitions
-	testData := []*CheeseIngredient{
+	testData := []*GarlicIngredient{
 		{
 			TenantId:   "t1",
 			Id:         "pi1",
@@ -609,4 +610,106 @@ func TestDatePartitionsUpdate(t *testing.T) {
 			createdAt.UTC().Format("2006-01"),
 			"Data should be in correct monthly partition")
 	}
+}
+
+func TestEventIDPartitionsUpdate(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	require.NoError(t, err)
+
+	msg := &CheeseIngredient{
+		TenantId: "t1",
+		Id:       "pi1",
+	}
+
+	// Create the table first
+	schema, err := pgdb_v1.CreateSchema(msg)
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "failed to execute sql: '\n%s\n'", line)
+	}
+
+	// Set up test dates - KSUIDs will be generated within this range
+	startDate := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	endDate := time.Date(2024, 4, 1, 0, 0, 0, 0, time.UTC)
+
+	// Create the partitions
+	err = pgdb_v1.EventIDPartitionsUpdate(ctx, pg.DB, msg, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
+		_, err := pg.DB.Exec(ctx, schema)
+		return err
+	})
+	require.NoError(t, err)
+
+	// Verify the partitions were created
+	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
+	require.NoError(t, err)
+
+	// Should have 3 partitions (Jan, Feb, Mar)
+	require.Equal(t, 3, len(subTables), "Should have created 3 monthly partitions")
+
+	// Verify partition names follow expected pattern
+	expectedNames := []string{
+		msg.DBReflect().Descriptor().TableName() + "_2024_01",
+		msg.DBReflect().Descriptor().TableName() + "_2024_02",
+		msg.DBReflect().Descriptor().TableName() + "_2024_03",
+	}
+
+	for i, expected := range expectedNames {
+		require.Equal(t, expected, subTables[i], "Partition table name mismatch")
+	}
+
+	// Test data insertion into partitions
+	testData := []*CheeseIngredient{
+		{
+			TenantId:   "t1",
+			Id:         "pi1",
+			EventId:    generateKSUIDForTime(time.Date(2024, 1, 15, 0, 0, 0, 0, time.UTC)), // Jan 15, 2024
+			SourceAddr: "127.0.0.1",
+		},
+		{
+			TenantId:   "t2",
+			Id:         "pi2",
+			EventId:    generateKSUIDForTime(time.Date(2024, 2, 15, 0, 0, 0, 0, time.UTC)), // Feb 15, 2024
+			SourceAddr: "1.2.3.4",
+		},
+		{
+			TenantId:   "t3",
+			Id:         "pi3",
+			EventId:    generateKSUIDForTime(time.Date(2024, 3, 15, 0, 0, 0, 0, time.UTC)), // Mar 15, 2024
+			SourceAddr: "2001:db8:abcd:12::1",
+		},
+	}
+
+	// Insert test data
+	for _, data := range testData {
+		sql, args, err := pgdb_v1.Insert(data)
+		require.NoError(t, err)
+		_, err = pg.DB.Exec(ctx, sql, args...)
+		require.NoError(t, err)
+	}
+
+	// Verify data distribution across partitions
+	for i, subTable := range subTables {
+		var count int
+		err := pg.DB.QueryRow(ctx, fmt.Sprintf("SELECT COUNT(*) FROM %s", subTable)).Scan(&count)
+		require.NoError(t, err)
+		require.Equal(t, 1, count, "Each partition should have exactly one row")
+
+		var eventId string
+		err = pg.DB.QueryRow(ctx, fmt.Sprintf("SELECT pb$event_id FROM %s", subTable)).Scan(&eventId)
+		require.NoError(t, err)
+		require.Equal(t, testData[i].EventId, eventId, "Data should be in correct monthly partition")
+	}
+}
+
+// generateKSUIDForTime creates a KSUID string for a given time
+func generateKSUIDForTime(t time.Time) string {
+	// Create a KSUID with the given timestamp
+	id, _ := ksuid.NewRandomWithTime(t)
+	return id.String()
 }

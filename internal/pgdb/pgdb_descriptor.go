@@ -20,6 +20,7 @@ type descriptorTemplateContext struct {
 	VersioningField          string
 	IsPartitioned            bool
 	IsPartitionedByCreatedAt bool
+	IsPartitionedByEventId   bool
 	PartitionDateRange       string
 }
 
@@ -60,6 +61,7 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		VersioningField:          vf,
 		IsPartitioned:            fext.Partitioned,
 		IsPartitionedByCreatedAt: fext.PartitionedByCreatedAt,
+		IsPartitionedByEventId:   fext.PartitionedByEventId,
 		PartitionDateRange:       "pgdb_v1.MessageOptions_" + fext.PartitionedByDateRange.String(),
 	}
 

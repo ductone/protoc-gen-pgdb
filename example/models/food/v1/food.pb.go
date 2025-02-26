@@ -288,7 +288,7 @@ func (x *SauceIngredient) GetSourceAddr() string {
 	return ""
 }
 
-type CheeseIngredient struct {
+type GarlicIngredient struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	Id            string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -300,9 +300,93 @@ type CheeseIngredient struct {
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *GarlicIngredient) Reset() {
+	*x = GarlicIngredient{}
+	mi := &file_models_food_v1_food_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GarlicIngredient) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GarlicIngredient) ProtoMessage() {}
+
+func (x *GarlicIngredient) ProtoReflect() protoreflect.Message {
+	mi := &file_models_food_v1_food_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GarlicIngredient.ProtoReflect.Descriptor instead.
+func (*GarlicIngredient) Descriptor() ([]byte, []int) {
+	return file_models_food_v1_food_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GarlicIngredient) GetTenantId() string {
+	if x != nil {
+		return x.TenantId
+	}
+	return ""
+}
+
+func (x *GarlicIngredient) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *GarlicIngredient) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *GarlicIngredient) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *GarlicIngredient) GetDeletedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DeletedAt
+	}
+	return nil
+}
+
+func (x *GarlicIngredient) GetSourceAddr() string {
+	if x != nil {
+		return x.SourceAddr
+	}
+	return ""
+}
+
+type CheeseIngredient struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
+	Id            string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	EventId       string                 `protobuf:"bytes,3,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"` // KSUID field for partitioning
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	SourceAddr    string                 `protobuf:"bytes,6,opt,name=source_addr,json=sourceAddr,proto3" json:"source_addr,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
 func (x *CheeseIngredient) Reset() {
 	*x = CheeseIngredient{}
-	mi := &file_models_food_v1_food_proto_msgTypes[3]
+	mi := &file_models_food_v1_food_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -314,7 +398,7 @@ func (x *CheeseIngredient) String() string {
 func (*CheeseIngredient) ProtoMessage() {}
 
 func (x *CheeseIngredient) ProtoReflect() protoreflect.Message {
-	mi := &file_models_food_v1_food_proto_msgTypes[3]
+	mi := &file_models_food_v1_food_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -327,7 +411,7 @@ func (x *CheeseIngredient) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheeseIngredient.ProtoReflect.Descriptor instead.
 func (*CheeseIngredient) Descriptor() ([]byte, []int) {
-	return file_models_food_v1_food_proto_rawDescGZIP(), []int{3}
+	return file_models_food_v1_food_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CheeseIngredient) GetTenantId() string {
@@ -344,11 +428,11 @@ func (x *CheeseIngredient) GetId() string {
 	return ""
 }
 
-func (x *CheeseIngredient) GetCreatedAt() *timestamppb.Timestamp {
+func (x *CheeseIngredient) GetEventId() string {
 	if x != nil {
-		return x.CreatedAt
+		return x.EventId
 	}
-	return nil
+	return ""
 }
 
 func (x *CheeseIngredient) GetUpdatedAt() *timestamppb.Timestamp {
@@ -382,7 +466,7 @@ type PastaIngredient_ModelEmbedding struct {
 
 func (x *PastaIngredient_ModelEmbedding) Reset() {
 	*x = PastaIngredient_ModelEmbedding{}
-	mi := &file_models_food_v1_food_proto_msgTypes[4]
+	mi := &file_models_food_v1_food_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -394,7 +478,7 @@ func (x *PastaIngredient_ModelEmbedding) String() string {
 func (*PastaIngredient_ModelEmbedding) ProtoMessage() {}
 
 func (x *PastaIngredient_ModelEmbedding) ProtoReflect() protoreflect.Message {
-	mi := &file_models_food_v1_food_proto_msgTypes[4]
+	mi := &file_models_food_v1_food_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -530,7 +614,7 @@ var file_models_food_v1_food_proto_rawDesc = []byte{
 	0x12, 0x2d, 0x0a, 0x11, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x5f,
 	0x69, 0x6e, 0x64, 0x65, 0x78, 0x10, 0x01, 0x1a, 0x09, 0x74, 0x65, 0x6e, 0x61, 0x6e, 0x74, 0x5f,
 	0x69, 0x64, 0x1a, 0x0b, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x22,
-	0xfe, 0x02, 0x0a, 0x10, 0x43, 0x68, 0x65, 0x65, 0x73, 0x65, 0x49, 0x6e, 0x67, 0x72, 0x65, 0x64,
+	0xfe, 0x02, 0x0a, 0x10, 0x47, 0x61, 0x72, 0x6c, 0x69, 0x63, 0x49, 0x6e, 0x67, 0x72, 0x65, 0x64,
 	0x69, 0x65, 0x6e, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x65, 0x6e, 0x61, 0x6e, 0x74, 0x5f, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x65, 0x6e, 0x61, 0x6e, 0x74, 0x49,
 	0x64, 0x12, 0x16, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x06, 0xd2,
@@ -554,11 +638,33 @@ var file_models_food_v1_food_proto_rawDesc = []byte{
 	0x11, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x5f, 0x69, 0x6e, 0x64,
 	0x65, 0x78, 0x10, 0x01, 0x1a, 0x09, 0x74, 0x65, 0x6e, 0x61, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x1a,
 	0x0b, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x38, 0x01, 0x40, 0x02,
-	0x42, 0x3b, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x64,
-	0x75, 0x63, 0x74, 0x6f, 0x6e, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x2d, 0x67, 0x65,
-	0x6e, 0x2d, 0x70, 0x67, 0x64, 0x62, 0x2f, 0x65, 0x78, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x6d,
-	0x6f, 0x64, 0x65, 0x6c, 0x73, 0x2f, 0x66, 0x6f, 0x6f, 0x64, 0x2f, 0x76, 0x31, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0xde, 0x02, 0x0a, 0x10, 0x43, 0x68, 0x65, 0x65, 0x73, 0x65, 0x49, 0x6e, 0x67, 0x72, 0x65,
+	0x64, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x65, 0x6e, 0x61, 0x6e, 0x74, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x65, 0x6e, 0x61, 0x6e, 0x74,
+	0x49, 0x64, 0x12, 0x16, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x06,
+	0xd2, 0xf7, 0x02, 0x02, 0x08, 0x01, 0x52, 0x02, 0x69, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x65, 0x76,
+	0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x65, 0x76,
+	0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x39, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64,
+	0x5f, 0x61, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65,
+	0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74,
+	0x12, 0x39, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70,
+	0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x27, 0x0a, 0x0b, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x06, 0xd2, 0xf7, 0x02, 0x02, 0x18, 0x05, 0x52, 0x0a, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x41, 0x64, 0x64, 0x72, 0x3a, 0x5b, 0x82, 0xf7, 0x02, 0x20, 0x12, 0x1e, 0x0a, 0x09, 0x74, 0x65,
+	0x6e, 0x61, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x0a, 0x02, 0x69, 0x64, 0x1a, 0x0d, 0x65, 0x78, 0x61,
+	0x6d, 0x70, 0x6c, 0x65, 0x63, 0x68, 0x65, 0x65, 0x73, 0x65, 0xd2, 0xf7, 0x02, 0x33, 0x12, 0x2d,
+	0x0a, 0x11, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x5f, 0x69, 0x6e,
+	0x64, 0x65, 0x78, 0x10, 0x01, 0x1a, 0x09, 0x74, 0x65, 0x6e, 0x61, 0x6e, 0x74, 0x5f, 0x69, 0x64,
+	0x1a, 0x0b, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x40, 0x02, 0x48,
+	0x01, 0x42, 0x3b, 0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x64, 0x75, 0x63, 0x74, 0x6f, 0x6e, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x2d, 0x67,
+	0x65, 0x6e, 0x2d, 0x70, 0x67, 0x64, 0x62, 0x2f, 0x65, 0x78, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x2f,
+	0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x2f, 0x66, 0x6f, 0x6f, 0x64, 0x2f, 0x76, 0x31, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -573,36 +679,39 @@ func file_models_food_v1_food_proto_rawDescGZIP() []byte {
 	return file_models_food_v1_food_proto_rawDescData
 }
 
-var file_models_food_v1_food_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_models_food_v1_food_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_models_food_v1_food_proto_goTypes = []any{
 	(*Pasta)(nil),                          // 0: models.food.v1.Pasta
 	(*PastaIngredient)(nil),                // 1: models.food.v1.PastaIngredient
 	(*SauceIngredient)(nil),                // 2: models.food.v1.SauceIngredient
-	(*CheeseIngredient)(nil),               // 3: models.food.v1.CheeseIngredient
-	(*PastaIngredient_ModelEmbedding)(nil), // 4: models.food.v1.PastaIngredient.ModelEmbedding
-	(*timestamppb.Timestamp)(nil),          // 5: google.protobuf.Timestamp
-	(v1.Model)(0),                          // 6: models.llm.v1.Model
+	(*GarlicIngredient)(nil),               // 3: models.food.v1.GarlicIngredient
+	(*CheeseIngredient)(nil),               // 4: models.food.v1.CheeseIngredient
+	(*PastaIngredient_ModelEmbedding)(nil), // 5: models.food.v1.PastaIngredient.ModelEmbedding
+	(*timestamppb.Timestamp)(nil),          // 6: google.protobuf.Timestamp
+	(v1.Model)(0),                          // 7: models.llm.v1.Model
 }
 var file_models_food_v1_food_proto_depIdxs = []int32{
-	5,  // 0: models.food.v1.Pasta.created_at:type_name -> google.protobuf.Timestamp
-	5,  // 1: models.food.v1.Pasta.updated_at:type_name -> google.protobuf.Timestamp
-	5,  // 2: models.food.v1.Pasta.deleted_at:type_name -> google.protobuf.Timestamp
-	5,  // 3: models.food.v1.PastaIngredient.created_at:type_name -> google.protobuf.Timestamp
-	5,  // 4: models.food.v1.PastaIngredient.updated_at:type_name -> google.protobuf.Timestamp
-	5,  // 5: models.food.v1.PastaIngredient.deleted_at:type_name -> google.protobuf.Timestamp
-	4,  // 6: models.food.v1.PastaIngredient.model_embeddings:type_name -> models.food.v1.PastaIngredient.ModelEmbedding
-	5,  // 7: models.food.v1.SauceIngredient.created_at:type_name -> google.protobuf.Timestamp
-	5,  // 8: models.food.v1.SauceIngredient.updated_at:type_name -> google.protobuf.Timestamp
-	5,  // 9: models.food.v1.SauceIngredient.deleted_at:type_name -> google.protobuf.Timestamp
-	5,  // 10: models.food.v1.CheeseIngredient.created_at:type_name -> google.protobuf.Timestamp
-	5,  // 11: models.food.v1.CheeseIngredient.updated_at:type_name -> google.protobuf.Timestamp
-	5,  // 12: models.food.v1.CheeseIngredient.deleted_at:type_name -> google.protobuf.Timestamp
-	6,  // 13: models.food.v1.PastaIngredient.ModelEmbedding.model:type_name -> models.llm.v1.Model
-	14, // [14:14] is the sub-list for method output_type
-	14, // [14:14] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	6,  // 0: models.food.v1.Pasta.created_at:type_name -> google.protobuf.Timestamp
+	6,  // 1: models.food.v1.Pasta.updated_at:type_name -> google.protobuf.Timestamp
+	6,  // 2: models.food.v1.Pasta.deleted_at:type_name -> google.protobuf.Timestamp
+	6,  // 3: models.food.v1.PastaIngredient.created_at:type_name -> google.protobuf.Timestamp
+	6,  // 4: models.food.v1.PastaIngredient.updated_at:type_name -> google.protobuf.Timestamp
+	6,  // 5: models.food.v1.PastaIngredient.deleted_at:type_name -> google.protobuf.Timestamp
+	5,  // 6: models.food.v1.PastaIngredient.model_embeddings:type_name -> models.food.v1.PastaIngredient.ModelEmbedding
+	6,  // 7: models.food.v1.SauceIngredient.created_at:type_name -> google.protobuf.Timestamp
+	6,  // 8: models.food.v1.SauceIngredient.updated_at:type_name -> google.protobuf.Timestamp
+	6,  // 9: models.food.v1.SauceIngredient.deleted_at:type_name -> google.protobuf.Timestamp
+	6,  // 10: models.food.v1.GarlicIngredient.created_at:type_name -> google.protobuf.Timestamp
+	6,  // 11: models.food.v1.GarlicIngredient.updated_at:type_name -> google.protobuf.Timestamp
+	6,  // 12: models.food.v1.GarlicIngredient.deleted_at:type_name -> google.protobuf.Timestamp
+	6,  // 13: models.food.v1.CheeseIngredient.updated_at:type_name -> google.protobuf.Timestamp
+	6,  // 14: models.food.v1.CheeseIngredient.deleted_at:type_name -> google.protobuf.Timestamp
+	7,  // 15: models.food.v1.PastaIngredient.ModelEmbedding.model:type_name -> models.llm.v1.Model
+	16, // [16:16] is the sub-list for method output_type
+	16, // [16:16] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_models_food_v1_food_proto_init() }
@@ -616,7 +725,7 @@ func file_models_food_v1_food_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_models_food_v1_food_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

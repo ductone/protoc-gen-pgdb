@@ -17,6 +17,7 @@ type Descriptor interface {
 	TenantField() *Column
 	IsPartitioned() bool
 	IsPartitionedByCreatedAt() bool
+	IsPartitionedByEventId() bool
 
 	Indexes(opts ...IndexOptionsFunc) []*Index
 	IndexPrimaryKey(opts ...IndexOptionsFunc) *Index
