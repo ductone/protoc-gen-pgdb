@@ -456,7 +456,7 @@ func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessa
 	return nil
 }
 
-// EventIDPartitionsUpdate creates partitions for event ID ranges based on their embedded timestamps
+// EventIDPartitionsUpdate creates partitions for event ID ranges based on their embedded timestamps.
 func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
 	desc := msg.DBReflect().Descriptor()
 	tableName := desc.TableName()
