@@ -520,7 +520,10 @@ func TestDatePartitionsUpdate(t *testing.T) {
 	require.NoError(t, err)
 	defer pg.Stop()
 
-	msg := &SauceIngredient{
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	require.NoError(t, err)
+
+	msg := &CheeseIngredient{
 		TenantId: "t1",
 		Id:       "pi1",
 	}
@@ -563,7 +566,7 @@ func TestDatePartitionsUpdate(t *testing.T) {
 	}
 
 	// Test data insertion into partitions
-	testData := []*SauceIngredient{
+	testData := []*CheeseIngredient{
 		{
 			TenantId:   "t1",
 			Id:         "pi1",
@@ -600,7 +603,7 @@ func TestDatePartitionsUpdate(t *testing.T) {
 		require.Equal(t, 1, count, "Each partition should have exactly one row")
 
 		var createdAt time.Time
-		err = pg.DB.QueryRow(ctx, fmt.Sprintf("SELECT created_at FROM %s", subTable)).Scan(&createdAt)
+		err = pg.DB.QueryRow(ctx, fmt.Sprintf("SELECT pb$created_at FROM %s", subTable)).Scan(&createdAt)
 		require.NoError(t, err)
 		require.Equal(t, testData[i].CreatedAt.AsTime().UTC().Format("2006-01"),
 			createdAt.UTC().Format("2006-01"),
