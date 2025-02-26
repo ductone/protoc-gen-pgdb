@@ -374,7 +374,7 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 	return nil
 }
 
-// DatePartitionsUpdate creates partitions for date ranges based on the partitioning scheme
+// DatePartitionsUpdate creates partitions for date ranges based on the partitioning scheme.
 func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
 	desc := msg.DBReflect().Descriptor()
 	tableName := desc.TableName()
