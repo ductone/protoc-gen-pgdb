@@ -2384,11 +2384,11 @@ func (d *pgdbDescriptorSauceIngredient) IsPartitioned() bool {
 }
 
 func (d *pgdbDescriptorSauceIngredient) IsPartitionedByCreatedAt() bool {
-	return true
+	return false
 }
 
 func (d *pgdbDescriptorSauceIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
-	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
 func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -2546,7 +2546,7 @@ func (d *pgdbDescriptorSauceIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOpt
 		IsPrimary:          true,
 		IsUnique:           true,
 		IsDropped:          false,
-		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 		OverrideExpression: "",
 	}
 
@@ -2565,7 +2565,7 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsPrimary:          true,
 			IsUnique:           true,
 			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -3160,69 +3160,6 @@ func (x *SauceIngredientDBQueryBuilder) FTSData() *SauceIngredientFTSDataSafeOpe
 	return &SauceIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
-type SauceIngredientCreatedAtSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *SauceIngredientCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-func (x *SauceIngredientDBQueryBuilder) CreatedAt() *SauceIngredientCreatedAtSafeOperators {
-	return &SauceIngredientCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + "created_at"}
-}
-
 type SauceIngredientSourceAddrSafeOperators struct {
 	column    string
 	tableName string
@@ -3479,6 +3416,1119 @@ func (x *SauceIngredientDBColumns) DeletedAt() exp.Expression {
 }
 
 func (x *SauceIngredientDBColumns) SourceAddr() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "source_addr")
+}
+
+type pgdbDescriptorCheeseIngredient struct{}
+
+var (
+	instancepgdbDescriptorCheeseIngredient pgdb_v1.Descriptor = &pgdbDescriptorCheeseIngredient{}
+)
+
+func (d *pgdbDescriptorCheeseIngredient) TableName() string {
+	return "pb_cheese_ingredient_models_food_v1_886942a1"
+}
+
+func (d *pgdbDescriptorCheeseIngredient) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorCheeseIngredient) IsPartitionedByCreatedAt() bool {
+	return true
+}
+
+func (d *pgdbDescriptorCheeseIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
+}
+
+func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("deleted_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("source_addr"),
+		Type:               "inet",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "NULL",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorCheeseIngredient) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_cheese_ingredient_models_food_v1_886942a1",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorCheeseIngredient) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_cheese_ingredient_models_food_v1_886942a1", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorCheeseIngredient) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_cheese_ingredient_models_food_v1_886942a1", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorCheeseIngredient) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_cheese_ingredient_models_food_v1_886942a1", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorCheeseIngredient) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_cheese_ingredient_models_food_v1_886942a1", Name: "pb$tenant_id", Type: "varchar"}
+}
+
+func (d *pgdbDescriptorCheeseIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_cheese_ingredient_models_food_v1_ed0d352c"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorCheeseIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_cheese_ingredient_models_food_v1_ed0d352c"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk"), io.ColumnName("created_at")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_cheese_ingredient_models_foo_1746f155"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_cheese_ingredient_models_fo_3b941f8c"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_cheese_ingredient_models_food_06e31396"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("source_addr_index_cheese_ingredient_mod_fa6deac7"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("source_addr")},
+		OverrideExpression: "",
+		WherePredicate:     "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorCheeseIngredient) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageCheeseIngredient struct {
+	self *CheeseIngredient
+}
+
+func (dbr *CheeseIngredient) DBReflect() pgdb_v1.Message {
+	return &pgdbMessageCheeseIngredient{
+		self: dbr,
+	}
+}
+
+func (m *pgdbMessageCheeseIngredient) Descriptor() pgdb_v1.Descriptor {
+	return instancepgdbDescriptorCheeseIngredient
+}
+
+func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_food_v1_cheese_ingredient")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.TenantId)
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.Id)
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("examplecheese")
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv4tmp := []*pgdb_v1.SearchContent{
+
+			{
+				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+				Value:  m.self.GetId(),
+			},
+		}
+
+		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv4
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv5
+		}
+
+	}
+
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
+
+	var v2 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v2tmp := m.self.GetCreatedAt().AsTime()
+		v2 = &v2tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v2
+	}
+
+	var v3 *time.Time
+	if m.self.GetUpdatedAt().IsValid() {
+		v3tmp := m.self.GetUpdatedAt().AsTime()
+		v3 = &v3tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v3
+	}
+
+	var v4 *time.Time
+	if m.self.GetDeletedAt().IsValid() {
+		v4tmp := m.self.GetDeletedAt().AsTime()
+		v4 = &v4tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("deleted_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("deleted_at")] = v4
+	}
+
+	var v5 *string
+	if m.self.GetSourceAddr() != "" {
+		v5tmp, err := netip.ParseAddr(m.self.GetSourceAddr())
+		if err != nil {
+			return nil, err
+		}
+		v5val := v5tmp.Unmap().String()
+		v5 = &v5val
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("source_addr")] = nullExp
+	} else {
+		rv[ro.ColumnName("source_addr")] = v5
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageCheeseIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{
+
+		{
+			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
+			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_UNSPECIFIED,
+			Value:  m.self.GetId(),
+		},
+	}
+
+	return rv
+}
+
+type CheeseIngredientDB struct {
+	tableName string
+}
+
+type CheeseIngredientDBQueryBuilder struct {
+	tableName string
+}
+
+type CheeseIngredientDBQueryUnsafe struct {
+	tableName string
+}
+
+type CheeseIngredientDBColumns struct {
+	tableName string
+}
+
+func (x *CheeseIngredient) DB() *CheeseIngredientDB {
+	return &CheeseIngredientDB{tableName: x.DBReflect().Descriptor().TableName()}
+}
+
+func (x *CheeseIngredientDB) TableName() string {
+	return x.tableName
+}
+
+func (x *CheeseIngredientDB) Query() *CheeseIngredientDBQueryBuilder {
+	return &CheeseIngredientDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *CheeseIngredientDB) Columns() *CheeseIngredientDBColumns {
+	return &CheeseIngredientDBColumns{tableName: x.tableName}
+}
+
+func (x *CheeseIngredientDB) WithTable(t string) *CheeseIngredientDB {
+	return &CheeseIngredientDB{tableName: t}
+}
+
+func (x *CheeseIngredientDBQueryBuilder) WithTable(t string) *CheeseIngredientDBQueryBuilder {
+	return &CheeseIngredientDBQueryBuilder{tableName: t}
+}
+
+func (x *CheeseIngredientDBQueryBuilder) Unsafe() *CheeseIngredientDBQueryUnsafe {
+	return &CheeseIngredientDBQueryUnsafe{tableName: x.tableName}
+}
+
+type CheeseIngredientTenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientDBQueryBuilder) TenantId() *CheeseIngredientTenantIdSafeOperators {
+	return &CheeseIngredientTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type CheeseIngredientPKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientDBQueryBuilder) PKSK() *CheeseIngredientPKSKSafeOperators {
+	return &CheeseIngredientPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type CheeseIngredientPKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *CheeseIngredientPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *CheeseIngredientPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *CheeseIngredientPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *CheeseIngredientPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *CheeseIngredientPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *CheeseIngredientPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *CheeseIngredientPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *CheeseIngredientPKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *CheeseIngredientPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *CheeseIngredientPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientDBQueryBuilder) PK() *CheeseIngredientPKSafeOperators {
+	return &CheeseIngredientPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type CheeseIngredientSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *CheeseIngredientSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *CheeseIngredientSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *CheeseIngredientSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *CheeseIngredientSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *CheeseIngredientSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *CheeseIngredientSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *CheeseIngredientSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *CheeseIngredientSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *CheeseIngredientSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *CheeseIngredientSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientDBQueryBuilder) SK() *CheeseIngredientSKSafeOperators {
+	return &CheeseIngredientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type CheeseIngredientFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *CheeseIngredientDBQueryBuilder) FTSData() *CheeseIngredientFTSDataSafeOperators {
+	return &CheeseIngredientFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type CheeseIngredientCreatedAtSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientDBQueryBuilder) CreatedAt() *CheeseIngredientCreatedAtSafeOperators {
+	return &CheeseIngredientCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+type CheeseIngredientSourceAddrSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) InNetworkPrefix(cidr netip.Prefix) exp.RangeExpression {
+	start, end := xpq.NetworkRange(cidr)
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start.String(), end.String()))
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientSourceAddrSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientDBQueryBuilder) SourceAddr() *CheeseIngredientSourceAddrSafeOperators {
+	return &CheeseIngredientSourceAddrSafeOperators{tableName: x.tableName, column: "pb$" + "source_addr"}
+}
+
+type CheeseIngredientTenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) TenantId() *CheeseIngredientTenantIdQueryType {
+	return &CheeseIngredientTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *CheeseIngredientTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientPKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) PKSK() *CheeseIngredientPKSKQueryType {
+	return &CheeseIngredientPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *CheeseIngredientPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientPKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) PK() *CheeseIngredientPKQueryType {
+	return &CheeseIngredientPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *CheeseIngredientPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) SK() *CheeseIngredientSKQueryType {
+	return &CheeseIngredientSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *CheeseIngredientSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientFTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) FTSData() *CheeseIngredientFTSDataQueryType {
+	return &CheeseIngredientFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *CheeseIngredientFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientPBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) PBData() *CheeseIngredientPBDataQueryType {
+	return &CheeseIngredientPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *CheeseIngredientPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) Id() *CheeseIngredientIdQueryType {
+	return &CheeseIngredientIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *CheeseIngredientIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientCreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) CreatedAt() *CheeseIngredientCreatedAtQueryType {
+	return &CheeseIngredientCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *CheeseIngredientCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientUpdatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) UpdatedAt() *CheeseIngredientUpdatedAtQueryType {
+	return &CheeseIngredientUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+}
+
+func (x *CheeseIngredientUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientDeletedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) DeletedAt() *CheeseIngredientDeletedAtQueryType {
+	return &CheeseIngredientDeletedAtQueryType{tableName: x.tableName, column: "pb$" + "deleted_at"}
+}
+
+func (x *CheeseIngredientDeletedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type CheeseIngredientSourceAddrQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) SourceAddr() *CheeseIngredientSourceAddrQueryType {
+	return &CheeseIngredientSourceAddrQueryType{tableName: x.tableName, column: "pb$" + "source_addr"}
+}
+
+func (x *CheeseIngredientSourceAddrQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientDBColumns) WithTable(t string) *CheeseIngredientDBColumns {
+	return &CheeseIngredientDBColumns{tableName: t}
+}
+
+func (x *CheeseIngredientDBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *CheeseIngredientDBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *CheeseIngredientDBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *CheeseIngredientDBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *CheeseIngredientDBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *CheeseIngredientDBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *CheeseIngredientDBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *CheeseIngredientDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *CheeseIngredientDBColumns) UpdatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+}
+
+func (x *CheeseIngredientDBColumns) DeletedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
+}
+
+func (x *CheeseIngredientDBColumns) SourceAddr() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "source_addr")
 }
 

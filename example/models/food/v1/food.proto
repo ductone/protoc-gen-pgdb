@@ -102,6 +102,30 @@ message PastaIngredient {
 }
 
 message SauceIngredient {
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "id"
+    ]
+    sk_const: "examplesauce"
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "source_addr_index"
+    method: INDEX_METHOD_BTREE
+    columns: [
+      "tenant_id",
+      "source_addr"
+    ]
+  };
+  string tenant_id = 1;
+  string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
+  string source_addr = 6 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_INET_ADDR}];
+}
+
+message CheeseIngredient {
   option (pgdb.v1.msg) = {
     partitioned_by_created_at: true
     partitioned_by_date_range: PARTITIONED_BY_DATE_RANGE_MONTH
@@ -111,7 +135,7 @@ message SauceIngredient {
       "tenant_id",
       "id"
     ]
-    sk_const: "examplesauce"
+    sk_const: "examplecheese"
   };
   option (pgdb.v1.msg).indexes = {
     name: "source_addr_index"

@@ -384,7 +384,7 @@ func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessa
 	if err != nil {
 		return err
 	}
-	if _, hasCreatedAt := columns["created_at"]; !hasCreatedAt {
+	if _, hasCreatedAt := columns["pb$created_at"]; !hasCreatedAt {
 		return fmt.Errorf("table %s is configured for date partitioning but missing created_at column", tableName)
 	}
 
