@@ -436,8 +436,3 @@ func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessa
 
 	return nil
 }
-
-// Helper function to create a partition table name for date ranges
-func createDatePartitionTableName(tableName string, date time.Time) string {
-	return fmt.Sprintf("%s_%s", tableName, date.Format("2006_01"))
-}
