@@ -48,8 +48,7 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 		),
 	)
 
-	switch idx := desc.IndexPrimaryKey(); {
-	case idx != nil:
+	if idx := desc.IndexPrimaryKey(); idx != nil {
 		_, _ = buf.WriteString(",\n  ")
 		_, _ = buf.WriteString("CONSTRAINT ")
 		_, _ = buf.WriteString(idx.Name)
