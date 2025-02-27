@@ -515,14 +515,16 @@ func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMe
 
 		// Generate KSUIDs for the partition boundaries
 		minParts := []byte{}
+		maxParts := []byte{}
 		for i := 0; i < 16; i++ {
 			minParts = append(minParts, 0)
+			maxParts = append(maxParts, 255)
 		}
-		startKSUID, err := ksuid.FromParts(current, minParts)
+		startKSUID, err := ksuid.FromParts(current.Add(time.Second), minParts)
 		if err != nil {
 			return fmt.Errorf("failed to generate start KSUID: %w", err)
 		}
-		endKSUID, err := ksuid.FromParts(nextDate, minParts)
+		endKSUID, err := ksuid.FromParts(nextDate, maxParts)
 		if err != nil {
 			return fmt.Errorf("failed to generate end KSUID: %w", err)
 		}
@@ -532,6 +534,7 @@ func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMe
 			tableName,
 			startKSUID.String(),
 			endKSUID.String())
+		// fmt.Println(builtSchema)
 
 		err = updateFunc(ctx, builtSchema)
 		if err != nil {
