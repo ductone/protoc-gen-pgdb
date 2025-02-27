@@ -29,7 +29,7 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	if desc.IsPartitionedByCreatedAt() {
 		partitioningStrategies++
 	}
-	if desc.IsPartitionedByEventId() {
+	if desc.GetPartitionedByKsuidFieldName() != "" {
 		partitioningStrategies++
 	}
 	if partitioningStrategies > 1 {
@@ -48,7 +48,8 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 		),
 	)
 
-	if idx := desc.IndexPrimaryKey(); idx != nil {
+	switch idx := desc.IndexPrimaryKey(); {
+	case idx != nil:
 		_, _ = buf.WriteString(",\n  ")
 		_, _ = buf.WriteString("CONSTRAINT ")
 		_, _ = buf.WriteString(idx.Name)
@@ -61,14 +62,15 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 
 	_, _ = buf.WriteString(")\n")
 
-	if desc.IsPartitioned() {
+	switch {
+	case desc.IsPartitioned():
 		_, _ = buf.WriteString("PARTITION BY LIST(")
 		_, _ = buf.WriteString(desc.TenantField().Name)
 		_, _ = buf.WriteString(")\n")
-	} else if desc.IsPartitionedByCreatedAt() {
+	case desc.IsPartitionedByCreatedAt():
 		_, _ = buf.WriteString("PARTITION BY RANGE(pb$created_at)\n")
-	} else if desc.IsPartitionedByEventId() {
-		_, _ = buf.WriteString("PARTITION BY RANGE(pb$event_id)\n")
+	case desc.GetPartitionedByKsuidFieldName() != "":
+		_, _ = buf.WriteString(fmt.Sprintf("PARTITION BY RANGE(pb$%s)\n", desc.GetPartitionedByKsuidFieldName()))
 	}
 
 	rv := []string{buf.String()}
@@ -513,11 +515,15 @@ func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMe
 		}
 
 		// Generate KSUIDs for the partition boundaries
-		startKSUID, err := ksuid.NewRandomWithTime(current)
+		minParts := []byte{}
+		for i := 0; i < 16; i++ {
+			minParts = append(minParts, 0)
+		}
+		startKSUID, err := ksuid.FromParts(current, minParts)
 		if err != nil {
 			return fmt.Errorf("failed to generate start KSUID: %w", err)
 		}
-		endKSUID, err := ksuid.NewRandomWithTime(nextDate)
+		endKSUID, err := ksuid.FromParts(nextDate, minParts)
 		if err != nil {
 			return fmt.Errorf("failed to generate end KSUID: %w", err)
 		}

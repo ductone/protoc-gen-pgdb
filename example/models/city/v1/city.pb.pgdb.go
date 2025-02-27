@@ -36,8 +36,8 @@ func (d *pgdbDescriptorAttractions) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorAttractions) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorAttractions) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorAttractions) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {

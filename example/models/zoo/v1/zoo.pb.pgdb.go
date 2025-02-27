@@ -31,8 +31,8 @@ func (d *pgdbDescriptorShop) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorShop) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorShop) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorShop) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -1082,8 +1082,8 @@ func (d *pgdbDescriptorShop_Manager) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorShop_Manager) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorShop_Manager) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorShop_Manager) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {

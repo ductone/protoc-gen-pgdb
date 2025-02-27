@@ -33,8 +33,8 @@ func (d *pgdbDescriptorPasta) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorPasta) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorPasta) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorPasta) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -967,8 +967,8 @@ func (d *pgdbDescriptorPastaIngredient) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorPastaIngredient) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorPastaIngredient) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorPastaIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -2395,8 +2395,8 @@ func (d *pgdbDescriptorSauceIngredient) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorSauceIngredient) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorSauceIngredient) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorSauceIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -3449,8 +3449,8 @@ func (d *pgdbDescriptorGarlicIngredient) IsPartitionedByCreatedAt() bool {
 	return true
 }
 
-func (d *pgdbDescriptorGarlicIngredient) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorGarlicIngredient) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorGarlicIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -4566,8 +4566,8 @@ func (d *pgdbDescriptorCheeseIngredient) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorCheeseIngredient) IsPartitionedByEventId() bool {
-	return true
+func (d *pgdbDescriptorCheeseIngredient) GetPartitionedByKsuidFieldName() string {
+	return "event_id"
 }
 
 func (d *pgdbDescriptorCheeseIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -5683,8 +5683,8 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) IsPartitionedByCreatedAt(
 	return false
 }
 
-func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {

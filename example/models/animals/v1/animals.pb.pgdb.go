@@ -33,8 +33,8 @@ func (d *pgdbDescriptorPet) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorPet) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorPet) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorPet) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -1374,8 +1374,8 @@ func (d *pgdbDescriptorScalarValue) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorScalarValue) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorScalarValue) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorScalarValue) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -3735,8 +3735,8 @@ func (d *pgdbDescriptorEBook) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorEBook) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorEBook) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorEBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -3930,8 +3930,8 @@ func (d *pgdbDescriptorPaperBook) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorPaperBook) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorPaperBook) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorPaperBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -4125,8 +4125,8 @@ func (d *pgdbDescriptorBook) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorBook) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorBook) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
@@ -5118,8 +5118,8 @@ func (d *pgdbDescriptorNewspaper) IsPartitionedByCreatedAt() bool {
 	return false
 }
 
-func (d *pgdbDescriptorNewspaper) IsPartitionedByEventId() bool {
-	return false
+func (d *pgdbDescriptorNewspaper) GetPartitionedByKsuidFieldName() string {
+	return ""
 }
 
 func (d *pgdbDescriptorNewspaper) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {

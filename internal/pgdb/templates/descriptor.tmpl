@@ -16,8 +16,8 @@ func (d *{{.ReceiverType}}) IsPartitionedByCreatedAt() bool {
     return {{.IsPartitionedByCreatedAt}}
 }
 
-func (d *{{.ReceiverType}}) IsPartitionedByEventId() bool {
-    return {{.IsPartitionedByEventId}}
+func (d *{{.ReceiverType}}) GetPartitionedByKsuidFieldName() string {
+    return "{{.PartitionedByKsuidFieldName}}"
 }
 
 func (d *{{.ReceiverType}}) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {

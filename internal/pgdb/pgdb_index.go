@@ -149,8 +149,8 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, "created_at")
 	}
 
-	if fext.PartitionedByEventId {
-		primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, "event_id")
+	if fext.PartitionedByKsuidFieldName != "" {
+		primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, fext.PartitionedByKsuidFieldName)
 	}
 
 	// So, we learned early in our deployment that having a second unique index

@@ -61,7 +61,7 @@ message MessageOptions {
 
   // if this message is used then we create a partitioned table and partition by
   // event_id.
-  bool partitioned_by_event_id = 9;
+  string partitioned_by_ksuid_field_name = 9;
 
   message Stat {
     enum StatsKind {

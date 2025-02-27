@@ -155,7 +155,7 @@ message GarlicIngredient {
 
 message CheeseIngredient {
   option (pgdb.v1.msg) = {
-    partitioned_by_event_id: true
+    partitioned_by_ksuid_field_name: "event_id"
     partitioned_by_date_range: PARTITIONED_BY_DATE_RANGE_MONTH
   };
   option (dynamo.v1.msg).key = {
