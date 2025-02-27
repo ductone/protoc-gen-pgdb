@@ -1,4 +1,3 @@
-
 type {{.Type}} struct{}
 
 var (
@@ -11,6 +10,18 @@ func (d *{{.ReceiverType}}) TableName() string {
 
 func (d *{{.ReceiverType}}) IsPartitioned() bool {
     return {{.IsPartitioned}}
+}
+
+func (d *{{.ReceiverType}}) IsPartitionedByCreatedAt() bool {
+    return {{.IsPartitionedByCreatedAt}}
+}
+
+func (d *{{.ReceiverType}}) GetPartitionedByKsuidFieldName() string {
+    return "{{.PartitionedByKsuidFieldName}}"
+}
+
+func (d *{{.ReceiverType}}) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+    return {{.PartitionDateRange}}
 }
 
 func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

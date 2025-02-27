@@ -32,6 +32,18 @@ func (d *pgdbDescriptorAttractions) IsPartitioned() bool {
 	return false
 }
 
+func (d *pgdbDescriptorAttractions) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorAttractions) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorAttractions) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
 func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df

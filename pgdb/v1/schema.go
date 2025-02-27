@@ -7,17 +7,35 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 	"github.com/jackc/pgx/v5"
 
 	_ "github.com/doug-martin/goqu/v9/dialect/postgres"
+	"github.com/segmentio/ksuid"
 )
 
 func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	dbr := msg.DBReflect()
 	desc := dbr.Descriptor()
+
+	// Validate only one partitioning strategy is used
+	partitioningStrategies := 0
+	if desc.IsPartitioned() {
+		partitioningStrategies++
+	}
+	if desc.IsPartitionedByCreatedAt() {
+		partitioningStrategies++
+	}
+	if desc.GetPartitionedByKsuidFieldName() != "" {
+		partitioningStrategies++
+	}
+	if partitioningStrategies > 1 {
+		return nil, fmt.Errorf("table %s has multiple partitioning strategies defined", desc.TableName())
+	}
+
 	buf := &bytes.Buffer{}
 	_, _ = buf.WriteString("CREATE TABLE IF NOT EXISTS\n  ")
 	pgWriteString(buf, desc.TableName())
@@ -43,10 +61,15 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 
 	_, _ = buf.WriteString(")\n")
 
-	if desc.IsPartitioned() {
+	switch {
+	case desc.IsPartitioned():
 		_, _ = buf.WriteString("PARTITION BY LIST(")
 		_, _ = buf.WriteString(desc.TenantField().Name)
 		_, _ = buf.WriteString(")\n")
+	case desc.IsPartitionedByCreatedAt():
+		_, _ = buf.WriteString("PARTITION BY RANGE(pb$created_at)\n")
+	case desc.GetPartitionedByKsuidFieldName() != "":
+		_, _ = buf.WriteString(fmt.Sprintf("PARTITION BY RANGE(pb$%s)\n", desc.GetPartitionedByKsuidFieldName()))
 	}
 
 	rv := []string{buf.String()}
@@ -366,6 +389,159 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 		if updateErr != nil {
 			return updateErr
 		}
+	}
+
+	return nil
+}
+
+// DatePartitionsUpdate creates partitions for date ranges based on the partitioning scheme.
+func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
+	desc := msg.DBReflect().Descriptor()
+	tableName := desc.TableName()
+
+	// Validate that created_at column exists
+	columns, err := readColumns(ctx, db, desc)
+	if err != nil {
+		return err
+	}
+	if _, hasCreatedAt := columns["pb$created_at"]; !hasCreatedAt {
+		return fmt.Errorf("table %s is configured for date partitioning but missing created_at column", tableName)
+	}
+
+	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
+	if err != nil {
+		return err
+	}
+
+	// The table exists but is not a parent partition
+	if !isParentPartition {
+		return nil
+	}
+
+	// Create partition schema template
+	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES FROM ($1) TO ($2);`
+
+	// Get partition interval
+	interval := desc.GetPartitionDateRange()
+
+	// Iterate through the date range and create partitions
+	current := startDate
+	for current.Before(endDate) {
+		var nextDate time.Time
+		var partitionTableName string
+
+		// Calculate the next partition boundary based on interval
+		switch interval {
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_DAY:
+			nextDate = current.AddDate(0, 0, 1)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006_01_02"))
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH:
+			nextDate = current.AddDate(0, 1, 0)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006_01"))
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_YEAR:
+			nextDate = current.AddDate(1, 0, 0)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006"))
+		default:
+			return fmt.Errorf("unsupported partition interval: %v", interval)
+		}
+
+		builtSchema := fmt.Sprintf(createPartitionSchema, partitionTableName, tableName)
+		err := updateFunc(ctx, builtSchema, current, nextDate)
+		if err != nil {
+			return err
+		}
+
+		current = nextDate
+	}
+
+	return nil
+}
+
+// EventIDPartitionsUpdate creates partitions for event ID ranges based on their embedded timestamps.
+func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
+	desc := msg.DBReflect().Descriptor()
+	tableName := desc.TableName()
+
+	// Validate that event_id column exists
+	columns, err := readColumns(ctx, db, desc)
+	if err != nil {
+		return err
+	}
+	if _, hasEventID := columns["pb$event_id"]; !hasEventID {
+		return fmt.Errorf("table %s is configured for event_id partitioning but missing event_id column", tableName)
+	}
+
+	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
+	if err != nil {
+		return err
+	}
+
+	// The table exists but is not a parent partition
+	if !isParentPartition {
+		return nil
+	}
+
+	// Create partition schema template
+	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s 
+		FOR VALUES FROM (
+			'%s'  -- Start KSUID for this time range
+		) TO (
+			'%s'  -- End KSUID for this time range
+		);`
+
+	// Get partition interval
+	interval := desc.GetPartitionDateRange()
+
+	// Iterate through the date range and create partitions
+	current := startDate
+	for current.Before(endDate) {
+		var nextDate time.Time
+		var partitionTableName string
+
+		// Calculate the next partition boundary based on interval
+		switch interval {
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_DAY:
+			nextDate = current.AddDate(0, 0, 1)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006_01_02"))
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH:
+			nextDate = current.AddDate(0, 1, 0)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006_01"))
+		case MessageOptions_PARTITIONED_BY_DATE_RANGE_YEAR:
+			nextDate = current.AddDate(1, 0, 0)
+			partitionTableName = fmt.Sprintf("%s_%s", tableName, current.Format("2006"))
+		default:
+			return fmt.Errorf("unsupported partition interval: %v", interval)
+		}
+
+		// Generate KSUIDs for the partition boundaries
+		minParts := []byte{}
+		maxParts := []byte{}
+		for i := 0; i < 16; i++ {
+			minParts = append(minParts, 0)
+			maxParts = append(maxParts, 255)
+		}
+		startKSUID, err := ksuid.FromParts(current.Add(time.Second), minParts)
+		if err != nil {
+			return fmt.Errorf("failed to generate start KSUID: %w", err)
+		}
+		endKSUID, err := ksuid.FromParts(nextDate, maxParts)
+		if err != nil {
+			return fmt.Errorf("failed to generate end KSUID: %w", err)
+		}
+
+		builtSchema := fmt.Sprintf(createPartitionSchema,
+			partitionTableName,
+			tableName,
+			startKSUID.String(),
+			endKSUID.String())
+		// fmt.Println(builtSchema)
+
+		err = updateFunc(ctx, builtSchema)
+		if err != nil {
+			return err
+		}
+
+		current = nextDate
 	}
 
 	return nil

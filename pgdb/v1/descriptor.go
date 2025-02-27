@@ -16,11 +16,15 @@ type Descriptor interface {
 	VersioningField() *Column
 	TenantField() *Column
 	IsPartitioned() bool
+	IsPartitionedByCreatedAt() bool
+	GetPartitionedByKsuidFieldName() string
 
 	Indexes(opts ...IndexOptionsFunc) []*Index
 	IndexPrimaryKey(opts ...IndexOptionsFunc) *Index
 
 	Statistics(opts ...StatisticOptionsFunc) []*Statistic
+
+	GetPartitionDateRange() MessageOptions_PartitionedByDateRange
 }
 
 type DescriptorFieldOption struct {
