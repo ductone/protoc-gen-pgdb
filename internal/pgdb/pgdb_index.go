@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
@@ -146,11 +147,15 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 	}
 
 	if fext.PartitionedByCreatedAt {
-		primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, "created_at")
+		if !slices.Contains(primaryIndex.DB.Columns, "created_at") {
+			primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, "created_at")
+		}
 	}
 
 	if fext.PartitionedByKsuidFieldName != "" {
-		primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, fext.PartitionedByKsuidFieldName)
+		if !slices.Contains(primaryIndex.DB.Columns, fext.PartitionedByKsuidFieldName) {
+			primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, fext.PartitionedByKsuidFieldName)
+		}
 	}
 
 	// So, we learned early in our deployment that having a second unique index
