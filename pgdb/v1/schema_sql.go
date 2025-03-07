@@ -147,3 +147,16 @@ func col2spec(col *Column) string {
 	}
 	return sbuf.String()
 }
+
+func ksuidColOverrideExpression(col *Column) string {
+	sbuf := &bytes.Buffer{}
+	_, _ = sbuf.WriteString(col.Type)
+	if !col.Nullable {
+		_, _ = sbuf.WriteString(" NOT NULL")
+	}
+	if col.Default != "" {
+		_, _ = sbuf.WriteString(" DEFAULT " + col.Default)
+	}
+	_, _ = sbuf.WriteString(" COLLATE \"C\"")
+	return sbuf.String()
+}

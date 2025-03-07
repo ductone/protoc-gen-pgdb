@@ -41,9 +41,21 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	pgWriteString(buf, desc.TableName())
 	_, _ = buf.WriteString("\n(\n")
 
+	// If we're partitioning by ksuid, we will override the expression for the ksuid column
+	// to use C style collation.
+	columns := desc.Fields()
+	if desc.GetPartitionedByKsuidFieldName() != "" {
+		ksuidColumnName := fmt.Sprintf("pb$%s", desc.GetPartitionedByKsuidFieldName())
+		for _, col := range columns {
+			if col.Name == ksuidColumnName {
+				col.OverrideExpression = ksuidColOverrideExpression(col)
+			}
+		}
+	}
+
 	_, _ = buf.WriteString(
 		strings.Join(
-			slice.Convert(desc.Fields(), col2spec),
+			slice.Convert(columns, col2spec),
 			",\n",
 		),
 	)

@@ -713,3 +713,92 @@ func generateKSUIDForTime(t time.Time) string {
 	id, _ := ksuid.NewRandomWithTime(t)
 	return id.String()
 }
+
+func TestKSUIDCollation(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	require.NoError(t, err)
+
+	// Create a message with KSUID partitioning
+	msg := &CheeseIngredient{
+		TenantId: "t1",
+		Id:       "pi1",
+		EventId:  generateKSUIDForTime(time.Now()),
+	}
+
+	// Create the table
+	schema, err := pgdb_v1.CreateSchema(msg)
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "failed to execute sql: '\n%s\n'", line)
+	}
+
+	// Verify the column collation
+	var collation string
+	err = pg.DB.QueryRow(ctx, `
+		SELECT a.attcollation::regcollation::text
+		FROM pg_attribute a
+		JOIN pg_class c ON c.oid = a.attrelid
+		WHERE c.relname = $1 AND a.attname = $2
+	`, msg.DBReflect().Descriptor().TableName(), "pb$event_id").Scan(&collation)
+	require.NoError(t, err)
+	require.Equal(t, "\"C\"", collation, "KSUID column should use C collation")
+
+	startDate := time.Date(2025, 3, 20, 0, 0, 0, 0, time.UTC)
+	endDate := time.Date(2025, 4, 21, 0, 0, 0, 0, time.UTC)
+
+	// Test data ordering
+	testData := []*CheeseIngredient{
+		{
+			TenantId: "t1",
+			Id:       "pi1",
+			EventId:  generateKSUIDForTime(startDate.Add(time.Hour)), // Earlier timestamp
+		},
+		{
+			TenantId: "t1",
+			Id:       "pi2",
+			EventId:  generateKSUIDForTime(endDate.Add(-1 * time.Hour)), // Later timestamp
+		},
+	}
+
+	// Create the partitions
+	err = pgdb_v1.EventIDPartitionsUpdate(ctx, pg.DB, msg, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
+		_, err := pg.DB.Exec(ctx, schema)
+		return err
+	})
+	require.NoError(t, err)
+
+	// Insert test data
+	for _, data := range testData {
+		sql, args, err := pgdb_v1.Insert(data)
+		require.NoError(t, err)
+		_, err = pg.DB.Exec(ctx, sql, args...)
+		require.NoError(t, err)
+	}
+
+	// Verify ordering
+	rows, err := pg.DB.Query(ctx, fmt.Sprintf(`
+		SELECT pb$event_id 
+		FROM %s 
+		ORDER BY pb$event_id
+	`, msg.DBReflect().Descriptor().TableName()))
+	require.NoError(t, err)
+	defer rows.Close()
+
+	var eventIds []string
+	for rows.Next() {
+		var eventId string
+		err = rows.Scan(&eventId)
+		require.NoError(t, err)
+		eventIds = append(eventIds, eventId)
+	}
+
+	// Verify the order matches the chronological order of the KSUIDs
+	require.Equal(t, testData[0].EventId, eventIds[0], "First KSUID should be earlier timestamp")
+	require.Equal(t, testData[1].EventId, eventIds[1], "Second KSUID should be later timestamp")
+}
