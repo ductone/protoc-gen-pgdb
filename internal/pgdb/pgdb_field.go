@@ -359,7 +359,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		DB: &pgdb_v1.Column{
 			Name:     "pkskv2",
 			Type:     vcDataType.Name,
-			Nullable: true,
+			Default:  "",
 		},
 		GoName:   "PKSKV2",
 		DataType: vcDataType,

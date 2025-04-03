@@ -100,7 +100,7 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})
@@ -1482,7 +1482,7 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})
@@ -4290,7 +4290,7 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})
@@ -5324,7 +5324,7 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})

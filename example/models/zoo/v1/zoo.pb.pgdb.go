@@ -98,7 +98,7 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})

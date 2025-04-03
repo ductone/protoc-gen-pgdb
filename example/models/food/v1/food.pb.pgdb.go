@@ -100,7 +100,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})
@@ -1075,7 +1075,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})
@@ -2544,7 +2544,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})
@@ -3639,7 +3639,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})
@@ -4797,7 +4797,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
-			Nullable:           df.Nullable(true),
+			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 		})
