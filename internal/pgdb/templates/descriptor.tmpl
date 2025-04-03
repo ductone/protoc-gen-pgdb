@@ -63,6 +63,14 @@ func (d *{{.ReceiverType}}) PKSKField() *pgdb_v1.Column {
 		}
 }
 
+func (d *{{.ReceiverType}}) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "{{.TableName}}",
+		Name:  "pb$pkskv2",
+		Type:  "varchar",
+	}
+}
+
 func (d *{{.ReceiverType}}) DataField() *pgdb_v1.Column {
   return &pgdb_v1.Column{Table: "{{.TableName}}", Name: "pb$pb_data", Type: "bytea"}
 }

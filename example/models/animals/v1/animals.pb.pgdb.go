@@ -98,6 +98,18 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -230,6 +242,14 @@ func (d *pgdbDescriptorPet) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_pet_models_animals_v1_8a3723d5",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorPet) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_pet_models_animals_v1_8a3723d5",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -435,7 +455,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -456,19 +480,19 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 			},
 		}
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -476,7 +500,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -1081,6 +1105,19 @@ func (x *PetSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PetPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) PKSKV2() *PetPKSKV2QueryType {
+	return &PetPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *PetPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type PetFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -1296,6 +1333,10 @@ func (x *PetDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
+func (x *PetDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
+}
+
 func (x *PetDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -1430,6 +1471,18 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 		})
@@ -1759,6 +1812,14 @@ func (d *pgdbDescriptorScalarValue) PKSKField() *pgdb_v1.Column {
 	}
 }
 
+func (d *pgdbDescriptorScalarValue) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_scalar_value_models_animals_v1_35025835",
+		Name:  "pb$pkskv2",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorScalarValue) DataField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Table: "pb_scalar_value_models_animals_v1_35025835", Name: "pb$pb_data", Type: "bytea"}
 }
@@ -1956,7 +2017,11 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
@@ -1971,19 +2036,19 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 			},
 		}
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -1991,7 +2056,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -3051,6 +3116,19 @@ func (x *ScalarValueSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type ScalarValuePKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ScalarValueDBQueryUnsafe) PKSKV2() *ScalarValuePKSKV2QueryType {
+	return &ScalarValuePKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *ScalarValuePKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type ScalarValueFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -3565,6 +3643,10 @@ func (x *ScalarValueDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
+func (x *ScalarValueDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
+}
+
 func (x *ScalarValueDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -3768,6 +3850,14 @@ func (d *pgdbDescriptorEBook) PKSKField() *pgdb_v1.Column {
 	}
 }
 
+func (d *pgdbDescriptorEBook) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_e_book_models_animals_v1_a344683d",
+		Name:  "pb$pkskv2",
+		Type:  "varchar",
+	}
+}
+
 func (d *pgdbDescriptorEBook) DataField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$pb_data", Type: "bytea"}
 }
@@ -3959,6 +4049,14 @@ func (d *pgdbDescriptorPaperBook) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_paper_book_models_animals_v1_ba82559d",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorPaperBook) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_paper_book_models_animals_v1_ba82559d",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -4190,6 +4288,18 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -4248,6 +4358,14 @@ func (d *pgdbDescriptorBook) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_book_models_animals_v1_d871ffce",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorBook) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_book_models_animals_v1_d871ffce",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -4454,7 +4572,11 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -4463,25 +4585,25 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 			},
 		}
 
-		cfv4tmp = append(cfv4tmp, m.self.GetPaper().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetPaper().DBReflect().SearchData()...)
 
-		cfv4tmp = append(cfv4tmp, m.self.GetEbook().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetEbook().DBReflect().SearchData()...)
 
-		cfv4tmp = append(cfv4tmp, m.self.GetNews().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetNews().DBReflect().SearchData()...)
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -4489,7 +4611,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -4995,6 +5117,19 @@ func (x *BookSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type BookPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *BookDBQueryUnsafe) PKSKV2() *BookPKSKV2QueryType {
+	return &BookPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *BookPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type BookFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -5078,6 +5213,10 @@ func (x *BookDBColumns) PK() exp.Expression {
 
 func (x *BookDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *BookDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
 }
 
 func (x *BookDBColumns) FTSData() exp.Expression {
@@ -5183,6 +5322,18 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -5227,6 +5378,14 @@ func (d *pgdbDescriptorNewspaper) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_newspaper_models_animals_v1_f52e04fd",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorNewspaper) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_newspaper_models_animals_v1_f52e04fd",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -5417,19 +5576,23 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 	if !ro.IsNested {
 
-		cfv4 := exp.NewLiteralExpression("NULL")
+	}
+
+	if !ro.IsNested {
+
+		cfv5 := exp.NewLiteralExpression("NULL")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -5437,7 +5600,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -5852,6 +6015,19 @@ func (x *NewspaperSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type NewspaperPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *NewspaperDBQueryUnsafe) PKSKV2() *NewspaperPKSKV2QueryType {
+	return &NewspaperPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *NewspaperPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type NewspaperFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -5922,6 +6098,10 @@ func (x *NewspaperDBColumns) PK() exp.Expression {
 
 func (x *NewspaperDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *NewspaperDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
 }
 
 func (x *NewspaperDBColumns) FTSData() exp.Expression {

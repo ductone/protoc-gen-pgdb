@@ -11,6 +11,7 @@ type Descriptor interface {
 	Fields(opts ...DescriptorFieldOptionFunc) []*Column
 
 	PKSKField() *Column
+	PKSKV2Field() *Column
 	DataField() *Column
 	SearchField() *Column
 	VersioningField() *Column

@@ -96,6 +96,18 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -164,6 +176,14 @@ func (d *pgdbDescriptorShop) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_shop_models_zoo_v1_ca2425f6",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorShop) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_shop_models_zoo_v1_ca2425f6",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -370,7 +390,11 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -379,27 +403,27 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 			},
 		}
 
-		cfv4tmp = append(cfv4tmp, m.self.GetPaper().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetPaper().DBReflect().SearchData()...)
 
-		cfv4tmp = append(cfv4tmp, m.self.GetEbook().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetEbook().DBReflect().SearchData()...)
 
-		cfv4tmp = append(cfv4tmp, m.self.GetAnything().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetAnything().DBReflect().SearchData()...)
 
-		cfv4tmp = append(cfv4tmp, m.self.GetMgr().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetMgr().DBReflect().SearchData()...)
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -407,7 +431,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -942,6 +966,19 @@ func (x *ShopSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type ShopPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ShopDBQueryUnsafe) PKSKV2() *ShopPKSKV2QueryType {
+	return &ShopPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *ShopPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type ShopFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -1040,6 +1077,10 @@ func (x *ShopDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
+func (x *ShopDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
+}
+
 func (x *ShopDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -1111,6 +1152,14 @@ func (d *pgdbDescriptorShop_Manager) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_manager_models_zoo_v1_6ccf2214",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorShop_Manager) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_manager_models_zoo_v1_6ccf2214",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
