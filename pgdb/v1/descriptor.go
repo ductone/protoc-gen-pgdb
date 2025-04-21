@@ -83,6 +83,7 @@ type Column struct {
 	Nullable           bool
 	OverrideExpression string
 	Default            string
+	Collation          string
 }
 
 func (x *Column) Identifier() exp.IdentifierExpression {

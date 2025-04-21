@@ -236,10 +236,11 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			return nil, fmt.Errorf("pgdb: nullable column with no default: %s (%s)", pgColName, dbTypeRef.Name)
 		}
 		rv.DB = &pgdb_v1.Column{
-			Name:     pgColName,
-			Type:     dbTypeRef.Name,
-			Nullable: nullable,
-			Default:  defaultValue,
+			Name:      pgColName,
+			Type:      dbTypeRef.Name,
+			Nullable:  nullable,
+			Default:   defaultValue,
+			Collation: ext.Collation,
 		}
 		rv.DataType = dbTypeRef
 	} else {

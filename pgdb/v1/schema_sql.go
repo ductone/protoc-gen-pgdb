@@ -144,6 +144,10 @@ func col2spec(col *Column) string {
 		if col.Default != "" {
 			_, _ = sbuf.WriteString(" DEFAULT " + col.Default)
 		}
+		if col.Collation != "" {
+			_, _ = sbuf.WriteString(" COLLATE ")
+			pgWriteString(sbuf, col.Collation)
+		}
 	}
 	return sbuf.String()
 }
