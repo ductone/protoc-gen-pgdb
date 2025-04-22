@@ -68,6 +68,7 @@ func (d *{{.ReceiverType}}) PKSKV2Field() *pgdb_v1.Column {
 		Table: "{{.TableName}}",
 		Name:  "pb$pkskv2",
 		Type:  "varchar",
+		Collation: "C",
 	}
 }
 
