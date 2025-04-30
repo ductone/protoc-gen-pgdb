@@ -236,10 +236,11 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			return nil, fmt.Errorf("pgdb: nullable column with no default: %s (%s)", pgColName, dbTypeRef.Name)
 		}
 		rv.DB = &pgdb_v1.Column{
-			Name:     pgColName,
-			Type:     dbTypeRef.Name,
-			Nullable: nullable,
-			Default:  defaultValue,
+			Name:      pgColName,
+			Type:      dbTypeRef.Name,
+			Nullable:  nullable,
+			Default:   defaultValue,
+			Collation: ext.Collation,
 		}
 		rv.DataType = dbTypeRef
 	} else {
@@ -351,6 +352,25 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		},
 		QueryTypeName: ctx.Name(m).String() + "SK" + "QueryType",
 	}
+
+	vn = vn.Next()
+	pkskv2Field := &fieldContext{
+		ExcludeNested: true,
+		IsVirtual:     true,
+		DB: &pgdb_v1.Column{
+			Name:      "pkskv2",
+			Type:      vcDataType.Name,
+			Nullable:  true,
+			Collation: "C",
+		},
+		GoName:   "PKSKV2",
+		DataType: vcDataType,
+		Convert: &pkskDataConvert{
+			ctx: ctx,
+		},
+		QueryTypeName: ctx.Name(m).String() + "PKSKV2" + "QueryType",
+	}
+
 	// https://github.com/jackc/pgtype/issues/150
 	// tsvector is not in-tree.  but we use to_tsvector() when inserting, so we just need to have the right type name
 	// in the Field{} struct.
@@ -391,7 +411,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		QueryTypeName: ctx.Name(m).String() + "PBData" + "QueryType",
 	}
 
-	rv := []*fieldContext{tenantIdField, pkskField, pkField, skField, ftsDataField, pbDataField}
+	rv := []*fieldContext{tenantIdField, pkskField, pkField, skField, pkskv2Field, ftsDataField, pbDataField}
 
 	// iterate message for vector behavior options
 	for _, field := range m.Fields() {

@@ -11,6 +11,7 @@ type Descriptor interface {
 	Fields(opts ...DescriptorFieldOptionFunc) []*Column
 
 	PKSKField() *Column
+	PKSKV2Field() *Column
 	DataField() *Column
 	SearchField() *Column
 	VersioningField() *Column
@@ -82,6 +83,7 @@ type Column struct {
 	Nullable           bool
 	OverrideExpression string
 	Default            string
+	Collation          string
 }
 
 func (x *Column) Identifier() exp.IdentifierExpression {
