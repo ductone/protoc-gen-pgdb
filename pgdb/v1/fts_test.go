@@ -144,6 +144,9 @@ func TestSearchSymbols(t *testing.T) {
 			"aws.push", true, dotVector,
 		},
 		{
+			"aws.push_group", true, dotVector,
+		},
+		{
 			"Example", false, pathVector,
 		},
 		{
@@ -626,9 +629,13 @@ func TestSubSnakeCaseDoc(t *testing.T) {
 		},
 	}
 
+	symbols := map[rune]struct{}{
+		'_': {},
+	}
+
 	for _, tc := range testCases {
 		var wordBuffer bytes.Buffer
-		lexemes := symbolSubTokensSplitDoc('_', tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
+		lexemes := symbolsSubTokensSplitDoc(symbols, tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
 		require.Equal(t, tc.expectedLexemes, lexemes)
 	}
 }
@@ -776,9 +783,13 @@ func TestFullSnakeCaseDoc(t *testing.T) {
 		},
 	}
 
+	symbols := map[rune]struct{}{
+		'_': {},
+	}
+
 	for _, tc := range testCases {
 		var wordBuffer bytes.Buffer
-		lexemes := symbolFullTokensSplitDoc('_', tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
+		lexemes := symbolsFullTokensSplitDoc(symbols, tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
 		require.Equal(t, tc.expectedLexemes, lexemes)
 	}
 }
@@ -972,9 +983,13 @@ func TestDotsSplitDoc(t *testing.T) {
 		},
 	}
 
+	symbols := map[rune]struct{}{
+		'.': {},
+	}
+
 	for _, tc := range testCases {
 		var wordBuffer bytes.Buffer
-		lexemes := symbolSubTokensSplitDoc('.', tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
+		lexemes := symbolsSubTokensSplitDoc(symbols, tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
 		require.Equal(t, tc.expectedLexemes, lexemes)
 	}
 }
