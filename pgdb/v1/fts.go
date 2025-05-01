@@ -334,15 +334,12 @@ func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 		if doc.Type == FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG {
 			continue
 		}
-		docTokens := make([]lexeme, 0, 8)
 		docValue := interfaceToValue(doc.Value)
 		var wordBuffer bytes.Buffer
-		docTokens = append(docTokens, camelSplitDoc(docValue, wordBuffer, doc)...)
-		docTokens = append(docTokens, symbolsSubTokensSplitDoc(symbols, docValue, wordBuffer, doc)...)
-		docTokens = append(docTokens, symbolsFullTokensSplitDoc(symbols, docValue, wordBuffer, doc)...)
-		docTokens = append(docTokens, acronymSplitDoc(docValue, wordBuffer, doc)...)
-
-		for _, v := range docTokens {
+		rv = append(rv, camelSplitDoc(docValue, wordBuffer, doc)...)
+		rv = append(rv, symbolsSubTokensSplitDoc(symbols, docValue, wordBuffer, doc)...)
+		symbolsFullTokens := symbolsFullTokensSplitDoc(symbols, docValue, wordBuffer, doc)
+		for _, v := range symbolsFullTokens {
 			if len(v.value) >= 1 {
 				// Add lexemes for each substring starting at the beginning
 				for i := 1; i < len(v.value); i++ {
@@ -350,10 +347,10 @@ func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 					gramWeight := lowerWeight(doc.Weight)
 					rv = append(rv, lexeme{substring, v.pos, gramWeight})
 				}
-				// Add the thing itself
-				rv = append(rv, v)
 			}
 		}
+		rv = append(rv, symbolsFullTokens...)
+		rv = append(rv, acronymSplitDoc(docValue, wordBuffer, doc)...)
 	}
 	return rv
 }
