@@ -116,9 +116,6 @@ message FieldOptions {
   MessageBehavior message_behavior = 3;
   reserved 4;
   reserved "vector_size";
-
-  // Specifies the collation for the field in PostgreSQL
-  string collation = 5;
 }
 
 extend google.protobuf.EnumValueOptions {

@@ -35,7 +35,7 @@ func Delete(msg DBReflectMessage) (string, []any, error) {
 	)
 
 	for _, colName := range primaryIndex.Columns {
-		if colName == "pb$pksk" || colName == "pb$pkskv2" {
+		if colName == "pb$pksk" {
 			pksk, err := generatedPKSK(record)
 			if err != nil {
 				return "", nil, err

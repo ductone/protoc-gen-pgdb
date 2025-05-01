@@ -34,9 +34,9 @@ func TestSchemaZooShop(t *testing.T) {
 	}
 	ct := schema[0]
 	require.Contains(t, ct, "CREATE TABLE")
-	require.Equal(t, 3, // todo: fix this after postgresql migration
+	require.Equal(t, 2,
 		strings.Count(ct, "$pksk"),
-		"Create table should contain one pksk and one pkskv2 field + index: %s", ct,
+		"Create table should contain only one pksk field + index: %s", ct,
 	)
 	require.Equal(t, 1,
 		strings.Count(ct, "fts_data"),
