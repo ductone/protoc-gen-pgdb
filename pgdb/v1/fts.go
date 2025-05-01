@@ -116,8 +116,8 @@ func lemmatizeDocs(docs []*SearchContent, additionalFilters ...jargon.Filter) []
 	return rv
 }
 
-// snakeSubTokensSplitDoc tokenizes []string{bar, baz, quo} from foo_bar_baz quix_quo.
-func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
+// Tokenizes strings separated by `symbol` into slices, kinda like strings.Split.
+func symbolsSubTokensSplitDoc(symbols map[rune]struct{}, docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
 	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
 	var pos = 1
@@ -127,7 +127,8 @@ func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *Searc
 			prev = r
 			continue
 		}
-		if prev == '_' {
+		_, prevIsSymbol := symbols[prev]
+		if prevIsSymbol {
 			if wordBuffer.Len() == 0 { // no current word
 				if unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r) || unicode.IsSymbol(r) {
 					prev = r
@@ -140,9 +141,10 @@ func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *Searc
 				}
 			}
 		} else if wordBuffer.Len() > 0 {
+			_, rIsSymbol := symbols[r]
 			// in a current word, do we append or end?
 			switch {
-			case r == '_' || unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r) || unicode.IsSymbol(r):
+			case rIsSymbol || unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r) || unicode.IsSymbol(r):
 				if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
 					// have a word, current is a rune that doesn't continue the word so end current word
 					rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
@@ -165,16 +167,17 @@ func snakeSubTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *Searc
 	return rv
 }
 
-// snakeFullTokensSplitDoc tokenizes []string{foobarbaz, quixquo} from foo_bar_baz quix_quo.
-func snakeFullTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
+// Tokenizes strings separated by `symbol` into one big word - effectively removing the symbol.
+func symbolsFullTokensSplitDoc(symbols map[rune]struct{}, docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
 	wordBuffer.Reset()
 	rv := make([]lexeme, 0, 8)
 	pos := 1
-	hasUnderscore := false
+	hasSymbol := false
 	for _, r := range docValue {
+		_, rIsSymbol := symbols[r]
 		if wordBuffer.Len() == 0 { // no current word
-			if r == '_' {
-				hasUnderscore = true
+			if rIsSymbol {
+				hasSymbol = true
 			}
 			if unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r) {
 				continue
@@ -187,22 +190,22 @@ func snakeFullTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *Sear
 		} else if wordBuffer.Len() > 0 {
 			// in a current word, do we append or end?
 			switch {
-			case r != '_' && (unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r)):
-				if hasUnderscore && utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+			case !rIsSymbol && (unicode.IsPunct(r) || unicode.IsSpace(r) || unicode.IsControl(r)):
+				if hasSymbol && utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
 					// have a word, current is a rune that doesn't continue the word so end current word
 					rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
 				}
-				hasUnderscore = false
+				hasSymbol = false
 				wordBuffer.Reset()
 			default:
 				// in word and current rune continues word so continue appending
-				if r == '_' {
-					hasUnderscore = true
+				if rIsSymbol {
+					hasSymbol = true
 					continue
 				}
 				if _, e := wordBuffer.WriteRune(r); e != nil {
 					wordBuffer.Reset()
-					hasUnderscore = false
+					hasSymbol = false
 					continue
 				}
 			}
@@ -210,7 +213,7 @@ func snakeFullTokensSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *Sear
 		pos += 1
 	}
 
-	if hasUnderscore && utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
+	if hasSymbol && utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
 		rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
 	}
 	return rv
@@ -318,39 +321,15 @@ func acronymSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchConten
 	return rv
 }
 
-// split foo-bar, foo.bar, and foo/bar into [foo bar].
-func punctuationSplitDoc(docValue string, wordBuffer bytes.Buffer, doc *SearchContent) []lexeme {
-	wordBuffer.Reset()
-	rv := make([]lexeme, 0, 8)
-	var pos = 1
-
-	for i, r := range docValue {
-		if unicode.IsPunct(r) {
-			if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
-				rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
-				pos = i + 2 // i is zero indexed, and we want to skip this current rune, so add 2 for the true start of the next token
-			}
-			wordBuffer.Reset()
-		} else if unicode.IsLetter(r) || unicode.IsDigit(r) {
-			_, e := wordBuffer.WriteRune(r)
-			if e != nil {
-				wordBuffer.Reset()
-				continue
-			}
-		}
-	}
-
-	// leftover since last append
-	if utf8.RuneCount(wordBuffer.Bytes()) >= minWordSize {
-		rv = append(rv, lexeme{strings.ToLower(wordBuffer.String()), pos, doc.Weight})
-	}
-
-	return rv
-}
-
 // normalizeVectorDocs - converts a set of input documents into a set of lexemes matching common patterns such as camel case, snake case and accronyms.
 func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 	rv := make([]lexeme, 0, 8)
+	symbols := map[rune]struct{}{
+		'.': {},
+		'_': {},
+		'/': {},
+		'-': {},
+	}
 	for _, doc := range docs {
 		if doc.Type == FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG {
 			continue
@@ -358,9 +337,19 @@ func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 		docValue := interfaceToValue(doc.Value)
 		var wordBuffer bytes.Buffer
 		rv = append(rv, camelSplitDoc(docValue, wordBuffer, doc)...)
-		rv = append(rv, snakeSubTokensSplitDoc(docValue, wordBuffer, doc)...)
-		rv = append(rv, snakeFullTokensSplitDoc(docValue, wordBuffer, doc)...)
-		rv = append(rv, punctuationSplitDoc(docValue, wordBuffer, doc)...)
+		rv = append(rv, symbolsSubTokensSplitDoc(symbols, docValue, wordBuffer, doc)...)
+		symbolsFullTokens := symbolsFullTokensSplitDoc(symbols, docValue, wordBuffer, doc)
+		for _, v := range symbolsFullTokens {
+			if len(v.value) >= 1 {
+				// Add lexemes for each substring starting at the beginning
+				for i := 1; i < len(v.value); i++ {
+					substring := v.value[0:i]
+					gramWeight := lowerWeight(doc.Weight)
+					rv = append(rv, lexeme{substring, v.pos, gramWeight})
+				}
+			}
+		}
+		rv = append(rv, symbolsFullTokens...)
 		rv = append(rv, acronymSplitDoc(docValue, wordBuffer, doc)...)
 	}
 	return rv

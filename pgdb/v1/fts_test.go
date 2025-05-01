@@ -63,7 +63,7 @@ func TestSearchSymbols(t *testing.T) {
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-			Value:  "Example.THING-PROD.Group29",
+			Value:  "Example.THING-PROD.Group29 aws.push_group",
 		},
 	})
 
@@ -79,7 +79,23 @@ func TestSearchSymbols(t *testing.T) {
 		{
 			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-			Value:  "foo_bar_baz_21_quux",
+			Value:  "foo_bar_baz_21_quux another_one_is_here_to",
+		},
+	})
+
+	dashVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "long-string-separated-by-dashes",
+		},
+	})
+
+	comboVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "abcdefg.hijklmnop qrstuv/wxyz superfoo$superbar@combo",
 		},
 	})
 
@@ -92,6 +108,9 @@ func TestSearchSymbols(t *testing.T) {
 			"THING", true, dotVector,
 		},
 		{
+			"THING-EXPECTEDTOFAIL", false, dotVector,
+		},
+		{
 			"THING-PROD", true, dotVector,
 		},
 		{
@@ -102,6 +121,30 @@ func TestSearchSymbols(t *testing.T) {
 		},
 		{
 			"Group", true, dotVector,
+		},
+		{
+			"example.thing", true, dotVector,
+		},
+		{
+			"example.thing-prod", true, dotVector,
+		},
+		{
+			"example-thing", true, dotVector,
+		},
+		{
+			"example_thing", true, dotVector,
+		},
+		{
+			"example/thing", true, dotVector,
+		},
+		{
+			"aws", true, dotVector,
+		},
+		{
+			"aws.push", true, dotVector,
+		},
+		{
+			"aws.push_group", true, dotVector,
 		},
 		{
 			"Example", false, pathVector,
@@ -135,6 +178,36 @@ func TestSearchSymbols(t *testing.T) {
 		},
 		{
 			"quux", true, underscoreVector,
+		},
+		{
+			"another", true, underscoreVector,
+		},
+		{
+			"long", true, dashVector,
+		},
+		{
+			"string", true, dashVector,
+		},
+		{
+			"by", true, dashVector,
+		},
+		{
+			"qrst", true, comboVector,
+		},
+		{
+			"qrstuv/wxyz", true, comboVector,
+		},
+		{
+			"superfoo", true, comboVector,
+		},
+		{
+			"superbar", true, comboVector,
+		},
+		{
+			"superfoo$superbar", true, comboVector,
+		},
+		{
+			"combo", true, comboVector,
 		},
 	}
 
@@ -556,9 +629,13 @@ func TestSubSnakeCaseDoc(t *testing.T) {
 		},
 	}
 
+	symbols := map[rune]struct{}{
+		'_': {},
+	}
+
 	for _, tc := range testCases {
 		var wordBuffer bytes.Buffer
-		lexemes := snakeSubTokensSplitDoc(tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
+		lexemes := symbolsSubTokensSplitDoc(symbols, tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
 		require.Equal(t, tc.expectedLexemes, lexemes)
 	}
 }
@@ -706,9 +783,13 @@ func TestFullSnakeCaseDoc(t *testing.T) {
 		},
 	}
 
+	symbols := map[rune]struct{}{
+		'_': {},
+	}
+
 	for _, tc := range testCases {
 		var wordBuffer bytes.Buffer
-		lexemes := snakeFullTokensSplitDoc(tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
+		lexemes := symbolsFullTokensSplitDoc(symbols, tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
 		require.Equal(t, tc.expectedLexemes, lexemes)
 	}
 }
@@ -882,7 +963,7 @@ func TestCamelSplitDoc(t *testing.T) {
 	}
 }
 
-func TestPunctuationSplitDoc(t *testing.T) {
+func TestDotsSplitDoc(t *testing.T) {
 	testCases := []struct {
 		searchContent   *SearchContent
 		expectedLexemes []lexeme
@@ -891,21 +972,24 @@ func TestPunctuationSplitDoc(t *testing.T) {
 			searchContent: &SearchContent{
 				Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 				Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-				Value:  "foo.bar-baz/quux_eek35!",
+				Value:  "foo.bar.baz.quux.eek35!",
 			},
 			expectedLexemes: []lexeme{
-				{"foo", 1, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
-				{"bar", 5, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
-				{"baz", 9, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
-				{"quux", 13, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
-				{"eek35", 18, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"bar", 7, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"baz", 11, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"quux", 16, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
+				{"eek35", 22, FieldOptions_FULL_TEXT_WEIGHT_HIGH},
 			},
 		},
 	}
 
+	symbols := map[rune]struct{}{
+		'.': {},
+	}
+
 	for _, tc := range testCases {
 		var wordBuffer bytes.Buffer
-		lexemes := punctuationSplitDoc(tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
+		lexemes := symbolsSubTokensSplitDoc(symbols, tc.searchContent.Value.(string), wordBuffer, tc.searchContent)
 		require.Equal(t, tc.expectedLexemes, lexemes)
 	}
 }
