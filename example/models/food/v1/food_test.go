@@ -120,7 +120,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 		}
 		ct := schema[0]
 		require.Contains(t, ct, "CREATE TABLE")
-		require.Equal(t, 2,
+		require.Equal(t, 3, // TODO: change this back to 2 when pksk field is removed
 			strings.Count(ct, "$pksk"),
 			"Create table should contain only one pksk field + index: %s", ct,
 		)
@@ -386,7 +386,7 @@ func readPartitionSubTables(ctx context.Context, db sqlScanner, desc pgdb_v1.Des
 	return tables, nil
 }
 
-func fxitureSchemaSauceIngredient(t *testing.T, pg *pgtest.PG) {
+func fixtureSchemaSauceIngredient(t *testing.T, pg *pgtest.PG) {
 	ctx := context.Background()
 	_, err := pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
@@ -431,7 +431,7 @@ func TestSchemaSauceIngredientNetworkRange(t *testing.T) {
 	require.NoError(t, err)
 	defer pg.Stop()
 
-	fxitureSchemaSauceIngredient(t, pg)
+	fixtureSchemaSauceIngredient(t, pg)
 
 	nilSI := (*SauceIngredient)(nil)
 	tableName := nilSI.DB().TableName()
@@ -469,7 +469,7 @@ func TestSchemaSauceIngredientInBehavoirs(t *testing.T) {
 	pg, err := pgtest.Start()
 	require.NoError(t, err)
 	defer pg.Stop()
-	fxitureSchemaSauceIngredient(t, pg)
+	fixtureSchemaSauceIngredient(t, pg)
 
 	nilSI := (*SauceIngredient)(nil)
 	tableName := nilSI.DB().TableName()

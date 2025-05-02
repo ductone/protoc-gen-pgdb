@@ -98,6 +98,18 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -158,6 +170,14 @@ func (d *pgdbDescriptorPasta) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_pasta_models_food_v1_29fd1107",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorPasta) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_pasta_models_food_v1_29fd1107",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -352,7 +372,11 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -361,19 +385,19 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 			},
 		}
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -381,7 +405,7 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -827,6 +851,19 @@ func (x *PastaSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PastaPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaDBQueryUnsafe) PKSKV2() *PastaPKSKV2QueryType {
+	return &PastaPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *PastaPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type PastaFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -925,6 +962,10 @@ func (x *PastaDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
+func (x *PastaDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
+}
+
 func (x *PastaDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -1021,6 +1062,18 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
@@ -1132,6 +1185,14 @@ func (d *pgdbDescriptorPastaIngredient) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_pasta_ingredient_models_food_v1_0565c036",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorPastaIngredient) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_pasta_ingredient_models_food_v1_0565c036",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -1415,7 +1476,11 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -1430,19 +1495,19 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 			},
 		}
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -1450,14 +1515,14 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		var cfv5 interface{} = nullExp
+		var cfv6 interface{} = nullExp
 		for _, v := range m.self.ModelEmbeddings {
 			if v.Model != llm_v1.Model_MODEL_3DIMS {
 				continue
@@ -1465,20 +1530,20 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 			if len(v.Embedding) == 0 {
 				break
 			}
-			cfv5 = pgdb_v1.FloatToVector(v.Embedding)
+			cfv6 = pgdb_v1.FloatToVector(v.Embedding)
 		}
 
 		if ro.Nulled {
 			rv[ro.ColumnName("model_embeddings_1")] = nullExp
 		} else {
-			rv[ro.ColumnName("model_embeddings_1")] = cfv5
+			rv[ro.ColumnName("model_embeddings_1")] = cfv6
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		var cfv5 interface{} = nullExp
+		var cfv6 interface{} = nullExp
 		for _, v := range m.self.ModelEmbeddings {
 			if v.Model != llm_v1.Model_MODEL_4DIMS {
 				continue
@@ -1486,13 +1551,13 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 			if len(v.Embedding) == 0 {
 				break
 			}
-			cfv5 = pgdb_v1.FloatToVector(v.Embedding)
+			cfv6 = pgdb_v1.FloatToVector(v.Embedding)
 		}
 
 		if ro.Nulled {
 			rv[ro.ColumnName("model_embeddings_2")] = nullExp
 		} else {
-			rv[ro.ColumnName("model_embeddings_2")] = cfv5
+			rv[ro.ColumnName("model_embeddings_2")] = cfv6
 		}
 
 	}
@@ -2187,6 +2252,19 @@ func (x *PastaIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PastaIngredientPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) PKSKV2() *PastaIngredientPKSKV2QueryType {
+	return &PastaIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *PastaIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type PastaIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -2337,6 +2415,10 @@ func (x *PastaIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
+func (x *PastaIngredientDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
+}
+
 func (x *PastaIngredientDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -2460,6 +2542,18 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -2528,6 +2622,14 @@ func (d *pgdbDescriptorSauceIngredient) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_sauce_ingredient_models_food_v1_e37b4524",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorSauceIngredient) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_sauce_ingredient_models_food_v1_e37b4524",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -2733,7 +2835,11 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -2742,19 +2848,19 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 			},
 		}
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -2762,7 +2868,7 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -3292,6 +3398,19 @@ func (x *SauceIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type SauceIngredientPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *SauceIngredientDBQueryUnsafe) PKSKV2() *SauceIngredientPKSKV2QueryType {
+	return &SauceIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *SauceIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type SauceIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -3401,6 +3520,10 @@ func (x *SauceIngredientDBColumns) PK() exp.Expression {
 
 func (x *SauceIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *SauceIngredientDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
 }
 
 func (x *SauceIngredientDBColumns) FTSData() exp.Expression {
@@ -3514,6 +3637,18 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -3582,6 +3717,14 @@ func (d *pgdbDescriptorGarlicIngredient) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorGarlicIngredient) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -3787,7 +3930,11 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -3796,19 +3943,19 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 			},
 		}
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -3816,7 +3963,7 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -4409,6 +4556,19 @@ func (x *GarlicIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type GarlicIngredientPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientDBQueryUnsafe) PKSKV2() *GarlicIngredientPKSKV2QueryType {
+	return &GarlicIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *GarlicIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type GarlicIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -4518,6 +4678,10 @@ func (x *GarlicIngredientDBColumns) PK() exp.Expression {
 
 func (x *GarlicIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *GarlicIngredientDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
 }
 
 func (x *GarlicIngredientDBColumns) FTSData() exp.Expression {
@@ -4631,6 +4795,18 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -4699,6 +4875,14 @@ func (d *pgdbDescriptorCheeseIngredient) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_cheese_ingredient_models_food_v1_886942a1",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorCheeseIngredient) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_cheese_ingredient_models_food_v1_886942a1",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -4904,7 +5088,11 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -4913,19 +5101,19 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 			},
 		}
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -4933,7 +5121,7 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -5526,6 +5714,19 @@ func (x *CheeseIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type CheeseIngredientPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) PKSKV2() *CheeseIngredientPKSKV2QueryType {
+	return &CheeseIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *CheeseIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type CheeseIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -5637,6 +5838,10 @@ func (x *CheeseIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
+func (x *CheeseIngredientDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
+}
+
 func (x *CheeseIngredientDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -5720,6 +5925,14 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) PKSKField() *pgdb_v1.Colu
 	return &pgdb_v1.Column{
 		Table: "pb_model_embedding_models_food_v1_de910e59",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_model_embedding_models_food_v1_de910e59",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }

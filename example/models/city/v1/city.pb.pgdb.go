@@ -101,6 +101,18 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -167,6 +179,14 @@ func (d *pgdbDescriptorAttractions) PKSKField() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table: "pb_attractions_models_city_v1_e136cbfc",
 		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorAttractions) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_attractions_models_city_v1_e136cbfc",
+		Name:  "pb$pkskv2",
 		Type:  "varchar",
 	}
 }
@@ -448,7 +468,11 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -457,25 +481,25 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 			},
 		}
 
-		cfv4tmp = append(cfv4tmp, m.self.GetPet().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetPet().DBReflect().SearchData()...)
 
-		cfv4tmp = append(cfv4tmp, m.self.GetZooShop().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetZooShop().DBReflect().SearchData()...)
 
-		cfv4tmp = append(cfv4tmp, m.self.GetMedium().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetMedium().DBReflect().SearchData()...)
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -483,7 +507,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -1344,6 +1368,19 @@ func (x *AttractionsSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type AttractionsPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsDBQueryUnsafe) PKSKV2() *AttractionsPKSKV2QueryType {
+	return &AttractionsPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *AttractionsPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type AttractionsFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -1440,6 +1477,10 @@ func (x *AttractionsDBColumns) PK() exp.Expression {
 
 func (x *AttractionsDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *AttractionsDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
 }
 
 func (x *AttractionsDBColumns) FTSData() exp.Expression {
