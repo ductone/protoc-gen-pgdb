@@ -372,6 +372,7 @@ type MessageOptions struct {
 	// event_id.
 	PartitionedByKsuidFieldName string                 `protobuf:"bytes,9,opt,name=partitioned_by_ksuid_field_name,json=partitionedByKsuidFieldName,proto3" json:"partitioned_by_ksuid_field_name,omitempty"`
 	Stats                       []*MessageOptions_Stat `protobuf:"bytes,6,rep,name=stats,proto3" json:"stats,omitempty"`
+	UsePkskv2Column             bool                   `protobuf:"varint,10,opt,name=use_pkskv2_column,json=usePkskv2Column,proto3" json:"use_pkskv2_column,omitempty"` // determines whether to add the pkskv2 column
 	unknownFields               protoimpl.UnknownFields
 	sizeCache                   protoimpl.SizeCache
 }
@@ -467,6 +468,13 @@ func (x *MessageOptions) GetStats() []*MessageOptions_Stat {
 		return x.Stats
 	}
 	return nil
+}
+
+func (x *MessageOptions) GetUsePkskv2Column() bool {
+	if x != nil {
+		return x.UsePkskv2Column
+	}
+	return false
 }
 
 type FieldOptions struct {
@@ -779,7 +787,7 @@ var File_pgdb_v1_pgdb_proto protoreflect.FileDescriptor
 
 const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\n" +
-	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\x8c\n" +
+	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\xb8\n" +
 	"\n" +
 	"\x0eMessageOptions\x12\x1a\n" +
 	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x127\n" +
@@ -791,7 +799,9 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\x19partitioned_by_created_at\x18\a \x01(\bR\x16partitionedByCreatedAt\x12i\n" +
 	"\x19partitioned_by_date_range\x18\b \x01(\x0e2..pgdb.v1.MessageOptions.PartitionedByDateRangeR\x16partitionedByDateRange\x12D\n" +
 	"\x1fpartitioned_by_ksuid_field_name\x18\t \x01(\tR\x1bpartitionedByKsuidFieldName\x122\n" +
-	"\x05stats\x18\x06 \x03(\v2\x1c.pgdb.v1.MessageOptions.StatR\x05stats\x1a\xe4\x02\n" +
+	"\x05stats\x18\x06 \x03(\v2\x1c.pgdb.v1.MessageOptions.StatR\x05stats\x12*\n" +
+	"\x11use_pkskv2_column\x18\n" +
+	" \x01(\bR\x0fusePkskv2Column\x1a\xe4\x02\n" +
 	"\x05Index\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12A\n" +
 	"\x06method\x18\x02 \x01(\x0e2).pgdb.v1.MessageOptions.Index.IndexMethodR\x06method\x12\x18\n" +

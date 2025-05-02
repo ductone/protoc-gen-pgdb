@@ -36,6 +36,7 @@ message PastaIngredient {
     ]
     sk_const: "exampleingredient"
   };
+
   option (pgdb.v1.msg).indexes = {
     name: "pastas"
     method: INDEX_METHOD_BTREE
@@ -158,6 +159,7 @@ message CheeseIngredient {
     partitioned_by_ksuid_field_name: "event_id"
     partitioned_by_date_range: PARTITIONED_BY_DATE_RANGE_MONTH
   };
+  option (pgdb.v1.msg).use_pkskv2_column = true;
   option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id",

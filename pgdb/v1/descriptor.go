@@ -7,11 +7,8 @@ import (
 // Descriptor is the same for all instances of a Message.
 type Descriptor interface {
 	TableName() string
-
 	Fields(opts ...DescriptorFieldOptionFunc) []*Column
-
 	PKSKField() *Column
-	PKSKV2Field() *Column
 	DataField() *Column
 	SearchField() *Column
 	VersioningField() *Column
@@ -28,6 +25,10 @@ type Descriptor interface {
 	GetPartitionDateRange() MessageOptions_PartitionedByDateRange
 }
 
+type DescriptorWithPKSKV2 interface {
+	Descriptor
+	PKSKV2Field() *Column
+}
 type DescriptorFieldOption struct {
 	Prefix        string
 	IsNested      bool
