@@ -120,7 +120,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 		}
 		ct := schema[0]
 		require.Contains(t, ct, "CREATE TABLE")
-		require.Equal(t, 3, // TODO: change this back to 2 when pksk field is removed
+		require.Equal(t, 2,
 			strings.Count(ct, "$pksk"),
 			"Create table should contain only one pksk field + index: %s", ct,
 		)
