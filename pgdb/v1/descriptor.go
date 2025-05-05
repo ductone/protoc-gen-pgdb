@@ -7,9 +7,7 @@ import (
 // Descriptor is the same for all instances of a Message.
 type Descriptor interface {
 	TableName() string
-
 	Fields(opts ...DescriptorFieldOptionFunc) []*Column
-
 	PKSKField() *Column
 	DataField() *Column
 	SearchField() *Column
@@ -27,6 +25,10 @@ type Descriptor interface {
 	GetPartitionDateRange() MessageOptions_PartitionedByDateRange
 }
 
+type DescriptorWithPKSKV2 interface {
+	Descriptor
+	PKSKV2Field() *Column
+}
 type DescriptorFieldOption struct {
 	Prefix        string
 	IsNested      bool
@@ -82,6 +84,7 @@ type Column struct {
 	Nullable           bool
 	OverrideExpression string
 	Default            string
+	Collation          string
 }
 
 func (x *Column) Identifier() exp.IdentifierExpression {

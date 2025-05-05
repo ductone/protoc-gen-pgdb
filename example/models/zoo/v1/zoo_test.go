@@ -34,9 +34,9 @@ func TestSchemaZooShop(t *testing.T) {
 	}
 	ct := schema[0]
 	require.Contains(t, ct, "CREATE TABLE")
-	require.Equal(t, 2,
+	require.Equal(t, 2, // todo: duplicate this test in food for pkskv2 column on CheeseIngredient
 		strings.Count(ct, "$pksk"),
-		"Create table should contain only one pksk field + index: %s", ct,
+		"Create table should contain one pksk field + index: %s", ct,
 	)
 	require.Equal(t, 1,
 		strings.Count(ct, "fts_data"),

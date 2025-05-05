@@ -22,6 +22,7 @@ type descriptorTemplateContext struct {
 	IsPartitionedByCreatedAt    bool
 	PartitionedByKsuidFieldName string
 	PartitionDateRange          string
+	UsePkskv2Column             bool
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -63,6 +64,7 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		IsPartitionedByCreatedAt:    fext.PartitionedByCreatedAt,
 		PartitionedByKsuidFieldName: fext.PartitionedByKsuidFieldName,
 		PartitionDateRange:          "pgdb_v1.MessageOptions_" + fext.PartitionedByDateRange.String(),
+		UsePkskv2Column:             fext.UsePkskv2Column,
 	}
 
 	return templates["descriptor.tmpl"].Execute(w, c)

@@ -4631,6 +4631,18 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("pkskv2"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
@@ -4700,6 +4712,16 @@ func (d *pgdbDescriptorCheeseIngredient) PKSKField() *pgdb_v1.Column {
 		Table: "pb_cheese_ingredient_models_food_v1_886942a1",
 		Name:  "pb$pksk",
 		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorCheeseIngredient) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table:     "pb_cheese_ingredient_models_food_v1_886942a1",
+		Name:      "pb$pkskv2",
+		Type:      "varchar",
+		Nullable:  true,
+		Collation: "C",
 	}
 }
 
@@ -4904,7 +4926,11 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 	if !ro.IsNested {
 
-		cfv4tmp := []*pgdb_v1.SearchContent{
+	}
+
+	if !ro.IsNested {
+
+		cfv5tmp := []*pgdb_v1.SearchContent{
 
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_EXACT,
@@ -4913,19 +4939,19 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 			},
 		}
 
-		cfv4 := pgdb_v1.FullTextSearchVectors(cfv4tmp)
+		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
 			rv[ro.ColumnName("fts_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("fts_data")] = cfv4
+			rv[ro.ColumnName("fts_data")] = cfv5
 		}
 
 	}
 
 	if !ro.IsNested {
 
-		cfv5, err := proto.Marshal(m.self)
+		cfv6, err := proto.Marshal(m.self)
 		if err != nil {
 			return nil, err
 		}
@@ -4933,7 +4959,7 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 		if ro.Nulled {
 			rv[ro.ColumnName("pb_data")] = nullExp
 		} else {
-			rv[ro.ColumnName("pb_data")] = cfv5
+			rv[ro.ColumnName("pb_data")] = cfv6
 		}
 
 	}
@@ -5526,6 +5552,19 @@ func (x *CheeseIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type CheeseIngredientPKSKV2QueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientDBQueryUnsafe) PKSKV2() *CheeseIngredientPKSKV2QueryType {
+	return &CheeseIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
+func (x *CheeseIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type CheeseIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -5635,6 +5674,10 @@ func (x *CheeseIngredientDBColumns) PK() exp.Expression {
 
 func (x *CheeseIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *CheeseIngredientDBColumns) PKSKV2() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
 }
 
 func (x *CheeseIngredientDBColumns) FTSData() exp.Expression {
