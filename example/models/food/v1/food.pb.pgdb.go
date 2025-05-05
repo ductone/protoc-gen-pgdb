@@ -55,6 +55,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -67,6 +68,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -79,6 +81,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -91,6 +94,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -103,6 +107,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -115,6 +120,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -125,6 +131,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -133,6 +140,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -141,6 +149,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -149,6 +158,7 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	return rv
@@ -989,6 +999,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -1001,6 +1012,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -1013,6 +1025,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -1025,6 +1038,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -1037,6 +1051,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -1049,6 +1064,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -1061,6 +1077,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "vector(3)",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -1073,6 +1090,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "vector(4)",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -1083,6 +1101,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1091,6 +1110,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1099,6 +1119,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1107,6 +1128,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1115,6 +1137,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1123,6 +1146,7 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	return rv
@@ -2417,6 +2441,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -2429,6 +2454,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -2441,6 +2467,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -2453,6 +2480,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -2465,6 +2493,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -2477,6 +2506,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -2487,6 +2517,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -2495,6 +2526,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -2503,6 +2535,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -2511,6 +2544,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -2519,6 +2553,7 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "NULL",
+		Collation:          "",
 	})
 
 	return rv
@@ -3471,6 +3506,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -3483,6 +3519,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -3495,6 +3532,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -3507,6 +3545,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -3519,6 +3558,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -3531,6 +3571,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -3541,6 +3582,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -3549,6 +3591,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -3557,6 +3600,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -3565,6 +3609,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -3573,6 +3618,7 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "NULL",
+		Collation:          "",
 	})
 
 	return rv
@@ -4588,6 +4634,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -4600,6 +4647,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -4612,6 +4660,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -4624,6 +4673,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -4636,6 +4686,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "C",
 		})
 
 	}
@@ -4648,6 +4699,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -4660,6 +4712,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -4670,6 +4723,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -4678,6 +4732,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -4686,6 +4741,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -4694,6 +4750,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -4702,6 +4759,7 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "NULL",
+		Collation:          "",
 	})
 
 	return rv
@@ -5746,6 +5804,7 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) Fields(opts ...pgdb_v1.De
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -5754,6 +5813,7 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) Fields(opts ...pgdb_v1.De
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	return rv
