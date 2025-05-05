@@ -2,6 +2,7 @@ package v1
 
 import (
 	"errors"
+
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
 )
@@ -31,7 +32,7 @@ func Insert(msg DBReflectMessage) (string, []any, error) {
 			pk := record["pb$pk"]
 			sk := record["pb$sk"]
 			record[pkskv2Field.Name] = fmt.Sprintf("%s|%s", pk.(string), sk.(string))
-		} */
+	} */
 
 	qb := goqu.Dialect("postgres")
 	q := qb.Insert(tableName).Prepared(true).Rows(
