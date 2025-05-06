@@ -58,6 +58,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -70,6 +71,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -82,6 +84,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -94,6 +97,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -106,6 +110,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -118,6 +123,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
+			Collation:          "",
 		})
 
 	}
@@ -128,6 +134,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -136,6 +143,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -144,6 +152,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
+		Collation:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -152,6 +161,7 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
+		Collation:          "",
 	})
 
 	rv = append(rv, ((*animals_v1.Pet)(nil)).DBReflect().Descriptor().Fields(df.Nested("10$")...)...)

@@ -41,6 +41,7 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
         Nullable: df.Nullable({{ .DB.Nullable }}),
         OverrideExpression: "{{ .DB.OverrideExpression }}",
         Default: "{{ .DB.Default }}",
+        Collation: "{{ .DB.Collation }}",
       })
     {{ end }}
     {{ if .ExcludeNested }}
