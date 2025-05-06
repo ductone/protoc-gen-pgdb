@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+project_name: protoc-gen-pgdb
+builds:
+  - binary: protoc-gen-pgdb
+    env:
+      - CGO_ENABLED=0
+    id: linux
+    main: .
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+archives:
+  - id: linux-archive
+    ids:
+      - linux
+    formats:
+      - "tar.gz"
+source:
+  enabled: true
+  name_template: "v{{ .Version }}"
+release:
+  disable: false
+snapshot:
+  version_template: "{{ incpatch .Version }}-dev"
+checksum:
+  name_template: "{{ .ProjectName }}-v{{ .Version }}_checksums.txt"
+  disable: false
+changelog:
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - typo
+      - lint
+      - Merge pull request
