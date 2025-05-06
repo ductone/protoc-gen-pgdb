@@ -29,6 +29,7 @@ type DescriptorWithPKSKV2 interface {
 	Descriptor
 	PKSKV2Field() *Column
 }
+
 type DescriptorFieldOption struct {
 	Prefix        string
 	IsNested      bool
