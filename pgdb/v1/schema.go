@@ -121,11 +121,11 @@ type sqlScanner interface {
 	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
 }
 
-func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
+func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]*Column, error) {
 	dialect := goqu.Dialect("postgres")
 
 	qb := dialect.From("information_schema.columns")
-	qb = qb.Select("column_name")
+	qb = qb.Select("column_name", "collation_name", "is_nullable", "column_default")
 	qb = qb.Where(goqu.L("table_name = ?", desc.TableName()))
 	query, params, err := qb.ToSQL()
 	if err != nil {
@@ -139,14 +139,15 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 
 	defer rows.Close()
 
-	haveCols := make(map[string]struct{})
+	haveCols := make(map[string]*Column)
 	for rows.Next() {
-		var columnName string
-		err = rows.Scan(&columnName)
+		var nullable bool
+		var columnName, collation, defaultValue string
+		err = rows.Scan(&columnName, &collation, &nullable, &defaultValue)
 		if err != nil {
 			return nil, err
 		}
-		haveCols[columnName] = struct{}{}
+		haveCols[columnName] = &Column{Name: columnName, Collation: collation, Nullable: nullable, Default: defaultValue}
 	}
 	return haveCols, nil
 }
@@ -262,6 +263,9 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	dbr := msg.DBReflect()
 	desc := dbr.Descriptor()
 
+	// What we need to do here is to get column characteristics that might change
+	// so what if readColumns returned a map[string]*Column
+
 	haveCols, err := readColumns(ctx, db, desc)
 	if err != nil {
 		return nil, err
@@ -271,11 +275,13 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 		return CreateSchema(msg)
 	}
 
+	// and then here, instead of just checking to see if the column
+	// needs to be added, see if it needs to be altered
 	for _, field := range desc.Fields() {
 		if _, ok := haveCols[field.Name]; ok {
 			continue
 		}
-		query := col2alter(desc, field)
+		query := col2alter(desc, field) // this adds missing columns but doesn't alter
 		rv = append(rv, query)
 	}
 
