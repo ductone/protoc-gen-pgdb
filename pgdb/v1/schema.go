@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -141,13 +142,24 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 
 	haveCols := make(map[string]*Column)
 	for rows.Next() {
-		var nullable bool
-		var columnName, collation, defaultValue string
-		err = rows.Scan(&columnName, &collation, &nullable, &defaultValue)
+		var nullable string
+		var columnName, defaultValue, collation string
+		var col, def sql.NullString
+		err = rows.Scan(&columnName, &col, &nullable, &def)
 		if err != nil {
 			return nil, err
 		}
-		haveCols[columnName] = &Column{Name: columnName, Collation: collation, Nullable: nullable, Default: defaultValue}
+		if def.Valid {
+			defaultValue = def.String
+		} else {
+			defaultValue = ""
+		}
+		if col.Valid {
+			collation = col.String
+		} else {
+			collation = ""
+		}
+		haveCols[columnName] = &Column{Collation: collation, Nullable: nullable == "YES", Default: defaultValue}
 	}
 	return haveCols, nil
 }
@@ -281,7 +293,7 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 		if _, ok := haveCols[field.Name]; ok {
 			continue
 		}
-		query := col2alter(desc, field) // this adds missing columns but doesn't alter
+		query := col2add(desc, field) // this adds missing columns but doesn't alter existing ones
 		rv = append(rv, query)
 	}
 
