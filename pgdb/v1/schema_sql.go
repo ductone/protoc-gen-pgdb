@@ -47,7 +47,7 @@ func index2sql(desc Descriptor, idx *Index) string {
 		// btree gin just means we can index
 		// col types in a multi-col index that aren't
 		// noramlly supporte dy gin, eg, varchar,
-		// but its not actually a new index type!
+		// but it's not actually a new index type!
 		_, _ = buf.WriteString("GIN")
 	case MessageOptions_Index_INDEX_METHOD_HNSW_COSINE:
 		_, _ = buf.WriteString("HNSW")
@@ -118,6 +118,18 @@ func pgWriteString(buf *bytes.Buffer, input string) {
 }
 
 func col2alter(desc Descriptor, col *Column) string {
+	buf := &bytes.Buffer{}
+	_, _ = buf.WriteString("ALTER TABLE ")
+	pgWriteString(buf, desc.TableName())
+	_, _ = buf.WriteString("\n")
+	_, _ = buf.WriteString("ALTER COLUMN ")
+	pgWriteString(buf, col.Name)
+	_, _ = buf.WriteString("\n")
+	_, _ = buf.WriteString(col2spec(col))
+	return buf.String()
+}
+
+func col2add(desc Descriptor, col *Column) string {
 	buf := &bytes.Buffer{}
 
 	_, _ = buf.WriteString("ALTER TABLE ")

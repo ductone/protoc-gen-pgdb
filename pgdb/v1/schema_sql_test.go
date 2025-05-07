@@ -188,7 +188,7 @@ ADD COLUMN IF NOT EXISTS
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result := col2alter(test.desc, test.col)
+			result := col2add(test.desc, test.col)
 			if result != test.expected {
 				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
 			}
