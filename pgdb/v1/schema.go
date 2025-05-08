@@ -276,8 +276,8 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	desc := dbr.Descriptor()
 
 	// What we need to do here is to get column characteristics that might change
-	// so what if readColumns returned a map[string]*Column
-
+	// haveCols []map[string]*Column contains the current state of the database
+	//
 	haveCols, err := readColumns(ctx, db, desc)
 	if err != nil {
 		return nil, err
@@ -290,11 +290,16 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	// and then here, instead of just checking to see if the column
 	// needs to be added, see if it needs to be altered
 	for _, field := range desc.Fields() {
-		if _, ok := haveCols[field.Name]; ok {
-			continue
+		if col, ok := haveCols[field.Name]; ok {
+			if colNeedsUpdating(col, field) {
+				query := col2alter(desc, field, col)
+				rv = append(rv, query)
+			}
+		} else {
+			// column needs to be added
+			query := col2add(desc, field)
+			rv = append(rv, query)
 		}
-		query := col2add(desc, field) // this adds missing columns but doesn't alter existing ones
-		rv = append(rv, query)
 	}
 
 	indexes, err := readIndexes(ctx, db, desc)
