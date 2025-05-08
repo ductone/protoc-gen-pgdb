@@ -152,7 +152,7 @@ func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 		actions = append(actions, b.String())
 	}
 
-	if current.Collation != wanted.Collation {
+	if current.Collation != wanted.Collation && wanted.Collation != "" {
 		b := &bytes.Buffer{}
 		_, _ = b.WriteString("ALTER COLUMN ")
 		pgWriteString(b, wanted.Name)
