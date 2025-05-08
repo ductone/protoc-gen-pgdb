@@ -117,15 +117,64 @@ func pgWriteString(buf *bytes.Buffer, input string) {
 	_, _ = buf.WriteString(`"`)
 }
 
-func col2alter(desc Descriptor, col *Column) string {
+/*
+the only alter column subcommands we care about are
+
+ALTER COLUMN SET DEFAULT <DEFAULT>
+ALTER COLUMN SET DATA TYPE <DATATYPE> COLLATE <COLLATION>
+ALTER COLUMN SET NOT NULL
+*/
+
+func colNeedsUpdating(current *Column, wanted *Column) bool {
+	return current.Collation != wanted.Collation ||
+		current.Default != wanted.Default ||
+		current.Nullable != wanted.Nullable
+}
+
+func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 	buf := &bytes.Buffer{}
+	actions := make([]string, 0)
+
 	_, _ = buf.WriteString("ALTER TABLE ")
 	pgWriteString(buf, desc.TableName())
 	_, _ = buf.WriteString("\n")
-	_, _ = buf.WriteString("ALTER COLUMN ")
-	pgWriteString(buf, col.Name)
-	_, _ = buf.WriteString("\n")
-	_, _ = buf.WriteString(col2spec(col))
+
+	if current.Nullable != wanted.Nullable {
+		b := &bytes.Buffer{}
+		_, _ = b.WriteString("ALTER COLUMN ")
+		pgWriteString(b, wanted.Name)
+		_, _ = b.WriteString("\n")
+		if !wanted.Nullable {
+			_, _ = b.WriteString("SET NOT NULL")
+		} else {
+			_, _ = b.WriteString("DROP NOT NULL")
+		}
+		actions = append(actions, b.String())
+	}
+
+	if current.Collation != wanted.Collation {
+		b := &bytes.Buffer{}
+		_, _ = b.WriteString("ALTER COLUMN ")
+		pgWriteString(b, wanted.Name)
+		_, _ = b.WriteString("\n")
+		_, _ = b.WriteString(" SET DATA TYPE ")
+		_, _ = b.WriteString(wanted.Type)
+		_, _ = b.WriteString(" COLLATE ")
+		pgWriteString(b, wanted.Collation)
+		actions = append(actions, b.String())
+	}
+
+	if current.Default != wanted.Default {
+		b := &bytes.Buffer{}
+		_, _ = b.WriteString("ALTER COLUMN ")
+		pgWriteString(buf, wanted.Name)
+		_, _ = b.WriteString("\n")
+		_, _ = b.WriteString(" SET DEFAULT ")
+		pgWriteString(b, wanted.Default)
+		actions = append(actions, b.String())
+	}
+
+	buf.WriteString(strings.Join(actions, ", "))
 	return buf.String()
 }
 
