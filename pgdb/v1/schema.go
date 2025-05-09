@@ -151,6 +151,9 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 		}
 		if def.Valid {
 			defaultValue = def.String
+			if strings.Contains(defaultValue, "::") {
+				defaultValue = strings.Split(defaultValue, "::")[0]
+			}
 		} else {
 			defaultValue = ""
 		}
@@ -159,7 +162,7 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 		} else {
 			collation = ""
 		}
-		haveCols[columnName] = &Column{Collation: collation, Nullable: nullable == "YES", Default: defaultValue}
+		haveCols[columnName] = &Column{Name: columnName, Collation: collation, Nullable: nullable == "YES", Default: defaultValue}
 	}
 	return haveCols, nil
 }
@@ -277,18 +280,18 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 
 	// What we need to do here is to get column characteristics that might change
 	// haveCols []map[string]*Column contains the current state of the database
-	//
+
 	haveCols, err := readColumns(ctx, db, desc)
 	if err != nil {
 		return nil, err
 	}
 
+	// if the table doesn't exist, make it
 	if len(haveCols) == 0 {
 		return CreateSchema(msg)
 	}
 
-	// and then here, instead of just checking to see if the column
-	// needs to be added, see if it needs to be altered
+	// check each field
 	for _, field := range desc.Fields() {
 		if col, ok := haveCols[field.Name]; ok {
 			if colNeedsUpdating(col, field) {

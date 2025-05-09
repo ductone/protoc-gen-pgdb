@@ -126,7 +126,7 @@ ALTER COLUMN SET NOT NULL
 */
 
 func colNeedsUpdating(current *Column, wanted *Column) bool {
-	return current.Collation != wanted.Collation ||
+	return (current.Collation != wanted.Collation && current.OverrideExpression == "") || // don't attempt to update collation if OverrideExpression is set
 		current.Default != wanted.Default ||
 		current.Nullable != wanted.Nullable
 }
@@ -141,9 +141,9 @@ func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 
 	if current.Nullable != wanted.Nullable {
 		b := &bytes.Buffer{}
-		_, _ = b.WriteString("ALTER COLUMN ")
+		_, _ = b.WriteString(" ALTER COLUMN ")
 		pgWriteString(b, wanted.Name)
-		_, _ = b.WriteString("\n")
+		_, _ = b.WriteString(" \n")
 		if !wanted.Nullable {
 			_, _ = b.WriteString("SET NOT NULL")
 		} else {
@@ -152,9 +152,9 @@ func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 		actions = append(actions, b.String())
 	}
 
-	if current.Collation != wanted.Collation && wanted.Collation != "" {
+	if current.Collation != wanted.Collation && current.OverrideExpression == "" {
 		b := &bytes.Buffer{}
-		_, _ = b.WriteString("ALTER COLUMN ")
+		_, _ = b.WriteString(" ALTER COLUMN ")
 		pgWriteString(b, wanted.Name)
 		_, _ = b.WriteString("\n")
 		_, _ = b.WriteString(" SET DATA TYPE ")
@@ -167,10 +167,14 @@ func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 	if current.Default != wanted.Default {
 		b := &bytes.Buffer{}
 		_, _ = b.WriteString("ALTER COLUMN ")
-		pgWriteString(buf, wanted.Name)
+		pgWriteString(b, wanted.Name)
 		_, _ = b.WriteString("\n")
-		_, _ = b.WriteString(" SET DEFAULT ")
-		pgWriteString(b, wanted.Default)
+		if wanted.Default == "" {
+			_, _ = b.WriteString("DROP DEFAULT")
+		} else {
+			_, _ = b.WriteString("SET DEFAULT ")
+			pgWriteString(b, wanted.Default)
+		}
 		actions = append(actions, b.String())
 	}
 
