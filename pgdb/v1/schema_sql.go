@@ -47,7 +47,7 @@ func index2sql(desc Descriptor, idx *Index) string {
 		// btree gin just means we can index
 		// col types in a multi-col index that aren't
 		// noramlly supporte dy gin, eg, varchar,
-		// but its not actually a new index type!
+		// but it's not actually a new index type!
 		_, _ = buf.WriteString("GIN")
 	case MessageOptions_Index_INDEX_METHOD_HNSW_COSINE:
 		_, _ = buf.WriteString("HNSW")
@@ -117,7 +117,72 @@ func pgWriteString(buf *bytes.Buffer, input string) {
 	_, _ = buf.WriteString(`"`)
 }
 
-func col2alter(desc Descriptor, col *Column) string {
+/*
+the only alter column subcommands we care about are
+
+ALTER COLUMN SET DEFAULT <DEFAULT>
+ALTER COLUMN SET DATA TYPE <DATATYPE> COLLATE <COLLATION>
+ALTER COLUMN SET NOT NULL
+*/
+
+func colNeedsUpdating(current *Column, wanted *Column) bool {
+	return (current.Collation != wanted.Collation && current.OverrideExpression == "") || // don't attempt to update collation if OverrideExpression is set
+		current.Default != wanted.Default ||
+		current.Nullable != wanted.Nullable
+}
+
+func col2alter(desc Descriptor, current *Column, wanted *Column) string {
+	buf := &bytes.Buffer{}
+	actions := make([]string, 0)
+
+	_, _ = buf.WriteString("ALTER TABLE ")
+	pgWriteString(buf, desc.TableName())
+	_, _ = buf.WriteString("\n")
+
+	if current.Nullable != wanted.Nullable {
+		b := &bytes.Buffer{}
+		_, _ = b.WriteString(" ALTER COLUMN ")
+		pgWriteString(b, wanted.Name)
+		_, _ = b.WriteString(" \n")
+		if !wanted.Nullable {
+			_, _ = b.WriteString("SET NOT NULL")
+		} else {
+			_, _ = b.WriteString("DROP NOT NULL")
+		}
+		actions = append(actions, b.String())
+	}
+
+	if current.Collation != wanted.Collation && current.OverrideExpression == "" {
+		b := &bytes.Buffer{}
+		_, _ = b.WriteString(" ALTER COLUMN ")
+		pgWriteString(b, wanted.Name)
+		_, _ = b.WriteString("\n")
+		_, _ = b.WriteString(" SET DATA TYPE ")
+		_, _ = b.WriteString(wanted.Type)
+		_, _ = b.WriteString(" COLLATE ")
+		pgWriteString(b, wanted.Collation)
+		actions = append(actions, b.String())
+	}
+
+	if current.Default != wanted.Default {
+		b := &bytes.Buffer{}
+		_, _ = b.WriteString("ALTER COLUMN ")
+		pgWriteString(b, wanted.Name)
+		_, _ = b.WriteString("\n")
+		if wanted.Default == "" {
+			_, _ = b.WriteString("DROP DEFAULT")
+		} else {
+			_, _ = b.WriteString("SET DEFAULT ")
+			pgWriteString(b, wanted.Default)
+		}
+		actions = append(actions, b.String())
+	}
+
+	buf.WriteString(strings.Join(actions, ", "))
+	return buf.String()
+}
+
+func col2add(desc Descriptor, col *Column) string {
 	buf := &bytes.Buffer{}
 
 	_, _ = buf.WriteString("ALTER TABLE ")

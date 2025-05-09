@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -121,11 +122,11 @@ type sqlScanner interface {
 	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
 }
 
-func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
+func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]*Column, error) {
 	dialect := goqu.Dialect("postgres")
 
 	qb := dialect.From("information_schema.columns")
-	qb = qb.Select("column_name")
+	qb = qb.Select("column_name", "collation_name", "is_nullable", "column_default")
 	qb = qb.Where(goqu.L("table_name = ?", desc.TableName()))
 	query, params, err := qb.ToSQL()
 	if err != nil {
@@ -139,14 +140,29 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 
 	defer rows.Close()
 
-	haveCols := make(map[string]struct{})
+	haveCols := make(map[string]*Column)
 	for rows.Next() {
-		var columnName string
-		err = rows.Scan(&columnName)
+		var nullable string
+		var columnName, defaultValue, collation string
+		var col, def sql.NullString
+		err = rows.Scan(&columnName, &col, &nullable, &def)
 		if err != nil {
 			return nil, err
 		}
-		haveCols[columnName] = struct{}{}
+		if def.Valid {
+			defaultValue = def.String
+			if strings.Contains(defaultValue, "::") {
+				defaultValue = strings.Split(defaultValue, "::")[0]
+			}
+		} else {
+			defaultValue = ""
+		}
+		if col.Valid {
+			collation = col.String
+		} else {
+			collation = ""
+		}
+		haveCols[columnName] = &Column{Name: columnName, Collation: collation, Nullable: nullable == "YES", Default: defaultValue}
 	}
 	return haveCols, nil
 }
@@ -262,21 +278,31 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	dbr := msg.DBReflect()
 	desc := dbr.Descriptor()
 
+	// What we need to do here is to get column characteristics that might change
+	// haveCols []map[string]*Column contains the current state of the database
+
 	haveCols, err := readColumns(ctx, db, desc)
 	if err != nil {
 		return nil, err
 	}
 
+	// if the table doesn't exist, make it
 	if len(haveCols) == 0 {
 		return CreateSchema(msg)
 	}
 
+	// check each field
 	for _, field := range desc.Fields() {
-		if _, ok := haveCols[field.Name]; ok {
-			continue
+		if col, ok := haveCols[field.Name]; ok {
+			if colNeedsUpdating(col, field) {
+				query := col2alter(desc, field, col)
+				rv = append(rv, query)
+			}
+		} else {
+			// column needs to be added
+			query := col2add(desc, field)
+			rv = append(rv, query)
 		}
-		query := col2alter(desc, field)
-		rv = append(rv, query)
 	}
 
 	indexes, err := readIndexes(ctx, db, desc)
