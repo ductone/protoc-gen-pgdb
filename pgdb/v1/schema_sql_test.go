@@ -106,7 +106,8 @@ func TestPgWriteString(t *testing.T) {
 		})
 	}
 }
-func TestCol2alter(t *testing.T) {
+
+func TestCol2add(t *testing.T) {
 	tests := []struct {
 		name     string
 		desc     Descriptor
@@ -305,6 +306,435 @@ func TestKsuidColOverrideExpression(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			result := ksuidColOverrideExpression(test.col)
+			if result != test.expected {
+				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
+			}
+		})
+	}
+}
+
+func TestCol2alter(t *testing.T) {
+	tests := []struct {
+		name     string
+		desc     Descriptor
+		current  *Column
+		wanted   *Column
+		expected string
+	}{
+		{
+			name: "Change nullability to NOT NULL",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			current: &Column{
+				Name:     "col1",
+				Type:     "TEXT",
+				Nullable: true,
+			},
+			wanted: &Column{
+				Name:     "col1",
+				Type:     "TEXT",
+				Nullable: false,
+			},
+			expected: `ALTER TABLE "test_table"
+ ALTER COLUMN "col1" 
+SET NOT NULL`,
+		},
+		{
+			name: "Change nullability to NULL",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			current: &Column{
+				Name:     "col2",
+				Type:     "INTEGER",
+				Nullable: false,
+			},
+			wanted: &Column{
+				Name:     "col2",
+				Type:     "INTEGER",
+				Nullable: true,
+			},
+			expected: `ALTER TABLE "test_table"
+ ALTER COLUMN "col2" 
+DROP NOT NULL`,
+		},
+		{
+			name: "Change collation",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			current: &Column{
+				Name:      "col3",
+				Type:      "TEXT",
+				Nullable:  true,
+				Collation: "en_US",
+			},
+			wanted: &Column{
+				Name:      "col3",
+				Type:      "TEXT",
+				Nullable:  true,
+				Collation: "C",
+			},
+			expected: `ALTER TABLE "test_table"
+ ALTER COLUMN "col3"
+ SET DATA TYPE TEXT COLLATE "C"`,
+		},
+		{
+			name: "Change default value",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			current: &Column{
+				Name:     "col4",
+				Type:     "TIMESTAMP",
+				Nullable: false,
+				Default:  "NOW()",
+			},
+			wanted: &Column{
+				Name:     "col4",
+				Type:     "TIMESTAMP",
+				Nullable: false,
+				Default:  "CURRENT_TIMESTAMP",
+			},
+			expected: `ALTER TABLE "test_table"
+ALTER COLUMN "col4"
+SET DEFAULT "CURRENT_TIMESTAMP"`,
+		},
+		{
+			name: "Drop default value",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			current: &Column{
+				Name:     "col5",
+				Type:     "TEXT",
+				Nullable: true,
+				Default:  "'default'",
+			},
+			wanted: &Column{
+				Name:     "col5",
+				Type:     "TEXT",
+				Nullable: true,
+				Default:  "",
+			},
+			expected: `ALTER TABLE "test_table"
+ALTER COLUMN "col5"
+DROP DEFAULT`,
+		},
+		{
+			name: "Multiple changes",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			current: &Column{
+				Name:      "col6",
+				Type:      "TEXT",
+				Nullable:  true,
+				Default:   "'default'",
+				Collation: "en_US",
+			},
+			wanted: &Column{
+				Name:      "col6",
+				Type:      "TEXT",
+				Nullable:  false,
+				Default:   "",
+				Collation: "C",
+			},
+			expected: `ALTER TABLE "test_table"
+ ALTER COLUMN "col6" 
+SET NOT NULL,  ALTER COLUMN "col6"
+ SET DATA TYPE TEXT COLLATE "C", ALTER COLUMN "col6"
+DROP DEFAULT`,
+		},
+		{
+			name: "No changes",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			current: &Column{
+				Name:     "col7",
+				Type:     "TEXT",
+				Nullable: false,
+				Default:  "'default'",
+			},
+			wanted: &Column{
+				Name:     "col7",
+				Type:     "TEXT",
+				Nullable: false,
+				Default:  "'default'",
+			},
+			expected: `ALTER TABLE "test_table"
+`,
+		},
+		{
+			name: "Skip collation change with override expression",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			current: &Column{
+				Name:               "col8",
+				Type:               "TEXT",
+				Nullable:           true,
+				Collation:          "en_US",
+				OverrideExpression: "JSONB NOT NULL DEFAULT '{}'::jsonb",
+			},
+			wanted: &Column{
+				Name:               "col8",
+				Type:               "TEXT",
+				Nullable:           true,
+				Collation:          "C",
+				OverrideExpression: "JSONB NOT NULL DEFAULT '{}'::jsonb",
+			},
+			expected: `ALTER TABLE "test_table"
+`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := col2alter(test.desc, test.current, test.wanted)
+			if result != test.expected {
+				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
+			}
+		})
+	}
+}
+
+func TestIndex2sql(t *testing.T) {
+	tests := []struct {
+		name     string
+		desc     Descriptor
+		idx      *Index
+		expected string
+	}{
+		{
+			name: "Create BTREE index",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			idx: &Index{
+				Name:    "idx_test_btree",
+				Method:  MessageOptions_Index_INDEX_METHOD_BTREE,
+				Columns: []string{"col1", "col2"},
+			},
+			expected: `CREATE INDEX CONCURRENTLY IF NOT EXISTS
+  "idx_test_btree"
+ON
+  "test_table"
+USING
+  BTREE
+(
+  "col1", 
+  "col2"
+)
+`,
+		},
+		{
+			name: "Create GIN index",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			idx: &Index{
+				Name:    "idx_test_gin",
+				Method:  MessageOptions_Index_INDEX_METHOD_GIN,
+				Columns: []string{"col3"},
+			},
+			expected: `CREATE INDEX CONCURRENTLY IF NOT EXISTS
+  "idx_test_gin"
+ON
+  "test_table"
+USING
+  GIN
+(
+  "col3"
+)
+`,
+		},
+		{
+			name: "Create UNIQUE index",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			idx: &Index{
+				Name:     "idx_test_unique",
+				IsUnique: true,
+				Method:   MessageOptions_Index_INDEX_METHOD_BTREE,
+				Columns:  []string{"col4"},
+			},
+			expected: `CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS
+  "idx_test_unique"
+ON
+  "test_table"
+USING
+  BTREE
+(
+  "col4"
+)
+`,
+		},
+		{
+			name: "Create index with WHERE predicate",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			idx: &Index{
+				Name:           "idx_test_where",
+				Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+				Columns:        []string{"col5"},
+				WherePredicate: "col5 IS NOT NULL",
+			},
+			expected: `CREATE INDEX CONCURRENTLY IF NOT EXISTS
+  "idx_test_where"
+ON
+  "test_table"
+USING
+  BTREE
+(
+  "col5"
+)
+WHERE col5 IS NOT NULL
+`,
+		},
+		{
+			name: "Create index with override expression",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			idx: &Index{
+				Name:               "idx_test_override",
+				Method:             MessageOptions_Index_INDEX_METHOD_GIN,
+				OverrideExpression: "to_tsvector('english', col6)",
+			},
+			expected: `CREATE INDEX CONCURRENTLY IF NOT EXISTS
+  "idx_test_override"
+ON
+  "test_table"
+USING
+  GIN
+(
+to_tsvector('english', col6)
+)
+`,
+		},
+		{
+			name: "Drop index",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			idx: &Index{
+				Name:      "idx_test_drop",
+				IsDropped: true,
+			},
+			expected: `DROP INDEX CONCURRENTLY IF EXISTS "idx_test_drop"`,
+		},
+		{
+			name: "Drop unique index",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			idx: &Index{
+				Name:      "idx_test_drop_unique",
+				IsUnique:  true,
+				IsDropped: true,
+			},
+			expected: `DROP INDEX IF EXISTS "idx_test_drop_unique"`,
+		},
+		{
+			name: "Create index on partitioned table",
+			desc: &mockDescriptor{
+				tableName:     "test_table",
+				isPartitioned: true,
+			},
+			idx: &Index{
+				Name:    "idx_test_partitioned",
+				Method:  MessageOptions_Index_INDEX_METHOD_BTREE,
+				Columns: []string{"col7"},
+			},
+			expected: `CREATE INDEX IF NOT EXISTS
+  "idx_test_partitioned"
+ON
+  "test_table"
+USING
+  BTREE
+(
+  "col7"
+)
+`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := index2sql(test.desc, test.idx)
+			if result != test.expected {
+				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
+			}
+		})
+	}
+}
+
+func TestStatistics2sql(t *testing.T) {
+	tests := []struct {
+		name     string
+		desc     Descriptor
+		st       *Statistic
+		expected string
+	}{
+		{
+			name: "Create statistics with no kinds",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			st: &Statistic{
+				Name:    "stat_test_no_kinds",
+				Columns: []string{"col1", "col2"},
+			},
+			expected: `CREATE STATISTICS IF NOT EXISTS "stat_test_no_kinds" ON "col1","col2" FROM "test_table"
+`,
+		},
+		{
+			name: "Create statistics with one kind",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			st: &Statistic{
+				Name:    "stat_test_ndistinct",
+				Kinds:   []MessageOptions_Stat_StatsKind{MessageOptions_Stat_STATS_KIND_NDISTINCT},
+				Columns: []string{"col3"},
+			},
+			expected: `CREATE STATISTICS IF NOT EXISTS "stat_test_ndistinct"(ndistinct) ON "col3" FROM "test_table"
+`,
+		},
+		{
+			name: "Create statistics with multiple kinds",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			st: &Statistic{
+				Name:    "stat_test_multiple",
+				Kinds:   []MessageOptions_Stat_StatsKind{MessageOptions_Stat_STATS_KIND_NDISTINCT, MessageOptions_Stat_STATS_KIND_DEPENDENCIES, MessageOptions_Stat_STATS_KIND_MCV},
+				Columns: []string{"col4", "col5"},
+			},
+			expected: `CREATE STATISTICS IF NOT EXISTS "stat_test_multiple"(ndistinct,dependencies,mcv) ON "col4","col5" FROM "test_table"
+`,
+		},
+		{
+			name: "Drop statistics",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			st: &Statistic{
+				Name:      "stat_test_drop",
+				IsDropped: true,
+			},
+			expected: `DROP STATISTICS IF EXISTS "stat_test_drop"`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := statistics2sql(test.desc, test.st)
 			if result != test.expected {
 				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
 			}
