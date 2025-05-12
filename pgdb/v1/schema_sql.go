@@ -143,7 +143,7 @@ func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 		b := &bytes.Buffer{}
 		_, _ = b.WriteString(" ALTER COLUMN ")
 		pgWriteString(b, wanted.Name)
-		_, _ = b.WriteString(" \n")
+		_, _ = b.WriteString("\n")
 		if !wanted.Nullable {
 			_, _ = b.WriteString("SET NOT NULL")
 		} else {
@@ -173,7 +173,7 @@ func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 			_, _ = b.WriteString("DROP DEFAULT")
 		} else {
 			_, _ = b.WriteString("SET DEFAULT ")
-			pgWriteString(b, wanted.Default)
+			_, _ = b.WriteString(wanted.Default)
 		}
 		actions = append(actions, b.String())
 	}
