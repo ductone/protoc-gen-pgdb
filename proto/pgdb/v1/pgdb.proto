@@ -78,7 +78,8 @@ message MessageOptions {
     bool dropped = 4;
   }
   repeated Stat stats = 6;
-  bool use_pkskv2_column = 10; // determines whether to add the pkskv2 column
+  // Deprecated: previously determined whether to add the pkskv2 column; it is now always added.
+  bool use_pkskv2_column = 10 [deprecated=true];
 }
 
 extend google.protobuf.FieldOptions {

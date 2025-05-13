@@ -23,12 +23,9 @@ type Descriptor interface {
 	Statistics(opts ...StatisticOptionsFunc) []*Statistic
 
 	GetPartitionDateRange() MessageOptions_PartitionedByDateRange
-}
-
-type DescriptorWithPKSKV2 interface {
-	Descriptor
 	PKSKV2Field() *Column
 }
+
 type DescriptorFieldOption struct {
 	Prefix        string
 	IsNested      bool
