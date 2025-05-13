@@ -249,7 +249,6 @@ func TestMigrationsColumnNeedsToBeAdded(t *testing.T) {
 	require.Empty(t, migrations, "Expected no migrations after adding column")
 }
 
-// TestMigrationsColumnNeedsToBeUpdated tests the scenario where a column needs to be updated
 func TestMigrationsColumnNeedsToBeUpdated(t *testing.T) {
 	ctx := context.Background()
 	pg, err := pgtest.Start()
