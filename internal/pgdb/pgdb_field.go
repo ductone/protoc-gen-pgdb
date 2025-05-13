@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/jackc/pgx/v5/pgtype"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
 
 const (
@@ -358,26 +359,24 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 	}
 	rv = append(rv, skField)
 
-	if fext.UsePkskv2Column {
-		vn = vn.Next()
-		pkskv2Field := &fieldContext{
-			ExcludeNested: true,
-			IsVirtual:     true,
-			DB: &pgdb_v1.Column{
-				Name:      "pkskv2",
-				Type:      vcDataType.Name,
-				Nullable:  true,
-				Collation: "C",
-			},
-			GoName:   "PKSKV2",
-			DataType: vcDataType,
-			Convert: &pkskDataConvert{
-				ctx: ctx,
-			},
-			QueryTypeName: ctx.Name(m).String() + "PKSKV2" + "QueryType",
-		}
-		rv = append(rv, pkskv2Field)
+	vn = vn.Next()
+	pkskv2Field := &fieldContext{
+		ExcludeNested: true,
+		IsVirtual:     true,
+		DB: &pgdb_v1.Column{
+			Name:      "pkskv2",
+			Type:      vcDataType.Name,
+			Nullable:  true,
+			Collation: "C",
+		},
+		GoName:   "PKSKV2",
+		DataType: vcDataType,
+		Convert: &pkskDataConvert{
+			ctx: ctx,
+		},
+		QueryTypeName: ctx.Name(m).String() + "PKSKV2" + "QueryType",
 	}
+	rv = append(rv, pkskv2Field)
 
 	// https://github.com/jackc/pgtype/issues/150
 	// tsvector is not in-tree.  but we use to_tsvector() when inserting, so we just need to have the right type name
