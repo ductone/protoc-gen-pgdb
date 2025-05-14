@@ -329,12 +329,12 @@ func TestCol2alter(t *testing.T) {
 			current: &Column{
 				Name:     "col1",
 				Type:     "TEXT",
-				Nullable: true,
+				Nullable: false,
 			},
 			wanted: &Column{
 				Name:     "col1",
 				Type:     "TEXT",
-				Nullable: false,
+				Nullable: true,
 			},
 			expected: `ALTER TABLE "test_table"
 ALTER COLUMN "col1"
@@ -348,12 +348,12 @@ SET NOT NULL`,
 			current: &Column{
 				Name:     "col2",
 				Type:     "INTEGER",
-				Nullable: false,
+				Nullable: true,
 			},
 			wanted: &Column{
 				Name:     "col2",
 				Type:     "INTEGER",
-				Nullable: true,
+				Nullable: false,
 			},
 			expected: `ALTER TABLE "test_table"
 ALTER COLUMN "col2"
@@ -377,8 +377,8 @@ DROP NOT NULL`,
 				Collation: "C",
 			},
 			expected: `ALTER TABLE "test_table"
- ALTER COLUMN "col3"
- SET DATA TYPE TEXT COLLATE "C"`,
+ALTER COLUMN "col3"
+SET DATA TYPE TEXT COLLATE "C"`,
 		},
 		{
 			name: "Multiple changes",
@@ -401,8 +401,8 @@ DROP NOT NULL`,
 			},
 			expected: `ALTER TABLE "test_table"
 ALTER COLUMN "col6"
-SET NOT NULL,  ALTER COLUMN "col6"
- SET DATA TYPE TEXT COLLATE "C"`,
+DROP NOT NULL, ALTER COLUMN "col6"
+SET DATA TYPE TEXT COLLATE "C"`,
 		},
 		{
 			name: "No changes",

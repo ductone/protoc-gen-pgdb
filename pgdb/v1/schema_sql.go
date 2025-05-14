@@ -142,7 +142,7 @@ func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 		_, _ = b.WriteString("ALTER COLUMN ")
 		pgWriteString(b, wanted.Name)
 		_, _ = b.WriteString("\n")
-		if wanted.Nullable {
+		if current.Nullable {
 			_, _ = b.WriteString("DROP NOT NULL")
 		} else {
 			_, _ = b.WriteString("SET NOT NULL")
@@ -152,10 +152,10 @@ func col2alter(desc Descriptor, current *Column, wanted *Column) string {
 
 	if current.Collation != wanted.Collation && current.OverrideExpression == "" {
 		b := &bytes.Buffer{}
-		_, _ = b.WriteString(" ALTER COLUMN ")
+		_, _ = b.WriteString("ALTER COLUMN ")
 		pgWriteString(b, wanted.Name)
 		_, _ = b.WriteString("\n")
-		_, _ = b.WriteString(" SET DATA TYPE ")
+		_, _ = b.WriteString("SET DATA TYPE ")
 		_, _ = b.WriteString(wanted.Type)
 		_, _ = b.WriteString(" COLLATE ")
 		pgWriteString(b, wanted.Collation)

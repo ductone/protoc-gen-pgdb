@@ -2,12 +2,11 @@ package v1
 
 import (
 	"context"
-	"testing"
-	"time"
-
 	"github.com/doug-martin/goqu/v9/exp"
-	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	"github.com/stretchr/testify/require"
+	"testing"
+
+	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 )
 
 type mockDBReflectMessage struct {
@@ -26,11 +25,11 @@ func (m *mockDBReflect) Descriptor() Descriptor {
 	return m.desc
 }
 
-func (m *mockDBReflect) Record(opts ...RecordOptionsFunc) (exp.Record, error) {
+func (m *mockDBReflect) Record(_ ...RecordOptionsFunc) (exp.Record, error) {
 	return nil, nil
 }
 
-func (m *mockDBReflect) SearchData(opts ...RecordOptionsFunc) []*SearchContent {
+func (m *mockDBReflect) SearchData(_ ...RecordOptionsFunc) []*SearchContent {
 	return nil
 }
 
@@ -49,7 +48,7 @@ func (m *migrationsTestDescriptor) TableName() string {
 	return m.tableName
 }
 
-func (m *migrationsTestDescriptor) Fields(opts ...DescriptorFieldOptionFunc) []*Column {
+func (m *migrationsTestDescriptor) Fields(_ ...DescriptorFieldOptionFunc) []*Column {
 	return m.fields
 }
 
@@ -89,11 +88,11 @@ func (m *migrationsTestDescriptor) GetPartitionedByKsuidFieldName() string {
 	return m.partitionedByKsuidFieldName
 }
 
-func (m *migrationsTestDescriptor) Indexes(opts ...IndexOptionsFunc) []*Index {
+func (m *migrationsTestDescriptor) Indexes(_ ...IndexOptionsFunc) []*Index {
 	return m.indexes
 }
 
-func (m *migrationsTestDescriptor) IndexPrimaryKey(opts ...IndexOptionsFunc) *Index {
+func (m *migrationsTestDescriptor) IndexPrimaryKey(_ ...IndexOptionsFunc) *Index {
 	for _, idx := range m.indexes {
 		if idx.IsPrimary {
 			return idx
@@ -102,7 +101,7 @@ func (m *migrationsTestDescriptor) IndexPrimaryKey(opts ...IndexOptionsFunc) *In
 	return nil
 }
 
-func (m *migrationsTestDescriptor) Statistics(opts ...StatisticOptionsFunc) []*Statistic {
+func (m *migrationsTestDescriptor) Statistics(_ ...StatisticOptionsFunc) []*Statistic {
 	return m.statistics
 }
 
@@ -274,7 +273,7 @@ func TestMigrationsColumnNeedsToBeUpdated(t *testing.T) {
 					{
 						Name:     "pb$description",
 						Type:     "TEXT",
-						Nullable: true,
+						Nullable: false,
 					},
 				},
 				indexes: []*Index{
@@ -313,7 +312,7 @@ func TestMigrationsColumnNeedsToBeUpdated(t *testing.T) {
 					{
 						Name:     "pb$description",
 						Type:     "TEXT",
-						Nullable: false,
+						Nullable: true,
 					},
 				},
 				indexes: []*Index{
@@ -340,9 +339,8 @@ func TestMigrationsColumnNeedsToBeUpdated(t *testing.T) {
 		_, err := pg.DB.Exec(ctx, migration)
 		require.NoError(t, err, "Failed to execute migration: %s", migration)
 	}
-
-	time.Sleep(15 * time.Second)
-	migrations, err = Migrations(ctx, pg.DB, initialMsg)
+	_, err = pg.DB.Exec(ctx, "COMMIT") // without this, information_schema will not update
+	migrations, err = Migrations(ctx, pg.DB, updatedMsg)
 	require.NoError(t, err)
 	require.Empty(t, migrations, "Expected no migrations after updating column")
 }
