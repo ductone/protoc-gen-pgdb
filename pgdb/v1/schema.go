@@ -126,7 +126,7 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 	dialect := goqu.Dialect("postgres")
 
 	qb := dialect.From("information_schema.columns")
-	qb = qb.Select("column_name", "collation_name", "is_nullable", "column_default")
+	qb = qb.Select("column_name", "collation_name", "is_nullable")
 	qb = qb.Where(goqu.L("table_name = ?", desc.TableName()))
 	query, params, err := qb.ToSQL()
 	if err != nil {
@@ -143,26 +143,19 @@ func readColumns(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 	haveCols := make(map[string]*Column)
 	for rows.Next() {
 		var nullable string
-		var columnName, defaultValue, collation string
-		var col, def sql.NullString
-		err = rows.Scan(&columnName, &col, &nullable, &def)
+		var columnName, collation string
+		var col sql.NullString
+		err = rows.Scan(&columnName, &col, &nullable)
 		if err != nil {
 			return nil, err
 		}
-		if def.Valid {
-			defaultValue = def.String
-			if strings.Contains(defaultValue, "::") {
-				defaultValue = strings.Split(defaultValue, "::")[0]
-			}
-		} else {
-			defaultValue = ""
-		}
+
 		if col.Valid {
 			collation = col.String
 		} else {
 			collation = ""
 		}
-		haveCols[columnName] = &Column{Name: columnName, Collation: collation, Nullable: nullable == "YES", Default: defaultValue}
+		haveCols[columnName] = &Column{Name: columnName, Collation: collation, Nullable: nullable == "YES"}
 	}
 	return haveCols, nil
 }

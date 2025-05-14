@@ -337,7 +337,7 @@ func TestCol2alter(t *testing.T) {
 				Nullable: false,
 			},
 			expected: `ALTER TABLE "test_table"
- ALTER COLUMN "col1" 
+ALTER COLUMN "col1"
 SET NOT NULL`,
 		},
 		{
@@ -356,7 +356,7 @@ SET NOT NULL`,
 				Nullable: true,
 			},
 			expected: `ALTER TABLE "test_table"
- ALTER COLUMN "col2" 
+ALTER COLUMN "col2"
 DROP NOT NULL`,
 		},
 		{
@@ -381,48 +381,6 @@ DROP NOT NULL`,
  SET DATA TYPE TEXT COLLATE "C"`,
 		},
 		{
-			name: "Change default value",
-			desc: &mockDescriptor{
-				tableName: "test_table",
-			},
-			current: &Column{
-				Name:     "col4",
-				Type:     "TIMESTAMP",
-				Nullable: false,
-				Default:  "NOW()",
-			},
-			wanted: &Column{
-				Name:     "col4",
-				Type:     "TIMESTAMP",
-				Nullable: false,
-				Default:  "CURRENT_TIMESTAMP",
-			},
-			expected: `ALTER TABLE "test_table"
-ALTER COLUMN "col4"
-SET DEFAULT "CURRENT_TIMESTAMP"`,
-		},
-		{
-			name: "Drop default value",
-			desc: &mockDescriptor{
-				tableName: "test_table",
-			},
-			current: &Column{
-				Name:     "col5",
-				Type:     "TEXT",
-				Nullable: true,
-				Default:  "'default'",
-			},
-			wanted: &Column{
-				Name:     "col5",
-				Type:     "TEXT",
-				Nullable: true,
-				Default:  "",
-			},
-			expected: `ALTER TABLE "test_table"
-ALTER COLUMN "col5"
-DROP DEFAULT`,
-		},
-		{
 			name: "Multiple changes",
 			desc: &mockDescriptor{
 				tableName: "test_table",
@@ -442,10 +400,9 @@ DROP DEFAULT`,
 				Collation: "C",
 			},
 			expected: `ALTER TABLE "test_table"
- ALTER COLUMN "col6" 
+ALTER COLUMN "col6"
 SET NOT NULL,  ALTER COLUMN "col6"
- SET DATA TYPE TEXT COLLATE "C", ALTER COLUMN "col6"
-DROP DEFAULT`,
+ SET DATA TYPE TEXT COLLATE "C"`,
 		},
 		{
 			name: "No changes",

@@ -312,7 +312,7 @@ func TestMigrationsColumnNeedsToBeUpdated(t *testing.T) {
 					{
 						Name:     "pb$description",
 						Type:     "TEXT",
-						Nullable: false, // Changed from true to false
+						Nullable: false,
 					},
 				},
 				indexes: []*Index{
@@ -333,7 +333,7 @@ func TestMigrationsColumnNeedsToBeUpdated(t *testing.T) {
 	require.Contains(t, migrations[0], "ALTER TABLE")
 	require.Contains(t, migrations[0], "ALTER COLUMN")
 	require.Contains(t, migrations[0], "pb$description")
-	require.Contains(t, migrations[0], "SET NOT NULL")
+	require.Contains(t, migrations[0], "DROP NOT NULL")
 
 	for _, migration := range migrations {
 		_, err := pg.DB.Exec(ctx, migration)

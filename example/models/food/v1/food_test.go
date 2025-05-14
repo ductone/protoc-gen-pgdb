@@ -122,7 +122,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 		require.Contains(t, ct, "CREATE TABLE")
 		require.Equal(t, 3,
 			strings.Count(ct, "$pksk"),
-			"Create table should contain only one pksk field + index: %s", ct,
+			"Create table should contain two pksk field + index: %s", ct,
 		)
 
 		if smsg.DBReflect().Descriptor().IsPartitioned() {
