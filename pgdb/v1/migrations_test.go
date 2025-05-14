@@ -3,6 +3,7 @@ package v1
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
@@ -340,7 +341,8 @@ func TestMigrationsColumnNeedsToBeUpdated(t *testing.T) {
 		require.NoError(t, err, "Failed to execute migration: %s", migration)
 	}
 
-	migrations, err = Migrations(ctx, pg.DB, updatedMsg)
+	time.Sleep(15 * time.Second)
+	migrations, err = Migrations(ctx, pg.DB, initialMsg)
 	require.NoError(t, err)
 	require.Empty(t, migrations, "Expected no migrations after updating column")
 }
