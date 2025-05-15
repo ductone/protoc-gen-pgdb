@@ -1,10 +1,10 @@
 var {{.VarName}} interface{} = nullExp
-for _, v := range m.self.{{.GoName}} {
-    if v.{{.EnumName}} != {{.EnumModelValue}} {
+for _, v := range m.self.Get{{.GoName}}() {
+    if v.Get{{.EnumName}}() != {{.EnumModelValue}} {
         continue
     }
-    if len(v.{{.FloatArrayName}}) == 0 {
+    if len(v.Get{{.FloatArrayName}}()) == 0 {
         break
     }
-    {{.VarName}} = pgdb_v1.FloatToVector(v.{{.FloatArrayName}})
+    {{.VarName}} = pgdb_v1.FloatToVector(v.Get{{.FloatArrayName}}())
 }

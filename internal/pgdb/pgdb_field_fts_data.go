@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 )
 
 type ftsDataConvert struct {
@@ -39,7 +39,7 @@ func getSearchFields(ctx pgsgo.Context, m pgs.Message) []*searchFieldContext {
 			rv = append(rv, &searchFieldContext{
 				Ext:     ext,
 				Field:   field,
-				VarName: "m.self.Get" + ctx.Name(field).String() + "()",
+				VarName: "m.self." + opaqueFieldGetter(field),
 			})
 		}
 	}
@@ -70,7 +70,7 @@ func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 			fdc.SearchFields = append(fdc.SearchFields, &searchFieldContext{
 				Ext:     ext,
 				Field:   field,
-				VarName: "m.self.Get" + fdc.ctx.Name(field).String() + "()",
+				VarName: "m.self." + opaqueFieldGetter(field),
 			})
 		}
 	}

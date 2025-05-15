@@ -2,7 +2,9 @@ version: v1
 plugins:
   - name: go
     out: example
-    opt: paths=source_relative
+    opt: 
+      - paths=source_relative
+      - default_api_level=API_OPAQUE
   - name: pgdb
     out: example
     opt: paths=source_relative

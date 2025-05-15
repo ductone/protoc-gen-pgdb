@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
@@ -103,8 +103,13 @@ func (fc *fieldConvert) GoType() (string, error) {
 	}
 }
 
+func opaqueFieldGetter(f pgs.Field) string {
+	return "Get" + pgsgo.PGGUpperCamelCase(f.Name()).String() + "()"
+}
+
 func (fc *fieldConvert) CodeForValue() (string, error) {
-	selfName := fc.goPrefix + ".Get" + fc.ctx.Name(fc.F).String() + "()"
+	// selfName := fc.goPrefix + ".Get" + fc.ctx.Name(fc.F).String() + "()"
+	selfName := fc.goPrefix + "." + opaqueFieldGetter(fc.F)
 	switch fc.TypeConversion {
 	case gtFloat32:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{

@@ -329,7 +329,7 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -351,11 +351,11 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 
@@ -1442,7 +1442,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -1464,19 +1464,19 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.PastaId)
+		_, _ = sb.WriteString(m.self.GetPastaId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.IngredientId)
+		_, _ = sb.WriteString(m.self.GetIngredientId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 
@@ -1553,14 +1553,14 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if !ro.IsNested {
 
 		var cfv6 interface{} = nullExp
-		for _, v := range m.self.ModelEmbeddings {
-			if v.Model != llm_v1.Model_MODEL_3DIMS {
+		for _, v := range m.self.GetModelEmbeddings() {
+			if v.GetModel() != llm_v1.Model_MODEL_3DIMS {
 				continue
 			}
-			if len(v.Embedding) == 0 {
+			if len(v.GetEmbedding()) == 0 {
 				break
 			}
-			cfv6 = pgdb_v1.FloatToVector(v.Embedding)
+			cfv6 = pgdb_v1.FloatToVector(v.GetEmbedding())
 		}
 
 		if ro.Nulled {
@@ -1574,14 +1574,14 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if !ro.IsNested {
 
 		var cfv6 interface{} = nullExp
-		for _, v := range m.self.ModelEmbeddings {
-			if v.Model != llm_v1.Model_MODEL_4DIMS {
+		for _, v := range m.self.GetModelEmbeddings() {
+			if v.GetModel() != llm_v1.Model_MODEL_4DIMS {
 				continue
 			}
-			if len(v.Embedding) == 0 {
+			if len(v.GetEmbedding()) == 0 {
 				break
 			}
-			cfv6 = pgdb_v1.FloatToVector(v.Embedding)
+			cfv6 = pgdb_v1.FloatToVector(v.GetEmbedding())
 		}
 
 		if ro.Nulled {
@@ -2823,7 +2823,7 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -2845,11 +2845,11 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 
@@ -3932,7 +3932,7 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -3954,11 +3954,11 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 
@@ -5104,7 +5104,7 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -5126,11 +5126,11 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 

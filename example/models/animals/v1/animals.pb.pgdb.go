@@ -421,7 +421,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -443,11 +443,11 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 
@@ -2032,7 +2032,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -2054,7 +2054,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		cfv2 := sb.String()
 
@@ -2070,7 +2070,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		sb.Reset()
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv3 := sb.String()
 
@@ -2093,7 +2093,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 			{
 				Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 				Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-				Value:  m.self.GetString_(),
+				Value:  m.self.GetString(),
 			},
 
 			{
@@ -2240,7 +2240,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		rv[ro.ColumnName("bool")] = v14
 	}
 
-	v15 := strings.ReplaceAll(string(m.self.GetString_()), "\u0000", "")
+	v15 := strings.ReplaceAll(string(m.self.GetString()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("string")] = nullExp
@@ -2529,7 +2529,7 @@ func (m *pgdbMessageScalarValue) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 		{
 			Type:   pgdb_v1.FieldOptions_FULL_TEXT_TYPE_ENGLISH,
 			Weight: pgdb_v1.FieldOptions_FULL_TEXT_WEIGHT_HIGH,
-			Value:  m.self.GetString_(),
+			Value:  m.self.GetString(),
 		},
 
 		{
@@ -4601,7 +4601,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -4623,11 +4623,11 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 
@@ -4778,20 +4778,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		}
 	}
 
-	oneof1 := uint32(0)
-
-	switch m.self.GetMedium().(type) {
-
-	case *Book_Paper:
-		oneof1 = 50
-
-	case *Book_Ebook:
-		oneof1 = 51
-
-	case *Book_News:
-		oneof1 = 52
-
-	}
+	oneof1 := uint32(m.self.WhichMedium())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("medium_oneof")] = nullExp
@@ -5620,7 +5607,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.Id), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -5642,7 +5629,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 

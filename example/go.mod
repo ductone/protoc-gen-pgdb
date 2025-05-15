@@ -1,6 +1,6 @@
 module github.com/ductone/protoc-gen-pgdb/example
 
-go 1.23
+go 1.24
 
 replace github.com/ductone/protoc-gen-pgdb => ../
 
@@ -9,6 +9,7 @@ require (
 	github.com/ductone/protoc-gen-pgdb v0.4.9
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/pquerna/protoc-gen-dynamo v0.6.0
+	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.8.1
 	google.golang.org/protobuf v1.36.2
 )

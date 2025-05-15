@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/jackc/pgx/v5/pgtype"
-	pgs "github.com/lyft/protoc-gen-star"
+	pgs "github.com/lyft/protoc-gen-star/v2"
 )
 
 const (

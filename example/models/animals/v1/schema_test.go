@@ -56,7 +56,7 @@ func TestSchemaPet(t *testing.T) {
 		require.NoErrorf(t, err, "TestSchemaPet: failed to execute migration sql: '\n%s\n'", line)
 	}
 
-	insertMsg := &Pet{
+	insertMsg := Pet_builder{
 		TenantId:      "t1",
 		Id:            "obj2",
 		CreatedAt:     timestamppb.Now(),
@@ -79,7 +79,7 @@ func TestSchemaPet(t *testing.T) {
 				},
 			},
 		},
-	}
+	}.Build()
 
 	query, params, err := pgdb_v1.Insert(insertMsg)
 	require.NoError(t, err)
@@ -88,7 +88,7 @@ func TestSchemaPet(t *testing.T) {
 	// spew.Dump(record)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
 
-	insertMsg2 := &Pet{
+	insertMsg2 := Pet_builder{
 		TenantId:      "t1",
 		Id:            "obj3",
 		CreatedAt:     timestamppb.Now(),
@@ -111,7 +111,7 @@ func TestSchemaPet(t *testing.T) {
 				},
 			},
 		},
-	}
+	}.Build()
 
 	// qb := goqu.Dialect("postgres")
 	// countQuery, params, err := qb.Select(goqu.COUNT(goqu.Star()).As("count")).From(insertMsg.DBReflect().Descriptor().TableName()).ToSQL()
@@ -135,7 +135,7 @@ func TestSchemaPet(t *testing.T) {
 
 	result := sb.String()
 
-	insertMsg3 := &Pet{
+	insertMsg3 := Pet_builder{
 		TenantId:      "t1",
 		Id:            "obj4",
 		CreatedAt:     timestamppb.Now(),
@@ -158,7 +158,7 @@ func TestSchemaPet(t *testing.T) {
 				},
 			},
 		},
-	}
+	}.Build()
 
 	query, params, err = pgdb_v1.Insert(insertMsg3)
 	require.NoError(t, err)
@@ -190,13 +190,13 @@ func TestSchemaBook(t *testing.T) {
 		require.NoErrorf(t, err, "TestSchemaBook: failed to execute sql: '\n%s\n'", line)
 	}
 
-	query, params, err := pgdb_v1.Insert(&Book{
+	query, params, err := pgdb_v1.Insert(Book_builder{
 		TenantId: "t1",
 		Id:       "b1",
-		Medium: &Book_Ebook{
-			Ebook: &EBook{Size: 4000},
-		},
-	})
+		Ebook: EBook_builder{
+			Size: 4000,
+		}.Build(),
+	}.Build())
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)
@@ -229,7 +229,7 @@ func TestSchemaScalarValue(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, query, params...)
 	require.NoError(t, err)
 
-	query, params, err = pgdb_v1.Insert(&ScalarValue{
+	query, params, err = pgdb_v1.Insert(ScalarValue_builder{
 		TenantId:       "t1",
 		Id:             "b1",
 		RepeatedString: []string{"hello", "world"},
@@ -239,7 +239,7 @@ func TestSchemaScalarValue(t *testing.T) {
 			[]byte("hi"),
 			[]byte("mars"),
 		},
-	})
+	}.Build())
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)
