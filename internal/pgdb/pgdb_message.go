@@ -29,7 +29,7 @@ func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File,
 	ix.PGDBV1 = true
 	ix.GoquExp = true
 	wantRecordStringBuilder := false
-	if !ext.NestedOnly {
+	if !ext.GetNestedOnly() {
 		// used by pk/sk builder
 		wantRecordStringBuilder = true
 		ix.Strings = true
@@ -90,7 +90,7 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 			panic(err)
 		}
 
-		if !fext.NestedOnly {
+		if !fext.GetNestedOnly() {
 			tenantIdField, err = getTenantIDField(m)
 			if err != nil {
 				panic(err)
@@ -178,7 +178,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 		panic(err)
 	}
 
-	if !fext.NestedOnly {
+	if !fext.GetNestedOnly() {
 		tenantIdField, err = getTenantIDField(m)
 		if err != nil {
 			panic(err)

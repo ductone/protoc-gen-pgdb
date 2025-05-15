@@ -52,8 +52,8 @@ func getTenantIDField(msg pgs.Message) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("pgdb: getTenantIDField: failed to extract Message extension from '%s': %w", msg.FullyQualifiedName(), err)
 	}
-	if ext.TenantIdField != "" {
-		fieldName = ext.TenantIdField
+	if ext.GetTenantIdField() != "" {
+		fieldName = ext.GetTenantIdField()
 	}
 	// panics if tenant id not found
 	_ = fieldByName(msg, fieldName)

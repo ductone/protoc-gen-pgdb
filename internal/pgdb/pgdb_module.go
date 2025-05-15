@@ -82,7 +82,7 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 			return fmt.Errorf("pgdb: applyTemplate: failed to extract Message extension from '%s': %w", m.FullyQualifiedName(), err)
 		}
 
-		if fext.Disabled {
+		if fext.GetDisabled() {
 			continue
 		}
 

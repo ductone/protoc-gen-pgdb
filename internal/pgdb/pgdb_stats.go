@@ -24,11 +24,11 @@ func (module *Module) getMessageStatistics(ctx pgsgo.Context, m pgs.Message, ix 
 	rv := make([]*statsContext, 0)
 
 	usedNames := map[string]struct{}{}
-	for _, st := range ext.Stats {
-		if _, ok := usedNames[st.Name]; ok {
-			panic(fmt.Errorf("pgdb: getMessageStatistics:index name reused  on Message '%s': %s", m.FullyQualifiedName(), st.Name))
+	for _, st := range ext.GetStats() {
+		if _, ok := usedNames[st.GetName()]; ok {
+			panic(fmt.Errorf("pgdb: getMessageStatistics:index name reused  on Message '%s': %s", m.FullyQualifiedName(), st.GetName()))
 		}
-		usedNames[st.Name] = struct{}{}
+		usedNames[st.GetName()] = struct{}{}
 		rv = append(rv, module.renderStats(ctx, m, ix, st))
 	}
 
@@ -36,22 +36,22 @@ func (module *Module) getMessageStatistics(ctx pgsgo.Context, m pgs.Message, ix 
 }
 
 func (module *Module) renderStats(ctx pgsgo.Context, m pgs.Message, ix *importTracker, st *pgdb_v1.MessageOptions_Stat) *statsContext {
-	statName, err := getIndexName(m, st.Name)
+	statName, err := getIndexName(m, st.GetName())
 	if err != nil {
 		panic(err)
 	}
 	rv := &statsContext{
 		DB: pgdb_v1.Statistic{
 			Name:  statName,
-			Kinds: st.Kinds,
+			Kinds: st.GetKinds(),
 		},
 	}
-	if st.Dropped {
+	if st.GetDropped() {
 		rv.DB.IsDropped = true
 		return rv
 	}
 
-	for _, fieldName := range st.Columns {
+	for _, fieldName := range st.GetColumns() {
 		path := strings.Split(fieldName, ".")
 		message := m
 		resolution := ""
