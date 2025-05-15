@@ -2,9 +2,10 @@ package v1
 
 import (
 	"context"
+	"testing"
+
 	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/stretchr/testify/require"
-	"testing"
 
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 )
@@ -340,9 +341,31 @@ func TestMigrationsColumnNeedsToBeUpdated(t *testing.T) {
 		require.NoError(t, err, "Failed to execute migration: %s", migration)
 	}
 	_, err = pg.DB.Exec(ctx, "COMMIT") // without this, information_schema will not update
+	require.NoError(t, err, "Failed to commit migration transaction")
+
 	migrations, err = Migrations(ctx, pg.DB, updatedMsg)
 	require.NoError(t, err)
 	require.Empty(t, migrations, "Expected no migrations after updating column")
+
+	migrations, err = Migrations(ctx, pg.DB, initialMsg)
+	require.NoError(t, err)
+	require.NotEmpty(t, migrations, "Expected migration statements for rolling back column upgrade")
+	require.Contains(t, migrations[0], "ALTER TABLE")
+	require.Contains(t, migrations[0], "ALTER COLUMN")
+	require.Contains(t, migrations[0], "pb$description")
+	require.Contains(t, migrations[0], "SET NOT NULL")
+
+	for _, migration := range migrations {
+		_, err := pg.DB.Exec(ctx, migration)
+		require.NoError(t, err, "Failed to execute migration rollback: %s", migration)
+	}
+
+	_, err = pg.DB.Exec(ctx, "COMMIT") // without this, information_schema will not update
+	require.NoError(t, err, "Failed to commit migration transaction")
+
+	migrations, err = Migrations(ctx, pg.DB, initialMsg)
+	require.NoError(t, err)
+	require.Empty(t, migrations, "Expected no migrations after rolling back column update")
 }
 
 func TestMigrationsIndexNeedsToBeAdded(t *testing.T) {
