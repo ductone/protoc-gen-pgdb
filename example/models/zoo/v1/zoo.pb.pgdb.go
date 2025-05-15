@@ -347,7 +347,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -369,11 +369,11 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		cfv2 := sb.String()
 
@@ -553,20 +553,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		}
 	}
 
-	oneof1 := uint32(0)
-
-	switch m.self.GetMedium().(type) {
-
-	case *Shop_Paper:
-		oneof1 = 50
-
-	case *Shop_Ebook:
-		oneof1 = 51
-
-	case *Shop_Anything:
-		oneof1 = 52
-
-	}
+	oneof1 := uint32(m.self.WhichMedium())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("medium_oneof")] = nullExp

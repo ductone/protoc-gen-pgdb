@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 )
 
 type ftsDataConvert struct {
@@ -35,11 +35,11 @@ func getSearchFields(ctx pgsgo.Context, m pgs.Message) []*searchFieldContext {
 		if err != nil {
 			panic(fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err))
 		}
-		if ext.FullTextType != pgdb_v1.FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED {
+		if ext.GetFullTextType() != pgdb_v1.FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED {
 			rv = append(rv, &searchFieldContext{
 				Ext:     ext,
 				Field:   field,
-				VarName: "m.self.Get" + ctx.Name(field).String() + "()",
+				VarName: "m.self." + opaqueFieldGetter(field),
 			})
 		}
 	}
@@ -60,17 +60,17 @@ func (fdc *ftsDataConvert) CodeForValue() (string, error) {
 		pt := field.Type().ProtoType()
 		if pt == pgs.MessageT {
 			if !strings.HasPrefix(field.Descriptor().GetTypeName(), ".google.protobuf") &&
-				(ext.MessageBehavior == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_EXPAND ||
-					ext.MessageBehavior == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED) {
+				(ext.GetMessageBehavior() == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_EXPAND ||
+					ext.GetMessageBehavior() == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED) {
 				fdc.NestedFieldNames = append(fdc.NestedFieldNames, fdc.ctx.Name(field).String())
 			}
 		}
 
-		if ext.FullTextType != pgdb_v1.FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED {
+		if ext.GetFullTextType() != pgdb_v1.FieldOptions_FULL_TEXT_TYPE_UNSPECIFIED {
 			fdc.SearchFields = append(fdc.SearchFields, &searchFieldContext{
 				Ext:     ext,
 				Field:   field,
-				VarName: "m.self.Get" + fdc.ctx.Name(field).String() + "()",
+				VarName: "m.self." + opaqueFieldGetter(field),
 			})
 		}
 	}

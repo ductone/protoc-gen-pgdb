@@ -56,18 +56,16 @@ func TestSchemaZooShop(t *testing.T) {
 	ct = schema[0]
 	require.Contains(t, ct, "CREATE TABLE")
 
-	s := &Shop{
+	s := Shop_builder{
 		TenantId:  "t1",
 		Id:        "s1",
 		CreatedAt: timestamppb.Now(),
 		Fur:       v1.FurType_FUR_TYPE_LOTS,
-		Medium: &Shop_Anything{
-			Anything: &v1.ScalarValue{
-				String_:        "unique",
-				RepeatedString: []string{"xyz", "zyx"},
-			},
-		},
-	}
+		Anything: v1.ScalarValue_builder{
+			String:         "unique",
+			RepeatedString: []string{"xyz", "zyx"},
+		}.Build(),
+	}.Build()
 	found := false
 	searchData := s.DBReflect().SearchData()
 	for _, sd := range searchData {

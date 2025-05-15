@@ -3,8 +3,8 @@ package pgdb
 import (
 	"fmt"
 
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 	dynamopb "github.com/pquerna/protoc-gen-dynamo/dynamo/v1"
 )
 
@@ -69,7 +69,7 @@ func (dkdc *dynamoKeyDataConvert) CodeForValue() (string, error) {
 
 	for _, fieldName := range keyFields {
 		field := fieldByName(dkdc.Message, fieldName)
-		formatter, err := typeToString(dkdc.ix, field.Type().ProtoType(), "m.self."+dkdc.ctx.Name(field).String())
+		formatter, err := typeToString(dkdc.ix, field.Type().ProtoType(), "m.self."+opaqueFieldGetter(field))
 		if err != nil {
 			panic(err)
 		}

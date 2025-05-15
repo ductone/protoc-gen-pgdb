@@ -1,6 +1,9 @@
 linters-settings:
   exhaustive:
     default-signifies-exhaustive: true
+  gomoddirectives:
+    replace-allow-list:
+      - github.com/lyft/protoc-gen-star/v2
 
   gocritic:
     # The list of supported checkers can be find in https://go-critic.github.io/overview.

@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 )
 
 type indexContext struct {
@@ -30,11 +30,11 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 	rv = append(rv, cf...)
 
 	usedNames := map[string]struct{}{}
-	for _, index := range ext.Indexes {
-		if _, ok := usedNames[index.Name]; ok {
-			panic(fmt.Errorf("pgdb: getFieldIndexes:index name reused  on Message '%s': %s", m.FullyQualifiedName(), index.Name))
+	for _, index := range ext.GetIndexes() {
+		if _, ok := usedNames[index.GetName()]; ok {
+			panic(fmt.Errorf("pgdb: getFieldIndexes:index name reused  on Message '%s': %s", m.FullyQualifiedName(), index.GetName()))
 		}
-		usedNames[index.Name] = struct{}{}
+		usedNames[index.GetName()] = struct{}{}
 		rv = append(rv, module.extraIndexes(ctx, m, ix, index))
 	}
 
@@ -42,7 +42,7 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 }
 
 func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker, idx *pgdb_v1.MessageOptions_Index) *indexContext {
-	indexName, err := getIndexName(m, idx.Name)
+	indexName, err := getIndexName(m, idx.GetName())
 	if err != nil {
 		panic(err)
 	}
@@ -51,14 +51,14 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			Name: indexName,
 		},
 	}
-	if idx.Dropped {
+	if idx.GetDropped() {
 		rv.DB.IsDropped = true
 		return rv
 	}
 
-	rv.DB.Method = idx.Method
+	rv.DB.Method = idx.GetMethod()
 
-	for _, fieldName := range idx.Columns {
+	for _, fieldName := range idx.GetColumns() {
 		path := strings.Split(fieldName, ".")
 		message := m
 		resolution := ""
@@ -100,7 +100,7 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		}
 	}
 
-	if idx.PartialDeletedAtIsNull {
+	if idx.GetPartialDeletedAtIsNull() {
 		if f, ok := tryFieldByName(m, "deleted_at"); ok {
 			name, err := getColumnName(f)
 			if err != nil {
@@ -126,7 +126,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 	}
 
 	// nested only currently don't have any of the common fields.
-	if fext.NestedOnly {
+	if fext.GetNestedOnly() {
 		return nil, nil
 	}
 
@@ -146,15 +146,15 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		},
 	}
 
-	if fext.PartitionedByCreatedAt {
+	if fext.GetPartitionedByCreatedAt() {
 		if !slices.Contains(primaryIndex.DB.Columns, "created_at") {
 			primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, "created_at")
 		}
 	}
 
-	if fext.PartitionedByKsuidFieldName != "" {
-		if !slices.Contains(primaryIndex.DB.Columns, fext.PartitionedByKsuidFieldName) {
-			primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, fext.PartitionedByKsuidFieldName)
+	if fext.GetPartitionedByKsuidFieldName() != "" {
+		if !slices.Contains(primaryIndex.DB.Columns, fext.GetPartitionedByKsuidFieldName()) {
+			primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, fext.GetPartitionedByKsuidFieldName())
 		}
 	}
 
@@ -215,7 +215,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		if err != nil {
 			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
 		}
-		if ext.MessageBehavior != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
+		if ext.GetMessageBehavior() != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
 			continue
 		}
 

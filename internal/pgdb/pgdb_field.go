@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/jackc/pgx/v5/pgtype"
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
@@ -46,7 +46,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", f.FullyQualifiedName(), err)
 	}
 
-	if ext.MessageBehavior == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_OMIT {
+	if ext.GetMessageBehavior() == pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_OMIT {
 		// explict option to just not store this in postgres
 		return nil, nil
 	}
@@ -117,14 +117,14 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		defaultValue = "false"
 		nullable = false
 	case pgs.StringT:
-		switch ext.MessageBehavior {
+		switch ext.GetMessageBehavior() {
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED:
 			// TODO(pquerna): annotations for max size
 			convertDef.PostgresTypeName = "text"
 			convertDef.IsArray = isArray
 			convertDef.TypeConversion = gtString
-			convertDef.FullTextType = ext.FullTextType
-			convertDef.FullTextWeight = ext.FullTextWeight
+			convertDef.FullTextType = ext.GetFullTextType()
+			convertDef.FullTextWeight = ext.GetFullTextWeight()
 			defaultValue = "''"
 			nullable = false
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_INET_ADDR:
@@ -140,7 +140,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			return nil, fmt.Errorf("pgdb: unsupported field type: %v: %s: MessageBehavior not supported on string type", pt, f.FullyQualifiedName())
 		}
 	case pgs.MessageT:
-		switch ext.MessageBehavior {
+		switch ext.GetMessageBehavior() {
 		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED:
 			switch f.Descriptor().GetTypeName() {
 			case ".google.protobuf.Any":
@@ -241,7 +241,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			Type:      dbTypeRef.Name,
 			Nullable:  nullable,
 			Default:   defaultValue,
-			Collation: ext.Collation,
+			Collation: ext.GetCollation(),
 		}
 		rv.DataType = dbTypeRef
 	} else {
@@ -271,7 +271,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 	rv := []*fieldContext{}
 	// nested only currently don't have any of the common fields.
-	if fext.NestedOnly {
+	if fext.GetNestedOnly() {
 		return nil, nil
 	}
 
@@ -427,7 +427,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		if err != nil {
 			return nil, fmt.Errorf("pgdb: getField: failed to extract Message extension from '%s': %w", field.FullyQualifiedName(), err)
 		}
-		if ext.MessageBehavior != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
+		if ext.GetMessageBehavior() != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_VECTOR {
 			continue
 		}
 
@@ -468,7 +468,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 					Name:               fmt.Sprintf("%s_%d", pgColName, enumValue.Value()),
 					Type:               "vector",
 					Nullable:           true,
-					OverrideExpression: fmt.Sprintf("vector(%d)", enumExt.VectorSize),
+					OverrideExpression: fmt.Sprintf("vector(%d)", enumExt.GetVectorSize()),
 				},
 				GoName:   goNameString, // Generated go struct name
 				DataType: nil,

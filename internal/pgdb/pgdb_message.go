@@ -5,8 +5,8 @@ import (
 	"io"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 )
 
 type messageTemplateContext struct {
@@ -29,7 +29,7 @@ func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File,
 	ix.PGDBV1 = true
 	ix.GoquExp = true
 	wantRecordStringBuilder := false
-	if !ext.NestedOnly {
+	if !ext.GetNestedOnly() {
 		// used by pk/sk builder
 		wantRecordStringBuilder = true
 		ix.Strings = true
@@ -90,7 +90,7 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 			panic(err)
 		}
 
-		if !fext.NestedOnly {
+		if !fext.GetNestedOnly() {
 			tenantIdField, err = getTenantIDField(m)
 			if err != nil {
 				panic(err)
@@ -178,7 +178,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 		panic(err)
 	}
 
-	if !fext.NestedOnly {
+	if !fext.GetNestedOnly() {
 		tenantIdField, err = getTenantIDField(m)
 		if err != nil {
 			panic(err)

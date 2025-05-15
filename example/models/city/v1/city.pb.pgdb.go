@@ -425,7 +425,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 	if !ro.IsNested {
 
-		cfv0 := strings.ReplaceAll(string(m.self.TenantId), "\u0000", "")
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("tenant_id")] = nullExp
@@ -447,7 +447,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(m.self.TenantId)
+		_, _ = sb.WriteString(m.self.GetTenantId())
 
 		cfv2 := sb.String()
 
@@ -463,11 +463,11 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		sb.Reset()
 
-		_, _ = sb.WriteString(m.self.Id)
+		_, _ = sb.WriteString(m.self.GetId())
 
 		_, _ = sb.WriteString(":")
 
-		_, _ = sb.WriteString(strconv.FormatInt(int64(m.self.Numid), 10))
+		_, _ = sb.WriteString(strconv.FormatInt(int64(m.self.GetNumid()), 10))
 
 		cfv3 := sb.String()
 
@@ -610,17 +610,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		}
 	}
 
-	oneof1 := uint32(0)
-
-	switch m.self.GetWhat().(type) {
-
-	case *Attractions_Pet:
-		oneof1 = 10
-
-	case *Attractions_ZooShop:
-		oneof1 = 11
-
-	}
+	oneof1 := uint32(m.self.WhichWhat())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("what_oneof")] = nullExp

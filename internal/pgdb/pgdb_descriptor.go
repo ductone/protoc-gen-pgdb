@@ -4,8 +4,8 @@ import (
 	"io"
 	"strconv"
 
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
@@ -44,7 +44,7 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 
 	var vf string
 
-	if !fext.NestedOnly {
+	if !fext.GetNestedOnly() {
 		vf, err = getVersioningField(m)
 		if err != nil {
 			return err
@@ -60,10 +60,10 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		Statistics:                  module.getMessageStatistics(ctx, m, ix),
 		TableName:                   tableName,
 		VersioningField:             vf,
-		IsPartitioned:               fext.Partitioned,
-		IsPartitionedByCreatedAt:    fext.PartitionedByCreatedAt,
-		PartitionedByKsuidFieldName: fext.PartitionedByKsuidFieldName,
-		PartitionDateRange:          "pgdb_v1.MessageOptions_" + fext.PartitionedByDateRange.String(),
+		IsPartitioned:               fext.GetPartitioned(),
+		IsPartitionedByCreatedAt:    fext.GetPartitionedByCreatedAt(),
+		PartitionedByKsuidFieldName: fext.GetPartitionedByKsuidFieldName(),
+		PartitionDateRange:          "pgdb_v1.MessageOptions_" + fext.GetPartitionedByDateRange().String(),
 	}
 
 	return templates["descriptor.tmpl"].Execute(w, c)

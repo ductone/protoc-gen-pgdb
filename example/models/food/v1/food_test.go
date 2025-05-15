@@ -36,75 +36,75 @@ func TestSchemaFoodPasta(t *testing.T) {
 	testobjects := []testTable{
 		{
 			objects: []pgdb_v1.DBReflectMessage{
-				&Pasta{
+				Pasta_builder{
 					TenantId: "t1",
 					Id:       "p1",
-				},
-				&Pasta{
+				}.Build(),
+				Pasta_builder{
 					TenantId: "t2",
 					Id:       "p2",
-				},
-				&Pasta{
+				}.Build(),
+				Pasta_builder{
 					TenantId: "t3",
 					Id:       "p3",
-				},
+				}.Build(),
 			},
 		},
 		{
 			objects: []pgdb_v1.DBReflectMessage{
-				&SauceIngredient{
+				SauceIngredient_builder{
 					TenantId:   "t1",
 					Id:         "s1",
 					SourceAddr: "127.0.0.1",
-				},
-				&SauceIngredient{
+				}.Build(),
+				SauceIngredient_builder{
 					TenantId:   "t2",
 					Id:         "s2",
 					SourceAddr: "1.2.3.4",
-				},
-				&SauceIngredient{
+				}.Build(),
+				SauceIngredient_builder{
 					TenantId:   "t3",
 					Id:         "s3",
 					SourceAddr: "2001:db8:abcd:12::1",
-				},
+				}.Build(),
 			},
 		},
 		{
 			objects: []pgdb_v1.DBReflectMessage{
-				&PastaIngredient{
+				PastaIngredient_builder{
 					TenantId: "t1",
 					Id:       "pi1",
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
-						{
+						PastaIngredient_ModelEmbedding_builder{
 							Embedding: []float32{},
 							Model:     llm_v1.Model_MODEL_3DIMS,
-						},
+						}.Build(),
 					},
-				},
-				&PastaIngredient{
+				}.Build(),
+				PastaIngredient_builder{
 					TenantId: "t2",
 					Id:       "pi2",
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
-						{
+						PastaIngredient_ModelEmbedding_builder{
 							Embedding: []float32{4.0, 5.0, 6.0},
 							Model:     llm_v1.Model_MODEL_3DIMS,
-						},
+						}.Build(),
 					},
-				},
-				&PastaIngredient{
+				}.Build(),
+				PastaIngredient_builder{
 					TenantId: "t3",
 					Id:       "pi3",
 					ModelEmbeddings: []*PastaIngredient_ModelEmbedding{
-						{
+						PastaIngredient_ModelEmbedding_builder{
 							Embedding: []float32{1.0, 2.0, 3.0},
 							Model:     llm_v1.Model_MODEL_3DIMS,
-						},
-						{
+						}.Build(),
+						PastaIngredient_ModelEmbedding_builder{
 							Embedding: []float32{4.0, 5.0, 6.0},
 							Model:     llm_v1.Model_MODEL_3DIMS,
-						},
+						}.Build(),
 					},
-				},
+				}.Build(),
 			},
 		},
 	}
@@ -400,21 +400,21 @@ func fixtureSchemaSauceIngredient(t *testing.T, pg *pgtest.PG) {
 	}
 
 	data := []*SauceIngredient{
-		{
+		SauceIngredient_builder{
 			TenantId:   "t1",
 			Id:         "s1",
 			SourceAddr: "127.0.0.1",
-		},
-		{
+		}.Build(),
+		SauceIngredient_builder{
 			TenantId:   "t2",
 			Id:         "s2",
 			SourceAddr: "1.2.3.4",
-		},
-		{
+		}.Build(),
+		SauceIngredient_builder{
 			TenantId:   "t3",
 			Id:         "s3",
 			SourceAddr: "2001:db8:abcd:12::1",
-		},
+		}.Build(),
 	}
 
 	for _, row := range data {
@@ -524,10 +524,10 @@ func TestDatePartitionsUpdate(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	msg := &GarlicIngredient{
+	msg := GarlicIngredient_builder{
 		TenantId: "t1",
 		Id:       "pi1",
-	}
+	}.Build()
 
 	// Create the table first
 	schema, err := pgdb_v1.CreateSchema(msg)
@@ -568,24 +568,24 @@ func TestDatePartitionsUpdate(t *testing.T) {
 
 	// Test data insertion into partitions
 	testData := []*GarlicIngredient{
-		{
+		GarlicIngredient_builder{
 			TenantId:   "t1",
 			Id:         "pi1",
 			SourceAddr: "127.0.0.1",
 			CreatedAt:  timestamppb.New(time.Date(2024, 1, 15, 0, 0, 0, 0, time.UTC)),
-		},
-		{
+		}.Build(),
+		GarlicIngredient_builder{
 			TenantId:   "t2",
 			Id:         "pi2",
 			SourceAddr: "1.2.3.4",
 			CreatedAt:  timestamppb.New(time.Date(2024, 2, 15, 0, 0, 0, 0, time.UTC)),
-		},
-		{
+		}.Build(),
+		GarlicIngredient_builder{
 			TenantId:   "t3",
 			Id:         "pi3",
 			SourceAddr: "2001:db8:abcd:12::1",
 			CreatedAt:  timestamppb.New(time.Date(2024, 3, 15, 0, 0, 0, 0, time.UTC)),
-		},
+		}.Build(),
 	}
 
 	// Insert test data
@@ -606,7 +606,7 @@ func TestDatePartitionsUpdate(t *testing.T) {
 		var createdAt time.Time
 		err = pg.DB.QueryRow(ctx, fmt.Sprintf("SELECT pb$created_at FROM %s", subTable)).Scan(&createdAt)
 		require.NoError(t, err)
-		require.Equal(t, testData[i].CreatedAt.AsTime().UTC().Format("2006-01"),
+		require.Equal(t, testData[i].GetCreatedAt().AsTime().UTC().Format("2006-01"),
 			createdAt.UTC().Format("2006-01"),
 			"Data should be in correct monthly partition")
 	}
@@ -621,10 +621,10 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	msg := &CheeseIngredient{
+	msg := CheeseIngredient_builder{
 		TenantId: "t1",
 		Id:       "pi1",
-	}
+	}.Build()
 
 	// Create the table first
 	schema, err := pgdb_v1.CreateSchema(msg)
@@ -665,24 +665,24 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 
 	// Test data insertion into partitions
 	testData := []*CheeseIngredient{
-		{
+		CheeseIngredient_builder{
 			TenantId:   "t1",
 			Id:         "pi1",
 			EventId:    generateKSUIDForTime(time.Date(2024, 1, 15, 0, 0, 0, 0, time.UTC)), // Jan 15, 2024
 			SourceAddr: "127.0.0.1",
-		},
-		{
+		}.Build(),
+		CheeseIngredient_builder{
 			TenantId:   "t2",
 			Id:         "pi2",
 			EventId:    generateKSUIDForTime(time.Date(2024, 2, 15, 0, 0, 0, 0, time.UTC)), // Feb 15, 2024
 			SourceAddr: "1.2.3.4",
-		},
-		{
+		}.Build(),
+		CheeseIngredient_builder{
 			TenantId:   "t3",
 			Id:         "pi3",
 			EventId:    generateKSUIDForTime(time.Date(2024, 3, 15, 0, 0, 0, 0, time.UTC)), // Mar 15, 2024
 			SourceAddr: "2001:db8:abcd:12::1",
-		},
+		}.Build(),
 	}
 
 	// Insert test data
@@ -703,7 +703,7 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 		var eventId string
 		err = pg.DB.QueryRow(ctx, fmt.Sprintf("SELECT pb$event_id FROM %s", subTable)).Scan(&eventId)
 		require.NoError(t, err)
-		require.Equal(t, testData[i].EventId, eventId, "Data should be in correct monthly partition")
+		require.Equal(t, testData[i].GetEventId(), eventId, "Data should be in correct monthly partition")
 	}
 }
 
@@ -724,11 +724,11 @@ func TestKSUIDCollation(t *testing.T) {
 	require.NoError(t, err)
 
 	// Create a message with KSUID partitioning
-	msg := &CheeseIngredient{
+	msg := CheeseIngredient_builder{
 		TenantId: "t1",
 		Id:       "pi1",
 		EventId:  generateKSUIDForTime(time.Now()),
-	}
+	}.Build()
 
 	// Create the table
 	schema, err := pgdb_v1.CreateSchema(msg)
@@ -754,16 +754,16 @@ func TestKSUIDCollation(t *testing.T) {
 
 	// Test data ordering
 	testData := []*CheeseIngredient{
-		{
+		CheeseIngredient_builder{
 			TenantId: "t1",
 			Id:       "pi1",
 			EventId:  generateKSUIDForTime(startDate.Add(time.Hour)), // Earlier timestamp
-		},
-		{
+		}.Build(),
+		CheeseIngredient_builder{
 			TenantId: "t1",
 			Id:       "pi2",
 			EventId:  generateKSUIDForTime(endDate.Add(-1 * time.Hour)), // Later timestamp
-		},
+		}.Build(),
 	}
 
 	// Create the partitions
@@ -799,6 +799,6 @@ func TestKSUIDCollation(t *testing.T) {
 	}
 
 	// Verify the order matches the chronological order of the KSUIDs
-	require.Equal(t, testData[0].EventId, eventIds[0], "First KSUID should be earlier timestamp")
-	require.Equal(t, testData[1].EventId, eventIds[1], "Second KSUID should be later timestamp")
+	require.Equal(t, testData[0].GetEventId(), eventIds[0], "First KSUID should be earlier timestamp")
+	require.Equal(t, testData[1].GetEventId(), eventIds[1], "Second KSUID should be later timestamp")
 }

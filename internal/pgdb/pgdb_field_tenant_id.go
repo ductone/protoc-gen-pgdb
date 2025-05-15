@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	pgs "github.com/lyft/protoc-gen-star"
-	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
+	pgs "github.com/lyft/protoc-gen-star/v2"
+	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 )
 
 type tenantIdDataConvert struct {
@@ -27,7 +27,7 @@ func (tidc *tenantIdDataConvert) CodeForValue() (string, error) {
 	// no-op, we just needed to calculate our variable name!
 	return templateExecToString("proto_format_cast.tmpl", &formatContext{
 		VarName:   tidc.VarName,
-		InputName: "m.self." + tidc.ctx.Name(fieldRef).String(),
+		InputName: "m.self." + opaqueFieldGetter(fieldRef),
 		CastType:  "string",
 		IsArray:   false,
 	})
@@ -52,8 +52,8 @@ func getTenantIDField(msg pgs.Message) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("pgdb: getTenantIDField: failed to extract Message extension from '%s': %w", msg.FullyQualifiedName(), err)
 	}
-	if ext.TenantIdField != "" {
-		fieldName = ext.TenantIdField
+	if ext.GetTenantIdField() != "" {
+		fieldName = ext.GetTenantIdField()
 	}
 	// panics if tenant id not found
 	_ = fieldByName(msg, fieldName)

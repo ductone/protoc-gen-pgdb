@@ -2,8 +2,8 @@
 {{.VarName}}tmp := []*pgdb_v1.SearchContent{
     {{ range .SearchFields }}
 		{
-			Type:   pgdb_v1.FieldOptions_{{- .Ext.FullTextType.String -}},
-			Weight: pgdb_v1.FieldOptions_{{- .Ext.FullTextWeight.String -}},
+			Type:   pgdb_v1.FieldOptions_{{- .Ext.GetFullTextType.String -}},
+			Weight: pgdb_v1.FieldOptions_{{- .Ext.GetFullTextWeight.String -}},
 			Value:  {{ .VarName }},
 		},
     {{ end }}
