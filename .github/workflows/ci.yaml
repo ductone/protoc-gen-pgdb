@@ -7,7 +7,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.23.x
+          go-version: 1.24.x
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Run linters
@@ -18,7 +18,7 @@ jobs:
   go-test:
     strategy:
       matrix:
-        go-version: [1.23.x]
+        go-version: [1.24.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: v1.23
+          go-version: v1.24
       - uses: imjasonh/setup-ko@v0.6
       - run: ko publish --bare ./ --platform linux/amd64,linux/arm64 -t $(git rev-parse --short "$GITHUB_SHA")
   buf-lint-and-breaking-change-detection:
