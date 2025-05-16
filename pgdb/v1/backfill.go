@@ -1,11 +1,14 @@
 package v1
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
 )
+
+var ErrNoPKSKField = errors.New("pb$pksk field not found in record")
 
 func BackfillPKSKV2(msg DBReflectMessage) (string, []any, error) {
 	dbr := msg.DBReflect()
@@ -18,7 +21,7 @@ func BackfillPKSKV2(msg DBReflectMessage) (string, []any, error) {
 
 	pkskField := desc.PKSKField()
 	if _, ok := record[pkskField.Name]; !ok {
-		return "", nil, fmt.Errorf("pgdb_v1: cannot backfill pb$pkskv2 field: %s not found in record", pkskField.Name)
+		return "", nil, fmt.Errorf("pgdb_v1: cannot backfill pb$pkskv2 field: %w", ErrNoPKSKField)
 	}
 	pksk := record[pkskField.Name].(string)
 
