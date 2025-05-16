@@ -72,11 +72,6 @@ func BackfillPKSKV2(msg DBReflectMessage) (string, []any, error) {
 		return "", nil, err
 	}
 
-	pkskField := desc.PKSKField()
-	if _, ok := record[pkskField.Name]; !ok {
-		return "", nil, fmt.Errorf("xpgdb: pksk missing from message; unable to backfill without %s", pkskField.Name)
-	}
-
 	pkskv2Field := desc.PKSKV2Field()
 	pk := record["pb$pk"]
 	sk := record["pb$sk"]
@@ -85,8 +80,15 @@ func BackfillPKSKV2(msg DBReflectMessage) (string, []any, error) {
 	qb := goqu.Dialect("postgres")
 	q := qb.Insert(tableName).Prepared(true).Rows(record)
 
+	var backfillExp any
+	pkskField := desc.PKSKField()
+	backfillExp = exp.NewIdentifierExpression("", "excluded", pkskField.Name)
+	if _, ok := record[pkskField.Name]; !ok {
+		backfillExp = record[pkskv2Field.Name]
+	}
+
 	conflictRecords := exp.Record{
-		pkskv2Field.Name: exp.NewIdentifierExpression("", "excluded", pkskField.Name),
+		pkskv2Field.Name: backfillExp,
 	}
 
 	primaryIndex := desc.IndexPrimaryKey()
