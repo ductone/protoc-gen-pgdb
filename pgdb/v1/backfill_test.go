@@ -182,8 +182,8 @@ func TestBackfillPKSKV2(t *testing.T) {
 	sql, params, err := BackfillPKSKV2(dbr)
 	require.NoError(t, err)
 	assert.Equal(t,
-		`INSERT INTO "test_table" ("pb$", "pb$pb_data", "pb$pk", "pb$pksk", "pb$pkskv2", "pb$sk", "pb$tenant_id") VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT ON CONSTRAINT "pbidx_pksk_test_table" DO UPDATE SET "pb$pkskv2"="excluded"."pb$pksk" WHERE ("test_table"."pb$pkskv2" IS NULL)`, //nolint:revive // this is just a long lint
+		`UPDATE "test_table" SET "pb$pkskv2"="pb$pksk" WHERE (("pb$pksk" = $1) AND ("pb$pkskv2" IS NULL))`,
 		sql,
 	)
-	require.Len(t, params, 7)
+	require.Len(t, params, 1)
 }
