@@ -301,6 +301,21 @@ func (d *pgdbDescriptorAttractions) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_attractions_models_city_v1_93fcaec3"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("furrrs_attractions_models_city_v1_97e8b7fb"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
@@ -950,6 +965,73 @@ func (x *AttractionsSKSafeOperators) NotBetween(start string, end string) exp.Ra
 
 func (x *AttractionsDBQueryBuilder) SK() *AttractionsSKSafeOperators {
 	return &AttractionsSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type AttractionsPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsDBQueryBuilder) PKSKV2() *AttractionsPKSKV2SafeOperators {
+	return &AttractionsPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type AttractionsFTSDataSafeOperators struct {

@@ -298,6 +298,21 @@ func (d *pgdbDescriptorShop) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_shop_models_zoo_v1_3ea8f17c"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	return rv
 }
 
@@ -895,6 +910,73 @@ func (x *ShopSKSafeOperators) NotBetween(start string, end string) exp.RangeExpr
 
 func (x *ShopDBQueryBuilder) SK() *ShopSKSafeOperators {
 	return &ShopSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type ShopPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ShopPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ShopPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ShopPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ShopPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ShopPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ShopPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ShopPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ShopPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ShopPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ShopPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *ShopPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ShopPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ShopDBQueryBuilder) PKSKV2() *ShopPKSKV2SafeOperators {
+	return &ShopPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type ShopFTSDataSafeOperators struct {

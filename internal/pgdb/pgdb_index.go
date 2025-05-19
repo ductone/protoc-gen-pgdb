@@ -146,15 +146,38 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		},
 	}
 
+	pkskv2TenantIndexName, err := getIndexName(m, "pkskv2")
+	if err != nil {
+		return nil, err
+	}
+
+	pkskv2TenantIndex := &indexContext{
+		ExcludeNested: true,
+		DB: pgdb_v1.Index{
+			Name:      pkskv2TenantIndexName,
+			IsPrimary: false,
+			IsUnique:  true,
+			Method:    pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:   []string{"tenant_id", "pkskv2"},
+		},
+	}
+
 	if fext.GetPartitionedByCreatedAt() {
 		if !slices.Contains(primaryIndex.DB.Columns, "created_at") {
 			primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, "created_at")
+		}
+		if !slices.Contains(pkskv2TenantIndex.DB.Columns, "created_at") {
+			pkskv2TenantIndex.DB.Columns = append(pkskv2TenantIndex.DB.Columns, "created_at")
 		}
 	}
 
 	if fext.GetPartitionedByKsuidFieldName() != "" {
 		if !slices.Contains(primaryIndex.DB.Columns, fext.GetPartitionedByKsuidFieldName()) {
 			primaryIndex.DB.Columns = append(primaryIndex.DB.Columns, fext.GetPartitionedByKsuidFieldName())
+		}
+
+		if !slices.Contains(pkskv2TenantIndex.DB.Columns, fext.GetPartitionedByKsuidFieldName()) {
+			pkskv2TenantIndex.DB.Columns = append(pkskv2TenantIndex.DB.Columns, fext.GetPartitionedByKsuidFieldName())
 		}
 	}
 
@@ -206,7 +229,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 
 	// again loop through and look for vector / hnsw indexes
 
-	rv := []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex}
+	rv := []*indexContext{primaryIndex, pkskIndexBroken, pkskIndex, ftsIndex, pkskv2TenantIndex}
 
 	// iterate message for vector behavior options
 	for _, field := range m.Fields() {

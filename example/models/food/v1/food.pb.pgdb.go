@@ -292,6 +292,21 @@ func (d *pgdbDescriptorPasta) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_pasta_models_food_v1_0111adf9"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	return rv
 }
 
@@ -793,6 +808,73 @@ func (x *PastaSKSafeOperators) NotBetween(start string, end string) exp.RangeExp
 
 func (x *PastaDBQueryBuilder) SK() *PastaSKSafeOperators {
 	return &PastaSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type PastaPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaDBQueryBuilder) PKSKV2() *PastaPKSKV2SafeOperators {
+	return &PastaPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type PastaFTSDataSafeOperators struct {
@@ -1318,6 +1400,21 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_pasta_ingredient_models_food_v1_7f17d585"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -1984,6 +2081,73 @@ func (x *PastaIngredientSKSafeOperators) NotBetween(start string, end string) ex
 
 func (x *PastaIngredientDBQueryBuilder) SK() *PastaIngredientSKSafeOperators {
 	return &PastaIngredientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type PastaIngredientPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PastaIngredientDBQueryBuilder) PKSKV2() *PastaIngredientPKSKV2SafeOperators {
+	return &PastaIngredientPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type PastaIngredientFTSDataSafeOperators struct {
@@ -2775,6 +2939,21 @@ func (d *pgdbDescriptorSauceIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_sauce_ingredient_models_food_v1_02bdff7c"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("source_addr_index_sauce_ingredient_mode_af6b7a10"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
@@ -3303,6 +3482,73 @@ func (x *SauceIngredientSKSafeOperators) NotBetween(start string, end string) ex
 
 func (x *SauceIngredientDBQueryBuilder) SK() *SauceIngredientSKSafeOperators {
 	return &SauceIngredientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type SauceIngredientPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *SauceIngredientPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *SauceIngredientDBQueryBuilder) PKSKV2() *SauceIngredientPKSKV2SafeOperators {
+	return &SauceIngredientPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type SauceIngredientFTSDataSafeOperators struct {
@@ -3884,6 +4130,21 @@ func (d *pgdbDescriptorGarlicIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFun
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_garlic_ingredient_models_food_v1_c517502e"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2"), io.ColumnName("created_at")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("source_addr_index_garlic_ingredient_mod_914c0e80"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
@@ -4412,6 +4673,73 @@ func (x *GarlicIngredientSKSafeOperators) NotBetween(start string, end string) e
 
 func (x *GarlicIngredientDBQueryBuilder) SK() *GarlicIngredientSKSafeOperators {
 	return &GarlicIngredientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type GarlicIngredientPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *GarlicIngredientDBQueryBuilder) PKSKV2() *GarlicIngredientPKSKV2SafeOperators {
+	return &GarlicIngredientPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type GarlicIngredientFTSDataSafeOperators struct {
@@ -5056,6 +5384,21 @@ func (d *pgdbDescriptorCheeseIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFun
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_cheese_ingredient_models_food_v1_131dbda3"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2"), io.ColumnName("event_id")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("source_addr_index_cheese_ingredient_mod_fa6deac7"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
@@ -5580,6 +5923,73 @@ func (x *CheeseIngredientSKSafeOperators) NotBetween(start string, end string) e
 
 func (x *CheeseIngredientDBQueryBuilder) SK() *CheeseIngredientSKSafeOperators {
 	return &CheeseIngredientSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type CheeseIngredientPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *CheeseIngredientDBQueryBuilder) PKSKV2() *CheeseIngredientPKSKV2SafeOperators {
+	return &CheeseIngredientPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type CheeseIngredientFTSDataSafeOperators struct {
