@@ -146,6 +146,9 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 		},
 	}
 
+	// The `pkskv2TenantIndex` is a unique secondary index for the `pkskv2` column,
+	// combined with the `tenant_id`. It ensures efficient lookups and enforces
+	// uniqueness for the `pkskv2` values within each tenant.
 	pkskv2TenantIndexName, err := getIndexName(m, "pkskv2")
 	if err != nil {
 		return nil, err
