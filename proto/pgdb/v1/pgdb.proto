@@ -80,6 +80,10 @@ message MessageOptions {
   repeated Stat stats = 6;
   // Deprecated: previously determined whether to add the pkskv2 column; it is now always added.
   bool use_pkskv2_column = 10 [deprecated=true];
+
+  // Enables dual writes to new PG17 db
+  bool dual_write_to_pg17 = 11;
+
 }
 
 extend google.protobuf.FieldOptions {
