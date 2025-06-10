@@ -23,6 +23,7 @@ type fieldConvert struct {
 	TypeConversion   goTypeConversion
 	FullTextType     pgdb_v1.FieldOptions_FullTextType
 	FullTextWeight   pgdb_v1.FieldOptions_FullTextWeight
+	BitsSize         int32
 }
 
 type goTypeConversion int64
@@ -49,6 +50,7 @@ const (
 	gtPbWktBoolValue   goTypeConversion = 17
 	gtPbWktStringValue goTypeConversion = 18
 	gtInetAddr         goTypeConversion = 19
+	gtBits             goTypeConversion = 20
 )
 
 type formatContext struct {
@@ -57,6 +59,7 @@ type formatContext struct {
 	CastType     string
 	IsArray      bool
 	NestedPrefix string
+	BitsSize     int32
 }
 
 const fieldConvertString = "string"
@@ -98,6 +101,8 @@ func (fc *fieldConvert) GoType() (string, error) {
 		return string(fc.ctx.Type(fc.F)), nil
 	case gtInetAddr:
 		return fieldConvertString, nil
+	case gtBits:
+		return "[]byte", nil
 	default:
 		panic(fmt.Errorf("pgdb: Implement fieldConvert.GoType for %v", fc.TypeConversion))
 	}
@@ -172,6 +177,12 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		return templateExecToString("proto_format_inet.tmpl", &formatContext{
 			VarName:   fc.varName,
 			InputName: selfName,
+		})
+	case gtBits:
+		return templateExecToString("proto_format_bits.tmpl", &formatContext{
+			VarName:   fc.varName,
+			InputName: selfName,
+			BitsSize:  fc.BitsSize,
 		})
 	case gtBytes:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{

@@ -1,0 +1,4 @@
+var {{.VarName}} interface{} = nullExp
+if len({{ .InputName }}) == {{.BitsSize}} {
+    {{.VarName}} = pgdb_v1.BytesToBitVector({{ .InputName }})
+}

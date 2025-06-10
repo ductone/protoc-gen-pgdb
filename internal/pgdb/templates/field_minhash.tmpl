@@ -1,7 +1,0 @@
-var {{.VarName}} interface{} = nullExp
-if m.self.Get{{.GoName}}() != nil {
-    v := m.self.Get{{.GoName}}()
-    if len(v.Get{{.ByteArrayName}}()) == {{.ByteArraySize}} {
-        {{.VarName}} = pgdb_v1.MinHashToBitVector(v.Get{{.ByteArrayName}}())
-    }
-}

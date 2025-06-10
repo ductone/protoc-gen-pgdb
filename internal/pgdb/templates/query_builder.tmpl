@@ -138,6 +138,13 @@ func  (x *{{ .OpsTypeName }}) InNetworkPrefix(cidr netip.Prefix) exp.RangeExpres
 }
 {{end}}
 
+{{if .Op.Distance }}
+func  (x *{{ .OpsTypeName }}) Distance(from {{.InputType}}) exp.Expression {
+	bits := pgdb_v1.BytesToBitVector(from)
+	return goqu.L("? <~> B?", x.column, bits)
+}
+{{end}}
+
 
 {{if .Op.Between }}
 func  (x *{{ .OpsTypeName }}) Between(start {{.InputType}}, end {{.InputType}}) exp.RangeExpression {

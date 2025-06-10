@@ -81,6 +81,14 @@ message PastaIngredient {
       "ingredient_id"
     ]
   };
+  option (pgdb.v1.msg).indexes = {
+    name: "min_hash_bits"
+    method: INDEX_METHOD_HNSW_COSINE
+    columns: [
+      "min_hash"
+    ]
+    bit_hamming_ops: true
+  };
   string tenant_id = 1;
   string ingredient_id = 2;
   google.protobuf.Timestamp created_at = 3;
@@ -101,12 +109,7 @@ message PastaIngredient {
   // 3. Message type has 2 fields, enum type and repeated float type
   repeated ModelEmbedding model_embeddings = 8 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_VECTOR}];
 
-  message MinHash {
-    option (pgdb.v1.msg).nested_only = true;
-    bytes min_hash = 1;
-  }
-
-  MinHash min_hashes = 9 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_MIN_HASH, minhash_size: 128}];
+  bytes min_hash = 9 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_BITS, bits_size: 4096}];
 }
 
 message SauceIngredient {

@@ -96,6 +96,9 @@ type safeOps struct {
 	// exp.Likeable
 	// exp.Distinctable
 	// exp.Bitwiseable
+
+	// Bit Vector Ops
+	Distance bool
 }
 
 type safeFieldContext struct {
@@ -189,15 +192,17 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 		isJSONB := false
 		isInet := false
 		isText := false
+		isBits := false
 
 		if f.DB != nil {
 			isArray = f.DB.Type[0] == '_'
 			isJSONB = f.DB.Type == "jsonb"
 			isText = f.DB.Type == "text" || f.DB.Type == "varchar"
 			isInet = f.DB.Type == "inet"
+			isBits = f.DB.Type == "bit"
 		}
 		_, isSupportedArrayType := xpq.SupportedArrayGoTypes[inputType]
-		ops := safeOpsForIndexTypes(methods, isArray && isSupportedArrayType, isJSONB, isText, isInet)
+		ops := safeOpsForIndexTypes(methods, isArray && isSupportedArrayType, isJSONB, isText, isInet, isBits)
 
 		ix.JSON = ix.JSON || isJSONB
 		ix.XPQ = ix.XPQ || ops.ObjectAllKeyExists || ops.ObjectAnyKeyExists || (isArray && isSupportedArrayType) || isInet
@@ -217,7 +222,7 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 	return rv
 }
 
-func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSuportedArrayType bool, isJSONB bool, isText bool, isInet bool) *safeOps {
+func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSuportedArrayType bool, isJSONB bool, isText bool, isInet bool, isBits bool) *safeOps {
 	indexMethods := make(map[pgdb_v1.MessageOptions_Index_IndexMethod]bool)
 	for _, m := range input {
 		indexMethods[m] = true
@@ -225,6 +230,7 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 	btree := pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE
 	btreeGin := pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN
 	gin := pgdb_v1.MessageOptions_Index_INDEX_METHOD_GIN
+	hnswCosine := pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE
 
 	rv := &safeOps{
 		Eq: safeOpCheck(indexMethods, btree, btreeGin, gin),
@@ -255,6 +261,7 @@ func safeOpsForIndexTypes(input []pgdb_v1.MessageOptions_Index_IndexMethod, isSu
 		ObjectKeyExists:    safeOpCheck(indexMethods, btreeGin, gin) && isJSONB,
 		ObjectAnyKeyExists: safeOpCheck(indexMethods, btreeGin, gin) && isJSONB,
 		ObjectAllKeyExists: safeOpCheck(indexMethods, btreeGin, gin) && isJSONB,
+		Distance:           safeOpCheck(indexMethods, hnswCosine) && isBits,
 	}
 	return rv
 }

@@ -802,3 +802,118 @@ func TestKSUIDCollation(t *testing.T) {
 	require.Equal(t, testData[0].GetEventId(), eventIds[0], "First KSUID should be earlier timestamp")
 	require.Equal(t, testData[1].GetEventId(), eventIds[1], "Second KSUID should be later timestamp")
 }
+
+func TestPastaIngredientBitVector(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin; CREATE EXTENSION IF NOT EXISTS vector;")
+	require.NoError(t, err)
+
+	// Create test data
+	testData := make([]*PastaIngredient, 100)
+	for i := 0; i < 100; i++ {
+		// Create a bit vector with a pattern that varies by index
+		minHash := make([]byte, 4096) // 4096 KB
+		for j := 0; j < len(minHash); j++ {
+			// Set bits based on the index to create different patterns
+			minHash[j] = byte((i + j) % 256)
+		}
+
+		testData[i] = PastaIngredient_builder{
+			TenantId:     "t1",
+			Id:           fmt.Sprintf("pi%d", i),
+			PastaId:      fmt.Sprintf("p%d", i),
+			IngredientId: fmt.Sprintf("i%d", i),
+			MinHash:      minHash,
+		}.Build()
+	}
+
+	// Create schema
+	schema, err := pgdb_v1.CreateSchema(testData[0])
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "failed to execute sql: '\n%s\n'", line)
+	}
+
+	// Create partitions for tenant_id
+	fakeTenantIds := []string{"t1"}
+	testCreatePartitionTables(t, pg, testData[0], fakeTenantIds)
+
+	// Insert test data
+	for _, data := range testData {
+		sql, args, err := pgdb_v1.Insert(data)
+		require.NoError(t, err)
+		_, err = pg.DB.Exec(ctx, sql, args...)
+		require.NoError(t, err)
+	}
+
+	// Test query using Distance()
+	// Use the first item's min_hash as the reference point
+	referenceMinHash := pgdb_v1.BytesToBitVector(testData[0].GetMinHash())
+	referenceMinHashBytes := testData[0].GetMinHash()
+
+	// Build query to find similar items using raw SQL
+
+	qb := goqu.Dialect("postgres")
+	query, args, err := qb.Select(
+		testData[0].DB().Query().Id().Identifier(),
+		goqu.L("? <~> B?", testData[0].DB().Query().MinHash().Identifier(), referenceMinHash),
+	).From(testData[0].DB().TableName()).
+		ToSQL()
+	require.NoError(t, err)
+
+	// Execute query
+	rows, err := pg.DB.Query(ctx, query, args...)
+	require.NoError(t, err)
+	defer rows.Close()
+
+	// Verify results
+	var results []struct {
+		ID      string
+		MinHash []byte
+	}
+	for rows.Next() {
+		var result struct {
+			ID      string
+			MinHash []byte
+		}
+		err := rows.Scan(&result.ID, &result.MinHash)
+		require.NoError(t, err)
+		results = append(results, result)
+	}
+	require.NoError(t, rows.Err())
+
+	// Verify we got some results
+	require.Greater(t, len(results), 0, "Should find at least one similar item")
+
+	// Verify the first result is the reference item (distance = 0)
+	require.Equal(t, testData[0].GetId(), results[0].ID, "First result should be the reference item")
+
+	// Verify distances are in ascending order
+	for i := 1; i < len(results); i++ {
+		dist1 := calculateHammingDistance(referenceMinHashBytes, results[i-1].MinHash)
+		dist2 := calculateHammingDistance(referenceMinHashBytes, results[i].MinHash)
+		require.LessOrEqual(t, dist1, dist2, "Results should be ordered by distance")
+	}
+}
+
+// calculateHammingDistance calculates the Hamming distance between two byte slices
+func calculateHammingDistance(a, b []byte) int {
+	if len(a) != len(b) {
+		return -1
+	}
+	distance := 0
+	for i := 0; i < len(a); i++ {
+		// XOR the bytes and count the set bits
+		xor := a[i] ^ b[i]
+		for xor > 0 {
+			distance += int(xor & 1)
+			xor >>= 1
+		}
+	}
+	return distance
+}
