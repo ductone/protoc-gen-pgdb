@@ -1156,9 +1156,9 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("min_hashes"),
-			Type:               "bytea",
+			Type:               "bit",
 			Nullable:           df.Nullable(true),
-			OverrideExpression: "",
+			OverrideExpression: "bit(128)",
 			Default:            "",
 			Collation:          "",
 		})
@@ -1608,11 +1608,11 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	if !ro.IsNested {
 
 		var cfv7 interface{} = nullExp
-		for _, v := range m.self.GetMinHashes() {
-			if len(v.GetMinHash()) != 128 {
-				break
+		if m.self.GetMinHashes() != nil {
+			v := m.self.GetMinHashes()
+			if len(v.GetMinHash()) == 128 {
+				cfv7 = pgdb_v1.MinHashToBitVector(v.GetMinHash())
 			}
-			cfv7 = pgdb_v1.ByteArrayToHex(v.GetMinHash())
 		}
 
 		if ro.Nulled {

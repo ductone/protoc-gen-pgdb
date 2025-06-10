@@ -75,22 +75,19 @@ func GetFieldVectorShape(field pgs.Field) (pgs.Field, pgs.Field, error) {
 	return enumField, floatField, nil
 }
 
-func getFieldByteArrayShape(field pgs.Field) pgs.Field {
-	if !field.Type().IsRepeated() {
-		panic(fmt.Errorf("pgdb: byte array behavior only supported on repeated fields: %s", field.FullyQualifiedName()))
-	}
-	subMsg := field.Type().Element().Embed()
+func getFieldMinHashShape(field pgs.Field) pgs.Field {
+	subMsg := field.Type().Embed()
 	if subMsg == nil {
-		panic(fmt.Errorf("pgdb: byte array behavior only supported on message fields: %s", field.FullyQualifiedName()))
+		panic(fmt.Errorf("pgdb: minhash behavior only supported on message fields: %s", field.FullyQualifiedName()))
 	}
 	allFields := subMsg.Fields()
 	if len(allFields) != 1 {
-		panic(fmt.Errorf("pgdb: byte array message must only have byte array field: %s", field.FullyQualifiedName()))
+		panic(fmt.Errorf("pgdb: minhash message must only have byte array field: %s", field.FullyQualifiedName()))
 	}
 
 	byteArrayField := allFields[0]
 	if byteArrayField.Type().ProtoType() != pgs.BytesT {
-		panic(fmt.Errorf("pgdb: byte array message must have byte array field: %s", field.FullyQualifiedName()))
+		panic(fmt.Errorf("pgdb: minhash message must have byte array field: %s", field.FullyQualifiedName()))
 	}
 	return byteArrayField
 }

@@ -180,7 +180,7 @@ type PastaIngredient struct {
 	xxx_hidden_PastaId         string                             `protobuf:"bytes,6,opt,name=pasta_id,json=pastaId,proto3"`
 	xxx_hidden_Id              string                             `protobuf:"bytes,7,opt,name=id,proto3"`
 	xxx_hidden_ModelEmbeddings *[]*PastaIngredient_ModelEmbedding `protobuf:"bytes,8,rep,name=model_embeddings,json=modelEmbeddings,proto3"`
-	xxx_hidden_MinHashes       *[]*PastaIngredient_MinHash        `protobuf:"bytes,9,rep,name=min_hashes,json=minHashes,proto3"`
+	xxx_hidden_MinHashes       *PastaIngredient_MinHash           `protobuf:"bytes,9,opt,name=min_hashes,json=minHashes,proto3"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
@@ -268,11 +268,9 @@ func (x *PastaIngredient) GetModelEmbeddings() []*PastaIngredient_ModelEmbedding
 	return nil
 }
 
-func (x *PastaIngredient) GetMinHashes() []*PastaIngredient_MinHash {
+func (x *PastaIngredient) GetMinHashes() *PastaIngredient_MinHash {
 	if x != nil {
-		if x.xxx_hidden_MinHashes != nil {
-			return *x.xxx_hidden_MinHashes
-		}
+		return x.xxx_hidden_MinHashes
 	}
 	return nil
 }
@@ -309,8 +307,8 @@ func (x *PastaIngredient) SetModelEmbeddings(v []*PastaIngredient_ModelEmbedding
 	x.xxx_hidden_ModelEmbeddings = &v
 }
 
-func (x *PastaIngredient) SetMinHashes(v []*PastaIngredient_MinHash) {
-	x.xxx_hidden_MinHashes = &v
+func (x *PastaIngredient) SetMinHashes(v *PastaIngredient_MinHash) {
+	x.xxx_hidden_MinHashes = v
 }
 
 func (x *PastaIngredient) HasCreatedAt() bool {
@@ -334,6 +332,13 @@ func (x *PastaIngredient) HasDeletedAt() bool {
 	return x.xxx_hidden_DeletedAt != nil
 }
 
+func (x *PastaIngredient) HasMinHashes() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_MinHashes != nil
+}
+
 func (x *PastaIngredient) ClearCreatedAt() {
 	x.xxx_hidden_CreatedAt = nil
 }
@@ -344,6 +349,10 @@ func (x *PastaIngredient) ClearUpdatedAt() {
 
 func (x *PastaIngredient) ClearDeletedAt() {
 	x.xxx_hidden_DeletedAt = nil
+}
+
+func (x *PastaIngredient) ClearMinHashes() {
+	x.xxx_hidden_MinHashes = nil
 }
 
 type PastaIngredient_builder struct {
@@ -361,7 +370,7 @@ type PastaIngredient_builder struct {
 	// 2. Type is a nested message
 	// 3. Message type has 2 fields, enum type and repeated float type
 	ModelEmbeddings []*PastaIngredient_ModelEmbedding
-	MinHashes       []*PastaIngredient_MinHash
+	MinHashes       *PastaIngredient_MinHash
 }
 
 func (b0 PastaIngredient_builder) Build() *PastaIngredient {
@@ -376,7 +385,7 @@ func (b0 PastaIngredient_builder) Build() *PastaIngredient {
 	x.xxx_hidden_PastaId = b.PastaId
 	x.xxx_hidden_Id = b.Id
 	x.xxx_hidden_ModelEmbeddings = &b.ModelEmbeddings
-	x.xxx_hidden_MinHashes = &b.MinHashes
+	x.xxx_hidden_MinHashes = b.MinHashes
 	return m0
 }
 
@@ -1009,7 +1018,7 @@ const file_models_food_v1_food_proto_rawDesc = "" +
 	"\x02id\x18\a \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\x02id\x12a\n" +
 	"\x10model_embeddings\x18\b \x03(\v2..models.food.v1.PastaIngredient.ModelEmbeddingB\x06\xd2\xf7\x02\x02\x18\x04R\x0fmodelEmbeddings\x12Q\n" +
 	"\n" +
-	"min_hashes\x18\t \x03(\v2'.models.food.v1.PastaIngredient.MinHashB\t\xd2\xf7\x02\x05\x18\x060\x80\x01R\tminHashes\x1ab\n" +
+	"min_hashes\x18\t \x01(\v2'.models.food.v1.PastaIngredient.MinHashB\t\xd2\xf7\x02\x05\x18\x060\x80\x01R\tminHashes\x1ab\n" +
 	"\x0eModelEmbedding\x12*\n" +
 	"\x05model\x18\x01 \x01(\x0e2\x14.models.llm.v1.ModelR\x05model\x12\x1c\n" +
 	"\tembedding\x18\x02 \x03(\x02R\tembedding:\x06\xd2\xf7\x02\x02 \x01\x1a,\n" +

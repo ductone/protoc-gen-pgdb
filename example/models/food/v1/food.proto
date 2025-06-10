@@ -106,7 +106,7 @@ message PastaIngredient {
     bytes min_hash = 1;
   }
 
-  repeated MinHash min_hashes = 9 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_BYTE_ARRAY, byte_array_size: 128}];
+  MinHash min_hashes = 9 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_MIN_HASH, minhash_size: 128}];
 }
 
 message SauceIngredient {

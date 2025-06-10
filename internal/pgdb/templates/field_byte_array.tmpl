@@ -1,7 +1,0 @@
-var {{.VarName}} interface{} = nullExp
-for _, v := range m.self.Get{{.GoName}}() {
-    if len(v.Get{{.ByteArrayName}}()) != {{.ByteArraySize}} {
-        break
-    }
-    {{.VarName}} = pgdb_v1.ByteArrayToHex(v.Get{{.ByteArrayName}}())
-}
