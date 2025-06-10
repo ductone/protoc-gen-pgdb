@@ -1152,6 +1152,19 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 	}
 
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Name:               df.ColumnName("min_hashes"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("ingredient_id"),
 		Type:               "text",
@@ -1588,6 +1601,24 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 			rv[ro.ColumnName("model_embeddings_2")] = nullExp
 		} else {
 			rv[ro.ColumnName("model_embeddings_2")] = cfv6
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		var cfv7 interface{} = nullExp
+		for _, v := range m.self.GetMinHashes() {
+			if len(v.GetMinHash()) != 128 {
+				break
+			}
+			cfv7 = pgdb_v1.ByteArrayToHex(v.GetMinHash())
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("min_hashes")] = nullExp
+		} else {
+			rv[ro.ColumnName("min_hashes")] = cfv7
 		}
 
 	}
@@ -2347,6 +2378,19 @@ func (x *PastaIngredientModelEmbeddings_4DIMSQueryType) Identifier() exp.Identif
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PastaIngredientMinHashesQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) MinHashes() *PastaIngredientMinHashesQueryType {
+	return &PastaIngredientMinHashesQueryType{tableName: x.tableName, column: "pb$" + "min_hashes"}
+}
+
+func (x *PastaIngredientMinHashesQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type PastaIngredientIngredientIdQueryType struct {
 	column    string
 	tableName string
@@ -2463,6 +2507,10 @@ func (x *PastaIngredientDBColumns) ModelEmbeddings_3DIMS() exp.Expression {
 
 func (x *PastaIngredientDBColumns) ModelEmbeddings_4DIMS() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "model_embeddings_2")
+}
+
+func (x *PastaIngredientDBColumns) MinHashes() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "min_hashes")
 }
 
 func (x *PastaIngredientDBColumns) IngredientId() exp.Expression {
@@ -6185,4 +6233,210 @@ func (x *PastaIngredient_ModelEmbeddingDBColumns) Model() exp.Expression {
 
 func (x *PastaIngredient_ModelEmbeddingDBColumns) Embedding() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "embedding")
+}
+
+type pgdbDescriptorPastaIngredient_MinHash struct{}
+
+var (
+	instancepgdbDescriptorPastaIngredient_MinHash pgdb_v1.Descriptor = &pgdbDescriptorPastaIngredient_MinHash{}
+)
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) TableName() string {
+	return "pb_min_hash_models_food_v1_ed4f1dcf"
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("min_hash"),
+		Type:               "bytea",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) PKSKField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table: "pb_min_hash_models_food_v1_ed4f1dcf",
+		Name:  "pb$pksk",
+		Type:  "varchar",
+	}
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) PKSKV2Field() *pgdb_v1.Column {
+	return &pgdb_v1.Column{
+		Table:     "pb_min_hash_models_food_v1_ed4f1dcf",
+		Name:      "pb$pkskv2",
+		Type:      "varchar",
+		Nullable:  true,
+		Collation: "C",
+	}
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_min_hash_models_food_v1_ed4f1dcf", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_min_hash_models_food_v1_ed4f1dcf", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_min_hash_models_food_v1_ed4f1dcf", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) TenantField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_min_hash_models_food_v1_ed4f1dcf", Name: "pb$tenant_id", Type: "varchar"}
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorPastaIngredient_MinHash) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessagePastaIngredient_MinHash struct {
+	self *PastaIngredient_MinHash
+}
+
+func (dbr *PastaIngredient_MinHash) DBReflect() pgdb_v1.Message {
+	return &pgdbMessagePastaIngredient_MinHash{
+		self: dbr,
+	}
+}
+
+func (m *pgdbMessagePastaIngredient_MinHash) Descriptor() pgdb_v1.Descriptor {
+	return instancepgdbDescriptorPastaIngredient_MinHash
+}
+
+func (m *pgdbMessagePastaIngredient_MinHash) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1 := []byte(m.self.GetMinHash())
+
+	if ro.Nulled {
+		rv[ro.ColumnName("min_hash")] = nullExp
+	} else {
+		rv[ro.ColumnName("min_hash")] = v1
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessagePastaIngredient_MinHash) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+type PastaIngredient_MinHashDB struct {
+	tableName string
+}
+
+type PastaIngredient_MinHashDBQueryBuilder struct {
+	tableName string
+}
+
+type PastaIngredient_MinHashDBQueryUnsafe struct {
+	tableName string
+}
+
+type PastaIngredient_MinHashDBColumns struct {
+	tableName string
+}
+
+func (x *PastaIngredient_MinHash) DB() *PastaIngredient_MinHashDB {
+	return &PastaIngredient_MinHashDB{tableName: x.DBReflect().Descriptor().TableName()}
+}
+
+func (x *PastaIngredient_MinHashDB) TableName() string {
+	return x.tableName
+}
+
+func (x *PastaIngredient_MinHashDB) Query() *PastaIngredient_MinHashDBQueryBuilder {
+	return &PastaIngredient_MinHashDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *PastaIngredient_MinHashDB) Columns() *PastaIngredient_MinHashDBColumns {
+	return &PastaIngredient_MinHashDBColumns{tableName: x.tableName}
+}
+
+func (x *PastaIngredient_MinHashDB) WithTable(t string) *PastaIngredient_MinHashDB {
+	return &PastaIngredient_MinHashDB{tableName: t}
+}
+
+func (x *PastaIngredient_MinHashDBQueryBuilder) WithTable(t string) *PastaIngredient_MinHashDBQueryBuilder {
+	return &PastaIngredient_MinHashDBQueryBuilder{tableName: t}
+}
+
+func (x *PastaIngredient_MinHashDBQueryBuilder) Unsafe() *PastaIngredient_MinHashDBQueryUnsafe {
+	return &PastaIngredient_MinHashDBQueryUnsafe{tableName: x.tableName}
+}
+
+type PastaIngredient_MinHashMinHashQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredient_MinHashDBQueryUnsafe) MinHash() *PastaIngredient_MinHashMinHashQueryType {
+	return &PastaIngredient_MinHashMinHashQueryType{tableName: x.tableName, column: "pb$" + "min_hash"}
+}
+
+func (x *PastaIngredient_MinHashMinHashQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredient_MinHashDBColumns) WithTable(t string) *PastaIngredient_MinHashDBColumns {
+	return &PastaIngredient_MinHashDBColumns{tableName: t}
+}
+
+func (x *PastaIngredient_MinHashDBColumns) MinHash() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "min_hash")
 }

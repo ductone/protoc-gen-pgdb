@@ -276,6 +276,8 @@ const (
 	FieldOptions_MESSAGE_BEHAVIOR_VECTOR FieldOptions_MessageBehavior = 4
 	// Must be a string representation of an IP address.
 	FieldOptions_MESSAGE_BEHAVIOR_INET_ADDR FieldOptions_MessageBehavior = 5
+	// Must be a byte array.
+	FieldOptions_MESSAGE_BEHAVIOR_BYTE_ARRAY FieldOptions_MessageBehavior = 6
 )
 
 // Enum value maps for FieldOptions_MessageBehavior.
@@ -287,6 +289,7 @@ var (
 		3: "MESSAGE_BEHAVIOR_JSONB",
 		4: "MESSAGE_BEHAVIOR_VECTOR",
 		5: "MESSAGE_BEHAVIOR_INET_ADDR",
+		6: "MESSAGE_BEHAVIOR_BYTE_ARRAY",
 	}
 	FieldOptions_MessageBehavior_value = map[string]int32{
 		"MESSAGE_BEHAVIOR_UNSPECIFIED": 0,
@@ -295,6 +298,7 @@ var (
 		"MESSAGE_BEHAVIOR_JSONB":       3,
 		"MESSAGE_BEHAVIOR_VECTOR":      4,
 		"MESSAGE_BEHAVIOR_INET_ADDR":   5,
+		"MESSAGE_BEHAVIOR_BYTE_ARRAY":  6,
 	}
 )
 
@@ -528,6 +532,7 @@ type FieldOptions struct {
 	xxx_hidden_FullTextWeight  FieldOptions_FullTextWeight  `protobuf:"varint,2,opt,name=full_text_weight,json=fullTextWeight,proto3,enum=pgdb.v1.FieldOptions_FullTextWeight"`
 	xxx_hidden_MessageBehavior FieldOptions_MessageBehavior `protobuf:"varint,3,opt,name=message_behavior,json=messageBehavior,proto3,enum=pgdb.v1.FieldOptions_MessageBehavior"`
 	xxx_hidden_Collation       string                       `protobuf:"bytes,5,opt,name=collation,proto3"`
+	xxx_hidden_ByteArraySize   int32                        `protobuf:"varint,6,opt,name=byte_array_size,json=byteArraySize,proto3"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
@@ -585,6 +590,13 @@ func (x *FieldOptions) GetCollation() string {
 	return ""
 }
 
+func (x *FieldOptions) GetByteArraySize() int32 {
+	if x != nil {
+		return x.xxx_hidden_ByteArraySize
+	}
+	return 0
+}
+
 func (x *FieldOptions) SetFullTextType(v FieldOptions_FullTextType) {
 	x.xxx_hidden_FullTextType = v
 }
@@ -601,6 +613,10 @@ func (x *FieldOptions) SetCollation(v string) {
 	x.xxx_hidden_Collation = v
 }
 
+func (x *FieldOptions) SetByteArraySize(v int32) {
+	x.xxx_hidden_ByteArraySize = v
+}
+
 type FieldOptions_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
@@ -609,6 +625,8 @@ type FieldOptions_builder struct {
 	MessageBehavior FieldOptions_MessageBehavior
 	// Specifies the collation for the field in PostgreSQL
 	Collation string
+	// byte array size options
+	ByteArraySize int32
 }
 
 func (b0 FieldOptions_builder) Build() *FieldOptions {
@@ -619,6 +637,7 @@ func (b0 FieldOptions_builder) Build() *FieldOptions {
 	x.xxx_hidden_FullTextWeight = b.FullTextWeight
 	x.xxx_hidden_MessageBehavior = b.MessageBehavior
 	x.xxx_hidden_Collation = b.Collation
+	x.xxx_hidden_ByteArraySize = b.ByteArraySize
 	return m0
 }
 
@@ -985,12 +1004,13 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"%PARTITIONED_BY_DATE_RANGE_UNSPECIFIED\x10\x00\x12!\n" +
 	"\x1dPARTITIONED_BY_DATE_RANGE_DAY\x10\x01\x12#\n" +
 	"\x1fPARTITIONED_BY_DATE_RANGE_MONTH\x10\x02\x12\"\n" +
-	"\x1ePARTITIONED_BY_DATE_RANGE_YEAR\x10\x03\"\xfe\x05\n" +
+	"\x1ePARTITIONED_BY_DATE_RANGE_YEAR\x10\x03\"\xc7\x06\n" +
 	"\fFieldOptions\x12H\n" +
 	"\x0efull_text_type\x18\x01 \x01(\x0e2\".pgdb.v1.FieldOptions.FullTextTypeR\ffullTextType\x12N\n" +
 	"\x10full_text_weight\x18\x02 \x01(\x0e2$.pgdb.v1.FieldOptions.FullTextWeightR\x0efullTextWeight\x12P\n" +
 	"\x10message_behavior\x18\x03 \x01(\x0e2%.pgdb.v1.FieldOptions.MessageBehaviorR\x0fmessageBehavior\x12\x1c\n" +
-	"\tcollation\x18\x05 \x01(\tR\tcollation\"\x85\x01\n" +
+	"\tcollation\x18\x05 \x01(\tR\tcollation\x12&\n" +
+	"\x0fbyte_array_size\x18\x06 \x01(\x05R\rbyteArraySize\"\x85\x01\n" +
 	"\fFullTextType\x12\x1e\n" +
 	"\x1aFULL_TEXT_TYPE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14FULL_TEXT_TYPE_EXACT\x10\x01\x12\x1a\n" +
@@ -1000,14 +1020,15 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\x1cFULL_TEXT_WEIGHT_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14FULL_TEXT_WEIGHT_LOW\x10\x01\x12\x18\n" +
 	"\x14FULL_TEXT_WEIGHT_MED\x10\x02\x12\x19\n" +
-	"\x15FULL_TEXT_WEIGHT_HIGH\x10\x03\"\xc4\x01\n" +
+	"\x15FULL_TEXT_WEIGHT_HIGH\x10\x03\"\xe5\x01\n" +
 	"\x0fMessageBehavior\x12 \n" +
 	"\x1cMESSAGE_BEHAVIOR_UNSPECIFIED\x10\x00\x12\x1b\n" +
 	"\x17MESSAGE_BEHAVIOR_EXPAND\x10\x01\x12\x19\n" +
 	"\x15MESSAGE_BEHAVIOR_OMIT\x10\x02\x12\x1a\n" +
 	"\x16MESSAGE_BEHAVIOR_JSONB\x10\x03\x12\x1b\n" +
 	"\x17MESSAGE_BEHAVIOR_VECTOR\x10\x04\x12\x1e\n" +
-	"\x1aMESSAGE_BEHAVIOR_INET_ADDR\x10\x05J\x04\b\x04\x10\x05R\vvector_size\"3\n" +
+	"\x1aMESSAGE_BEHAVIOR_INET_ADDR\x10\x05\x12\x1f\n" +
+	"\x1bMESSAGE_BEHAVIOR_BYTE_ARRAY\x10\x06J\x04\b\x04\x10\x05R\vvector_size\"3\n" +
 	"\x10EnumValueOptions\x12\x1f\n" +
 	"\vvector_size\x18\x01 \x01(\x05R\n" +
 	"vectorSize:K\n" +

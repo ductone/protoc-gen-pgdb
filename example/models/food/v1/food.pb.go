@@ -180,6 +180,7 @@ type PastaIngredient struct {
 	xxx_hidden_PastaId         string                             `protobuf:"bytes,6,opt,name=pasta_id,json=pastaId,proto3"`
 	xxx_hidden_Id              string                             `protobuf:"bytes,7,opt,name=id,proto3"`
 	xxx_hidden_ModelEmbeddings *[]*PastaIngredient_ModelEmbedding `protobuf:"bytes,8,rep,name=model_embeddings,json=modelEmbeddings,proto3"`
+	xxx_hidden_MinHashes       *[]*PastaIngredient_MinHash        `protobuf:"bytes,9,rep,name=min_hashes,json=minHashes,proto3"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
@@ -267,6 +268,15 @@ func (x *PastaIngredient) GetModelEmbeddings() []*PastaIngredient_ModelEmbedding
 	return nil
 }
 
+func (x *PastaIngredient) GetMinHashes() []*PastaIngredient_MinHash {
+	if x != nil {
+		if x.xxx_hidden_MinHashes != nil {
+			return *x.xxx_hidden_MinHashes
+		}
+	}
+	return nil
+}
+
 func (x *PastaIngredient) SetTenantId(v string) {
 	x.xxx_hidden_TenantId = v
 }
@@ -297,6 +307,10 @@ func (x *PastaIngredient) SetId(v string) {
 
 func (x *PastaIngredient) SetModelEmbeddings(v []*PastaIngredient_ModelEmbedding) {
 	x.xxx_hidden_ModelEmbeddings = &v
+}
+
+func (x *PastaIngredient) SetMinHashes(v []*PastaIngredient_MinHash) {
+	x.xxx_hidden_MinHashes = &v
 }
 
 func (x *PastaIngredient) HasCreatedAt() bool {
@@ -347,6 +361,7 @@ type PastaIngredient_builder struct {
 	// 2. Type is a nested message
 	// 3. Message type has 2 fields, enum type and repeated float type
 	ModelEmbeddings []*PastaIngredient_ModelEmbedding
+	MinHashes       []*PastaIngredient_MinHash
 }
 
 func (b0 PastaIngredient_builder) Build() *PastaIngredient {
@@ -361,6 +376,7 @@ func (b0 PastaIngredient_builder) Build() *PastaIngredient {
 	x.xxx_hidden_PastaId = b.PastaId
 	x.xxx_hidden_Id = b.Id
 	x.xxx_hidden_ModelEmbeddings = &b.ModelEmbeddings
+	x.xxx_hidden_MinHashes = &b.MinHashes
 	return m0
 }
 
@@ -904,6 +920,66 @@ func (b0 PastaIngredient_ModelEmbedding_builder) Build() *PastaIngredient_ModelE
 	return m0
 }
 
+type PastaIngredient_MinHash struct {
+	state              protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_MinHash []byte                 `protobuf:"bytes,1,opt,name=min_hash,json=minHash,proto3"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *PastaIngredient_MinHash) Reset() {
+	*x = PastaIngredient_MinHash{}
+	mi := &file_models_food_v1_food_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PastaIngredient_MinHash) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PastaIngredient_MinHash) ProtoMessage() {}
+
+func (x *PastaIngredient_MinHash) ProtoReflect() protoreflect.Message {
+	mi := &file_models_food_v1_food_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *PastaIngredient_MinHash) GetMinHash() []byte {
+	if x != nil {
+		return x.xxx_hidden_MinHash
+	}
+	return nil
+}
+
+func (x *PastaIngredient_MinHash) SetMinHash(v []byte) {
+	if v == nil {
+		v = []byte{}
+	}
+	x.xxx_hidden_MinHash = v
+}
+
+type PastaIngredient_MinHash_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	MinHash []byte
+}
+
+func (b0 PastaIngredient_MinHash_builder) Build() *PastaIngredient_MinHash {
+	m0 := &PastaIngredient_MinHash{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_MinHash = b.MinHash
+	return m0
+}
+
 var File_models_food_v1_food_proto protoreflect.FileDescriptor
 
 const file_models_food_v1_food_proto_rawDesc = "" +
@@ -919,7 +995,7 @@ const file_models_food_v1_food_proto_rawDesc = "" +
 	"\n" +
 	"deleted_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt:$\x82\xf7\x02\x1a\x12\x18\n" +
 	"\ttenant_id\n" +
-	"\x02id\x1a\aexample\xd2\xf7\x02\x02(\x01\"\xc7\x06\n" +
+	"\x02id\x1a\aexample\xd2\xf7\x02\x02(\x01\"\xc8\a\n" +
 	"\x0fPastaIngredient\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12#\n" +
 	"\ringredient_id\x18\x02 \x01(\tR\fingredientId\x129\n" +
@@ -931,10 +1007,14 @@ const file_models_food_v1_food_proto_rawDesc = "" +
 	"deleted_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12!\n" +
 	"\bpasta_id\x18\x06 \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\apastaId\x12\x16\n" +
 	"\x02id\x18\a \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\x02id\x12a\n" +
-	"\x10model_embeddings\x18\b \x03(\v2..models.food.v1.PastaIngredient.ModelEmbeddingB\x06\xd2\xf7\x02\x02\x18\x04R\x0fmodelEmbeddings\x1ab\n" +
+	"\x10model_embeddings\x18\b \x03(\v2..models.food.v1.PastaIngredient.ModelEmbeddingB\x06\xd2\xf7\x02\x02\x18\x04R\x0fmodelEmbeddings\x12Q\n" +
+	"\n" +
+	"min_hashes\x18\t \x03(\v2'.models.food.v1.PastaIngredient.MinHashB\t\xd2\xf7\x02\x05\x18\x060\x80\x01R\tminHashes\x1ab\n" +
 	"\x0eModelEmbedding\x12*\n" +
 	"\x05model\x18\x01 \x01(\x0e2\x14.models.llm.v1.ModelR\x05model\x12\x1c\n" +
-	"\tembedding\x18\x02 \x03(\x02R\tembedding:\x06\xd2\xf7\x02\x02 \x01:\xbe\x02\x82\xf7\x02=\x12;\n" +
+	"\tembedding\x18\x02 \x03(\x02R\tembedding:\x06\xd2\xf7\x02\x02 \x01\x1a,\n" +
+	"\aMinHash\x12\x19\n" +
+	"\bmin_hash\x18\x01 \x01(\fR\aminHash:\x06\xd2\xf7\x02\x02 \x01:\xbe\x02\x82\xf7\x02=\x12;\n" +
 	"\ttenant_id\n" +
 	"\bpasta_id\n" +
 	"\ringredient_id\n" +
@@ -986,7 +1066,7 @@ const file_models_food_v1_food_proto_rawDesc = "" +
 	"\x02id\x1a\rexamplecheese\xd2\xf7\x02=\x12-\n" +
 	"\x11source_addr_index\x10\x01\x1a\ttenant_id\x1a\vsource_addr@\x02J\bevent_idP\x01B;Z9github.com/ductone/protoc-gen-pgdb/example/models/food/v1b\x06proto3"
 
-var file_models_food_v1_food_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_models_food_v1_food_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_models_food_v1_food_proto_goTypes = []any{
 	(*Pasta)(nil),                          // 0: models.food.v1.Pasta
 	(*PastaIngredient)(nil),                // 1: models.food.v1.PastaIngredient
@@ -994,31 +1074,33 @@ var file_models_food_v1_food_proto_goTypes = []any{
 	(*GarlicIngredient)(nil),               // 3: models.food.v1.GarlicIngredient
 	(*CheeseIngredient)(nil),               // 4: models.food.v1.CheeseIngredient
 	(*PastaIngredient_ModelEmbedding)(nil), // 5: models.food.v1.PastaIngredient.ModelEmbedding
-	(*timestamppb.Timestamp)(nil),          // 6: google.protobuf.Timestamp
-	(v1.Model)(0),                          // 7: models.llm.v1.Model
+	(*PastaIngredient_MinHash)(nil),        // 6: models.food.v1.PastaIngredient.MinHash
+	(*timestamppb.Timestamp)(nil),          // 7: google.protobuf.Timestamp
+	(v1.Model)(0),                          // 8: models.llm.v1.Model
 }
 var file_models_food_v1_food_proto_depIdxs = []int32{
-	6,  // 0: models.food.v1.Pasta.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 1: models.food.v1.Pasta.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 2: models.food.v1.Pasta.deleted_at:type_name -> google.protobuf.Timestamp
-	6,  // 3: models.food.v1.PastaIngredient.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 4: models.food.v1.PastaIngredient.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 5: models.food.v1.PastaIngredient.deleted_at:type_name -> google.protobuf.Timestamp
+	7,  // 0: models.food.v1.Pasta.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 1: models.food.v1.Pasta.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 2: models.food.v1.Pasta.deleted_at:type_name -> google.protobuf.Timestamp
+	7,  // 3: models.food.v1.PastaIngredient.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 4: models.food.v1.PastaIngredient.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 5: models.food.v1.PastaIngredient.deleted_at:type_name -> google.protobuf.Timestamp
 	5,  // 6: models.food.v1.PastaIngredient.model_embeddings:type_name -> models.food.v1.PastaIngredient.ModelEmbedding
-	6,  // 7: models.food.v1.SauceIngredient.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 8: models.food.v1.SauceIngredient.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 9: models.food.v1.SauceIngredient.deleted_at:type_name -> google.protobuf.Timestamp
-	6,  // 10: models.food.v1.GarlicIngredient.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 11: models.food.v1.GarlicIngredient.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 12: models.food.v1.GarlicIngredient.deleted_at:type_name -> google.protobuf.Timestamp
-	6,  // 13: models.food.v1.CheeseIngredient.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 14: models.food.v1.CheeseIngredient.deleted_at:type_name -> google.protobuf.Timestamp
-	7,  // 15: models.food.v1.PastaIngredient.ModelEmbedding.model:type_name -> models.llm.v1.Model
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	6,  // 7: models.food.v1.PastaIngredient.min_hashes:type_name -> models.food.v1.PastaIngredient.MinHash
+	7,  // 8: models.food.v1.SauceIngredient.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 9: models.food.v1.SauceIngredient.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 10: models.food.v1.SauceIngredient.deleted_at:type_name -> google.protobuf.Timestamp
+	7,  // 11: models.food.v1.GarlicIngredient.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 12: models.food.v1.GarlicIngredient.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 13: models.food.v1.GarlicIngredient.deleted_at:type_name -> google.protobuf.Timestamp
+	7,  // 14: models.food.v1.CheeseIngredient.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 15: models.food.v1.CheeseIngredient.deleted_at:type_name -> google.protobuf.Timestamp
+	8,  // 16: models.food.v1.PastaIngredient.ModelEmbedding.model:type_name -> models.llm.v1.Model
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_models_food_v1_food_proto_init() }
@@ -1032,7 +1114,7 @@ func file_models_food_v1_food_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_models_food_v1_food_proto_rawDesc), len(file_models_food_v1_food_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

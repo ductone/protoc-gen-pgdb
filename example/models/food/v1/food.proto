@@ -100,6 +100,13 @@ message PastaIngredient {
   // 2. Type is a nested message
   // 3. Message type has 2 fields, enum type and repeated float type
   repeated ModelEmbedding model_embeddings = 8 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_VECTOR}];
+
+  message MinHash {
+    option (pgdb.v1.msg).nested_only = true;
+    bytes min_hash = 1;
+  }
+
+  repeated MinHash min_hashes = 9 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_BYTE_ARRAY, byte_array_size: 128}];
 }
 
 message SauceIngredient {
