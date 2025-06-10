@@ -74,20 +74,3 @@ func GetFieldVectorShape(field pgs.Field) (pgs.Field, pgs.Field, error) {
 
 	return enumField, floatField, nil
 }
-
-func getFieldMinHashShape(field pgs.Field) pgs.Field {
-	subMsg := field.Type().Embed()
-	if subMsg == nil {
-		panic(fmt.Errorf("pgdb: minhash behavior only supported on message fields: %s", field.FullyQualifiedName()))
-	}
-	allFields := subMsg.Fields()
-	if len(allFields) != 1 {
-		panic(fmt.Errorf("pgdb: minhash message must only have byte array field: %s", field.FullyQualifiedName()))
-	}
-
-	byteArrayField := allFields[0]
-	if byteArrayField.Type().ProtoType() != pgs.BytesT {
-		panic(fmt.Errorf("pgdb: minhash message must have byte array field: %s", field.FullyQualifiedName()))
-	}
-	return byteArrayField
-}
