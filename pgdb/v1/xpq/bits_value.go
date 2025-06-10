@@ -11,15 +11,23 @@ import (
 type BitsValue []byte
 
 func (b BitsValue) Value() (driver.Value, error) {
-	if len(b) > math.MaxInt32 {
-		return nil, fmt.Errorf("bits value too large: %d bytes", len(b))
+	len, err := SafeIntToInt32(len(b))
+	if err != nil {
+		return nil, err
 	}
 
 	bits := &pgtype.Bits{
 		Bytes: b,
 		Valid: true,
-		Len:   int32(len(b)),
+		Len:   len,
 	}
 
 	return bits.Value()
+}
+
+func SafeIntToInt32(val int) (int32, error) {
+	if val < math.MinInt32 || val > math.MaxInt32 {
+		return 0, fmt.Errorf("value %d out of range for int32", val)
+	}
+	return int32(val), nil
 }
