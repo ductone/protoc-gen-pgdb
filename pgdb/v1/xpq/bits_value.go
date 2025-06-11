@@ -11,7 +11,7 @@ import (
 type BitsValue []byte
 
 func (b BitsValue) Value() (driver.Value, error) {
-	bytesLen, err := safeIntToInt32(len(b))
+	bitsLen, err := safeIntToInt32(len(b) * 8)
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +19,7 @@ func (b BitsValue) Value() (driver.Value, error) {
 	bits := &pgtype.Bits{
 		Bytes: b,
 		Valid: true,
-		Len:   bytesLen,
+		Len:   bitsLen,
 	}
 
 	return bits.Value()
