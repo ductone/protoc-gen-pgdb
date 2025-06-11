@@ -1674,10 +1674,10 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	}
 
 	var v8 interface{} = nullExp
-	if len(m.self.GetMinHash()) != 0 && len(m.self.GetMinHash())*8 != 4096 {
-		return nil, fmt.Errorf("m.self.GetMinHash() must be 4096 bits")
+	if len(m.self.GetMinHash()) != 0 && len(m.self.GetMinHash()) != 512 {
+		return nil, fmt.Errorf("m.self.GetMinHash() must be 512 bytes")
 	}
-	if len(m.self.GetMinHash())*8 == 4096 {
+	if len(m.self.GetMinHash()) == 512 {
 		v8 = pgdb_v1.BytesToBitVector(m.self.GetMinHash())
 	}
 

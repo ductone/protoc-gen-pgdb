@@ -1,7 +1,7 @@
 var {{.VarName}} interface{} = nullExp
-if len({{ .InputName }}) != 0 && len({{ .InputName }}) * 8 != {{.BitsSize}} {
-    return nil, fmt.Errorf("{{ .InputName }} must be {{.BitsSize}} bits")
+if len({{ .InputName }}) != 0 && len({{ .InputName }}) != {{.ExpectedBytesLen}} {
+    return nil, fmt.Errorf("{{ .InputName }} must be {{.ExpectedBytesLen}} bytes")
 }
-if len({{ .InputName }}) * 8 == {{.BitsSize}} {
+if len({{ .InputName }}) == {{.ExpectedBytesLen}} {
     {{.VarName}} = pgdb_v1.BytesToBitVector({{ .InputName }})
 }
