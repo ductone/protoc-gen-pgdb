@@ -23,7 +23,7 @@ type fieldConvert struct {
 	TypeConversion   goTypeConversion
 	FullTextType     pgdb_v1.FieldOptions_FullTextType
 	FullTextWeight   pgdb_v1.FieldOptions_FullTextWeight
-	BitsSize         int32
+	ExpectedBytesLen int32
 }
 
 type goTypeConversion int64
@@ -54,12 +54,12 @@ const (
 )
 
 type formatContext struct {
-	VarName      string
-	InputName    string
-	CastType     string
-	IsArray      bool
-	NestedPrefix string
-	BitsSize     int32
+	VarName          string
+	InputName        string
+	CastType         string
+	IsArray          bool
+	NestedPrefix     string
+	ExpectedBytesLen int32
 }
 
 const fieldConvertString = "string"
@@ -180,9 +180,9 @@ func (fc *fieldConvert) CodeForValue() (string, error) {
 		})
 	case gtBits:
 		return templateExecToString("proto_format_bits.tmpl", &formatContext{
-			VarName:   fc.varName,
-			InputName: selfName,
-			BitsSize:  fc.BitsSize,
+			VarName:          fc.varName,
+			InputName:        selfName,
+			ExpectedBytesLen: fc.ExpectedBytesLen,
 		})
 	case gtBytes:
 		return templateExecToString("proto_format_cast.tmpl", &formatContext{

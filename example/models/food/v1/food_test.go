@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/netip"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -816,7 +817,7 @@ func TestPastaIngredientBitVector(t *testing.T) {
 	testData := make([]*PastaIngredient, 100)
 	for i := 0; i < 100; i++ {
 		// Create a bit vector with a pattern that varies by index
-		minHash := make([]byte, 4096) // 4 KB
+		minHash := make([]byte, 512) // 512 bytes -> 4096 bits to match the vector size on the message/model.
 		for j := 0; j < len(minHash); j++ {
 			// Set bits based on the index to create different patterns
 			minHash[j] = byte((i + j) % 256)
@@ -894,4 +895,120 @@ func TestPastaIngredientBitVector(t *testing.T) {
 	// Verify the first result is the reference item (distance = 0)
 	require.Equal(t, testData[0].GetId(), results[0].ID, "First result should be the reference item")
 	require.Equal(t, 0, results[0].Distance, "First result should be the reference item")
+}
+
+func TestPastaIngredientBitVectorRetrieval(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin; CREATE EXTENSION IF NOT EXISTS vector;")
+	require.NoError(t, err)
+
+	// Create test data with a specific pattern in the min hash
+	minHash := make([]byte, 512)
+	for i := 0; i < len(minHash); i++ {
+		// Create a pattern where each byte alternates between 0xAA and 0x55
+		if i%2 == 0 {
+			minHash[i] = 0xAA // 10101010
+		} else {
+			minHash[i] = 0x55 // 01010101
+		}
+	}
+
+	// fmt.Println(">>> minHash:")
+	// fmt.Println(minHash)
+
+	testData := PastaIngredient_builder{
+		TenantId:     "t1",
+		Id:           "pi1",
+		PastaId:      "p1",
+		IngredientId: "i1",
+		MinHash:      minHash,
+	}.Build()
+
+	// Create schema
+	schema, err := pgdb_v1.CreateSchema(testData)
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "failed to execute sql: '\n%s\n'", line)
+	}
+
+	// fmt.Println(">>> schema:")
+	// fmt.Println(schema)
+
+	// Create partitions for tenant_id
+	fakeTenantIds := []string{"t1"}
+	testCreatePartitionTables(t, pg, testData, fakeTenantIds)
+
+	// Insert test data
+	sql, args, err := pgdb_v1.Insert(testData)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, sql, args...)
+	require.NoError(t, err)
+
+	// fmt.Println(">>> testData:")
+	// fmt.Println(testData)
+
+	// Query the record
+	pi := testData
+	piFields := pi.DB().Query()
+
+	qb := goqu.Dialect("postgres")
+	query, args, err := qb.Select(
+		piFields.Id().Identifier(),
+		piFields.MinHash().Identifier(),
+	).From(pi.DB().TableName()).
+		Where(piFields.Id().Eq(testData.GetId())).
+		ToSQL()
+	require.NoError(t, err)
+
+	// Execute query
+	rows, err := pg.DB.Query(ctx, query, args...)
+	require.NoError(t, err)
+	defer rows.Close()
+
+	// Verify results
+	require.True(t, rows.Next(), "Should find the inserted record")
+	var retrievedID string
+	var retrievedMinHashBits string
+	err = rows.Scan(&retrievedID, &retrievedMinHashBits)
+	require.NoError(t, err)
+	require.NoError(t, rows.Err())
+
+	// fmt.Println(">>> retrievedID:")
+	// fmt.Println(retrievedID)
+	// fmt.Println(">>> retrievedMinHashBits:")
+	// fmt.Println(retrievedMinHashBits)
+
+	// Verify the ID matches
+	require.Equal(t, testData.GetId(), retrievedID, "Retrieved ID should match")
+	require.Equal(t, len(minHash)*8, len(retrievedMinHashBits), "Retrieved min hash length should match")
+
+	// Verify the min hash matches
+	retrievedMinHash := bitStringToBytes(t, retrievedMinHashBits)
+	// fmt.Println(">>> retrievedMinHash:")
+	// fmt.Println(retrievedMinHash)
+
+	require.Equal(t, len(minHash), len(retrievedMinHash), "Retrieved min hash length should match")
+	for i := 0; i < len(minHash); i++ {
+		require.Equal(t, minHash[i], retrievedMinHash[i], 
+			"Retrieved min hash byte at index %d should match", i)
+	}
+
+	// Verify no more rows
+	require.False(t, rows.Next(), "Should not find any more records")
+}
+
+func bitStringToBytes(t *testing.T, bitString string) []byte {
+	bytes := make([]byte, len(bitString)/8)
+	for i := 0; i < len(bitString); i += 8 {
+		byteValue := bitString[i:i+8]
+		intValue, err := strconv.ParseInt(byteValue, 2, 64)
+		require.NoError(t, err)
+		bytes[i/8] = byte(intValue)
+	}
+	return bytes
 }

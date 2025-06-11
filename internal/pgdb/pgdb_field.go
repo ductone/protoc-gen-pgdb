@@ -210,7 +210,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			convertDef.IsArray = isArray
 			convertDef.PostgresTypeName = pgTypeBit
 			convertDef.TypeConversion = gtBits
-			convertDef.BitsSize = length
+			convertDef.ExpectedBytesLen = length / 8
 			overrideExpression = fmt.Sprintf("bit(%d)", length)
 		default:
 			convertDef.IsArray = isArray
