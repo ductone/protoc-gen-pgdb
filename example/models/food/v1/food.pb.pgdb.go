@@ -2273,7 +2273,7 @@ func (x *PastaIngredientMinHashSafeOperators) Identifier() exp.IdentifierExpress
 
 func (x *PastaIngredientMinHashSafeOperators) Distance(from []byte) exp.Expression {
 	bits := pgdb_v1.BytesToBitVector(from)
-	return goqu.L("? <~> B?", x.column, bits)
+	return goqu.L("? <~> ?", x.Identifier(), bits)
 }
 
 func (x *PastaIngredientDBQueryBuilder) MinHash() *PastaIngredientMinHashSafeOperators {

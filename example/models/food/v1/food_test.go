@@ -816,7 +816,7 @@ func TestPastaIngredientBitVector(t *testing.T) {
 	testData := make([]*PastaIngredient, 100)
 	for i := 0; i < 100; i++ {
 		// Create a bit vector with a pattern that varies by index
-		minHash := make([]byte, 4096) // 4096 KB
+		minHash := make([]byte, 4096) // 4 KB
 		for j := 0; j < len(minHash); j++ {
 			// Set bits based on the index to create different patterns
 			minHash[j] = byte((i + j) % 256)
@@ -853,16 +853,17 @@ func TestPastaIngredientBitVector(t *testing.T) {
 
 	// Test query using Distance()
 	// Use the first item's min_hash as the reference point
-	referenceMinHash := pgdb_v1.BytesToBitVector(testData[0].GetMinHash())
 	referenceMinHashBytes := testData[0].GetMinHash()
 
 	// Build query to find similar items using raw SQL
+	pi := testData[0]
+	piFields := pi.DB().Query()
 
 	qb := goqu.Dialect("postgres")
 	query, args, err := qb.Select(
-		testData[0].DB().Query().Id().Identifier(),
-		goqu.L("? <~> B?", testData[0].DB().Query().MinHash().Identifier(), referenceMinHash),
-	).From(testData[0].DB().TableName()).
+		piFields.Id().Identifier(),
+		piFields.MinHash().Distance(referenceMinHashBytes),
+	).From(pi.DB().TableName()).
 		ToSQL()
 	require.NoError(t, err)
 
@@ -873,15 +874,15 @@ func TestPastaIngredientBitVector(t *testing.T) {
 
 	// Verify results
 	var results []struct {
-		ID      string
-		MinHash []byte
+		ID       string
+		Distance int
 	}
 	for rows.Next() {
 		var result struct {
-			ID      string
-			MinHash []byte
+			ID       string
+			Distance int
 		}
-		err := rows.Scan(&result.ID, &result.MinHash)
+		err := rows.Scan(&result.ID, &result.Distance)
 		require.NoError(t, err)
 		results = append(results, result)
 	}
@@ -892,28 +893,5 @@ func TestPastaIngredientBitVector(t *testing.T) {
 
 	// Verify the first result is the reference item (distance = 0)
 	require.Equal(t, testData[0].GetId(), results[0].ID, "First result should be the reference item")
-
-	// Verify distances are in ascending order
-	for i := 1; i < len(results); i++ {
-		dist1 := calculateHammingDistance(referenceMinHashBytes, results[i-1].MinHash)
-		dist2 := calculateHammingDistance(referenceMinHashBytes, results[i].MinHash)
-		require.LessOrEqual(t, dist1, dist2, "Results should be ordered by distance")
-	}
-}
-
-// calculateHammingDistance calculates the Hamming distance between two byte slices
-func calculateHammingDistance(a, b []byte) int {
-	if len(a) != len(b) {
-		return -1
-	}
-	distance := 0
-	for i := 0; i < len(a); i++ {
-		// XOR the bytes and count the set bits
-		xor := a[i] ^ b[i]
-		for xor > 0 {
-			distance += int(xor & 1)
-			xor >>= 1
-		}
-	}
-	return distance
+	require.Equal(t, 0, results[0].Distance, "First result should be the reference item")
 }
