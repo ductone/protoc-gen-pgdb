@@ -15,6 +15,7 @@ const (
 	pgTypeJSONB = "jsonb"
 	pgTypeInt4  = "int4"
 	pgTypeBool  = "bool"
+	pgTypeBit   = "bit"
 )
 
 type fieldContext struct {
@@ -69,6 +70,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 	}
 	nullable := true
 	defaultValue := ""
+	overrideExpression := ""
 	// https://developers.google.com/protocol-buffers/docs/proto3#scalar
 	switch pt {
 	case pgs.DoubleT:
@@ -199,9 +201,22 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 				pt, f.FullyQualifiedName(), f.Descriptor().GetType())
 		}
 	case pgs.BytesT:
-		convertDef.IsArray = isArray
-		convertDef.PostgresTypeName = "bytea"
-		convertDef.TypeConversion = gtBytes
+		switch ext.GetMessageBehavior() {
+		case pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_BITS:
+			length := ext.GetBitsSize()
+			if length == 0 {
+				return nil, fmt.Errorf("pgdb: bits size must be greater than 0: %s", f.FullyQualifiedName())
+			}
+			convertDef.IsArray = isArray
+			convertDef.PostgresTypeName = pgTypeBit
+			convertDef.TypeConversion = gtBits
+			convertDef.BitsSize = length
+			overrideExpression = fmt.Sprintf("bit(%d)", length)
+		default:
+			convertDef.IsArray = isArray
+			convertDef.PostgresTypeName = "bytea"
+			convertDef.TypeConversion = gtBytes
+		}
 	case pgs.EnumT:
 		convertDef.PostgresTypeName = pgTypeInt4
 		convertDef.IsArray = isArray
@@ -237,11 +252,12 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			return nil, fmt.Errorf("pgdb: nullable column with no default: %s (%s)", pgColName, dbTypeRef.Name)
 		}
 		rv.DB = &pgdb_v1.Column{
-			Name:      pgColName,
-			Type:      dbTypeRef.Name,
-			Nullable:  nullable,
-			Default:   defaultValue,
-			Collation: ext.GetCollation(),
+			Name:               pgColName,
+			Type:               dbTypeRef.Name,
+			Nullable:           nullable,
+			Default:            defaultValue,
+			Collation:          ext.GetCollation(),
+			OverrideExpression: overrideExpression,
 		}
 		rv.DataType = dbTypeRef
 	} else {

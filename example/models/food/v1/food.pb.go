@@ -180,6 +180,7 @@ type PastaIngredient struct {
 	xxx_hidden_PastaId         string                             `protobuf:"bytes,6,opt,name=pasta_id,json=pastaId,proto3"`
 	xxx_hidden_Id              string                             `protobuf:"bytes,7,opt,name=id,proto3"`
 	xxx_hidden_ModelEmbeddings *[]*PastaIngredient_ModelEmbedding `protobuf:"bytes,8,rep,name=model_embeddings,json=modelEmbeddings,proto3"`
+	xxx_hidden_MinHash         []byte                             `protobuf:"bytes,9,opt,name=min_hash,json=minHash,proto3"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
@@ -267,6 +268,13 @@ func (x *PastaIngredient) GetModelEmbeddings() []*PastaIngredient_ModelEmbedding
 	return nil
 }
 
+func (x *PastaIngredient) GetMinHash() []byte {
+	if x != nil {
+		return x.xxx_hidden_MinHash
+	}
+	return nil
+}
+
 func (x *PastaIngredient) SetTenantId(v string) {
 	x.xxx_hidden_TenantId = v
 }
@@ -297,6 +305,13 @@ func (x *PastaIngredient) SetId(v string) {
 
 func (x *PastaIngredient) SetModelEmbeddings(v []*PastaIngredient_ModelEmbedding) {
 	x.xxx_hidden_ModelEmbeddings = &v
+}
+
+func (x *PastaIngredient) SetMinHash(v []byte) {
+	if v == nil {
+		v = []byte{}
+	}
+	x.xxx_hidden_MinHash = v
 }
 
 func (x *PastaIngredient) HasCreatedAt() bool {
@@ -347,6 +362,7 @@ type PastaIngredient_builder struct {
 	// 2. Type is a nested message
 	// 3. Message type has 2 fields, enum type and repeated float type
 	ModelEmbeddings []*PastaIngredient_ModelEmbedding
+	MinHash         []byte
 }
 
 func (b0 PastaIngredient_builder) Build() *PastaIngredient {
@@ -361,6 +377,7 @@ func (b0 PastaIngredient_builder) Build() *PastaIngredient {
 	x.xxx_hidden_PastaId = b.PastaId
 	x.xxx_hidden_Id = b.Id
 	x.xxx_hidden_ModelEmbeddings = &b.ModelEmbeddings
+	x.xxx_hidden_MinHash = b.MinHash
 	return m0
 }
 
@@ -919,7 +936,7 @@ const file_models_food_v1_food_proto_rawDesc = "" +
 	"\n" +
 	"deleted_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt:$\x82\xf7\x02\x1a\x12\x18\n" +
 	"\ttenant_id\n" +
-	"\x02id\x1a\aexample\xd2\xf7\x02\x02(\x01\"\xc7\x06\n" +
+	"\x02id\x1a\aexample\xd2\xf7\x02\x02(\x01\"\x8c\a\n" +
 	"\x0fPastaIngredient\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12#\n" +
 	"\ringredient_id\x18\x02 \x01(\tR\fingredientId\x129\n" +
@@ -931,18 +948,20 @@ const file_models_food_v1_food_proto_rawDesc = "" +
 	"deleted_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12!\n" +
 	"\bpasta_id\x18\x06 \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\apastaId\x12\x16\n" +
 	"\x02id\x18\a \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\x02id\x12a\n" +
-	"\x10model_embeddings\x18\b \x03(\v2..models.food.v1.PastaIngredient.ModelEmbeddingB\x06\xd2\xf7\x02\x02\x18\x04R\x0fmodelEmbeddings\x1ab\n" +
+	"\x10model_embeddings\x18\b \x03(\v2..models.food.v1.PastaIngredient.ModelEmbeddingB\x06\xd2\xf7\x02\x02\x18\x04R\x0fmodelEmbeddings\x12$\n" +
+	"\bmin_hash\x18\t \x01(\fB\t\xd2\xf7\x02\x05\x18\x060\x80 R\aminHash\x1ab\n" +
 	"\x0eModelEmbedding\x12*\n" +
 	"\x05model\x18\x01 \x01(\x0e2\x14.models.llm.v1.ModelR\x05model\x12\x1c\n" +
-	"\tembedding\x18\x02 \x03(\x02R\tembedding:\x06\xd2\xf7\x02\x02 \x01:\xbe\x02\x82\xf7\x02=\x12;\n" +
+	"\tembedding\x18\x02 \x03(\x02R\tembedding:\x06\xd2\xf7\x02\x02 \x01:\xdd\x02\x82\xf7\x02=\x12;\n" +
 	"\ttenant_id\n" +
 	"\bpasta_id\n" +
 	"\ringredient_id\n" +
-	"\x02id\x1a\x11exampleingredient\xd2\xf7\x02\xf8\x01\x12#\n" +
+	"\x02id\x1a\x11exampleingredient\xd2\xf7\x02\x97\x02\x12#\n" +
 	"\x06pastas\x10\x01\x1a\ttenant_id\x1a\bpasta_id\x1a\x02id\x12-\n" +
 	"\vingredients\x10\x01\x1a\ttenant_id\x1a\ringredient_id\x1a\x02id\x12.\n" +
 	"\reverythingggg\x10\x01\x1a\ringredient_id\x1a\bpasta_id\x1a\x02id\x12;\n" +
-	"\x18everythingggg_alive_only\x10\x01\x1a\ringredient_id\x1a\bpasta_id\x1a\x02id(\x01(\x0123\n" +
+	"\x18everythingggg_alive_only\x10\x01\x1a\ringredient_id\x1a\bpasta_id\x1a\x02id(\x01\x12\x1d\n" +
+	"\rmin_hash_bits\x10\x04\x1a\bmin_hash0\x01(\x0123\n" +
 	"\x17tenant_id_ingredient_id\x1a\ttenant_id\x1a\ringredient_id\"\xf8\x02\n" +
 	"\x0fSauceIngredient\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x16\n" +

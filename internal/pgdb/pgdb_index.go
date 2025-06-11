@@ -100,6 +100,10 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		}
 	}
 
+	if idx.GetBitHammingOps() && idx.GetMethod() == pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE {
+		rv.DB.OverrideExpression = fmt.Sprintf("pb$%s bit_hamming_ops", rv.DB.Columns[0])
+	}
+
 	if idx.GetPartialDeletedAtIsNull() {
 		if f, ok := tryFieldByName(m, "deleted_at"); ok {
 			name, err := getColumnName(f)

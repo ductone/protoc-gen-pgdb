@@ -2,6 +2,7 @@
 package v1
 
 import (
+	"fmt"
 	"strings"
 
 	"net/netip"
@@ -1206,6 +1207,15 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Collation:          "",
 	})
 
+	rv = append(rv, &pgdb_v1.Column{
+		Name:               df.ColumnName("min_hash"),
+		Type:               "bit",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "bit(4096)",
+		Default:            "",
+		Collation:          "",
+	})
+
 	return rv
 }
 
@@ -1396,6 +1406,17 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 		Columns:            []string{io.ColumnName("ingredient_id"), io.ColumnName("pasta_id"), io.ColumnName("id")},
 		OverrideExpression: "",
 		WherePredicate:     "" + io.ColumnName("deleted_at") + " IS NULL",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("min_hash_bits_pasta_ingredient_models_f_0f3197d4"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("min_hash")},
+		OverrideExpression: "pb$min_hash bit_hamming_ops",
+		WherePredicate:     "",
 	})
 
 	return rv
@@ -1650,6 +1671,20 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		rv[ro.ColumnName("id")] = nullExp
 	} else {
 		rv[ro.ColumnName("id")] = v6
+	}
+
+	var v8 interface{} = nullExp
+	if len(m.self.GetMinHash()) != 0 && len(m.self.GetMinHash()) != 4096 {
+		return nil, fmt.Errorf("m.self.GetMinHash() must be 4096 bytes")
+	}
+	if len(m.self.GetMinHash()) == 4096 {
+		v8 = pgdb_v1.BytesToBitVector(m.self.GetMinHash())
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("min_hash")] = nullExp
+	} else {
+		rv[ro.ColumnName("min_hash")] = v8
 	}
 
 	return rv, nil
@@ -2230,6 +2265,24 @@ func (x *PastaIngredientDBQueryBuilder) Id() *PastaIngredientIdSafeOperators {
 	return &PastaIngredientIdSafeOperators{tableName: x.tableName, column: "pb$" + "id"}
 }
 
+type PastaIngredientMinHashSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientMinHashSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientMinHashSafeOperators) Distance(from []byte) exp.Expression {
+	bits := pgdb_v1.BytesToBitVector(from)
+	return exp.NewLiteralExpression("? <~> ?", x.Identifier(), bits)
+}
+
+func (x *PastaIngredientDBQueryBuilder) MinHash() *PastaIngredientMinHashSafeOperators {
+	return &PastaIngredientMinHashSafeOperators{tableName: x.tableName, column: "pb$" + "min_hash"}
+}
+
 type PastaIngredientTenantIdQueryType struct {
 	column    string
 	tableName string
@@ -2425,6 +2478,19 @@ func (x *PastaIngredientIdQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PastaIngredientMinHashQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) MinHash() *PastaIngredientMinHashQueryType {
+	return &PastaIngredientMinHashQueryType{tableName: x.tableName, column: "pb$" + "min_hash"}
+}
+
+func (x *PastaIngredientMinHashQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 func (x *PastaIngredientDBColumns) WithTable(t string) *PastaIngredientDBColumns {
 	return &PastaIngredientDBColumns{tableName: t}
 }
@@ -2487,6 +2553,10 @@ func (x *PastaIngredientDBColumns) PastaId() exp.Expression {
 
 func (x *PastaIngredientDBColumns) Id() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *PastaIngredientDBColumns) MinHash() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "min_hash")
 }
 
 type pgdbDescriptorSauceIngredient struct{}

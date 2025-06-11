@@ -100,6 +100,7 @@ type Index struct {
 	// OverrideExpression if set, this string is used to render indexes contents, instead of the Columns list.
 	OverrideExpression string
 	WherePredicate     string
+	BitHammingOps      bool
 }
 
 type Statistic struct {
