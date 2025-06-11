@@ -2,6 +2,7 @@
 package v1
 
 import (
+	"fmt"
 	"strings"
 
 	"net/netip"
@@ -9,7 +10,6 @@ import (
 
 	llm_v1 "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1"
 
-	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq"
@@ -1674,6 +1674,9 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	}
 
 	var v8 interface{} = nullExp
+	if len(m.self.GetMinHash()) != 0 && len(m.self.GetMinHash()) != 4096 {
+		return nil, fmt.Errorf("m.self.GetMinHash() must be 4096 bytes")
+	}
 	if len(m.self.GetMinHash()) == 4096 {
 		v8 = pgdb_v1.BytesToBitVector(m.self.GetMinHash())
 	}
@@ -2273,7 +2276,7 @@ func (x *PastaIngredientMinHashSafeOperators) Identifier() exp.IdentifierExpress
 
 func (x *PastaIngredientMinHashSafeOperators) Distance(from []byte) exp.Expression {
 	bits := pgdb_v1.BytesToBitVector(from)
-	return goqu.L("? <~> ?", x.Identifier(), bits)
+	return exp.NewLiteralExpression("? <~> ?", x.Identifier(), bits)
 }
 
 func (x *PastaIngredientDBQueryBuilder) MinHash() *PastaIngredientMinHashSafeOperators {

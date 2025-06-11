@@ -11,7 +11,7 @@ import (
 type BitsValue []byte
 
 func (b BitsValue) Value() (driver.Value, error) {
-	bytesLen, err := SafeIntToInt32(len(b))
+	bytesLen, err := safeIntToInt32(len(b))
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,7 @@ func (b BitsValue) Value() (driver.Value, error) {
 	return bits.Value()
 }
 
-func SafeIntToInt32(val int) (int32, error) {
+func safeIntToInt32(val int) (int32, error) {
 	if val < math.MinInt32 || val > math.MaxInt32 {
 		return 0, fmt.Errorf("value %d out of range for int32", val)
 	}

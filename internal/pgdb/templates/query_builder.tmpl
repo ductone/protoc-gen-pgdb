@@ -141,7 +141,7 @@ func  (x *{{ .OpsTypeName }}) InNetworkPrefix(cidr netip.Prefix) exp.RangeExpres
 {{if .Op.Distance }}
 func  (x *{{ .OpsTypeName }}) Distance(from {{.InputType}}) exp.Expression {
 	bits := pgdb_v1.BytesToBitVector(from)
-	return goqu.L("? <~> ?", x.Identifier(), bits)
+	return exp.NewLiteralExpression("? <~> ?", x.Identifier(), bits)
 }
 {{end}}
 
