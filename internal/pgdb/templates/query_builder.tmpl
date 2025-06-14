@@ -48,6 +48,8 @@ func (x *{{- .QueryType -}}) Unsafe() *{{- .UnsafeType }} {
 }
 
 {{ range .QueryFields }}
+{{ $v17Disabled := and .Field.V17FieldOverrides .Field.V17FieldOverrides.Disabled }}
+{{ if not $v17Disabled }}
 type {{ .OpsTypeName }} struct {
 	column string
 	tableName string
@@ -260,9 +262,11 @@ func (x *{{ $QueryType }}) {{ .Field.GoName -}}() *{{ .OpsTypeName }} {
 	return &{{- .OpsTypeName -}}{tableName: x.tableName, column: "pb$" + "{{- .ColName -}}"}
 }
 {{ end }}
+{{ end }}
 
 {{ range .UnsafeFields }}
-{{ if .DB -}}
+{{ $ok := ne .GoName "PKSKV2"  }}
+{{ if and .DB $ok -}}
 
 type {{ .QueryTypeName }} struct {
 	column string
@@ -285,7 +289,8 @@ func (x *{{ $ColumnType }}) WithTable(t string) *{{- $ColumnType }} {
 }
 
 {{ range .ColumnFields }}
-{{ if .DB -}}
+{{ $ok := ne .GoName "PKSKV2" }}
+{{ if and .DB $ok -}}
 func (x *{{ $ColumnType }}) {{ .GoName -}}() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "{{- .DB.Name -}}")
 }

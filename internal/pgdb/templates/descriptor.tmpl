@@ -1,8 +1,15 @@
-type {{.Type}} struct{}
+type {{.Type}} struct{
+  dialect pgdb_v1.Dialect
+}
 
 var (
     instance{{.Type}} pgdb_v1.Descriptor = &{{.Type}}{}
+    instance{{.Type}}V17 pgdb_v1.Descriptor = &{{.Type}}{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *{{.ReceiverType}}) Dialect() pgdb_v1.Dialect {
+    return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *{{.ReceiverType}}) TableName() string {
     return "{{.TableName}}"
@@ -35,14 +42,39 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
     {{ end }}
 
     {{ if .DB }}
-      rv = append(rv, &pgdb_v1.Column{
+      {{ if .V17FieldOverrides }}
+        {{ $collationVar := printf "col%sCollation" .DB.Name }}
+        {{ $expVar := printf "col%sOverrideExpression" .DB.Name }}
+        {{ $collationVar }} := "{{.DB.Collation}}"
+        {{ $expVar }} := "{{ .DB.OverrideExpression }}"
+        {{ if not .V17FieldOverrides.Disabled }}
+        switch d.Dialect() {
+        case pgdb_v1.DialectV17:
+          {{ if .V17FieldOverrides.Collation }}{{ $collationVar }} = {{ printf "%q" .V17FieldOverrides.Collation }}{{ end }}
+          {{ if .V17FieldOverrides.ClearOverrideExpression }}{{ $expVar }} = ""{{ end }}
+        default:
+        }
+        {{ end }}
+        {{ if .V17FieldOverrides.Disabled }}if d.Dialect() != pgdb_v1.DialectV17 { {{ end }}
+        rv = append(rv, &pgdb_v1.Column{
+        Name: df.ColumnName("{{ .DB.Name }}"),
+        Type: "{{ .DB.Type }}",
+        Nullable: df.Nullable({{ .DB.Nullable }}),
+        OverrideExpression: {{ $expVar }},
+        Default: "{{ .DB.Default }}",
+        Collation: {{ $collationVar }},
+        })
+        {{ if .V17FieldOverrides.Disabled }} } {{ end }}
+      {{ else }}
+        rv = append(rv, &pgdb_v1.Column{
         Name: df.ColumnName("{{ .DB.Name }}"),
         Type: "{{ .DB.Type }}",
         Nullable: df.Nullable({{ .DB.Nullable }}),
         OverrideExpression: "{{ .DB.OverrideExpression }}",
         Default: "{{ .DB.Default }}",
         Collation: "{{ .DB.Collation }}",
-      })
+        })
+      {{ end }}
     {{ end }}
     {{ if .ExcludeNested }}
     }
@@ -57,21 +89,18 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 }
 
 func (d *{{.ReceiverType}}) PKSKField() *pgdb_v1.Column {
+    var collation string
+    switch d.Dialect() {
+    case pgdb_v1.DialectV17:
+      collation = "C"
+    default:
+    }
 	return &pgdb_v1.Column{
       Table: "{{.TableName}}",
 			Name:  "pb$pksk",
 			Type:  "varchar",
+            Collation: collation,
 		}
-}
-
-func (d *{{.ReceiverType}}) PKSKV2Field() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "{{.TableName}}",
-		Name:  "pb$pkskv2",
-		Type:  "varchar",
-		Nullable: true,
-		Collation: "C",
-	}
 }
 
 func (d *{{.ReceiverType}}) DataField() *pgdb_v1.Column {
@@ -87,7 +116,18 @@ func (d *{{.ReceiverType}}) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *{{.ReceiverType}}) TenantField() *pgdb_v1.Column {
-  return &pgdb_v1.Column{Table: "{{.TableName}}", Name: "pb$tenant_id", Type: "varchar"}
+  var collation string
+  switch d.Dialect() {
+  case pgdb_v1.DialectV17:
+  collation = "C"
+  default:
+  }
+  return &pgdb_v1.Column{
+      Table: "{{.TableName}}",
+      Name: "pb$tenant_id",
+      Type: "varchar",
+      Collation: collation,
+  }
 }
 
 func (d *{{.ReceiverType}}) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {

@@ -2,14 +2,17 @@ package v1
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
 )
 
-func Insert(msg DBReflectMessage) (string, []any, error) {
-	dbr := msg.DBReflect()
+func Insert(msg DBReflectMessage, opts ...DialectOpt) (string, []any, error) {
+	cfg := &dialectOpts{}
+	if len(opts) > 0 {
+		opts[0].apply(cfg)
+	}
+	dbr := msg.DBReflectWithDialect(cfg.dialect)
 	desc := dbr.Descriptor()
 	tableName := desc.TableName()
 
@@ -23,11 +26,17 @@ func Insert(msg DBReflectMessage) (string, []any, error) {
 		return "", nil, errors.New("pgdb_v1: updated_at missing from message; unable to upsert without " + versionField.Name)
 	}
 
-	pkskv2Field := desc.PKSKV2Field()
+	pkskValue, err := generatedPKSK(record)
+	if err != nil {
+		return "", nil, err
+	}
 
-	pk := record["pb$pk"]
-	sk := record["pb$sk"]
-	record[pkskv2Field.Name] = fmt.Sprintf("%s|%s", pk.(string), sk.(string))
+	switch dbr.Dialect() {
+	case DialectV17:
+		pkskField := desc.PKSKField()
+		record[pkskField.Name] = pkskValue
+	default:
+	}
 
 	qb := goqu.Dialect("postgres")
 	q := qb.Insert(tableName).Prepared(true).Rows(

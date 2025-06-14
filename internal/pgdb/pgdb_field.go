@@ -20,16 +20,23 @@ const (
 
 type fieldContext struct {
 	// denotes a realized/virtual field that comes from multiple fields. in this case, F is nil.
-	IsVirtual       bool
-	ExcludeNested   bool
-	GoName          string
-	Field           pgs.Field
-	Nested          bool
-	DB              *pgdb_v1.Column
-	DataType        *pgtype.Type
-	Convert         FieldConverter
-	QueryTypeName   string
-	DBFieldNameDeep string
+	IsVirtual         bool
+	ExcludeNested     bool
+	GoName            string
+	Field             pgs.Field
+	Nested            bool
+	DB                *pgdb_v1.Column
+	DataType          *pgtype.Type
+	Convert           FieldConverter
+	QueryTypeName     string
+	DBFieldNameDeep   string
+	V17FieldOverrides *V17FieldOverrides
+}
+
+type V17FieldOverrides struct {
+	Collation               string
+	ClearOverrideExpression bool
+	Disabled                bool
 }
 
 type FieldConverter interface {
@@ -260,6 +267,12 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			OverrideExpression: overrideExpression,
 		}
 		rv.DataType = dbTypeRef
+
+		if ext.HasV17FieldOptions() {
+			rv.V17FieldOverrides = &V17FieldOverrides{
+				Collation: ext.GetV17FieldOptions().GetCollation(),
+			}
+		}
 	} else {
 		rv.Nested = true
 	}
@@ -309,6 +322,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			VarName: vn.String(),
 		},
 		QueryTypeName: ctx.Name(m).String() + "TenantId" + "QueryType",
+		V17FieldOverrides: &V17FieldOverrides{
+			Collation: "C",
+		},
 	}
 	rv = append(rv, tenantIdField)
 
@@ -328,6 +344,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			ctx: ctx,
 		},
 		QueryTypeName: ctx.Name(m).String() + "PKSK" + "QueryType",
+		V17FieldOverrides: &V17FieldOverrides{
+			Collation:               "C",
+			ClearOverrideExpression: true,
+		},
 	}
 	rv = append(rv, pkskField)
 
@@ -350,6 +370,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			KeyType: DynamoKeyTypePartition,
 		},
 		QueryTypeName: ctx.Name(m).String() + "PK" + "QueryType",
+		V17FieldOverrides: &V17FieldOverrides{
+			Collation: "C",
+		},
 	}
 	rv = append(rv, pkField)
 
@@ -372,6 +395,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			KeyType: DynamoKeyTypeSort,
 		},
 		QueryTypeName: ctx.Name(m).String() + "SK" + "QueryType",
+		V17FieldOverrides: &V17FieldOverrides{
+			Collation: "C",
+		},
 	}
 	rv = append(rv, skField)
 
@@ -391,6 +417,9 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			ctx: ctx,
 		},
 		QueryTypeName: ctx.Name(m).String() + "PKSKV2" + "QueryType",
+		V17FieldOverrides: &V17FieldOverrides{
+			Disabled: true,
+		},
 	}
 	rv = append(rv, pkskv2Field)
 

@@ -11,7 +11,11 @@ import (
 )
 
 func MarshalNestedRecord(msg DBReflectMessage, opts ...RecordOptionsFunc) (exp.Record, error) {
-	recs, err := msg.DBReflect().Record(opts...)
+	return MarshalNestedMsgRecord(msg.DBReflect(), opts...)
+}
+
+func MarshalNestedMsgRecord(msg Message, opts ...RecordOptionsFunc) (exp.Record, error) {
+	recs, err := msg.Record(opts...)
 	if err != nil {
 		return nil, err
 	}
