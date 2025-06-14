@@ -7,11 +7,12 @@ import (
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
+	"github.com/stretchr/testify/require"
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	v1 "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	"github.com/stretchr/testify/require"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func TestSchemaZooShop(t *testing.T) {
@@ -68,6 +69,74 @@ func TestSchemaZooShop(t *testing.T) {
 	}.Build()
 	found := false
 	searchData := s.DBReflect().SearchData()
+	for _, sd := range searchData {
+		if sd.Value == "unique" {
+			found = true
+		}
+	}
+	require.True(t, found, "expected string in FTS data: %v", searchData)
+	vectors := pgdb_v1.FullTextSearchVectors(searchData)
+	qb := goqu.Dialect("postgres")
+	sql, _, err := qb.Select(exp.NewAliasExpression(vectors, "vectors")).ToSQL()
+	require.NoError(t, err)
+	require.Contains(t, sql, "''unique'':")
+	require.Contains(t, sql, "''xyz'':")
+	require.Contains(t, sql, "''zyx'':")
+}
+
+func TestSchemaZooShop_V17(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	require.NoError(t, err)
+	dialectOpts := []pgdb_v1.DialectOpt{
+		pgdb_v1.DialectV17,
+	}
+	smsg := &Shop{}
+	schema, err := pgdb_v1.CreateSchema(smsg, dialectOpts...)
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "TestSchemaZooShop: failed to execute sql: '\n%s\n'", line)
+		// os.Stderr.WriteString(line)
+		// os.Stderr.WriteString("\n------\n")
+	}
+	ct := schema[0]
+	require.Contains(t, ct, "CREATE TABLE")
+	require.Equal(t, 2,
+		strings.Count(ct, "$pksk"),
+		"Create table should contain one pksk field + index: %s", ct,
+	)
+	require.NotContainsf(t, ct, "pb$pkskv2", "Create table should not contain pkskv2 field: %s", ct)
+	require.Equal(t, 1,
+		strings.Count(ct, "fts_data"),
+		"Create table should contain only one fts_data field: %s", ct,
+	)
+	_, err = pg.DB.Exec(ctx, "DROP TABLE "+smsg.DBReflect().Descriptor().TableName())
+	require.NoErrorf(t, err, "TestSchemaZooShop: failed to drop")
+	schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg, dialectOpts...)
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "TestSchemaZooShop: failed to execute sql: '\n%s\n'", line)
+	}
+	ct = schema[0]
+	require.Contains(t, ct, "CREATE TABLE")
+
+	s := Shop_builder{
+		TenantId:  "t1",
+		Id:        "s1",
+		CreatedAt: timestamppb.Now(),
+		Fur:       v1.FurType_FUR_TYPE_LOTS,
+		Anything: v1.ScalarValue_builder{
+			String:         "unique",
+			RepeatedString: []string{"xyz", "zyx"},
+		}.Build(),
+	}.Build()
+	found := false
+	searchData := s.DBReflectWithDialect(pgdb_v1.DialectV17).SearchData()
 	for _, sd := range searchData {
 		if sd.Value == "unique" {
 			found = true
