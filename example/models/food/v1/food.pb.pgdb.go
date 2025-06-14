@@ -16,11 +16,18 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type pgdbDescriptorPasta struct{}
+type pgdbDescriptorPasta struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorPasta pgdb_v1.Descriptor = &pgdbDescriptorPasta{}
+	instancepgdbDescriptorPasta    pgdb_v1.Descriptor = &pgdbDescriptorPasta{}
+	instancepgdbDescriptorPastaV17 pgdb_v1.Descriptor = &pgdbDescriptorPasta{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorPasta) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorPasta) TableName() string {
 	return "pb_pasta_models_food_v1_29fd1107"
@@ -50,66 +57,111 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 
 	if !df.IsNested {
 
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          coltenant_idCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
 
-		rv = append(rv, &pgdb_v1.Column{
-			Name:               df.ColumnName("pkskv2"),
-			Type:               "varchar",
-			Nullable:           df.Nullable(true),
-			OverrideExpression: "",
-			Default:            "",
-			Collation:          "C",
-		})
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+			})
+		}
 
 	}
 
@@ -179,20 +231,17 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 }
 
 func (d *pgdbDescriptorPasta) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_pasta_models_food_v1_29fd1107",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorPasta) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_pasta_models_food_v1_29fd1107",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -209,7 +258,18 @@ func (d *pgdbDescriptorPasta) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorPasta) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_pasta_models_food_v1_29fd1107", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_pasta_models_food_v1_29fd1107",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorPasta) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -305,17 +365,28 @@ func (d *pgdbDescriptorPasta) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) [
 }
 
 type pgdbMessagePasta struct {
-	self *Pasta
+	self    *Pasta
+	dialect pgdb_v1.Dialect
 }
 
 func (dbr *Pasta) DBReflect() pgdb_v1.Message {
+	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
+}
+
+func (dbr *Pasta) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessagePasta{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessagePasta) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorPasta
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorPastaV17
+	default:
+		return instancepgdbDescriptorPasta
+	}
 }
 
 func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -385,6 +456,10 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 	}
 
 	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
 
 	}
 
@@ -482,6 +557,10 @@ func (m *pgdbMessagePasta) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb
 	}
 
 	return rv
+}
+
+func (m *pgdbMessagePasta) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 
 type PastaDB struct {
@@ -865,19 +944,6 @@ func (x *PastaSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type PastaPKSKV2QueryType struct {
-	column    string
-	tableName string
-}
-
-func (x *PastaDBQueryUnsafe) PKSKV2() *PastaPKSKV2QueryType {
-	return &PastaPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
-}
-
-func (x *PastaPKSKV2QueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
 type PastaFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -976,10 +1042,6 @@ func (x *PastaDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
-func (x *PastaDBColumns) PKSKV2() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
-}
-
 func (x *PastaDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -1004,11 +1066,18 @@ func (x *PastaDBColumns) DeletedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
 }
 
-type pgdbDescriptorPastaIngredient struct{}
+type pgdbDescriptorPastaIngredient struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorPastaIngredient pgdb_v1.Descriptor = &pgdbDescriptorPastaIngredient{}
+	instancepgdbDescriptorPastaIngredient    pgdb_v1.Descriptor = &pgdbDescriptorPastaIngredient{}
+	instancepgdbDescriptorPastaIngredientV17 pgdb_v1.Descriptor = &pgdbDescriptorPastaIngredient{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorPastaIngredient) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorPastaIngredient) TableName() string {
 	return "pb_pasta_ingredient_models_food_v1_0565c036"
@@ -1038,66 +1107,111 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 	if !df.IsNested {
 
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          coltenant_idCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
 
-		rv = append(rv, &pgdb_v1.Column{
-			Name:               df.ColumnName("pkskv2"),
-			Type:               "varchar",
-			Nullable:           df.Nullable(true),
-			OverrideExpression: "",
-			Default:            "",
-			Collation:          "C",
-		})
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+			})
+		}
 
 	}
 
@@ -1220,20 +1334,17 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 }
 
 func (d *pgdbDescriptorPastaIngredient) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_pasta_ingredient_models_food_v1_0565c036",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorPastaIngredient) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_pasta_ingredient_models_food_v1_0565c036",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -1250,7 +1361,18 @@ func (d *pgdbDescriptorPastaIngredient) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorPastaIngredient) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_pasta_ingredient_models_food_v1_0565c036", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_pasta_ingredient_models_food_v1_0565c036",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorPastaIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -1438,17 +1560,28 @@ func (d *pgdbDescriptorPastaIngredient) Statistics(opts ...pgdb_v1.StatisticOpti
 }
 
 type pgdbMessagePastaIngredient struct {
-	self *PastaIngredient
+	self    *PastaIngredient
+	dialect pgdb_v1.Dialect
 }
 
 func (dbr *PastaIngredient) DBReflect() pgdb_v1.Message {
+	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
+}
+
+func (dbr *PastaIngredient) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessagePastaIngredient{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessagePastaIngredient) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorPastaIngredient
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorPastaIngredientV17
+	default:
+		return instancepgdbDescriptorPastaIngredient
+	}
 }
 
 func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -1526,6 +1659,10 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	}
 
 	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
 
 	}
 
@@ -1707,6 +1844,10 @@ func (m *pgdbMessagePastaIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFun
 	}
 
 	return rv
+}
+
+func (m *pgdbMessagePastaIngredient) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 
 type PastaIngredientDB struct {
@@ -2335,19 +2476,6 @@ func (x *PastaIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type PastaIngredientPKSKV2QueryType struct {
-	column    string
-	tableName string
-}
-
-func (x *PastaIngredientDBQueryUnsafe) PKSKV2() *PastaIngredientPKSKV2QueryType {
-	return &PastaIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
-}
-
-func (x *PastaIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
 type PastaIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -2511,10 +2639,6 @@ func (x *PastaIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
-func (x *PastaIngredientDBColumns) PKSKV2() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
-}
-
 func (x *PastaIngredientDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -2559,11 +2683,18 @@ func (x *PastaIngredientDBColumns) MinHash() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "min_hash")
 }
 
-type pgdbDescriptorSauceIngredient struct{}
+type pgdbDescriptorSauceIngredient struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorSauceIngredient pgdb_v1.Descriptor = &pgdbDescriptorSauceIngredient{}
+	instancepgdbDescriptorSauceIngredient    pgdb_v1.Descriptor = &pgdbDescriptorSauceIngredient{}
+	instancepgdbDescriptorSauceIngredientV17 pgdb_v1.Descriptor = &pgdbDescriptorSauceIngredient{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorSauceIngredient) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorSauceIngredient) TableName() string {
 	return "pb_sauce_ingredient_models_food_v1_e37b4524"
@@ -2593,66 +2724,111 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 	if !df.IsNested {
 
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          coltenant_idCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
 
-		rv = append(rv, &pgdb_v1.Column{
-			Name:               df.ColumnName("pkskv2"),
-			Type:               "varchar",
-			Nullable:           df.Nullable(true),
-			OverrideExpression: "",
-			Default:            "",
-			Collation:          "C",
-		})
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+			})
+		}
 
 	}
 
@@ -2731,20 +2907,17 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 }
 
 func (d *pgdbDescriptorSauceIngredient) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_sauce_ingredient_models_food_v1_e37b4524",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorSauceIngredient) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_sauce_ingredient_models_food_v1_e37b4524",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -2761,7 +2934,18 @@ func (d *pgdbDescriptorSauceIngredient) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorSauceIngredient) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_sauce_ingredient_models_food_v1_e37b4524", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_sauce_ingredient_models_food_v1_e37b4524",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorSauceIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -2868,17 +3052,28 @@ func (d *pgdbDescriptorSauceIngredient) Statistics(opts ...pgdb_v1.StatisticOpti
 }
 
 type pgdbMessageSauceIngredient struct {
-	self *SauceIngredient
+	self    *SauceIngredient
+	dialect pgdb_v1.Dialect
 }
 
 func (dbr *SauceIngredient) DBReflect() pgdb_v1.Message {
+	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
+}
+
+func (dbr *SauceIngredient) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageSauceIngredient{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessageSauceIngredient) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorSauceIngredient
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorSauceIngredientV17
+	default:
+		return instancepgdbDescriptorSauceIngredient
+	}
 }
 
 func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -2948,6 +3143,10 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	}
 
 	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
 
 	}
 
@@ -3061,6 +3260,10 @@ func (m *pgdbMessageSauceIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFun
 	}
 
 	return rv
+}
+
+func (m *pgdbMessageSauceIngredient) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 
 type SauceIngredientDB struct {
@@ -3512,19 +3715,6 @@ func (x *SauceIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type SauceIngredientPKSKV2QueryType struct {
-	column    string
-	tableName string
-}
-
-func (x *SauceIngredientDBQueryUnsafe) PKSKV2() *SauceIngredientPKSKV2QueryType {
-	return &SauceIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
-}
-
-func (x *SauceIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
 type SauceIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -3636,10 +3826,6 @@ func (x *SauceIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
-func (x *SauceIngredientDBColumns) PKSKV2() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
-}
-
 func (x *SauceIngredientDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -3668,11 +3854,18 @@ func (x *SauceIngredientDBColumns) SourceAddr() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "source_addr")
 }
 
-type pgdbDescriptorGarlicIngredient struct{}
+type pgdbDescriptorGarlicIngredient struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorGarlicIngredient pgdb_v1.Descriptor = &pgdbDescriptorGarlicIngredient{}
+	instancepgdbDescriptorGarlicIngredient    pgdb_v1.Descriptor = &pgdbDescriptorGarlicIngredient{}
+	instancepgdbDescriptorGarlicIngredientV17 pgdb_v1.Descriptor = &pgdbDescriptorGarlicIngredient{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorGarlicIngredient) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorGarlicIngredient) TableName() string {
 	return "pb_garlic_ingredient_models_food_v1_9fa66ee2"
@@ -3702,66 +3895,111 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 
 	if !df.IsNested {
 
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          coltenant_idCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
 
-		rv = append(rv, &pgdb_v1.Column{
-			Name:               df.ColumnName("pkskv2"),
-			Type:               "varchar",
-			Nullable:           df.Nullable(true),
-			OverrideExpression: "",
-			Default:            "",
-			Collation:          "C",
-		})
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+			})
+		}
 
 	}
 
@@ -3840,20 +4078,17 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 }
 
 func (d *pgdbDescriptorGarlicIngredient) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorGarlicIngredient) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_garlic_ingredient_models_food_v1_9fa66ee2",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -3870,7 +4105,18 @@ func (d *pgdbDescriptorGarlicIngredient) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorGarlicIngredient) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_garlic_ingredient_models_food_v1_9fa66ee2", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_garlic_ingredient_models_food_v1_9fa66ee2",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorGarlicIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -3977,17 +4223,28 @@ func (d *pgdbDescriptorGarlicIngredient) Statistics(opts ...pgdb_v1.StatisticOpt
 }
 
 type pgdbMessageGarlicIngredient struct {
-	self *GarlicIngredient
+	self    *GarlicIngredient
+	dialect pgdb_v1.Dialect
 }
 
 func (dbr *GarlicIngredient) DBReflect() pgdb_v1.Message {
+	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
+}
+
+func (dbr *GarlicIngredient) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageGarlicIngredient{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessageGarlicIngredient) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorGarlicIngredient
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorGarlicIngredientV17
+	default:
+		return instancepgdbDescriptorGarlicIngredient
+	}
 }
 
 func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -4057,6 +4314,10 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 	}
 
 	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
 
 	}
 
@@ -4170,6 +4431,10 @@ func (m *pgdbMessageGarlicIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFu
 	}
 
 	return rv
+}
+
+func (m *pgdbMessageGarlicIngredient) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 
 type GarlicIngredientDB struct {
@@ -4684,19 +4949,6 @@ func (x *GarlicIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type GarlicIngredientPKSKV2QueryType struct {
-	column    string
-	tableName string
-}
-
-func (x *GarlicIngredientDBQueryUnsafe) PKSKV2() *GarlicIngredientPKSKV2QueryType {
-	return &GarlicIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
-}
-
-func (x *GarlicIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
 type GarlicIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -4808,10 +5060,6 @@ func (x *GarlicIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
-func (x *GarlicIngredientDBColumns) PKSKV2() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
-}
-
 func (x *GarlicIngredientDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -4840,11 +5088,18 @@ func (x *GarlicIngredientDBColumns) SourceAddr() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "source_addr")
 }
 
-type pgdbDescriptorCheeseIngredient struct{}
+type pgdbDescriptorCheeseIngredient struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorCheeseIngredient pgdb_v1.Descriptor = &pgdbDescriptorCheeseIngredient{}
+	instancepgdbDescriptorCheeseIngredient    pgdb_v1.Descriptor = &pgdbDescriptorCheeseIngredient{}
+	instancepgdbDescriptorCheeseIngredientV17 pgdb_v1.Descriptor = &pgdbDescriptorCheeseIngredient{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorCheeseIngredient) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorCheeseIngredient) TableName() string {
 	return "pb_cheese_ingredient_models_food_v1_886942a1"
@@ -4874,66 +5129,111 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 
 	if !df.IsNested {
 
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          coltenant_idCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
 
-		rv = append(rv, &pgdb_v1.Column{
-			Name:               df.ColumnName("pkskv2"),
-			Type:               "varchar",
-			Nullable:           df.Nullable(true),
-			OverrideExpression: "",
-			Default:            "",
-			Collation:          "C",
-		})
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+			})
+		}
 
 	}
 
@@ -5012,20 +5312,17 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 }
 
 func (d *pgdbDescriptorCheeseIngredient) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_cheese_ingredient_models_food_v1_886942a1",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorCheeseIngredient) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_cheese_ingredient_models_food_v1_886942a1",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -5042,7 +5339,18 @@ func (d *pgdbDescriptorCheeseIngredient) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorCheeseIngredient) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_cheese_ingredient_models_food_v1_886942a1", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_cheese_ingredient_models_food_v1_886942a1",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorCheeseIngredient) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -5149,17 +5457,28 @@ func (d *pgdbDescriptorCheeseIngredient) Statistics(opts ...pgdb_v1.StatisticOpt
 }
 
 type pgdbMessageCheeseIngredient struct {
-	self *CheeseIngredient
+	self    *CheeseIngredient
+	dialect pgdb_v1.Dialect
 }
 
 func (dbr *CheeseIngredient) DBReflect() pgdb_v1.Message {
+	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
+}
+
+func (dbr *CheeseIngredient) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageCheeseIngredient{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessageCheeseIngredient) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorCheeseIngredient
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorCheeseIngredientV17
+	default:
+		return instancepgdbDescriptorCheeseIngredient
+	}
 }
 
 func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -5229,6 +5548,10 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 	}
 
 	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
 
 	}
 
@@ -5338,6 +5661,10 @@ func (m *pgdbMessageCheeseIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFu
 	}
 
 	return rv
+}
+
+func (m *pgdbMessageCheeseIngredient) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 
 type CheeseIngredientDB struct {
@@ -5856,19 +6183,6 @@ func (x *CheeseIngredientSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type CheeseIngredientPKSKV2QueryType struct {
-	column    string
-	tableName string
-}
-
-func (x *CheeseIngredientDBQueryUnsafe) PKSKV2() *CheeseIngredientPKSKV2QueryType {
-	return &CheeseIngredientPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
-}
-
-func (x *CheeseIngredientPKSKV2QueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
 type CheeseIngredientFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -5980,10 +6294,6 @@ func (x *CheeseIngredientDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
-func (x *CheeseIngredientDBColumns) PKSKV2() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
-}
-
 func (x *CheeseIngredientDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -6012,11 +6322,18 @@ func (x *CheeseIngredientDBColumns) SourceAddr() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "source_addr")
 }
 
-type pgdbDescriptorPastaIngredient_ModelEmbedding struct{}
+type pgdbDescriptorPastaIngredient_ModelEmbedding struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorPastaIngredient_ModelEmbedding pgdb_v1.Descriptor = &pgdbDescriptorPastaIngredient_ModelEmbedding{}
+	instancepgdbDescriptorPastaIngredient_ModelEmbedding    pgdb_v1.Descriptor = &pgdbDescriptorPastaIngredient_ModelEmbedding{}
+	instancepgdbDescriptorPastaIngredient_ModelEmbeddingV17 pgdb_v1.Descriptor = &pgdbDescriptorPastaIngredient_ModelEmbedding{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) TableName() string {
 	return "pb_model_embedding_models_food_v1_de910e59"
@@ -6066,20 +6383,17 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) Fields(opts ...pgdb_v1.De
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_model_embedding_models_food_v1_de910e59",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_model_embedding_models_food_v1_de910e59",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -6096,7 +6410,18 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) VersioningField() *pgdb_v
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_model_embedding_models_food_v1_de910e59", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_model_embedding_models_food_v1_de910e59",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -6124,17 +6449,28 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) Statistics(opts ...pgdb_v
 }
 
 type pgdbMessagePastaIngredient_ModelEmbedding struct {
-	self *PastaIngredient_ModelEmbedding
+	self    *PastaIngredient_ModelEmbedding
+	dialect pgdb_v1.Dialect
 }
 
 func (dbr *PastaIngredient_ModelEmbedding) DBReflect() pgdb_v1.Message {
+	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
+}
+
+func (dbr *PastaIngredient_ModelEmbedding) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessagePastaIngredient_ModelEmbedding{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessagePastaIngredient_ModelEmbedding) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorPastaIngredient_ModelEmbedding
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorPastaIngredient_ModelEmbeddingV17
+	default:
+		return instancepgdbDescriptorPastaIngredient_ModelEmbedding
+	}
 }
 
 func (m *pgdbMessagePastaIngredient_ModelEmbedding) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -6173,6 +6509,10 @@ func (m *pgdbMessagePastaIngredient_ModelEmbedding) SearchData(opts ...pgdb_v1.R
 	rv := []*pgdb_v1.SearchContent{}
 
 	return rv
+}
+
+func (m *pgdbMessagePastaIngredient_ModelEmbedding) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 
 type PastaIngredient_ModelEmbeddingDB struct {

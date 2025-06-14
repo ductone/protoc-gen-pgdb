@@ -18,11 +18,18 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type pgdbDescriptorAttractions struct{}
+type pgdbDescriptorAttractions struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorAttractions pgdb_v1.Descriptor = &pgdbDescriptorAttractions{}
+	instancepgdbDescriptorAttractions    pgdb_v1.Descriptor = &pgdbDescriptorAttractions{}
+	instancepgdbDescriptorAttractionsV17 pgdb_v1.Descriptor = &pgdbDescriptorAttractions{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorAttractions) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorAttractions) TableName() string {
 	return "pb_attractions_models_city_v1_e136cbfc"
@@ -52,66 +59,111 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 
 	if !df.IsNested {
 
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          coltenant_idCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
 
-		rv = append(rv, &pgdb_v1.Column{
-			Name:               df.ColumnName("pkskv2"),
-			Type:               "varchar",
-			Nullable:           df.Nullable(true),
-			OverrideExpression: "",
-			Default:            "",
-			Collation:          "C",
-		})
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+			})
+		}
 
 	}
 
@@ -187,20 +239,17 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 }
 
 func (d *pgdbDescriptorAttractions) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_attractions_models_city_v1_e136cbfc",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorAttractions) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_attractions_models_city_v1_e136cbfc",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -217,7 +266,18 @@ func (d *pgdbDescriptorAttractions) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorAttractions) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_attractions_models_city_v1_e136cbfc", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_attractions_models_city_v1_e136cbfc",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorAttractions) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -400,17 +460,28 @@ var AttractionsWhat = struct {
 }
 
 type pgdbMessageAttractions struct {
-	self *Attractions
+	self    *Attractions
+	dialect pgdb_v1.Dialect
 }
 
 func (dbr *Attractions) DBReflect() pgdb_v1.Message {
+	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
+}
+
+func (dbr *Attractions) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageAttractions{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessageAttractions) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorAttractions
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorAttractionsV17
+	default:
+		return instancepgdbDescriptorAttractions
+	}
 }
 
 func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -480,6 +551,10 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	}
 
 	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
 
 	}
 
@@ -559,7 +634,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v4opts = append(v4opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v4, err := pgdb_v1.MarshalNestedRecord(v4tmp, v4opts...)
+	v4, err := pgdb_v1.MarshalNestedMsgRecord(v4tmp.DBReflectWithDialect(m.Dialect()), v4opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -578,7 +653,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v5opts = append(v5opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v5, err := pgdb_v1.MarshalNestedRecord(v5tmp, v5opts...)
+	v5, err := pgdb_v1.MarshalNestedMsgRecord(v5tmp.DBReflectWithDialect(m.Dialect()), v5opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -597,7 +672,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v6opts = append(v6opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v6, err := pgdb_v1.MarshalNestedRecord(v6tmp, v6opts...)
+	v6, err := pgdb_v1.MarshalNestedMsgRecord(v6tmp.DBReflectWithDialect(m.Dialect()), v6opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -631,13 +706,17 @@ func (m *pgdbMessageAttractions) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 		},
 	}
 
-	rv = append(rv, m.self.GetPet().DBReflect().SearchData()...)
+	rv = append(rv, m.self.GetPet().DBReflectWithDialect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetZooShop().DBReflect().SearchData()...)
+	rv = append(rv, m.self.GetZooShop().DBReflectWithDialect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetMedium().DBReflect().SearchData()...)
+	rv = append(rv, m.self.GetMedium().DBReflectWithDialect(m.Dialect()).SearchData()...)
 
 	return rv
+}
+
+func (m *pgdbMessageAttractions) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 
 type AttractionsDB struct {
@@ -1371,19 +1450,6 @@ func (x *AttractionsSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type AttractionsPKSKV2QueryType struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsDBQueryUnsafe) PKSKV2() *AttractionsPKSKV2QueryType {
-	return &AttractionsPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
-}
-
-func (x *AttractionsPKSKV2QueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
 type AttractionsFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -1480,10 +1546,6 @@ func (x *AttractionsDBColumns) PK() exp.Expression {
 
 func (x *AttractionsDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
-}
-
-func (x *AttractionsDBColumns) PKSKV2() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
 }
 
 func (x *AttractionsDBColumns) FTSData() exp.Expression {

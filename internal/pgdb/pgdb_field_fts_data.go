@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star/v2"
 	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
+
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
 
 type ftsDataConvert struct {
