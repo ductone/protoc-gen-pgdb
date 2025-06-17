@@ -369,11 +369,7 @@ type pgdbMessagePasta struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Pasta) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *Pasta) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *Pasta) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessagePasta{
 		self:    dbr,
 		dialect: dialect,
@@ -580,7 +576,7 @@ type PastaDBColumns struct {
 }
 
 func (x *Pasta) DB() *PastaDB {
-	return &PastaDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &PastaDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *PastaDB) TableName() string {
@@ -1564,11 +1560,7 @@ type pgdbMessagePastaIngredient struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *PastaIngredient) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *PastaIngredient) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *PastaIngredient) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessagePastaIngredient{
 		self:    dbr,
 		dialect: dialect,
@@ -1867,7 +1859,7 @@ type PastaIngredientDBColumns struct {
 }
 
 func (x *PastaIngredient) DB() *PastaIngredientDB {
-	return &PastaIngredientDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &PastaIngredientDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *PastaIngredientDB) TableName() string {
@@ -3056,11 +3048,7 @@ type pgdbMessageSauceIngredient struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *SauceIngredient) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *SauceIngredient) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *SauceIngredient) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageSauceIngredient{
 		self:    dbr,
 		dialect: dialect,
@@ -3283,7 +3271,7 @@ type SauceIngredientDBColumns struct {
 }
 
 func (x *SauceIngredient) DB() *SauceIngredientDB {
-	return &SauceIngredientDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &SauceIngredientDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *SauceIngredientDB) TableName() string {
@@ -4227,11 +4215,7 @@ type pgdbMessageGarlicIngredient struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *GarlicIngredient) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *GarlicIngredient) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *GarlicIngredient) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageGarlicIngredient{
 		self:    dbr,
 		dialect: dialect,
@@ -4454,7 +4438,7 @@ type GarlicIngredientDBColumns struct {
 }
 
 func (x *GarlicIngredient) DB() *GarlicIngredientDB {
-	return &GarlicIngredientDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &GarlicIngredientDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *GarlicIngredientDB) TableName() string {
@@ -5461,11 +5445,7 @@ type pgdbMessageCheeseIngredient struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *CheeseIngredient) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *CheeseIngredient) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *CheeseIngredient) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageCheeseIngredient{
 		self:    dbr,
 		dialect: dialect,
@@ -5684,7 +5664,7 @@ type CheeseIngredientDBColumns struct {
 }
 
 func (x *CheeseIngredient) DB() *CheeseIngredientDB {
-	return &CheeseIngredientDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &CheeseIngredientDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *CheeseIngredientDB) TableName() string {
@@ -6453,11 +6433,7 @@ type pgdbMessagePastaIngredient_ModelEmbedding struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *PastaIngredient_ModelEmbedding) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *PastaIngredient_ModelEmbedding) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *PastaIngredient_ModelEmbedding) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessagePastaIngredient_ModelEmbedding{
 		self:    dbr,
 		dialect: dialect,
@@ -6532,7 +6508,7 @@ type PastaIngredient_ModelEmbeddingDBColumns struct {
 }
 
 func (x *PastaIngredient_ModelEmbedding) DB() *PastaIngredient_ModelEmbeddingDB {
-	return &PastaIngredient_ModelEmbeddingDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &PastaIngredient_ModelEmbeddingDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *PastaIngredient_ModelEmbeddingDB) TableName() string {

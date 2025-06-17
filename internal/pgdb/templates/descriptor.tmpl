@@ -83,7 +83,7 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
   {{ end }}
 
   {{ range .NestedFields }}
-    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect().Descriptor().Fields(df.Nested("{{ .Prefix }}")...)...)
+    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("{{ .Prefix }}")...)...)
   {{ end }}
   return rv
 }

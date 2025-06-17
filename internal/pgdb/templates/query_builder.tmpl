@@ -20,7 +20,7 @@ type {{ .ColumnType }} struct {
 }
 
 func (x *{{ .ReceiverType -}}) DB() *{{- .DbType}} {
-	return &{{- .DbType -}}{tableName: x.DBReflect().Descriptor().TableName()}
+	return &{{- .DbType -}}{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *{{- .DbType -}}) TableName() string {

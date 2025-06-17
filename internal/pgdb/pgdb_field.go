@@ -268,9 +268,9 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		}
 		rv.DataType = dbTypeRef
 
-		if ext.HasV17FieldOptions() {
+		if ext.GetKsuid() {
 			rv.V17FieldOverrides = &V17FieldOverrides{
-				Collation: ext.GetV17FieldOptions().GetCollation(),
+				Collation: "C",
 			}
 		}
 	} else {

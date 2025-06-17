@@ -7,11 +7,7 @@ type {{.MessageType}} struct {
     dialect pgdb_v1.Dialect
 }
 
-func (dbr *{{.ReceiverType}}) DBReflect() pgdb_v1.Message {
-    return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *{{.ReceiverType}}) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *{{.ReceiverType}}) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
     return &{{.MessageType}}{
         self: dbr,
         dialect: dialect,
@@ -86,7 +82,7 @@ func (m *{{.MessageType}}) SearchData(opts ...pgdb_v1.RecordOptionsFunc) ([]*pgd
 
     {{ range .Fields }}
         {{ if .Nested }}
-        rv = append(rv, m.self.Get{{- .GoName -}}().DBReflectWithDialect(m.Dialect()).SearchData()...)
+        rv = append(rv, m.self.Get{{- .GoName -}}().DBReflect(m.Dialect()).SearchData()...)
         {{ end }}
     {{ end }}
     return rv

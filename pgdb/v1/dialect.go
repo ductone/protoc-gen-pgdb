@@ -23,10 +23,6 @@ func (d Dialect) String() string {
 	}
 }
 
-func (d Dialect) apply(cfg *dialectOpts) {
-	cfg.dialect = d
-}
-
 func DialectOrDefault(d Dialect) Dialect {
 	switch d {
 	case DialectV17:
@@ -34,12 +30,4 @@ func DialectOrDefault(d Dialect) Dialect {
 	default:
 		return DefaultDialect
 	}
-}
-
-type dialectOpts struct {
-	dialect Dialect
-}
-
-type DialectOpt interface {
-	apply(*dialectOpts)
 }

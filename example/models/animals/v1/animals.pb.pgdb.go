@@ -4,15 +4,15 @@ package v1
 import (
 	"encoding/json"
 	"strings"
+
 	"time"
 
 	"github.com/doug-martin/goqu/v9/exp"
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+	"github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq"
 	"github.com/jackc/pgx/v5/pgtype"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-
-	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	"github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq"
 )
 
 type pgdbDescriptorPet struct {
@@ -479,11 +479,7 @@ type pgdbMessagePet struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Pet) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *Pet) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *Pet) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessagePet{
 		self:    dbr,
 		dialect: dialect,
@@ -809,7 +805,7 @@ type PetDBColumns struct {
 }
 
 func (x *Pet) DB() *PetDB {
-	return &PetDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &PetDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *PetDB) TableName() string {
@@ -2177,11 +2173,7 @@ type pgdbMessageScalarValue struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *ScalarValue) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *ScalarValue) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *ScalarValue) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageScalarValue{
 		self:    dbr,
 		dialect: dialect,
@@ -2744,7 +2736,7 @@ type ScalarValueDBColumns struct {
 }
 
 func (x *ScalarValue) DB() *ScalarValueDB {
-	return &ScalarValueDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &ScalarValueDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *ScalarValueDB) TableName() string {
@@ -4156,11 +4148,7 @@ type pgdbMessageEBook struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *EBook) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *EBook) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *EBook) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageEBook{
 		self:    dbr,
 		dialect: dialect,
@@ -4222,7 +4210,7 @@ type EBookDBColumns struct {
 }
 
 func (x *EBook) DB() *EBookDB {
-	return &EBookDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &EBookDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *EBookDB) TableName() string {
@@ -4392,11 +4380,7 @@ type pgdbMessagePaperBook struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *PaperBook) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *PaperBook) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *PaperBook) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessagePaperBook{
 		self:    dbr,
 		dialect: dialect,
@@ -4458,7 +4442,7 @@ type PaperBookDBColumns struct {
 }
 
 func (x *PaperBook) DB() *PaperBookDB {
-	return &PaperBookDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &PaperBookDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *PaperBookDB) TableName() string {
@@ -4708,11 +4692,11 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		Collation:          "",
 	})
 
-	rv = append(rv, ((*PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
+	rv = append(rv, ((*PaperBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("50$")...)...)
 
-	rv = append(rv, ((*EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
+	rv = append(rv, ((*EBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("51$")...)...)
 
-	rv = append(rv, ((*Newspaper)(nil)).DBReflect().Descriptor().Fields(df.Nested("52$")...)...)
+	rv = append(rv, ((*Newspaper)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("52$")...)...)
 
 	return rv
 }
@@ -4868,11 +4852,7 @@ type pgdbMessageBook struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Book) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *Book) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *Book) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageBook{
 		self:    dbr,
 		dialect: dialect,
@@ -4973,11 +4953,11 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 			},
 		}
 
-		cfv5tmp = append(cfv5tmp, m.self.GetPaper().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetPaper().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetEbook().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetEbook().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetNews().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetNews().DBReflect(m.Dialect()).SearchData()...)
 
 		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
@@ -5030,7 +5010,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v3opts = append(v3opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v3, err := pgdb_v1.MarshalNestedMsgRecord(v3tmp.DBReflectWithDialect(m.Dialect()), v3opts...)
+	v3, err := pgdb_v1.MarshalNestedMsgRecord(v3tmp.DBReflect(m.Dialect()), v3opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -5049,7 +5029,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v4opts = append(v4opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v4, err := pgdb_v1.MarshalNestedMsgRecord(v4tmp.DBReflectWithDialect(m.Dialect()), v4opts...)
+	v4, err := pgdb_v1.MarshalNestedMsgRecord(v4tmp.DBReflect(m.Dialect()), v4opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -5068,7 +5048,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v5opts = append(v5opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v5, err := pgdb_v1.MarshalNestedMsgRecord(v5tmp.DBReflectWithDialect(m.Dialect()), v5opts...)
+	v5, err := pgdb_v1.MarshalNestedMsgRecord(v5tmp.DBReflect(m.Dialect()), v5opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -5102,11 +5082,11 @@ func (m *pgdbMessageBook) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 		},
 	}
 
-	rv = append(rv, m.self.GetPaper().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetPaper().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetEbook().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetEbook().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetNews().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetNews().DBReflect(m.Dialect()).SearchData()...)
 
 	return rv
 }
@@ -5132,7 +5112,7 @@ type BookDBColumns struct {
 }
 
 func (x *Book) DB() *BookDB {
-	return &BookDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &BookDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *BookDB) TableName() string {
@@ -5936,11 +5916,7 @@ type pgdbMessageNewspaper struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Newspaper) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *Newspaper) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *Newspaper) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageNewspaper{
 		self:    dbr,
 		dialect: dialect,
@@ -6103,7 +6079,7 @@ type NewspaperDBColumns struct {
 }
 
 func (x *Newspaper) DB() *NewspaperDB {
-	return &NewspaperDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &NewspaperDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *NewspaperDB) TableName() string {

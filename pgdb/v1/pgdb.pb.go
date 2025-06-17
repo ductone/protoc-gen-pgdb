@@ -533,7 +533,7 @@ type FieldOptions struct {
 	xxx_hidden_MessageBehavior FieldOptions_MessageBehavior `protobuf:"varint,3,opt,name=message_behavior,json=messageBehavior,proto3,enum=pgdb.v1.FieldOptions_MessageBehavior"`
 	xxx_hidden_Collation       string                       `protobuf:"bytes,5,opt,name=collation,proto3"`
 	xxx_hidden_BitsSize        int32                        `protobuf:"varint,6,opt,name=bits_size,json=bitsSize,proto3"`
-	xxx_hidden_V17FieldOptions *DialectFieldOptions         `protobuf:"bytes,7,opt,name=v17_field_options,json=v17FieldOptions,proto3"`
+	xxx_hidden_Ksuid           bool                         `protobuf:"varint,7,opt,name=ksuid,proto3"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
@@ -598,11 +598,11 @@ func (x *FieldOptions) GetBitsSize() int32 {
 	return 0
 }
 
-func (x *FieldOptions) GetV17FieldOptions() *DialectFieldOptions {
+func (x *FieldOptions) GetKsuid() bool {
 	if x != nil {
-		return x.xxx_hidden_V17FieldOptions
+		return x.xxx_hidden_Ksuid
 	}
-	return nil
+	return false
 }
 
 func (x *FieldOptions) SetFullTextType(v FieldOptions_FullTextType) {
@@ -625,19 +625,8 @@ func (x *FieldOptions) SetBitsSize(v int32) {
 	x.xxx_hidden_BitsSize = v
 }
 
-func (x *FieldOptions) SetV17FieldOptions(v *DialectFieldOptions) {
-	x.xxx_hidden_V17FieldOptions = v
-}
-
-func (x *FieldOptions) HasV17FieldOptions() bool {
-	if x == nil {
-		return false
-	}
-	return x.xxx_hidden_V17FieldOptions != nil
-}
-
-func (x *FieldOptions) ClearV17FieldOptions() {
-	x.xxx_hidden_V17FieldOptions = nil
+func (x *FieldOptions) SetKsuid(v bool) {
+	x.xxx_hidden_Ksuid = v
 }
 
 type FieldOptions_builder struct {
@@ -649,8 +638,8 @@ type FieldOptions_builder struct {
 	// Specifies the collation for the field in PostgresSQL
 	Collation string
 	// bit vector size options
-	BitsSize        int32
-	V17FieldOptions *DialectFieldOptions
+	BitsSize int32
+	Ksuid    bool
 }
 
 func (b0 FieldOptions_builder) Build() *FieldOptions {
@@ -662,7 +651,7 @@ func (b0 FieldOptions_builder) Build() *FieldOptions {
 	x.xxx_hidden_MessageBehavior = b.MessageBehavior
 	x.xxx_hidden_Collation = b.Collation
 	x.xxx_hidden_BitsSize = b.BitsSize
-	x.xxx_hidden_V17FieldOptions = b.V17FieldOptions
+	x.xxx_hidden_Ksuid = b.Ksuid
 	return m0
 }
 
@@ -724,64 +713,6 @@ func (b0 EnumValueOptions_builder) Build() *EnumValueOptions {
 	return m0
 }
 
-type DialectFieldOptions struct {
-	state                protoimpl.MessageState `protogen:"opaque.v1"`
-	xxx_hidden_Collation string                 `protobuf:"bytes,1,opt,name=collation,proto3"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
-}
-
-func (x *DialectFieldOptions) Reset() {
-	*x = DialectFieldOptions{}
-	mi := &file_pgdb_v1_pgdb_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DialectFieldOptions) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DialectFieldOptions) ProtoMessage() {}
-
-func (x *DialectFieldOptions) ProtoReflect() protoreflect.Message {
-	mi := &file_pgdb_v1_pgdb_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-func (x *DialectFieldOptions) GetCollation() string {
-	if x != nil {
-		return x.xxx_hidden_Collation
-	}
-	return ""
-}
-
-func (x *DialectFieldOptions) SetCollation(v string) {
-	x.xxx_hidden_Collation = v
-}
-
-type DialectFieldOptions_builder struct {
-	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
-
-	// Specifies the collation for the field in PostgresSQL
-	Collation string
-}
-
-func (b0 DialectFieldOptions_builder) Build() *DialectFieldOptions {
-	m0 := &DialectFieldOptions{}
-	b, x := &b0, m0
-	_, _ = b, x
-	x.xxx_hidden_Collation = b.Collation
-	return m0
-}
-
 type MessageOptions_Index struct {
 	state                             protoimpl.MessageState           `protogen:"opaque.v1"`
 	xxx_hidden_Name                   string                           `protobuf:"bytes,1,opt,name=name,proto3"`
@@ -796,7 +727,7 @@ type MessageOptions_Index struct {
 
 func (x *MessageOptions_Index) Reset() {
 	*x = MessageOptions_Index{}
-	mi := &file_pgdb_v1_pgdb_proto_msgTypes[4]
+	mi := &file_pgdb_v1_pgdb_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -808,7 +739,7 @@ func (x *MessageOptions_Index) String() string {
 func (*MessageOptions_Index) ProtoMessage() {}
 
 func (x *MessageOptions_Index) ProtoReflect() protoreflect.Message {
-	mi := &file_pgdb_v1_pgdb_proto_msgTypes[4]
+	mi := &file_pgdb_v1_pgdb_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -924,7 +855,7 @@ type MessageOptions_Stat struct {
 
 func (x *MessageOptions_Stat) Reset() {
 	*x = MessageOptions_Stat{}
-	mi := &file_pgdb_v1_pgdb_proto_msgTypes[5]
+	mi := &file_pgdb_v1_pgdb_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -936,7 +867,7 @@ func (x *MessageOptions_Stat) String() string {
 func (*MessageOptions_Stat) ProtoMessage() {}
 
 func (x *MessageOptions_Stat) ProtoReflect() protoreflect.Message {
-	mi := &file_pgdb_v1_pgdb_proto_msgTypes[5]
+	mi := &file_pgdb_v1_pgdb_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1103,14 +1034,14 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"%PARTITIONED_BY_DATE_RANGE_UNSPECIFIED\x10\x00\x12!\n" +
 	"\x1dPARTITIONED_BY_DATE_RANGE_DAY\x10\x01\x12#\n" +
 	"\x1fPARTITIONED_BY_DATE_RANGE_MONTH\x10\x02\x12\"\n" +
-	"\x1ePARTITIONED_BY_DATE_RANGE_YEAR\x10\x03\"\x80\a\n" +
+	"\x1ePARTITIONED_BY_DATE_RANGE_YEAR\x10\x03\"\xcc\x06\n" +
 	"\fFieldOptions\x12H\n" +
 	"\x0efull_text_type\x18\x01 \x01(\x0e2\".pgdb.v1.FieldOptions.FullTextTypeR\ffullTextType\x12N\n" +
 	"\x10full_text_weight\x18\x02 \x01(\x0e2$.pgdb.v1.FieldOptions.FullTextWeightR\x0efullTextWeight\x12P\n" +
 	"\x10message_behavior\x18\x03 \x01(\x0e2%.pgdb.v1.FieldOptions.MessageBehaviorR\x0fmessageBehavior\x12\x1c\n" +
 	"\tcollation\x18\x05 \x01(\tR\tcollation\x12\x1b\n" +
-	"\tbits_size\x18\x06 \x01(\x05R\bbitsSize\x12H\n" +
-	"\x11v17_field_options\x18\a \x01(\v2\x1c.pgdb.v1.DialectFieldOptionsR\x0fv17FieldOptions\"\x85\x01\n" +
+	"\tbits_size\x18\x06 \x01(\x05R\bbitsSize\x12\x14\n" +
+	"\x05ksuid\x18\a \x01(\bR\x05ksuid\"\x85\x01\n" +
 	"\fFullTextType\x12\x1e\n" +
 	"\x1aFULL_TEXT_TYPE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14FULL_TEXT_TYPE_EXACT\x10\x01\x12\x1a\n" +
@@ -1131,16 +1062,14 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\x15MESSAGE_BEHAVIOR_BITS\x10\x06J\x04\b\x04\x10\x05R\vvector_size\"3\n" +
 	"\x10EnumValueOptions\x12\x1f\n" +
 	"\vvector_size\x18\x01 \x01(\x05R\n" +
-	"vectorSize\"3\n" +
-	"\x13DialectFieldOptions\x12\x1c\n" +
-	"\tcollation\x18\x01 \x01(\tR\tcollation:K\n" +
+	"vectorSize:K\n" +
 	"\x03msg\x12\x1f.google.protobuf.MessageOptions\x18\xfa. \x01(\v2\x17.pgdb.v1.MessageOptionsR\x03msg:O\n" +
 	"\aoptions\x12\x1d.google.protobuf.FieldOptions\x18\xfa. \x01(\v2\x15.pgdb.v1.FieldOptionsR\aoptions:Q\n" +
 	"\x04enum\x12!.google.protobuf.EnumValueOptions\x18\xfa. \x01(\v2\x19.pgdb.v1.EnumValueOptionsR\x04enumB\x81\x01\n" +
 	"\vcom.pgdb.v1B\tPgdbProtoP\x01Z*github.com/ductone/protoc-gen-pgdb/pgdb/v1\xa2\x02\x03PXX\xaa\x02\aPgdb.V1\xca\x02\aPgdb\\V1\xe2\x02\x13Pgdb\\V1\\GPBMetadata\xea\x02\bPgdb::V1b\x06proto3"
 
 var file_pgdb_v1_pgdb_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
-var file_pgdb_v1_pgdb_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_pgdb_v1_pgdb_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_pgdb_v1_pgdb_proto_goTypes = []any{
 	(MessageOptions_PartitionedByDateRange)(0), // 0: pgdb.v1.MessageOptions.PartitionedByDateRange
 	(MessageOptions_Index_IndexMethod)(0),      // 1: pgdb.v1.MessageOptions.Index.IndexMethod
@@ -1151,34 +1080,32 @@ var file_pgdb_v1_pgdb_proto_goTypes = []any{
 	(*MessageOptions)(nil),                     // 6: pgdb.v1.MessageOptions
 	(*FieldOptions)(nil),                       // 7: pgdb.v1.FieldOptions
 	(*EnumValueOptions)(nil),                   // 8: pgdb.v1.EnumValueOptions
-	(*DialectFieldOptions)(nil),                // 9: pgdb.v1.DialectFieldOptions
-	(*MessageOptions_Index)(nil),               // 10: pgdb.v1.MessageOptions.Index
-	(*MessageOptions_Stat)(nil),                // 11: pgdb.v1.MessageOptions.Stat
-	(*descriptorpb.MessageOptions)(nil),        // 12: google.protobuf.MessageOptions
-	(*descriptorpb.FieldOptions)(nil),          // 13: google.protobuf.FieldOptions
-	(*descriptorpb.EnumValueOptions)(nil),      // 14: google.protobuf.EnumValueOptions
+	(*MessageOptions_Index)(nil),               // 9: pgdb.v1.MessageOptions.Index
+	(*MessageOptions_Stat)(nil),                // 10: pgdb.v1.MessageOptions.Stat
+	(*descriptorpb.MessageOptions)(nil),        // 11: google.protobuf.MessageOptions
+	(*descriptorpb.FieldOptions)(nil),          // 12: google.protobuf.FieldOptions
+	(*descriptorpb.EnumValueOptions)(nil),      // 13: google.protobuf.EnumValueOptions
 }
 var file_pgdb_v1_pgdb_proto_depIdxs = []int32{
-	10, // 0: pgdb.v1.MessageOptions.indexes:type_name -> pgdb.v1.MessageOptions.Index
+	9,  // 0: pgdb.v1.MessageOptions.indexes:type_name -> pgdb.v1.MessageOptions.Index
 	0,  // 1: pgdb.v1.MessageOptions.partitioned_by_date_range:type_name -> pgdb.v1.MessageOptions.PartitionedByDateRange
-	11, // 2: pgdb.v1.MessageOptions.stats:type_name -> pgdb.v1.MessageOptions.Stat
+	10, // 2: pgdb.v1.MessageOptions.stats:type_name -> pgdb.v1.MessageOptions.Stat
 	3,  // 3: pgdb.v1.FieldOptions.full_text_type:type_name -> pgdb.v1.FieldOptions.FullTextType
 	4,  // 4: pgdb.v1.FieldOptions.full_text_weight:type_name -> pgdb.v1.FieldOptions.FullTextWeight
 	5,  // 5: pgdb.v1.FieldOptions.message_behavior:type_name -> pgdb.v1.FieldOptions.MessageBehavior
-	9,  // 6: pgdb.v1.FieldOptions.v17_field_options:type_name -> pgdb.v1.DialectFieldOptions
-	1,  // 7: pgdb.v1.MessageOptions.Index.method:type_name -> pgdb.v1.MessageOptions.Index.IndexMethod
-	2,  // 8: pgdb.v1.MessageOptions.Stat.kinds:type_name -> pgdb.v1.MessageOptions.Stat.StatsKind
-	12, // 9: pgdb.v1.msg:extendee -> google.protobuf.MessageOptions
-	13, // 10: pgdb.v1.options:extendee -> google.protobuf.FieldOptions
-	14, // 11: pgdb.v1.enum:extendee -> google.protobuf.EnumValueOptions
-	6,  // 12: pgdb.v1.msg:type_name -> pgdb.v1.MessageOptions
-	7,  // 13: pgdb.v1.options:type_name -> pgdb.v1.FieldOptions
-	8,  // 14: pgdb.v1.enum:type_name -> pgdb.v1.EnumValueOptions
-	15, // [15:15] is the sub-list for method output_type
-	15, // [15:15] is the sub-list for method input_type
-	12, // [12:15] is the sub-list for extension type_name
-	9,  // [9:12] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	1,  // 6: pgdb.v1.MessageOptions.Index.method:type_name -> pgdb.v1.MessageOptions.Index.IndexMethod
+	2,  // 7: pgdb.v1.MessageOptions.Stat.kinds:type_name -> pgdb.v1.MessageOptions.Stat.StatsKind
+	11, // 8: pgdb.v1.msg:extendee -> google.protobuf.MessageOptions
+	12, // 9: pgdb.v1.options:extendee -> google.protobuf.FieldOptions
+	13, // 10: pgdb.v1.enum:extendee -> google.protobuf.EnumValueOptions
+	6,  // 11: pgdb.v1.msg:type_name -> pgdb.v1.MessageOptions
+	7,  // 12: pgdb.v1.options:type_name -> pgdb.v1.FieldOptions
+	8,  // 13: pgdb.v1.enum:type_name -> pgdb.v1.EnumValueOptions
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	11, // [11:14] is the sub-list for extension type_name
+	8,  // [8:11] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_pgdb_v1_pgdb_proto_init() }
@@ -1192,7 +1119,7 @@ func file_pgdb_v1_pgdb_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pgdb_v1_pgdb_proto_rawDesc), len(file_pgdb_v1_pgdb_proto_rawDesc)),
 			NumEnums:      6,
-			NumMessages:   6,
+			NumMessages:   5,
 			NumExtensions: 3,
 			NumServices:   0,
 		},

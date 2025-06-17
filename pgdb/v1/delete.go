@@ -7,8 +7,8 @@ import (
 	"github.com/doug-martin/goqu/v9/exp"
 )
 
-func Delete(msg DBReflectMessage) (string, []any, error) {
-	dbr := msg.DBReflect()
+func Delete(msg DBReflectMessage, dialect Dialect) (string, []any, error) {
+	dbr := msg.DBReflect(dialect)
 	desc := dbr.Descriptor()
 	tableName := desc.TableName()
 

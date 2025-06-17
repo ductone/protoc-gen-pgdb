@@ -1459,7 +1459,7 @@ var File_models_animals_v1_animals_proto protoreflect.FileDescriptor
 
 const file_models_animals_v1_animals_proto_rawDesc = "" +
 	"\n" +
-	"\x1fmodels/animals/v1/animals.proto\x12\x11models.animals.v1\x1a\x16dynamo/v1/dynamo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x12pgdb/v1/pgdb.proto\"\xf2\x06\n" +
+	"\x1fmodels/animals/v1/animals.proto\x12\x11models.animals.v1\x1a\x16dynamo/v1/dynamo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x12pgdb/v1/pgdb.proto\"\xef\x06\n" +
 	"\x03Pet\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x16\n" +
 	"\x02id\x18\x02 \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\x02id\x129\n" +
@@ -1478,9 +1478,8 @@ const file_models_animals_v1_animals_proto_rawDesc = "" +
 	"\bcuteness\x18\f \x01(\x02R\bcuteness\x12\x14\n" +
 	"\x05price\x18\r \x01(\x01R\x05price\x12\x9a\x01\n" +
 	"Ivery_long_naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame\x18\x0e \x01(\bRGveryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame\x12>\n" +
-	"\x0eextra_profiles\x18\x0f \x03(\v2\x17.google.protobuf.StructR\rextraProfiles\x12K\n" +
-	"\x1dfield_with_v17_collation_only\x18\x10 \x01(\tB\t\xd2\xf7\x02\x05:\x03\n" +
-	"\x01CR\x19fieldWithV17CollationOnly:C\x82\xf7\x02\x1a\x12\x18\n" +
+	"\x0eextra_profiles\x18\x0f \x03(\v2\x17.google.protobuf.StructR\rextraProfiles\x12H\n" +
+	"\x1dfield_with_v17_collation_only\x18\x10 \x01(\tB\x06\xd2\xf7\x02\x028\x01R\x19fieldWithV17CollationOnly:C\x82\xf7\x02\x1a\x12\x18\n" +
 	"\ttenant_id\n" +
 	"\x02id\x1a\aexample\xd2\xf7\x02!\x12\x1f\n" +
 	"\aprofile\x10\x03\x1a\ttenant_id\x1a\aprofile\"\xac\f\n" +

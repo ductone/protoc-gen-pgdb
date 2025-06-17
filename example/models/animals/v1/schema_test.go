@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
-	durationpb "google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
@@ -24,7 +24,7 @@ func TestSchemaPet(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	schema, err := pgdb_v1.CreateSchema(&Pet{})
+	schema, err := pgdb_v1.CreateSchema(&Pet{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -32,7 +32,7 @@ func TestSchemaPet(t *testing.T) {
 	}
 
 	// make sure we should have zero migrations after schema create
-	m, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{})
+	m, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	require.Len(t, m, 0)
 
@@ -40,7 +40,7 @@ func TestSchemaPet(t *testing.T) {
 	// it is both a col, and an index!
 	_, err = pg.DB.Exec(ctx, `ALTER TABLE pb_pet_models_animals_v1_8a3723d5 DROP COLUMN "pb$profile"`)
 	require.NoError(t, err)
-	migrations, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{})
+	migrations, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 
 	require.Len(t, migrations, 2)
@@ -81,7 +81,7 @@ func TestSchemaPet(t *testing.T) {
 		},
 	}.Build()
 
-	query, params, err := pgdb_v1.Insert(insertMsg)
+	query, params, err := pgdb_v1.Insert(insertMsg, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, query, params...)
 	// spew.Dump(query, params)
@@ -117,12 +117,12 @@ func TestSchemaPet(t *testing.T) {
 	// countQuery, params, err := qb.Select(goqu.COUNT(goqu.Star()).As("count")).From(insertMsg.DBReflect().Descriptor().TableName()).ToSQL()
 	// require.NoError(t, err)
 
-	query, params, err = pgdb_v1.Insert(insertMsg2)
+	query, params, err = pgdb_v1.Insert(insertMsg2, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, query, params...)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
 
-	query, params, err = pgdb_v1.Delete(insertMsg2)
+	query, params, err = pgdb_v1.Delete(insertMsg2, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	res, err := pg.DB.Exec(ctx, query, params...)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
@@ -160,12 +160,12 @@ func TestSchemaPet(t *testing.T) {
 		},
 	}.Build()
 
-	query, params, err = pgdb_v1.Insert(insertMsg3)
+	query, params, err = pgdb_v1.Insert(insertMsg3, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, query, params...)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
 
-	query, params, err = pgdb_v1.Delete(insertMsg3)
+	query, params, err = pgdb_v1.Delete(insertMsg3, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	res, err = pg.DB.Exec(ctx, query, params...)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
@@ -182,7 +182,7 @@ func TestSchemaBook(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	schema, err := pgdb_v1.CreateSchema(&Book{})
+	schema, err := pgdb_v1.CreateSchema(&Book{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -196,7 +196,7 @@ func TestSchemaBook(t *testing.T) {
 		Ebook: EBook_builder{
 			Size: 4000,
 		}.Build(),
-	}.Build())
+	}.Build(), pgdb_v1.DialectV13)
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)
@@ -215,7 +215,7 @@ func TestSchemaScalarValue(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	schema, err := pgdb_v1.CreateSchema(&ScalarValue{})
+	schema, err := pgdb_v1.CreateSchema(&ScalarValue{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -223,7 +223,7 @@ func TestSchemaScalarValue(t *testing.T) {
 		require.NoErrorf(t, err, "TestSchemaScalarValue: failed to execute sql: '\n%s\n'", line)
 	}
 
-	query, params, err := pgdb_v1.Insert(&ScalarValue{})
+	query, params, err := pgdb_v1.Insert(&ScalarValue{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)
@@ -239,7 +239,7 @@ func TestSchemaScalarValue(t *testing.T) {
 			[]byte("hi"),
 			[]byte("mars"),
 		},
-	}.Build())
+	}.Build(), pgdb_v1.DialectV13)
 	require.NoError(t, err)
 
 	_, err = pg.DB.Exec(ctx, query, params...)

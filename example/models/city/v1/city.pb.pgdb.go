@@ -229,11 +229,11 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		Collation:          "",
 	})
 
-	rv = append(rv, ((*animals_v1.Pet)(nil)).DBReflect().Descriptor().Fields(df.Nested("10$")...)...)
+	rv = append(rv, ((*animals_v1.Pet)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("10$")...)...)
 
-	rv = append(rv, ((*zoo_v1.Shop)(nil)).DBReflect().Descriptor().Fields(df.Nested("11$")...)...)
+	rv = append(rv, ((*zoo_v1.Shop)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("11$")...)...)
 
-	rv = append(rv, ((*zoo_v1.Shop)(nil)).DBReflect().Descriptor().Fields(df.Nested("12$")...)...)
+	rv = append(rv, ((*zoo_v1.Shop)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("12$")...)...)
 
 	return rv
 }
@@ -464,11 +464,7 @@ type pgdbMessageAttractions struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Attractions) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *Attractions) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *Attractions) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageAttractions{
 		self:    dbr,
 		dialect: dialect,
@@ -569,11 +565,11 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 			},
 		}
 
-		cfv5tmp = append(cfv5tmp, m.self.GetPet().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetPet().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetZooShop().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetZooShop().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetMedium().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetMedium().DBReflect(m.Dialect()).SearchData()...)
 
 		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
@@ -634,7 +630,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v4opts = append(v4opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v4, err := pgdb_v1.MarshalNestedMsgRecord(v4tmp.DBReflectWithDialect(m.Dialect()), v4opts...)
+	v4, err := pgdb_v1.MarshalNestedMsgRecord(v4tmp.DBReflect(m.Dialect()), v4opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -653,7 +649,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v5opts = append(v5opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v5, err := pgdb_v1.MarshalNestedMsgRecord(v5tmp.DBReflectWithDialect(m.Dialect()), v5opts...)
+	v5, err := pgdb_v1.MarshalNestedMsgRecord(v5tmp.DBReflect(m.Dialect()), v5opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -672,7 +668,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		v6opts = append(v6opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v6, err := pgdb_v1.MarshalNestedMsgRecord(v6tmp.DBReflectWithDialect(m.Dialect()), v6opts...)
+	v6, err := pgdb_v1.MarshalNestedMsgRecord(v6tmp.DBReflect(m.Dialect()), v6opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -706,11 +702,11 @@ func (m *pgdbMessageAttractions) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 		},
 	}
 
-	rv = append(rv, m.self.GetPet().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetPet().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetZooShop().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetZooShop().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetMedium().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetMedium().DBReflect(m.Dialect()).SearchData()...)
 
 	return rv
 }
@@ -736,7 +732,7 @@ type AttractionsDBColumns struct {
 }
 
 func (x *Attractions) DB() *AttractionsDB {
-	return &AttractionsDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &AttractionsDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *AttractionsDB) TableName() string {

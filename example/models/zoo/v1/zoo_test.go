@@ -25,7 +25,7 @@ func TestSchemaZooShop(t *testing.T) {
 	require.NoError(t, err)
 
 	smsg := &Shop{}
-	schema, err := pgdb_v1.CreateSchema(smsg)
+	schema, err := pgdb_v1.CreateSchema(smsg, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -43,10 +43,10 @@ func TestSchemaZooShop(t *testing.T) {
 		strings.Count(ct, "fts_data"),
 		"Create table should contain only one fts_data field: %s", ct,
 	)
-	_, err = pg.DB.Exec(ctx, "DROP TABLE "+smsg.DBReflect().Descriptor().TableName())
+	_, err = pg.DB.Exec(ctx, "DROP TABLE "+smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName())
 	require.NoErrorf(t, err, "TestSchemaZooShop: failed to drop")
 
-	schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
+	schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -68,7 +68,7 @@ func TestSchemaZooShop(t *testing.T) {
 		}.Build(),
 	}.Build()
 	found := false
-	searchData := s.DBReflect().SearchData()
+	searchData := s.DBReflect(pgdb_v1.DialectV13).SearchData()
 	for _, sd := range searchData {
 		if sd.Value == "unique" {
 			found = true
@@ -91,11 +91,8 @@ func TestSchemaZooShop_V17(t *testing.T) {
 	defer pg.Stop()
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
-	dialectOpts := []pgdb_v1.DialectOpt{
-		pgdb_v1.DialectV17,
-	}
 	smsg := &Shop{}
-	schema, err := pgdb_v1.CreateSchema(smsg, dialectOpts...)
+	schema, err := pgdb_v1.CreateSchema(smsg, pgdb_v1.DialectV17)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -114,9 +111,9 @@ func TestSchemaZooShop_V17(t *testing.T) {
 		strings.Count(ct, "fts_data"),
 		"Create table should contain only one fts_data field: %s", ct,
 	)
-	_, err = pg.DB.Exec(ctx, "DROP TABLE "+smsg.DBReflect().Descriptor().TableName())
+	_, err = pg.DB.Exec(ctx, "DROP TABLE "+smsg.DBReflect(pgdb_v1.DialectV17).Descriptor().TableName())
 	require.NoErrorf(t, err, "TestSchemaZooShop: failed to drop")
-	schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg, dialectOpts...)
+	schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg, pgdb_v1.DialectV17)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -136,7 +133,7 @@ func TestSchemaZooShop_V17(t *testing.T) {
 		}.Build(),
 	}.Build()
 	found := false
-	searchData := s.DBReflectWithDialect(pgdb_v1.DialectV17).SearchData()
+	searchData := s.DBReflect(pgdb_v1.DialectV17).SearchData()
 	for _, sd := range searchData {
 		if sd.Value == "unique" {
 			found = true

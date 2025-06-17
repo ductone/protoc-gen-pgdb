@@ -224,13 +224,13 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		Collation:          "",
 	})
 
-	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
+	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("50$")...)...)
 
-	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
+	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("51$")...)...)
 
-	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect().Descriptor().Fields(df.Nested("52$")...)...)
+	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("52$")...)...)
 
-	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect().Descriptor().Fields(df.Nested("5$")...)...)
+	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("5$")...)...)
 
 	return rv
 }
@@ -386,11 +386,7 @@ type pgdbMessageShop struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Shop) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *Shop) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *Shop) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageShop{
 		self:    dbr,
 		dialect: dialect,
@@ -491,13 +487,13 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 			},
 		}
 
-		cfv5tmp = append(cfv5tmp, m.self.GetPaper().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetPaper().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetEbook().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetEbook().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetAnything().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetAnything().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetMgr().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetMgr().DBReflect(m.Dialect()).SearchData()...)
 
 		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
@@ -550,7 +546,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v3opts = append(v3opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v3, err := pgdb_v1.MarshalNestedMsgRecord(v3tmp.DBReflectWithDialect(m.Dialect()), v3opts...)
+	v3, err := pgdb_v1.MarshalNestedMsgRecord(v3tmp.DBReflect(m.Dialect()), v3opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -569,7 +565,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v4opts = append(v4opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v4, err := pgdb_v1.MarshalNestedMsgRecord(v4tmp.DBReflectWithDialect(m.Dialect()), v4opts...)
+	v4, err := pgdb_v1.MarshalNestedMsgRecord(v4tmp.DBReflect(m.Dialect()), v4opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -588,7 +584,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v5opts = append(v5opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v5, err := pgdb_v1.MarshalNestedMsgRecord(v5tmp.DBReflectWithDialect(m.Dialect()), v5opts...)
+	v5, err := pgdb_v1.MarshalNestedMsgRecord(v5tmp.DBReflect(m.Dialect()), v5opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -615,7 +611,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v7opts = append(v7opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v7, err := pgdb_v1.MarshalNestedMsgRecord(v7tmp.DBReflectWithDialect(m.Dialect()), v7opts...)
+	v7, err := pgdb_v1.MarshalNestedMsgRecord(v7tmp.DBReflect(m.Dialect()), v7opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -649,13 +645,13 @@ func (m *pgdbMessageShop) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 		},
 	}
 
-	rv = append(rv, m.self.GetPaper().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetPaper().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetEbook().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetEbook().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetAnything().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetAnything().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetMgr().DBReflectWithDialect(m.Dialect()).SearchData()...)
+	rv = append(rv, m.self.GetMgr().DBReflect(m.Dialect()).SearchData()...)
 
 	return rv
 }
@@ -681,7 +677,7 @@ type ShopDBColumns struct {
 }
 
 func (x *Shop) DB() *ShopDB {
-	return &ShopDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &ShopDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *ShopDB) TableName() string {
@@ -1289,11 +1285,7 @@ type pgdbMessageShop_Manager struct {
 	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Shop_Manager) DBReflect() pgdb_v1.Message {
-	return dbr.DBReflectWithDialect(pgdb_v1.DialectUnspecified)
-}
-
-func (dbr *Shop_Manager) DBReflectWithDialect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+func (dbr *Shop_Manager) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageShop_Manager{
 		self:    dbr,
 		dialect: dialect,
@@ -1355,7 +1347,7 @@ type Shop_ManagerDBColumns struct {
 }
 
 func (x *Shop_Manager) DB() *Shop_ManagerDB {
-	return &Shop_ManagerDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &Shop_ManagerDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *Shop_ManagerDB) TableName() string {

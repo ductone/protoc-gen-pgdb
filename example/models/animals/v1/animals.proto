@@ -51,9 +51,7 @@ message Pet {
   bool very_long_naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame = 14;
   repeated google.protobuf.Struct extra_profiles = 15;
   string field_with_v17_collation_only = 16 [(pgdb.v1.options) = {
-    v17_field_options: {
-      collation: "C"
-    }
+    ksuid: true,
   }];
 }
 

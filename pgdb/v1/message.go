@@ -5,8 +5,7 @@ import (
 )
 
 type DBReflectMessage interface {
-	DBReflect() Message
-	DBReflectWithDialect(dialect Dialect) Message
+	DBReflect(dialect Dialect) Message
 }
 
 type Message interface {

@@ -7,12 +7,8 @@ import (
 	"github.com/doug-martin/goqu/v9/exp"
 )
 
-func Insert(msg DBReflectMessage, opts ...DialectOpt) (string, []any, error) {
-	cfg := &dialectOpts{}
-	if len(opts) > 0 {
-		opts[0].apply(cfg)
-	}
-	dbr := msg.DBReflectWithDialect(cfg.dialect)
+func Insert(msg DBReflectMessage, dialect Dialect) (string, []any, error) {
+	dbr := msg.DBReflect(dialect)
 	desc := dbr.Descriptor()
 	tableName := desc.TableName()
 
