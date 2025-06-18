@@ -1112,6 +1112,11 @@ func (x *AttractionsPetSafeOperators) Eq(v any) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+func (x *AttractionsPetSafeOperators) ObjectContainsRaw(obj exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, obj)
+}
+
 func (x *AttractionsPetSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error
 	var data []byte
@@ -1126,33 +1131,47 @@ func (x *AttractionsPetSafeOperators) ObjectContains(obj interface{}) (exp.Expre
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+	return x.ObjectContainsRaw(exp.NewLiteralExpression("?::jsonb", string(data))), nil
 }
 
-func (x *AttractionsPetSafeOperators) ObjectPathExists(path string) exp.Expression {
+func (x *AttractionsPetSafeOperators) ObjectPathExistsRaw(path exp.Expression) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
+func (x *AttractionsPetSafeOperators) ObjectPathExists(path string) exp.Expression {
+	return x.ObjectPathExistsRaw(exp.NewLiteralExpression("?", path))
+}
 
+func (x *AttractionsPetSafeOperators) ObjectPathRaw(path exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? @@ ?", idExp, exp.NewLiteralExpression("?"), path)
+}
 func (x *AttractionsPetSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+	return x.ObjectPathRaw(exp.NewLiteralExpression("?", path))
 }
 
+func (x *AttractionsPetSafeOperators) ObjectKeyExistsRaw(key exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? ? ?", idExp, exp.NewLiteralExpression("?"), key)
+}
 func (x *AttractionsPetSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+	return x.ObjectKeyExistsRaw(exp.NewLiteralExpression("?", key))
 }
 
+func (x *AttractionsPetSafeOperators) ObjectAnyKeyExistsRaw(keys exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), keys)
+}
 func (x *AttractionsPetSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+	return x.ObjectAnyKeyExistsRaw(exp.NewLiteralExpression("?", xpq.StringArray(keys)))
 }
 
-func (x *AttractionsPetSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+func (x *AttractionsPetSafeOperators) ObjectAllKeyExistsRaw(keys exp.Expression) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), keys)
+}
+func (x *AttractionsPetSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	return x.ObjectAllKeyExistsRaw(exp.NewLiteralExpression("?", xpq.StringArray(keys)))
 }
 
 func (x *AttractionsDBQueryBuilder) Pet() *AttractionsPetSafeOperators {
