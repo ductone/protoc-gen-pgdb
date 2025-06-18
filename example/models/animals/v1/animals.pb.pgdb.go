@@ -1028,6 +1028,11 @@ func (x *PetProfileSafeOperators) Eq(v any) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+func (x *PetProfileSafeOperators) ObjectContainsRaw(obj exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, obj)
+}
+
 func (x *PetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error
 	var data []byte
@@ -1042,33 +1047,47 @@ func (x *PetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expressio
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+	return x.ObjectContainsRaw(exp.NewLiteralExpression("?::jsonb", string(data))), nil
 }
 
-func (x *PetProfileSafeOperators) ObjectPathExists(path string) exp.Expression {
+func (x *PetProfileSafeOperators) ObjectPathExistsRaw(path exp.Expression) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
+func (x *PetProfileSafeOperators) ObjectPathExists(path string) exp.Expression {
+	return x.ObjectPathExistsRaw(exp.NewLiteralExpression("?", path))
+}
 
+func (x *PetProfileSafeOperators) ObjectPathRaw(path exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? @@ ?", idExp, exp.NewLiteralExpression("?"), path)
+}
 func (x *PetProfileSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+	return x.ObjectPathRaw(exp.NewLiteralExpression("?", path))
 }
 
+func (x *PetProfileSafeOperators) ObjectKeyExistsRaw(key exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? ? ?", idExp, exp.NewLiteralExpression("?"), key)
+}
 func (x *PetProfileSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+	return x.ObjectKeyExistsRaw(exp.NewLiteralExpression("?", key))
 }
 
+func (x *PetProfileSafeOperators) ObjectAnyKeyExistsRaw(keys exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), keys)
+}
 func (x *PetProfileSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+	return x.ObjectAnyKeyExistsRaw(exp.NewLiteralExpression("?", xpq.StringArray(keys)))
 }
 
-func (x *PetProfileSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+func (x *PetProfileSafeOperators) ObjectAllKeyExistsRaw(keys exp.Expression) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), keys)
+}
+func (x *PetProfileSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	return x.ObjectAllKeyExistsRaw(exp.NewLiteralExpression("?", xpq.StringArray(keys)))
 }
 
 func (x *PetDBQueryBuilder) Profile() *PetProfileSafeOperators {
@@ -3084,6 +3103,11 @@ func (x *ScalarValueStringMapSafeOperators) Eq(v any) exp.BooleanExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
 }
 
+func (x *ScalarValueStringMapSafeOperators) ObjectContainsRaw(obj exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, obj)
+}
+
 func (x *ScalarValueStringMapSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
 	var err error
 	var data []byte
@@ -3098,33 +3122,47 @@ func (x *ScalarValueStringMapSafeOperators) ObjectContains(obj interface{}) (exp
 		return nil, err
 	}
 
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+	return x.ObjectContainsRaw(exp.NewLiteralExpression("?::jsonb", string(data))), nil
 }
 
-func (x *ScalarValueStringMapSafeOperators) ObjectPathExists(path string) exp.Expression {
+func (x *ScalarValueStringMapSafeOperators) ObjectPathExistsRaw(path exp.Expression) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
 	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
 }
+func (x *ScalarValueStringMapSafeOperators) ObjectPathExists(path string) exp.Expression {
+	return x.ObjectPathExistsRaw(exp.NewLiteralExpression("?", path))
+}
 
+func (x *ScalarValueStringMapSafeOperators) ObjectPathRaw(path exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? @@ ?", idExp, exp.NewLiteralExpression("?"), path)
+}
 func (x *ScalarValueStringMapSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+	return x.ObjectPathRaw(exp.NewLiteralExpression("?", path))
 }
 
+func (x *ScalarValueStringMapSafeOperators) ObjectKeyExistsRaw(key exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? ? ?", idExp, exp.NewLiteralExpression("?"), key)
+}
 func (x *ScalarValueStringMapSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+	return x.ObjectKeyExistsRaw(exp.NewLiteralExpression("?", key))
 }
 
+func (x *ScalarValueStringMapSafeOperators) ObjectAnyKeyExistsRaw(keys exp.Expression) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), keys)
+}
 func (x *ScalarValueStringMapSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+	return x.ObjectAnyKeyExistsRaw(exp.NewLiteralExpression("?", xpq.StringArray(keys)))
 }
 
-func (x *ScalarValueStringMapSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+func (x *ScalarValueStringMapSafeOperators) ObjectAllKeyExistsRaw(keys exp.Expression) exp.Expression {
 	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), keys)
+}
+func (x *ScalarValueStringMapSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	return x.ObjectAllKeyExistsRaw(exp.NewLiteralExpression("?", xpq.StringArray(keys)))
 }
 
 func (x *ScalarValueDBQueryBuilder) StringMap() *ScalarValueStringMapSafeOperators {
