@@ -1263,13 +1263,23 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 	}
 
+	colingredient_idCollation := ""
+	colingredient_idOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colingredient_idCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("ingredient_id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colingredient_idOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colingredient_idCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1299,13 +1309,23 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Collation:          "",
 	})
 
+	colpasta_idCollation := ""
+	colpasta_idOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colpasta_idCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("pasta_id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colpasta_idOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colpasta_idCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -5256,13 +5276,23 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		Collation:          "",
 	})
 
+	colevent_idCollation := ""
+	colevent_idOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colevent_idCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("event_id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colevent_idOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colevent_idCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{

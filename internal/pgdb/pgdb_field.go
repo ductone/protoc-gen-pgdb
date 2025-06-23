@@ -272,6 +272,10 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			rv.V17FieldOverrides = &V17FieldOverrides{
 				Collation: "C",
 			}
+		} else if strings.HasSuffix(ctx.Name(f).LowerSnakeCase().String(), "_id") {
+			rv.V17FieldOverrides = &V17FieldOverrides{
+				Collation: "C",
+			}
 		}
 	} else {
 		rv.Nested = true
