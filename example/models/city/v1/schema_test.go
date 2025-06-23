@@ -4,9 +4,10 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
-	"github.com/stretchr/testify/require"
 )
 
 func TestSchemaAttractions(t *testing.T) {
@@ -18,11 +19,11 @@ func TestSchemaAttractions(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	schema, err := pgdb_v1.CreateSchema(&Attractions{})
+	schema, err := pgdb_v1.CreateSchema(&Attractions{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 
-		//fmt.Printf("%s \n", line)
+		// fmt.Printf("%s \n", line)
 		_, err := pg.DB.Exec(ctx, line)
 		require.NoErrorf(t, err, "TestSchemaPet: failed to execute sql: '\n%s\n'", line)
 	}

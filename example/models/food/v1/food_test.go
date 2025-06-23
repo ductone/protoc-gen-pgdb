@@ -11,14 +11,16 @@ import (
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
-	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
-	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/require"
 
-	llm_v1 "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1"
+	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+
 	"github.com/segmentio/ksuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
+
+	llm_v1 "github.com/ductone/protoc-gen-pgdb/example/models/llm/v1"
 )
 
 type testTable struct {
@@ -112,10 +114,10 @@ func TestSchemaFoodPasta(t *testing.T) {
 
 	for _, testobj := range testobjects {
 		smsg := testobj.objects[0]
-		schema, err := pgdb_v1.CreateSchema(smsg)
+		schema, err := pgdb_v1.CreateSchema(smsg, pgdb_v1.DialectV13)
 		require.NoError(t, err)
 		for _, line := range schema {
-			//fmt.Printf("%s \n", line)
+			// fmt.Printf("%s \n", line)
 			_, err := pg.DB.Exec(ctx, line)
 			require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
 		}
@@ -126,7 +128,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 			"Create table should contain only one pksk field + index: %s", ct,
 		)
 
-		if smsg.DBReflect().Descriptor().IsPartitioned() {
+		if smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().IsPartitioned() {
 			require.Contains(t, ct, "PARTITION BY LIST")
 		} else {
 			require.NotContains(t, ct, "PARTITION BY LIST")
@@ -157,13 +159,13 @@ func TestSchemaFoodPasta(t *testing.T) {
 			"Create table should contain only one fts_data field: %s", ct,
 		)
 
-		_, err = pg.DB.Exec(ctx, `ALTER TABLE `+smsg.DBReflect().Descriptor().TableName()+` DROP COLUMN "pb$id"`)
+		_, err = pg.DB.Exec(ctx, `ALTER TABLE `+smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName()+` DROP COLUMN "pb$id"`)
 		require.NoError(t, err, "TestSchemaFoodPasta: failed to drop col id")
 
-		schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
+		schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg, pgdb_v1.DialectV13)
 		require.NoError(t, err)
 		for _, line := range schema {
-			//fmt.Println(line)
+			// fmt.Println(line)
 			_, err := pg.DB.Exec(ctx, line)
 			require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to execute sql: '\n%s\n'", line)
 		}
@@ -176,14 +178,14 @@ func TestSchemaFoodPasta(t *testing.T) {
 			_, err = pg.DB.Exec(ctx, line)
 			require.NoErrorf(t, err, "TestSchemaFoodPasta: failed to repair table: '%s'", line)
 		}
-		schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg)
+		schema, err = pgdb_v1.Migrations(ctx, pg.DB, smsg, pgdb_v1.DialectV13)
 		require.NoError(t, err)
 		require.Len(t, schema, 0, "Should have no migrations after repair")
 
 		fakeTenantIds := []string{"t1", "t2", "t3"}
-		protoTableName := smsg.DBReflect().Descriptor().TableName()
+		protoTableName := smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName()
 
-		if smsg.DBReflect().Descriptor().IsPartitioned() {
+		if smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().IsPartitioned() {
 			verifyMasterPartition(t, pg, protoTableName, fakeTenantIds)
 			// Test sub-tables for partitions
 			// Create sub-tables
@@ -201,7 +203,7 @@ func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflec
 	// Create sub-tables
 	tenantIter := TenantIteratorTest(ctx, fakeTenantIds)
 	// Don't really need tenantId in update func but good for logging purposes.
-	err := pgdb_v1.TenantPartitionsUpdate(ctx, pg.DB, msg, tenantIter, func(ctx context.Context, schema string, args ...interface{}) error {
+	err := pgdb_v1.TenantPartitionsUpdate(ctx, pg.DB, msg, pgdb_v1.DialectV13, tenantIter, func(ctx context.Context, schema string, args ...interface{}) error {
 		_, err := pg.DB.Exec(ctx, schema, args...)
 		require.NoError(t, err)
 		return nil
@@ -278,24 +280,24 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	// Verify data in master table
 	// Verify data in sub tables
 	msg := objects[0]
-	sql, args, err := pgdb_v1.Insert(objects[0])
+	sql, args, err := pgdb_v1.Insert(objects[0], pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	// fmt.Printf("sql: %s\n\n%v\n", sql, args)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
-	sql, args, err = pgdb_v1.Insert(objects[1])
+	sql, args, err = pgdb_v1.Insert(objects[1], pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err, "Failed to insert object: %v", objects[1])
 
-	sql, args, err = pgdb_v1.Insert(objects[2])
+	sql, args, err = pgdb_v1.Insert(objects[2], pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
 
 	var tenantIdSelect string
-	selectColStr := msg.DBReflect().Descriptor().TenantField().Name
+	selectColStr := msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TenantField().Name
 	// Test select from master table
 	masterSelectSql := `SELECT %s FROM %s`
 	fmtSql := fmt.Sprintf(masterSelectSql, selectColStr, tableName)
@@ -312,7 +314,7 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	require.NoError(t, rows.Err())
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one row per tenant")
 
-	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
+	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect(pgdb_v1.DialectV13).Descriptor())
 	require.NoError(t, err)
 
 	// Test select each tenant
@@ -392,7 +394,7 @@ func fixtureSchemaSauceIngredient(t *testing.T, pg *pgtest.PG) {
 	_, err := pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
 	require.NoError(t, err)
 
-	schema, err := pgdb_v1.CreateSchema(&SauceIngredient{})
+	schema, err := pgdb_v1.CreateSchema(&SauceIngredient{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		// fmt.Printf("%s \n", line)
@@ -419,7 +421,7 @@ func fixtureSchemaSauceIngredient(t *testing.T, pg *pgtest.PG) {
 	}
 
 	for _, row := range data {
-		sql, args, err := pgdb_v1.Insert(row)
+		sql, args, err := pgdb_v1.Insert(row, pgdb_v1.DialectV13)
 		require.NoError(t, err)
 		_, err = pg.DB.Exec(ctx, sql, args...)
 		require.NoError(t, err)
@@ -531,7 +533,7 @@ func TestDatePartitionsUpdate(t *testing.T) {
 	}.Build()
 
 	// Create the table first
-	schema, err := pgdb_v1.CreateSchema(msg)
+	schema, err := pgdb_v1.CreateSchema(msg, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -543,14 +545,14 @@ func TestDatePartitionsUpdate(t *testing.T) {
 	endDate := time.Date(2024, 4, 1, 0, 0, 0, 0, time.UTC)
 
 	// Create the partitions
-	err = pgdb_v1.DatePartitionsUpdate(ctx, pg.DB, msg, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
+	err = pgdb_v1.DatePartitionsUpdate(ctx, pg.DB, msg, pgdb_v1.DialectV13, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
 		_, err := pg.DB.Exec(ctx, schema, args...)
 		return err
 	})
 	require.NoError(t, err)
 
 	// Verify the partitions were created
-	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
+	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect(pgdb_v1.DialectV13).Descriptor())
 	require.NoError(t, err)
 
 	// Should have 3 partitions (Jan, Feb, Mar)
@@ -558,9 +560,9 @@ func TestDatePartitionsUpdate(t *testing.T) {
 
 	// Verify partition names follow expected pattern
 	expectedNames := []string{
-		msg.DBReflect().Descriptor().TableName() + "_2024_01",
-		msg.DBReflect().Descriptor().TableName() + "_2024_02",
-		msg.DBReflect().Descriptor().TableName() + "_2024_03",
+		msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName() + "_2024_01",
+		msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName() + "_2024_02",
+		msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName() + "_2024_03",
 	}
 
 	for i, expected := range expectedNames {
@@ -591,7 +593,7 @@ func TestDatePartitionsUpdate(t *testing.T) {
 
 	// Insert test data
 	for _, data := range testData {
-		sql, args, err := pgdb_v1.Insert(data)
+		sql, args, err := pgdb_v1.Insert(data, pgdb_v1.DialectV13)
 		require.NoError(t, err)
 		_, err = pg.DB.Exec(ctx, sql, args...)
 		require.NoError(t, err)
@@ -628,7 +630,7 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 	}.Build()
 
 	// Create the table first
-	schema, err := pgdb_v1.CreateSchema(msg)
+	schema, err := pgdb_v1.CreateSchema(msg, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -640,14 +642,14 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 	endDate := time.Date(2024, 4, 1, 0, 0, 0, 0, time.UTC)
 
 	// Create the partitions
-	err = pgdb_v1.EventIDPartitionsUpdate(ctx, pg.DB, msg, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
+	err = pgdb_v1.EventIDPartitionsUpdate(ctx, pg.DB, msg, pgdb_v1.DialectV13, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
 		_, err := pg.DB.Exec(ctx, schema)
 		return err
 	})
 	require.NoError(t, err)
 
 	// Verify the partitions were created
-	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect().Descriptor())
+	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect(pgdb_v1.DialectV13).Descriptor())
 	require.NoError(t, err)
 
 	// Should have 3 partitions (Jan, Feb, Mar)
@@ -655,9 +657,9 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 
 	// Verify partition names follow expected pattern
 	expectedNames := []string{
-		msg.DBReflect().Descriptor().TableName() + "_2024_01",
-		msg.DBReflect().Descriptor().TableName() + "_2024_02",
-		msg.DBReflect().Descriptor().TableName() + "_2024_03",
+		msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName() + "_2024_01",
+		msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName() + "_2024_02",
+		msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName() + "_2024_03",
 	}
 
 	for i, expected := range expectedNames {
@@ -688,7 +690,7 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 
 	// Insert test data
 	for _, data := range testData {
-		sql, args, err := pgdb_v1.Insert(data)
+		sql, args, err := pgdb_v1.Insert(data, pgdb_v1.DialectV13)
 		require.NoError(t, err)
 		_, err = pg.DB.Exec(ctx, sql, args...)
 		require.NoError(t, err)
@@ -732,7 +734,7 @@ func TestKSUIDCollation(t *testing.T) {
 	}.Build()
 
 	// Create the table
-	schema, err := pgdb_v1.CreateSchema(msg)
+	schema, err := pgdb_v1.CreateSchema(msg, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -746,7 +748,7 @@ func TestKSUIDCollation(t *testing.T) {
 		FROM pg_attribute a
 		JOIN pg_class c ON c.oid = a.attrelid
 		WHERE c.relname = $1 AND a.attname = $2
-	`, msg.DBReflect().Descriptor().TableName(), "pb$event_id").Scan(&collation)
+	`, msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName(), "pb$event_id").Scan(&collation)
 	require.NoError(t, err)
 	require.Equal(t, "\"C\"", collation, "KSUID column should use C collation")
 
@@ -768,7 +770,7 @@ func TestKSUIDCollation(t *testing.T) {
 	}
 
 	// Create the partitions
-	err = pgdb_v1.EventIDPartitionsUpdate(ctx, pg.DB, msg, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
+	err = pgdb_v1.EventIDPartitionsUpdate(ctx, pg.DB, msg, pgdb_v1.DialectV13, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
 		_, err := pg.DB.Exec(ctx, schema)
 		return err
 	})
@@ -776,7 +778,7 @@ func TestKSUIDCollation(t *testing.T) {
 
 	// Insert test data
 	for _, data := range testData {
-		sql, args, err := pgdb_v1.Insert(data)
+		sql, args, err := pgdb_v1.Insert(data, pgdb_v1.DialectV13)
 		require.NoError(t, err)
 		_, err = pg.DB.Exec(ctx, sql, args...)
 		require.NoError(t, err)
@@ -787,7 +789,7 @@ func TestKSUIDCollation(t *testing.T) {
 		SELECT pb$event_id 
 		FROM %s 
 		ORDER BY pb$event_id
-	`, msg.DBReflect().Descriptor().TableName()))
+	`, msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName()))
 	require.NoError(t, err)
 	defer rows.Close()
 
@@ -833,7 +835,7 @@ func TestPastaIngredientBitVector(t *testing.T) {
 	}
 
 	// Create schema
-	schema, err := pgdb_v1.CreateSchema(testData[0])
+	schema, err := pgdb_v1.CreateSchema(testData[0], pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -846,7 +848,7 @@ func TestPastaIngredientBitVector(t *testing.T) {
 
 	// Insert test data
 	for _, data := range testData {
-		sql, args, err := pgdb_v1.Insert(data)
+		sql, args, err := pgdb_v1.Insert(data, pgdb_v1.DialectV13)
 		require.NoError(t, err)
 		_, err = pg.DB.Exec(ctx, sql, args...)
 		require.NoError(t, err)
@@ -929,7 +931,7 @@ func TestPastaIngredientBitVectorRetrieval(t *testing.T) {
 	}.Build()
 
 	// Create schema
-	schema, err := pgdb_v1.CreateSchema(testData)
+	schema, err := pgdb_v1.CreateSchema(testData, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
 		_, err := pg.DB.Exec(ctx, line)
@@ -944,7 +946,7 @@ func TestPastaIngredientBitVectorRetrieval(t *testing.T) {
 	testCreatePartitionTables(t, pg, testData, fakeTenantIds)
 
 	// Insert test data
-	sql, args, err := pgdb_v1.Insert(testData)
+	sql, args, err := pgdb_v1.Insert(testData, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	_, err = pg.DB.Exec(ctx, sql, args...)
 	require.NoError(t, err)
@@ -994,7 +996,7 @@ func TestPastaIngredientBitVectorRetrieval(t *testing.T) {
 
 	require.Equal(t, len(minHash), len(retrievedMinHash), "Retrieved min hash length should match")
 	for i := 0; i < len(minHash); i++ {
-		require.Equal(t, minHash[i], retrievedMinHash[i], 
+		require.Equal(t, minHash[i], retrievedMinHash[i],
 			"Retrieved min hash byte at index %d should match", i)
 	}
 
@@ -1005,7 +1007,7 @@ func TestPastaIngredientBitVectorRetrieval(t *testing.T) {
 func bitStringToBytes(t *testing.T, bitString string) []byte {
 	bytes := make([]byte, len(bitString)/8)
 	for i := 0; i < len(bitString); i += 8 {
-		byteValue := bitString[i:i+8]
+		byteValue := bitString[i : i+8]
 		intValue, err := strconv.ParseInt(byteValue, 2, 64)
 		require.NoError(t, err)
 		bytes[i/8] = byte(intValue)
