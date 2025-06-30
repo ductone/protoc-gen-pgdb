@@ -373,6 +373,21 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_pet_models_animals_v1_d6c55c5f"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("profile_pet_models_animals_v1_6b04a2a2"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
@@ -996,6 +1011,73 @@ func (x *PetSKSafeOperators) NotBetween(start string, end string) exp.RangeExpre
 
 func (x *PetDBQueryBuilder) SK() *PetSKSafeOperators {
 	return &PetSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type PetPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PetPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PetPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *PetPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *PetPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *PetPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *PetPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *PetPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *PetPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *PetPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *PetPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *PetPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *PetPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *PetPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *PetDBQueryBuilder) PKSKV2() *PetPKSKV2SafeOperators {
+	return &PetPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type PetFTSDataSafeOperators struct {
@@ -1984,6 +2066,21 @@ func (d *pgdbDescriptorScalarValue) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_scalar_value_models_animals_v1_0e1bb54a"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("repeated_sfixed32_scalar_value_models_a_4e825cd3"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_GIN,
@@ -2852,6 +2949,73 @@ func (x *ScalarValueSKSafeOperators) NotBetween(start string, end string) exp.Ra
 
 func (x *ScalarValueDBQueryBuilder) SK() *ScalarValueSKSafeOperators {
 	return &ScalarValueSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type ScalarValuePKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ScalarValuePKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ScalarValueDBQueryBuilder) PKSKV2() *ScalarValuePKSKV2SafeOperators {
+	return &ScalarValuePKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type ScalarValueFTSDataSafeOperators struct {
@@ -4552,6 +4716,21 @@ func (d *pgdbDescriptorBook) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_book_models_animals_v1_217bd7bb"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
 	return rv
 }
 
@@ -5120,6 +5299,73 @@ func (x *BookDBQueryBuilder) SK() *BookSKSafeOperators {
 	return &BookSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
+type BookPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *BookPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *BookPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *BookPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *BookPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *BookPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *BookPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *BookPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *BookPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *BookPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *BookPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *BookPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *BookPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *BookPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *BookDBQueryBuilder) PKSKV2() *BookPKSKV2SafeOperators {
+	return &BookPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
+}
+
 type BookFTSDataSafeOperators struct {
 	column    string
 	tableName string
@@ -5564,6 +5810,21 @@ func (d *pgdbDescriptorNewspaper) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*p
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pkskv2_newspaper_models_animals_v1_1595be97"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pkskv2")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -6027,6 +6288,73 @@ func (x *NewspaperSKSafeOperators) NotBetween(start string, end string) exp.Rang
 
 func (x *NewspaperDBQueryBuilder) SK() *NewspaperSKSafeOperators {
 	return &NewspaperSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type NewspaperPKSKV2SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *NewspaperPKSKV2SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *NewspaperPKSKV2SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *NewspaperPKSKV2SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *NewspaperPKSKV2SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *NewspaperPKSKV2SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *NewspaperPKSKV2SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *NewspaperPKSKV2SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *NewspaperPKSKV2SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *NewspaperPKSKV2SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *NewspaperPKSKV2SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *NewspaperPKSKV2SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *NewspaperPKSKV2SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperPKSKV2SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *NewspaperDBQueryBuilder) PKSKV2() *NewspaperPKSKV2SafeOperators {
+	return &NewspaperPKSKV2SafeOperators{tableName: x.tableName, column: "pb$" + "pkskv2"}
 }
 
 type NewspaperFTSDataSafeOperators struct {
