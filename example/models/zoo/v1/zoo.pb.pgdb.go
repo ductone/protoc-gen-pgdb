@@ -188,13 +188,23 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 
 	}
 
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colidCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{

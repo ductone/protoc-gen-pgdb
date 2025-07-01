@@ -191,13 +191,23 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 
 	}
 
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colidCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -1328,13 +1338,23 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		Collation:          colpasta_idCollation,
 	})
 
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colidCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -2870,13 +2890,23 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 	}
 
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colidCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -4037,13 +4067,23 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 
 	}
 
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colidCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -5267,13 +5307,23 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 
 	}
 
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colidCollation,
 	})
 
 	colevent_idCollation := ""

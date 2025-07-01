@@ -272,7 +272,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			rv.V17FieldOverrides = &V17FieldOverrides{
 				Collation: "C",
 			}
-		} else if strings.HasSuffix(ctx.Name(f).LowerSnakeCase().String(), "_id") || strings.TrimPrefix(ctx.Name(f).LowerSnakeCase().String(), "pb$") == "id" {
+		} else if isIDField(ctx, f) {
 			rv.V17FieldOverrides = &V17FieldOverrides{
 				Collation: "C",
 			}
@@ -281,6 +281,11 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		rv.Nested = true
 	}
 	return rv, nil
+}
+
+func isIDField(ctx pgsgo.Context, f pgs.Field) bool {
+	isID := strings.HasSuffix(ctx.Name(f).LowerSnakeCase().String(), "_id") || strings.TrimPrefix(ctx.Name(f).LowerSnakeCase().String(), "pb$") == "id"
+	return isID && f.Type().ProtoType() == pgs.StringT
 }
 
 // Panics on error.
