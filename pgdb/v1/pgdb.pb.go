@@ -533,6 +533,7 @@ type FieldOptions struct {
 	xxx_hidden_MessageBehavior FieldOptions_MessageBehavior `protobuf:"varint,3,opt,name=message_behavior,json=messageBehavior,proto3,enum=pgdb.v1.FieldOptions_MessageBehavior"`
 	xxx_hidden_Collation       string                       `protobuf:"bytes,5,opt,name=collation,proto3"`
 	xxx_hidden_BitsSize        int32                        `protobuf:"varint,6,opt,name=bits_size,json=bitsSize,proto3"`
+	xxx_hidden_Ksuid           bool                         `protobuf:"varint,7,opt,name=ksuid,proto3"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
@@ -597,6 +598,13 @@ func (x *FieldOptions) GetBitsSize() int32 {
 	return 0
 }
 
+func (x *FieldOptions) GetKsuid() bool {
+	if x != nil {
+		return x.xxx_hidden_Ksuid
+	}
+	return false
+}
+
 func (x *FieldOptions) SetFullTextType(v FieldOptions_FullTextType) {
 	x.xxx_hidden_FullTextType = v
 }
@@ -617,16 +625,21 @@ func (x *FieldOptions) SetBitsSize(v int32) {
 	x.xxx_hidden_BitsSize = v
 }
 
+func (x *FieldOptions) SetKsuid(v bool) {
+	x.xxx_hidden_Ksuid = v
+}
+
 type FieldOptions_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
 	FullTextType    FieldOptions_FullTextType
 	FullTextWeight  FieldOptions_FullTextWeight
 	MessageBehavior FieldOptions_MessageBehavior
-	// Specifies the collation for the field in PostgreSQL
+	// Specifies the collation for the field in PostgresSQL
 	Collation string
 	// bit vector size options
 	BitsSize int32
+	Ksuid    bool
 }
 
 func (b0 FieldOptions_builder) Build() *FieldOptions {
@@ -638,6 +651,7 @@ func (b0 FieldOptions_builder) Build() *FieldOptions {
 	x.xxx_hidden_MessageBehavior = b.MessageBehavior
 	x.xxx_hidden_Collation = b.Collation
 	x.xxx_hidden_BitsSize = b.BitsSize
+	x.xxx_hidden_Ksuid = b.Ksuid
 	return m0
 }
 
@@ -1020,13 +1034,14 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"%PARTITIONED_BY_DATE_RANGE_UNSPECIFIED\x10\x00\x12!\n" +
 	"\x1dPARTITIONED_BY_DATE_RANGE_DAY\x10\x01\x12#\n" +
 	"\x1fPARTITIONED_BY_DATE_RANGE_MONTH\x10\x02\x12\"\n" +
-	"\x1ePARTITIONED_BY_DATE_RANGE_YEAR\x10\x03\"\xb6\x06\n" +
+	"\x1ePARTITIONED_BY_DATE_RANGE_YEAR\x10\x03\"\xcc\x06\n" +
 	"\fFieldOptions\x12H\n" +
 	"\x0efull_text_type\x18\x01 \x01(\x0e2\".pgdb.v1.FieldOptions.FullTextTypeR\ffullTextType\x12N\n" +
 	"\x10full_text_weight\x18\x02 \x01(\x0e2$.pgdb.v1.FieldOptions.FullTextWeightR\x0efullTextWeight\x12P\n" +
 	"\x10message_behavior\x18\x03 \x01(\x0e2%.pgdb.v1.FieldOptions.MessageBehaviorR\x0fmessageBehavior\x12\x1c\n" +
 	"\tcollation\x18\x05 \x01(\tR\tcollation\x12\x1b\n" +
-	"\tbits_size\x18\x06 \x01(\x05R\bbitsSize\"\x85\x01\n" +
+	"\tbits_size\x18\x06 \x01(\x05R\bbitsSize\x12\x14\n" +
+	"\x05ksuid\x18\a \x01(\bR\x05ksuid\"\x85\x01\n" +
 	"\fFullTextType\x12\x1e\n" +
 	"\x1aFULL_TEXT_TYPE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14FULL_TEXT_TYPE_EXACT\x10\x01\x12\x1a\n" +

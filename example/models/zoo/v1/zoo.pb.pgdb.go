@@ -13,11 +13,18 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type pgdbDescriptorShop struct{}
+type pgdbDescriptorShop struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorShop pgdb_v1.Descriptor = &pgdbDescriptorShop{}
+	instancepgdbDescriptorShop    pgdb_v1.Descriptor = &pgdbDescriptorShop{}
+	instancepgdbDescriptorShopV17 pgdb_v1.Descriptor = &pgdbDescriptorShop{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorShop) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorShop) TableName() string {
 	return "pb_shop_models_zoo_v1_ca2425f6"
@@ -47,66 +54,111 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 
 	if !df.IsNested {
 
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          coltenant_idCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colpkCollation,
 		})
 
 	}
 
 	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
 
 		rv = append(rv, &pgdb_v1.Column{
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
-			OverrideExpression: "",
+			OverrideExpression: colskOverrideExpression,
 			Default:            "",
-			Collation:          "",
+			Collation:          colskCollation,
 		})
 
 	}
 
 	if !df.IsNested {
 
-		rv = append(rv, &pgdb_v1.Column{
-			Name:               df.ColumnName("pkskv2"),
-			Type:               "varchar",
-			Nullable:           df.Nullable(true),
-			OverrideExpression: "",
-			Default:            "",
-			Collation:          "C",
-		})
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+			})
+		}
 
 	}
 
@@ -136,13 +188,23 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 
 	}
 
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
 	rv = append(rv, &pgdb_v1.Column{
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
-		OverrideExpression: "",
+		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
-		Collation:          "",
+		Collation:          colidCollation,
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
@@ -172,32 +234,29 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		Collation:          "",
 	})
 
-	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("50$")...)...)
+	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("50$")...)...)
 
-	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect().Descriptor().Fields(df.Nested("51$")...)...)
+	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("51$")...)...)
 
-	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect().Descriptor().Fields(df.Nested("52$")...)...)
+	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("52$")...)...)
 
-	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect().Descriptor().Fields(df.Nested("5$")...)...)
+	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("5$")...)...)
 
 	return rv
 }
 
 func (d *pgdbDescriptorShop) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_shop_models_zoo_v1_ca2425f6",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorShop) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_shop_models_zoo_v1_ca2425f6",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -214,7 +273,18 @@ func (d *pgdbDescriptorShop) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorShop) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_shop_models_zoo_v1_ca2425f6", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_shop_models_zoo_v1_ca2425f6",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorShop) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -322,17 +392,24 @@ var ShopMedium = struct {
 }
 
 type pgdbMessageShop struct {
-	self *Shop
+	self    *Shop
+	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Shop) DBReflect() pgdb_v1.Message {
+func (dbr *Shop) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageShop{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessageShop) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorShop
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorShopV17
+	default:
+		return instancepgdbDescriptorShop
+	}
 }
 
 func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -403,6 +480,10 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 	if !ro.IsNested {
 
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
+
 	}
 
 	if !ro.IsNested {
@@ -416,13 +497,13 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 			},
 		}
 
-		cfv5tmp = append(cfv5tmp, m.self.GetPaper().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetPaper().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetEbook().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetEbook().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetAnything().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetAnything().DBReflect(m.Dialect()).SearchData()...)
 
-		cfv5tmp = append(cfv5tmp, m.self.GetMgr().DBReflect().SearchData()...)
+		cfv5tmp = append(cfv5tmp, m.self.GetMgr().DBReflect(m.Dialect()).SearchData()...)
 
 		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
@@ -475,7 +556,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v3opts = append(v3opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v3, err := pgdb_v1.MarshalNestedRecord(v3tmp, v3opts...)
+	v3, err := pgdb_v1.MarshalNestedMsgRecord(v3tmp.DBReflect(m.Dialect()), v3opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -494,7 +575,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v4opts = append(v4opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v4, err := pgdb_v1.MarshalNestedRecord(v4tmp, v4opts...)
+	v4, err := pgdb_v1.MarshalNestedMsgRecord(v4tmp.DBReflect(m.Dialect()), v4opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -513,7 +594,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v5opts = append(v5opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v5, err := pgdb_v1.MarshalNestedRecord(v5tmp, v5opts...)
+	v5, err := pgdb_v1.MarshalNestedMsgRecord(v5tmp.DBReflect(m.Dialect()), v5opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -540,7 +621,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 		v7opts = append(v7opts, pgdb_v1.RecordOptionNulled(true))
 	}
 
-	v7, err := pgdb_v1.MarshalNestedRecord(v7tmp, v7opts...)
+	v7, err := pgdb_v1.MarshalNestedMsgRecord(v7tmp.DBReflect(m.Dialect()), v7opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -574,15 +655,19 @@ func (m *pgdbMessageShop) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 		},
 	}
 
-	rv = append(rv, m.self.GetPaper().DBReflect().SearchData()...)
+	rv = append(rv, m.self.GetPaper().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetEbook().DBReflect().SearchData()...)
+	rv = append(rv, m.self.GetEbook().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetAnything().DBReflect().SearchData()...)
+	rv = append(rv, m.self.GetAnything().DBReflect(m.Dialect()).SearchData()...)
 
-	rv = append(rv, m.self.GetMgr().DBReflect().SearchData()...)
+	rv = append(rv, m.self.GetMgr().DBReflect(m.Dialect()).SearchData()...)
 
 	return rv
+}
+
+func (m *pgdbMessageShop) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 
 type ShopDB struct {
@@ -602,7 +687,7 @@ type ShopDBColumns struct {
 }
 
 func (x *Shop) DB() *ShopDB {
-	return &ShopDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &ShopDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *ShopDB) TableName() string {
@@ -966,19 +1051,6 @@ func (x *ShopSKQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
-type ShopPKSKV2QueryType struct {
-	column    string
-	tableName string
-}
-
-func (x *ShopDBQueryUnsafe) PKSKV2() *ShopPKSKV2QueryType {
-	return &ShopPKSKV2QueryType{tableName: x.tableName, column: "pb$" + "pkskv2"}
-}
-
-func (x *ShopPKSKV2QueryType) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
 type ShopFTSDataQueryType struct {
 	column    string
 	tableName string
@@ -1077,10 +1149,6 @@ func (x *ShopDBColumns) SK() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "sk")
 }
 
-func (x *ShopDBColumns) PKSKV2() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, "pkskv2")
-}
-
 func (x *ShopDBColumns) FTSData() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
 }
@@ -1105,11 +1173,18 @@ func (x *ShopDBColumns) Medium() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
 }
 
-type pgdbDescriptorShop_Manager struct{}
+type pgdbDescriptorShop_Manager struct {
+	dialect pgdb_v1.Dialect
+}
 
 var (
-	instancepgdbDescriptorShop_Manager pgdb_v1.Descriptor = &pgdbDescriptorShop_Manager{}
+	instancepgdbDescriptorShop_Manager    pgdb_v1.Descriptor = &pgdbDescriptorShop_Manager{}
+	instancepgdbDescriptorShop_ManagerV17 pgdb_v1.Descriptor = &pgdbDescriptorShop_Manager{dialect: pgdb_v1.DialectV17}
 )
+
+func (d *pgdbDescriptorShop_Manager) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
 
 func (d *pgdbDescriptorShop_Manager) TableName() string {
 	return "pb_manager_models_zoo_v1_6ccf2214"
@@ -1150,20 +1225,17 @@ func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptio
 }
 
 func (d *pgdbDescriptorShop_Manager) PKSKField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{
-		Table: "pb_manager_models_zoo_v1_6ccf2214",
-		Name:  "pb$pksk",
-		Type:  "varchar",
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
 	}
-}
-
-func (d *pgdbDescriptorShop_Manager) PKSKV2Field() *pgdb_v1.Column {
 	return &pgdb_v1.Column{
 		Table:     "pb_manager_models_zoo_v1_6ccf2214",
-		Name:      "pb$pkskv2",
+		Name:      "pb$pksk",
 		Type:      "varchar",
-		Nullable:  true,
-		Collation: "C",
+		Collation: collation,
 	}
 }
 
@@ -1180,7 +1252,18 @@ func (d *pgdbDescriptorShop_Manager) VersioningField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorShop_Manager) TenantField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "pb$tenant_id", Type: "varchar"}
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_manager_models_zoo_v1_6ccf2214",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
 }
 
 func (d *pgdbDescriptorShop_Manager) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
@@ -1208,17 +1291,24 @@ func (d *pgdbDescriptorShop_Manager) Statistics(opts ...pgdb_v1.StatisticOptions
 }
 
 type pgdbMessageShop_Manager struct {
-	self *Shop_Manager
+	self    *Shop_Manager
+	dialect pgdb_v1.Dialect
 }
 
-func (dbr *Shop_Manager) DBReflect() pgdb_v1.Message {
+func (dbr *Shop_Manager) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
 	return &pgdbMessageShop_Manager{
-		self: dbr,
+		self:    dbr,
+		dialect: dialect,
 	}
 }
 
 func (m *pgdbMessageShop_Manager) Descriptor() pgdb_v1.Descriptor {
-	return instancepgdbDescriptorShop_Manager
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorShop_ManagerV17
+	default:
+		return instancepgdbDescriptorShop_Manager
+	}
 }
 
 func (m *pgdbMessageShop_Manager) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -1246,6 +1336,10 @@ func (m *pgdbMessageShop_Manager) SearchData(opts ...pgdb_v1.RecordOptionsFunc) 
 	return rv
 }
 
+func (m *pgdbMessageShop_Manager) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
 type Shop_ManagerDB struct {
 	tableName string
 }
@@ -1263,7 +1357,7 @@ type Shop_ManagerDBColumns struct {
 }
 
 func (x *Shop_Manager) DB() *Shop_ManagerDB {
-	return &Shop_ManagerDB{tableName: x.DBReflect().Descriptor().TableName()}
+	return &Shop_ManagerDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
 }
 
 func (x *Shop_ManagerDB) TableName() string {

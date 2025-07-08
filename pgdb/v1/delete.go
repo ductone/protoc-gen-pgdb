@@ -7,8 +7,8 @@ import (
 	"github.com/doug-martin/goqu/v9/exp"
 )
 
-func Delete(msg DBReflectMessage) (string, []any, error) {
-	dbr := msg.DBReflect()
+func Delete(msg DBReflectMessage, dialect Dialect) (string, []any, error) {
+	dbr := msg.DBReflect(dialect)
 	desc := dbr.Descriptor()
 	tableName := desc.TableName()
 
@@ -24,7 +24,7 @@ func Delete(msg DBReflectMessage) (string, []any, error) {
 
 	primaryIndex := desc.IndexPrimaryKey()
 	if primaryIndex == nil {
-		return "", nil, errors.New("pgdb_v1.Insert: malformed message: primary index missing")
+		return "", nil, errors.New("pgdb_v1: malformed message: primary index missing")
 	}
 
 	qb := goqu.Dialect("postgres")
@@ -35,7 +35,7 @@ func Delete(msg DBReflectMessage) (string, []any, error) {
 	)
 
 	for _, colName := range primaryIndex.Columns {
-		if colName == "pb$pksk" || colName == "pb$pkskv2" {
+		if colName == "pb$pksk" {
 			pksk, err := generatedPKSK(record)
 			if err != nil {
 				return "", nil, err
@@ -65,19 +65,19 @@ func Delete(msg DBReflectMessage) (string, []any, error) {
 func generatedPKSK(record exp.Record) (string, error) {
 	pkAny, ok := record["pb$pk"]
 	if !ok {
-		return "", errors.New("pgdb_v1: pb$pk missing from message; unable to delete without it")
+		return "", errors.New("pgdb_v1: pb$pk missing from message")
 	}
 	skAny, ok := record["pb$sk"]
 	if !ok {
-		return "", errors.New("pgdb_v1: pb$pk missing from message; unable to delete without it")
+		return "", errors.New("pgdb_v1: pb$pk missing from message")
 	}
 	pk, ok := pkAny.(string)
 	if !ok {
-		return "", errors.New("pgdb_v1: pb$pk wrong type from message; unable to delete without it")
+		return "", errors.New("pgdb_v1: pb$pk wrong type from message")
 	}
 	sk, ok := skAny.(string)
 	if !ok {
-		return "", errors.New("pgdb_v1: pb$pk wrong type from message; unable to delete without it")
+		return "", errors.New("pgdb_v1: pb$pk wrong type from message")
 	}
 	return pk + "|" + sk, nil
 }

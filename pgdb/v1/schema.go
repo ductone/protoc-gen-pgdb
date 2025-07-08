@@ -10,15 +10,16 @@ import (
 	"time"
 
 	"github.com/doug-martin/goqu/v9"
-	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 	"github.com/jackc/pgx/v5"
+
+	"github.com/ductone/protoc-gen-pgdb/internal/slice"
 
 	_ "github.com/doug-martin/goqu/v9/dialect/postgres"
 	"github.com/segmentio/ksuid"
 )
 
-func CreateSchema(msg DBReflectMessage) ([]string, error) {
-	dbr := msg.DBReflect()
+func CreateSchema(msg DBReflectMessage, dialect Dialect) ([]string, error) {
+	dbr := msg.DBReflect(dialect)
 	desc := dbr.Descriptor()
 
 	// Validate only one partitioning strategy is used
@@ -86,7 +87,7 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 
 	rv := []string{buf.String()}
 
-	more, err := IndexSchema(msg)
+	more, err := IndexSchema(msg, dialect)
 	if err != nil {
 		return nil, err
 	}
@@ -98,8 +99,8 @@ func CreateSchema(msg DBReflectMessage) ([]string, error) {
 	return rv, nil
 }
 
-func IndexSchema(msg DBReflectMessage) ([]string, error) {
-	dbr := msg.DBReflect()
+func IndexSchema(msg DBReflectMessage, dialect Dialect) ([]string, error) {
+	dbr := msg.DBReflect(dialect)
 	desc := dbr.Descriptor()
 	indexes := desc.Indexes()
 	rv := make([]string, 0, len(indexes))
@@ -257,9 +258,9 @@ func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string
 	return false, nil
 }
 
-func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]string, error) {
+func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialect Dialect) ([]string, error) {
 	rv := make([]string, 0)
-	dbr := msg.DBReflect()
+	dbr := msg.DBReflect(dialect)
 	desc := dbr.Descriptor()
 
 	haveCols, err := readColumns(ctx, db, desc)
@@ -268,7 +269,7 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage) ([]str
 	}
 
 	if len(haveCols) == 0 {
-		return CreateSchema(msg)
+		return CreateSchema(msg, dialect)
 	}
 
 	for _, field := range desc.Fields() {
@@ -368,8 +369,8 @@ func createPartitionTableName(tableName string, tenantId string) string {
 type TenantIteratorFunc func(ctx context.Context) (string, error)
 type SchemaUpdateFunc func(ctx context.Context, schema string, args ...interface{}) error
 
-func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) error {
-	tableName := msg.DBReflect().Descriptor().TableName()
+func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialect Dialect, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) error {
+	tableName := msg.DBReflect(dialect).Descriptor().TableName()
 
 	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
 	if err != nil {
@@ -407,8 +408,8 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 }
 
 // DatePartitionsUpdate creates partitions for date ranges based on the partitioning scheme.
-func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
-	desc := msg.DBReflect().Descriptor()
+func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialect Dialect, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
+	desc := msg.DBReflect(dialect).Descriptor()
 	tableName := desc.TableName()
 
 	// Validate that created_at column exists
@@ -470,8 +471,8 @@ func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessa
 }
 
 // EventIDPartitionsUpdate creates partitions for event ID ranges based on their embedded timestamps.
-func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
-	desc := msg.DBReflect().Descriptor()
+func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialect Dialect, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
+	desc := msg.DBReflect(dialect).Descriptor()
 	tableName := desc.TableName()
 
 	// Validate that event_id column exists

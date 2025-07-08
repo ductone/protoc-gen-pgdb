@@ -5,7 +5,7 @@ import (
 )
 
 type DBReflectMessage interface {
-	DBReflect() Message
+	DBReflect(dialect Dialect) Message
 }
 
 type Message interface {
@@ -13,6 +13,7 @@ type Message interface {
 
 	Record(opts ...RecordOptionsFunc) (exp.Record, error)
 	SearchData(opts ...RecordOptionsFunc) []*SearchContent
+	Dialect() Dialect
 }
 
 type ColumnExpression interface {

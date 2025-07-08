@@ -4,16 +4,23 @@
 
 type {{.MessageType}} struct {
     self *{{.ReceiverType}}
+    dialect pgdb_v1.Dialect
 }
 
-func (dbr *{{.ReceiverType}}) DBReflect() pgdb_v1.Message {
+func (dbr *{{.ReceiverType}}) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
     return &{{.MessageType}}{
         self: dbr,
+        dialect: dialect,
     }
 }
 
 func (m *{{.MessageType}}) Descriptor() pgdb_v1.Descriptor {
-    return instance{{.DescriptorType}}
+    switch m.Dialect() {
+    case pgdb_v1.DialectV17:
+        return instance{{.DescriptorType}}V17
+    default:
+        return instance{{.DescriptorType}}
+    }
 }
 
 func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
@@ -28,9 +35,11 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
     rv := exp.Record{}
 
     {{ range .Fields }}
+        {{ $v17Disabled := and .V17FieldOverrides .V17FieldOverrides.Disabled }}
         {{ if .ExcludeNested }}
         if !ro.IsNested {
         {{ end }}
+         {{ if $v17Disabled }} if m.Dialect() != pgdb_v1.DialectV17 { {{ end }}
         {{.Convert.CodeForValue}}
         {{ $VarForValue := .Convert.VarForValue }}
         {{ if $VarForValue }}
@@ -51,6 +60,7 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
             }
         }
         {{ end }}
+        {{ if $v17Disabled }} } {{ end }}
         {{ if .ExcludeNested }}
             }
         {{ end }}
@@ -72,8 +82,12 @@ func (m *{{.MessageType}}) SearchData(opts ...pgdb_v1.RecordOptionsFunc) ([]*pgd
 
     {{ range .Fields }}
         {{ if .Nested }}
-        rv = append(rv, m.self.Get{{- .GoName -}}().DBReflect().SearchData()...)
+        rv = append(rv, m.self.Get{{- .GoName -}}().DBReflect(m.Dialect()).SearchData()...)
         {{ end }}
     {{ end }}
     return rv
+}
+
+func (m *{{.MessageType}}) Dialect() pgdb_v1.Dialect {
+    return pgdb_v1.DialectOrDefault(m.dialect)
 }

@@ -10,8 +10,12 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func MarshalNestedRecord(msg DBReflectMessage, opts ...RecordOptionsFunc) (exp.Record, error) {
-	recs, err := msg.DBReflect().Record(opts...)
+func MarshalNestedRecord(msg DBReflectMessage, dialect Dialect, opts ...RecordOptionsFunc) (exp.Record, error) {
+	return MarshalNestedMsgRecord(msg.DBReflect(dialect), opts...)
+}
+
+func MarshalNestedMsgRecord(msg Message, opts ...RecordOptionsFunc) (exp.Record, error) {
+	recs, err := msg.Record(opts...)
 	if err != nil {
 		return nil, err
 	}

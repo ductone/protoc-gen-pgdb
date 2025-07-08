@@ -22,11 +22,9 @@ func (m *mockDescriptor) Fields(opts ...DescriptorFieldOptionFunc) []*Column {
 }
 
 func (m *mockDescriptor) PKSKField() *Column {
-	return nil
-}
-
-func (m *mockDescriptor) PKSKV2Field() *Column {
-	return nil
+	return &Column{
+		Name: "pb$pksk",
+	}
 }
 
 func (m *mockDescriptor) DataField() *Column {
@@ -38,7 +36,9 @@ func (m *mockDescriptor) SearchField() *Column {
 }
 
 func (m *mockDescriptor) VersioningField() *Column {
-	return nil
+	return &Column{
+		Name: "pb$updated_at",
+	}
 }
 
 func (m *mockDescriptor) TenantField() *Column {
@@ -62,7 +62,9 @@ func (m *mockDescriptor) Indexes(opts ...IndexOptionsFunc) []*Index {
 }
 
 func (m *mockDescriptor) IndexPrimaryKey(opts ...IndexOptionsFunc) *Index {
-	return nil
+	return &Index{
+		Name: "pbidx_" + m.tableName,
+	}
 }
 
 func (m *mockDescriptor) Statistics(opts ...StatisticOptionsFunc) []*Statistic {

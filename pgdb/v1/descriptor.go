@@ -23,7 +23,6 @@ type Descriptor interface {
 	Statistics(opts ...StatisticOptionsFunc) []*Statistic
 
 	GetPartitionDateRange() MessageOptions_PartitionedByDateRange
-	PKSKV2Field() *Column
 }
 
 type DescriptorFieldOption struct {

@@ -9,7 +9,7 @@
     {{ end }}
 	}
     {{ range .NestedFieldNames }}
-		{{$VarName}}tmp = append({{$VarName}}tmp, m.self.Get{{- . -}}().DBReflect().SearchData()...)
+		{{$VarName}}tmp = append({{$VarName}}tmp, m.self.Get{{- . -}}().DBReflect(m.Dialect()).SearchData()...)
     {{ end }}
 
 {{.VarName}} := pgdb_v1.FullTextSearchVectors({{.VarName}}tmp)
