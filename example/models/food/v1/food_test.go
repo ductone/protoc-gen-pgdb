@@ -642,7 +642,7 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 	endDate := time.Date(2024, 4, 1, 0, 0, 0, 0, time.UTC)
 
 	// Create the partitions
-	err = pgdb_v1.EventIDPartitionsUpdate(ctx, pg.DB, msg, pgdb_v1.DialectV13, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
+	err = pgdb_v1.KSUIDPartitionsUpdate(ctx, "event_id", pg.DB, msg, pgdb_v1.DialectV13, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
 		_, err := pg.DB.Exec(ctx, schema)
 		return err
 	})
@@ -770,7 +770,7 @@ func TestKSUIDCollation(t *testing.T) {
 	}
 
 	// Create the partitions
-	err = pgdb_v1.EventIDPartitionsUpdate(ctx, pg.DB, msg, pgdb_v1.DialectV13, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
+	err = pgdb_v1.KSUIDPartitionsUpdate(ctx, "event_id", pg.DB, msg, pgdb_v1.DialectV13, startDate, endDate, func(ctx context.Context, schema string, args ...interface{}) error {
 		_, err := pg.DB.Exec(ctx, schema)
 		return err
 	})
