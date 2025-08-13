@@ -470,8 +470,8 @@ func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessa
 	return nil
 }
 
-// EventIDPartitionsUpdate creates partitions for event ID ranges based on their embedded timestamps.
-func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialect Dialect, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
+// KSUIDPartitionsUpdate creates partitions for event ID ranges based on their embedded timestamps.
+func KSUIDPartitionsUpdate(ctx context.Context, fieldName string, db sqlScanner, msg DBReflectMessage, dialect Dialect, startDate, endDate time.Time, updateFunc SchemaUpdateFunc) error {
 	desc := msg.DBReflect(dialect).Descriptor()
 	tableName := desc.TableName()
 
@@ -480,8 +480,8 @@ func EventIDPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMe
 	if err != nil {
 		return err
 	}
-	if _, hasEventID := columns["pb$event_id"]; !hasEventID {
-		return fmt.Errorf("table %s is configured for event_id partitioning but missing event_id column", tableName)
+	if _, hasFeild := columns["pb$"+fieldName]; !hasFeild {
+		return fmt.Errorf("table %s is configured for partitioning on %s but missing %s column", tableName, fieldName, fieldName)
 	}
 
 	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
