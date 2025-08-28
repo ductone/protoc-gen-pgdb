@@ -1,6 +1,6 @@
 module github.com/ductone/protoc-gen-pgdb/example
 
-go 1.24
+go 1.25
 
 replace github.com/ductone/protoc-gen-pgdb => ../
 
@@ -16,7 +16,7 @@ require (
 
 require (
 	github.com/clipperhouse/jargon v1.0.9 // indirect
-	github.com/clipperhouse/uax29 v1.14.3 // indirect
+	github.com/clipperhouse/uax29 v1.15.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gaissmai/extnetip v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
@@ -27,10 +27,13 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
+	golang.org/x/crypto v0.41.0 // indirect
 	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sync v0.14.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/sync v0.16.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+// https://github.com/clipperhouse/jargon/pull/17
+replace github.com/clipperhouse/jargon => github.com/VVill-ga/go-jargon v0.0.0-20250828163223-584abda901e4
