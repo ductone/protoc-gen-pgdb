@@ -1,5 +1,10 @@
 package words
 
+import (
+	"bufio"
+	"unicode/utf8"
+)
+
 var trie = newWordsTrie(0)
 
 // is determines if lookup intersects propert(ies)
@@ -14,34 +19,43 @@ const (
 )
 
 // SplitFunc is a bufio.SplitFunc implementation of word segmentation, for use with bufio.Scanner.
-func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
+var SplitFunc bufio.SplitFunc = none.splitFunc
+
+// splitFunc is a bufio.splitFunc implementation of word segmentation, for use with bufio.Scanner.
+func (j *Joiners) splitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 	if len(data) == 0 {
 		return 0, nil, nil
 	}
 
 	// These vars are stateful across loop iterations
-	var pos, w int
-	var current property
-
+	var pos int
 	var lastExIgnore property     // "last excluding ignored categories"
 	var lastLastExIgnore property // "the last one before that"
 	var regionalIndicatorCount int
 
-	// https://unicode.org/reports/tr29/#WB1
-	{
-		// Start of text always advances
-		current, w = trie.lookup(data[pos:])
-		if w == 0 {
-			if !atEOF {
-				// Rune extends past current data, request more
-				return 0, nil, nil
-			}
-			pos = len(data)
-			return pos, data[:pos], nil
-		}
+	// Rules are usually of the form Cat1 × Cat2; "current" refers to the first property
+	// to the right of the ×, from which we look back or forward
 
-		pos += w
+	current, w := trie.lookup(data[pos:])
+	if w == 0 {
+		if !atEOF {
+			// Rune extends past current data, request more
+			return 0, nil, nil
+		}
+		pos = len(data)
+		return pos, data[:pos], nil
 	}
+
+	if j != nil && j.Leading != nil {
+		r, _ := utf8.DecodeRune(data[pos:])
+		if runesContain(j.Leading, r) {
+			current |= _AHLetter
+		}
+	}
+
+	// https://unicode.org/reports/tr29/#WB1
+	// Start of text always advances
+	pos += w
 
 	for {
 		eot := pos == len(data) // "end of text"
@@ -56,9 +70,7 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 			break
 		}
 
-		// Rules are usually of the form Cat1 × Cat2; "current" refers to the first property
-		// to the right of the ×, from which we look back or forward
-
+		// Remember previous properties to avoid lookups/lookbacks
 		last := current
 		if !last.is(_Ignore) {
 			lastLastExIgnore = lastExIgnore
@@ -76,9 +88,26 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 			return 0, nil, nil
 		}
 
-		// Optimization: no rule can possibly apply
-		if current|last == 0 { // i.e. both are zero
-			break
+		if j != nil && j.Middle != nil {
+			r, _ := utf8.DecodeRune(data[pos:])
+			if runesContain(j.Middle, r) {
+				current |= _MidNumLet
+			}
+		}
+
+		// https://unicode.org/reports/tr29/#WB5
+		// https://unicode.org/reports/tr29/#WB8
+		// https://unicode.org/reports/tr29/#WB9
+		// https://unicode.org/reports/tr29/#WB10
+		if current.is(_Numeric|_AHLetter) && lastExIgnore.is(_Numeric|_AHLetter) {
+			pos += w
+			continue
+		}
+
+		// https://unicode.org/reports/tr29/#WB3d
+		if (current & last).is(_WSegSpace) {
+			pos += w
+			continue
 		}
 
 		// https://unicode.org/reports/tr29/#WB3
@@ -99,12 +128,6 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 			continue
 		}
 
-		// https://unicode.org/reports/tr29/#WB3d
-		if (current & last).is(_WSegSpace) {
-			pos += w
-			continue
-		}
-
 		// https://unicode.org/reports/tr29/#WB4
 		if current.is(_Extend | _Format | _ZWJ) {
 			pos += w
@@ -113,31 +136,26 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 
 		// WB4 applies to subsequent rules; there is an implied "ignoring Extend & Format & ZWJ"
 		// https://unicode.org/reports/tr29/#Grapheme_Cluster_and_Format_Rules
-		// The previous/subsequent methods are shorthand for "seek a property but skip over Extend|Format|ZWJ on the way"
-
-		// https://unicode.org/reports/tr29/#WB5
-		if current.is(_AHLetter) && lastExIgnore.is(_AHLetter) {
-			pos += w
-			continue
-		}
+		// The previous/subsequent funcs are shorthand for "seek a property but skip over Extend|Format|ZWJ on the way"
 
 		// https://unicode.org/reports/tr29/#WB6
 		if current.is(_MidLetter|_MidNumLetQ) && lastExIgnore.is(_AHLetter) {
-			found, more := subsequent(_AHLetter, data[pos+w:], atEOF)
+			advance, more := subsequent(_AHLetter, data[pos+w:], atEOF)
 
 			if more {
 				// Token extends past current data, request more
 				return 0, nil, nil
 			}
 
+			found := advance != notfound
 			if found {
-				pos += w
+				pos += w + advance
 				continue
 			}
 		}
 
 		// https://unicode.org/reports/tr29/#WB7
-		if current.is(_AHLetter) && lastExIgnore.is(_MidLetter|_MidNumLetQ|_Ignore) && lastLastExIgnore.is(_AHLetter) {
+		if current.is(_AHLetter) && lastExIgnore.is(_MidLetter|_MidNumLetQ) && lastLastExIgnore.is(_AHLetter) {
 			pos += w
 			continue
 		}
@@ -149,30 +167,23 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 		}
 
 		// https://unicode.org/reports/tr29/#WB7b
-		if current.is(_DoubleQuote) && lastExIgnore.is(_HebrewLetter|_Ignore) {
-			found, more := subsequent(_HebrewLetter, data[pos+w:], atEOF)
+		if current.is(_DoubleQuote) && lastExIgnore.is(_HebrewLetter) {
+			advance, more := subsequent(_HebrewLetter, data[pos+w:], atEOF)
 
 			if more {
 				// Token extends past current data, request more
 				return 0, nil, nil
 			}
 
+			found := advance != notfound
 			if found {
-				pos += w
+				pos += w + advance
 				continue
 			}
 		}
 
 		// https://unicode.org/reports/tr29/#WB7c
-		if current.is(_HebrewLetter) && lastExIgnore.is(_DoubleQuote|_Ignore) && lastLastExIgnore.is(_HebrewLetter) {
-			pos += w
-			continue
-		}
-
-		// https://unicode.org/reports/tr29/#WB8
-		// https://unicode.org/reports/tr29/#WB9
-		// https://unicode.org/reports/tr29/#WB10
-		if current.is(_Numeric|_AHLetter) && lastExIgnore.is(_Numeric|_AHLetter) {
+		if current.is(_HebrewLetter) && lastExIgnore.is(_DoubleQuote) && lastLastExIgnore.is(_HebrewLetter) {
 			pos += w
 			continue
 		}
@@ -185,15 +196,15 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 
 		// https://unicode.org/reports/tr29/#WB12
 		if current.is(_MidNum|_MidNumLetQ) && lastExIgnore.is(_Numeric) {
-			found, more := subsequent(_Numeric, data[pos+w:], atEOF)
+			advance, more := subsequent(_Numeric, data[pos+w:], atEOF)
 
 			if more {
 				// Token extends past current data, request more
 				return 0, nil, nil
 			}
 
-			if found {
-				pos += w
+			if advance != notfound {
+				pos += w + advance
 				continue
 			}
 		}
@@ -216,11 +227,9 @@ func SplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 			continue
 		}
 
-		maybeWB1516 := current.is(_RegionalIndicator) && lastExIgnore.is(_RegionalIndicator)
-
 		// https://unicode.org/reports/tr29/#WB15 and
 		// https://unicode.org/reports/tr29/#WB16
-		if maybeWB1516 {
+		if current.is(_RegionalIndicator) && lastExIgnore.is(_RegionalIndicator) {
 			regionalIndicatorCount++
 
 			odd := regionalIndicatorCount%2 == 1

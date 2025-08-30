@@ -49,6 +49,11 @@ func (seg *Segmenter) SetText(data []byte) {
 	seg.err = nil
 }
 
+// Split sets the SplitFunc for the Segmenter
+func (seg *Segmenter) Split(split bufio.SplitFunc) {
+	seg.split = split
+}
+
 // Filter applies a filter (predicate) to all tokens, returning only those
 // where all filters evaluate true. Calling Filter will overwrite the previous
 // filter.
@@ -69,7 +74,6 @@ var ErrAdvanceTooFar = errors.New("SplitFunc advanced beyond the end of the data
 // Next advances Segmenter to the next token (segment). It returns false when there
 // are no remaining segments, or an error occurred.
 func (seg *Segmenter) Next() bool {
-next:
 	for seg.pos < len(seg.data) {
 		seg.start = seg.pos
 
@@ -110,7 +114,7 @@ next:
 		}
 
 		if seg.filter != nil && !seg.filter(seg.token) {
-			continue next
+			continue
 		}
 
 		return true
