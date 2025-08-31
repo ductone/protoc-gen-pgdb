@@ -33,7 +33,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Install Postgres Server for Tests
-        run: sudo apt install -y postgresql postgresql-17-pgvector
+        run: sudo apt install -y postgresql
       - name: go tests
         run: go test -v -covermode=count -json ./... > test.json
       - name: annotate go tests
