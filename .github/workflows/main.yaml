@@ -38,9 +38,12 @@ jobs:
         run: go test -v -covermode=count -json ./... > test.json
       - name: annotate go tests
         if: always()
-        uses: guyarb/golang-test-annotations@v0.5.1
+        uses: guyarb/golang-test-annotations@v0.8.0
         with:
           test-results: test.json
+      - name: export test.json
+        if: failure()
+        run: echo "test-results=$(cat test.json)" >> $GITHUB_OUTPUT
   docker-image:
     name: Build docker image
     runs-on: ubuntu-latest
