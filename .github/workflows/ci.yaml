@@ -7,18 +7,18 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.24.x
+          go-version: 1.25.x
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Run linters
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v8
         with:
           version: latest
           args: --timeout=3m
   go-test:
     strategy:
       matrix:
-        go-version: [1.24.x]
+        go-version: [1.25.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: v1.24
+          go-version: v1.25
       - uses: imjasonh/setup-ko@v0.6
       - run: ko publish --bare ./ --platform linux/amd64,linux/arm64 -t $(git rev-parse --short "$GITHUB_SHA")
   buf-lint-and-breaking-change-detection:
@@ -54,12 +54,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup
-        uses: bufbuild/buf-setup-action@v1.11.0
+        uses: bufbuild/buf-setup-action@v1.50.0
         with:
           github_token: ${{ github.token }}
       - name: Lint
-        uses: bufbuild/buf-lint-action@v1
+        uses: bufbuild/buf-lint-action@v1.1.1
       - name: Breaking change detection against `main`
-        uses: bufbuild/buf-breaking-action@v1
+        uses: bufbuild/buf-breaking-action@v1.1.4
         with:
           against: "https://github.com/ductone/protoc-gen-pgdb.git#branch=main"
