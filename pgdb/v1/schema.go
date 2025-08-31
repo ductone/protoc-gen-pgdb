@@ -82,7 +82,7 @@ func CreateSchema(msg DBReflectMessage, dialect Dialect) ([]string, error) {
 	case desc.IsPartitionedByCreatedAt():
 		_, _ = buf.WriteString("PARTITION BY RANGE(pb$created_at)\n")
 	case desc.GetPartitionedByKsuidFieldName() != "":
-		_, _ = buf.WriteString(fmt.Sprintf("PARTITION BY RANGE(pb$%s)\n", desc.GetPartitionedByKsuidFieldName()))
+		_, _ = fmt.Fprintf(buf, "PARTITION BY RANGE(pb$%s)\n", desc.GetPartitionedByKsuidFieldName())
 	}
 
 	rv := []string{buf.String()}

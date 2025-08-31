@@ -10,18 +10,18 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.24.x
+          go-version: 1.25.x
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Run linters
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v8
         with:
           version: latest
           args: --timeout=3m
   go-test:
     strategy:
       matrix:
-        go-version: [1.24.x]
+        go-version: [1.25.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -38,9 +38,12 @@ jobs:
         run: go test -v -covermode=count -json ./... > test.json
       - name: annotate go tests
         if: always()
-        uses: guyarb/golang-test-annotations@v0.5.1
+        uses: guyarb/golang-test-annotations@v0.8.0
         with:
           test-results: test.json
+      - name: export test.json
+        if: failure()
+        run: echo "test-results=$(cat test.json)" >> $GITHUB_OUTPUT
   docker-image:
     name: Build docker image
     runs-on: ubuntu-latest
@@ -48,7 +51,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: v1.24.x
+          go-version: v1.25.x
       - uses: imjasonh/setup-ko@v0.6
       - run: ko publish --bare ./ --platform linux/amd64,linux/arm64 -t $(git rev-parse --short "$GITHUB_SHA")
   lint-and-breaking-change-detection:
@@ -57,9 +60,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup
-        uses: bufbuild/buf-setup-action@v1.14.0
+        uses: bufbuild/buf-setup-action@v1.50.0
       - name: Lint
-        uses: bufbuild/buf-lint-action@v1
+        uses: bufbuild/buf-lint-action@v1.1.1
       - name: Breaking change detection against `main`
         uses: bufbuild/buf-breaking-action@v1
         with:
