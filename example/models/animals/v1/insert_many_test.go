@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"strconv"
 	"testing"
 	"time"
 
@@ -468,8 +469,8 @@ func TestInsertMany_AllConflictsAcceptAll(t *testing.T) {
 	// Verify all records were updated
 	for i := 1; i <= 3; i++ {
 		var displayName string
-		petID := "pet" + string(rune('0'+i))
-		expectedName := "New " + string(rune('0'+i))
+		petID := "pet" + strconv.Itoa(i)
+		expectedName := "New " + strconv.Itoa(i)
 		err = pg.DB.QueryRow(ctx, `SELECT "pb$display_name" FROM pb_pet_models_animals_v1_8a3723d5 WHERE "pb$tenant_id" = $1 AND "pb$id" = $2`, "t1", petID).Scan(&displayName)
 		require.NoError(t, err)
 		require.Equal(t, expectedName, displayName)
@@ -572,8 +573,8 @@ func TestInsertMany_AllConflictsRejectAll(t *testing.T) {
 	// Verify no records were updated (kept the newer ones)
 	for i := 1; i <= 3; i++ {
 		var displayName string
-		petID := "pet" + string(rune('0'+i))
-		expectedName := "New " + string(rune('0'+i))
+		petID := "pet" + strconv.Itoa(i)
+		expectedName := "New " + strconv.Itoa(i)
 		err = pg.DB.QueryRow(ctx, `SELECT "pb$display_name" FROM pb_pet_models_animals_v1_8a3723d5 WHERE "pb$tenant_id" = $1 AND "pb$id" = $2`, "t1", petID).Scan(&displayName)
 		require.NoError(t, err)
 		require.Equal(t, expectedName, displayName, "Should keep the newer record")
