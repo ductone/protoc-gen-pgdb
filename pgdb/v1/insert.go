@@ -7,8 +7,12 @@ import (
 	"github.com/doug-martin/goqu/v9/exp"
 )
 
-func Insert(msg DBReflectMessage, dialect Dialect) (string, []any, error) {
-	dbr := msg.DBReflect(dialect)
+func InsertMany[T DBReflectMessage](dialect Dialect, msgs ...T) (string, []any, error) {
+	if len(msgs) == 0 {
+		return "", nil, errors.New("insert many rows must have at least one message")
+	}
+	firstMsg := msgs[0]
+	dbr := firstMsg.DBReflect(dialect)
 	desc := dbr.Descriptor()
 	tableName := desc.TableName()
 
@@ -22,22 +26,35 @@ func Insert(msg DBReflectMessage, dialect Dialect) (string, []any, error) {
 		return "", nil, errors.New("pgdb_v1: updated_at missing from message; unable to upsert without " + versionField.Name)
 	}
 
-	pkskValue, err := generatedPKSK(record)
-	if err != nil {
-		return "", nil, err
-	}
+	rows := make([]exp.Record, 0, len(msgs))
+	for _, msg := range msgs {
+		dbr := msg.DBReflect(dialect)
+		desc := dbr.Descriptor()
 
-	switch dbr.Dialect() {
-	case DialectV17:
-		pkskField := desc.PKSKField()
-		record[pkskField.Name] = pkskValue
-	default:
+		record, err := dbr.Record()
+		if err != nil {
+			return "", nil, err
+		}
+
+		pkskValue, err := generatedPKSK(record)
+		if err != nil {
+			return "", nil, err
+		}
+
+		switch dbr.Dialect() {
+		case DialectV17:
+			pkskField := desc.PKSKField()
+			record[pkskField.Name] = pkskValue
+		default:
+		}
+		rows = append(rows, record)
 	}
 
 	qb := goqu.Dialect("postgres")
-	q := qb.Insert(tableName).Prepared(true).Rows(
-		record,
-	)
+	q := qb.Insert(tableName).
+		Prepared(true).
+		Rows(rows)
+
 	conflictRecords := exp.Record{}
 	for k := range record {
 		switch k {
@@ -60,10 +77,14 @@ func Insert(msg DBReflectMessage, dialect Dialect) (string, []any, error) {
 	q = q.OnConflict(
 		exp.NewDoUpdateConflictExpression(`ON CONSTRAINT "`+primaryIndex.Name+`"`, conflictRecords).Where(
 			exp.NewIdentifierExpression("", tableName, versionField.Name).Lte(
-				exp.NewLiteralExpression("?::timestamptz", record[versionField.Name]),
+				exp.NewIdentifierExpression("", "excluded", versionField.Name),
 			),
 		),
 	)
 
 	return q.ToSQL()
+}
+
+func Insert(msg DBReflectMessage, dialect Dialect) (string, []any, error) {
+	return InsertMany[DBReflectMessage](dialect, msg)
 }
