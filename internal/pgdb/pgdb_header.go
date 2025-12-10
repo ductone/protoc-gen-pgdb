@@ -18,6 +18,7 @@ type importTracker struct {
 	JSON                 bool
 	ProtobufEncodingJSON bool
 	ProtobufProto        bool
+	ProtobufReflect      bool
 	Strings              bool
 	Strconv              bool
 	Time                 bool

@@ -6,6 +6,7 @@ import (
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star/v2"
 	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer, ix *importTracker) *fieldContext {
@@ -27,10 +28,13 @@ func (module *Module) getOneOf(ctx pgsgo.Context, oneof pgs.OneOf, vn *varNamer,
 		IsVirtual: false,
 		GoName:    ctx.Name(oneof).String(),
 		DB: &pgdb_v1.Column{
-			Name:     pgColName,
-			Type:     dbTypeRef.Name,
-			Nullable: false,
-			Default:  "0",
+			Name:       pgColName,
+			Type:       dbTypeRef.Name,
+			Nullable:   false,
+			Default:    "0",
+			SourceKind: pgdb_v1.ColumnSourceKind_ONEOF,
+			ProtoKind:  protoreflect.Int32Kind,
+			OneofName:  oneof.Name().LowerSnakeCase().String(),
 		},
 		DataType: dbTypeRef,
 		Convert: &oneofDataConvert{

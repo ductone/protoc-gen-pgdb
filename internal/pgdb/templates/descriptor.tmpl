@@ -57,22 +57,38 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
         {{ end }}
         {{ if .V17FieldOverrides.Disabled }}if d.Dialect() != pgdb_v1.DialectV17 { {{ end }}
         rv = append(rv, &pgdb_v1.Column{
+        Table: df.TableName("{{$.TableName}}"),
         Name: df.ColumnName("{{ .DB.Name }}"),
         Type: "{{ .DB.Type }}",
         Nullable: df.Nullable({{ .DB.Nullable }}),
         OverrideExpression: {{ $expVar }},
         Default: "{{ .DB.Default }}",
         Collation: {{ $collationVar }},
+        SourceKind: {{ formatSourceKind .DB.SourceKind }},
+        ProtoFieldPath: df.ExtendProtoFieldPath({{ formatFieldPath .DB.ProtoFieldPath }}),
+        ProtoPath: df.ExtendProtoPath("{{ .DB.ProtoPath }}"),
+        ProtoKind: {{ formatProtoKind .DB.ProtoKind }},
+        ProtoTypeName: "{{ .DB.ProtoTypeName }}",
+        IsRepeated: {{ .DB.IsRepeated }},
+        OneofName: "{{ .DB.OneofName }}",
         })
         {{ if .V17FieldOverrides.Disabled }} } {{ end }}
       {{ else }}
         rv = append(rv, &pgdb_v1.Column{
+        Table: df.TableName("{{$.TableName}}"),
         Name: df.ColumnName("{{ .DB.Name }}"),
         Type: "{{ .DB.Type }}",
         Nullable: df.Nullable({{ .DB.Nullable }}),
         OverrideExpression: "{{ .DB.OverrideExpression }}",
         Default: "{{ .DB.Default }}",
         Collation: "{{ .DB.Collation }}",
+        SourceKind: {{ formatSourceKind .DB.SourceKind }},
+        ProtoFieldPath: df.ExtendProtoFieldPath({{ formatFieldPath .DB.ProtoFieldPath }}),
+        ProtoPath: df.ExtendProtoPath("{{ .DB.ProtoPath }}"),
+        ProtoKind: {{ formatProtoKind .DB.ProtoKind }},
+        ProtoTypeName: "{{ .DB.ProtoTypeName }}",
+        IsRepeated: {{ .DB.IsRepeated }},
+        OneofName: "{{ .DB.OneofName }}",
         })
       {{ end }}
     {{ end }}
@@ -83,7 +99,7 @@ func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
   {{ end }}
 
   {{ range .NestedFields }}
-    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("{{ .Prefix }}")...)...)
+    rv = append(rv, (({{- .TypeName -}})(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("{{ .Prefix }}", {{ .FieldNum }}, "{{ .FieldName }}", "{{$.TableName}}")...)...)
   {{ end }}
   return rv
 }

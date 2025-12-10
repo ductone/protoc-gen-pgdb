@@ -11,6 +11,7 @@ import (
 	"github.com/doug-martin/goqu/v9/exp"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type pgdbDescriptorShop struct {
@@ -65,12 +66,20 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -88,12 +97,20 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -111,12 +128,20 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -134,12 +159,20 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -151,12 +184,20 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -165,12 +206,20 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -178,12 +227,20 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -199,48 +256,80 @@ func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 		Name:               df.ColumnName("fur"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("fur"),
+		ProtoKind:          protoreflect.Kind(14),
+		ProtoTypeName:      ".models.animals.v1.FurType",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_shop_models_zoo_v1_ca2425f6"),
 		Name:               df.ColumnName("medium_oneof"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(5),
+		ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+		ProtoPath:          df.ExtendProtoPath(""),
+		ProtoKind:          protoreflect.Kind(5),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "medium",
 	})
 
-	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("50$")...)...)
+	rv = append(rv, ((*animals_v1.PaperBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("50$", 50, "paper", "pb_shop_models_zoo_v1_ca2425f6")...)...)
 
-	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("51$")...)...)
+	rv = append(rv, ((*animals_v1.EBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("51$", 51, "ebook", "pb_shop_models_zoo_v1_ca2425f6")...)...)
 
-	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("52$")...)...)
+	rv = append(rv, ((*animals_v1.ScalarValue)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("52$", 52, "anything", "pb_shop_models_zoo_v1_ca2425f6")...)...)
 
-	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("5$")...)...)
+	rv = append(rv, ((*Shop_Manager)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("5$", 5, "mgr", "pb_shop_models_zoo_v1_ca2425f6")...)...)
 
 	return rv
 }
@@ -1213,12 +1302,20 @@ func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptio
 	rv := make([]*pgdb_v1.Column, 0)
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_manager_models_zoo_v1_6ccf2214"),
 		Name:               df.ColumnName("id"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(5),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv

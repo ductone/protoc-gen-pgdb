@@ -147,7 +147,7 @@ func TestSchemaFoodPasta(t *testing.T) {
 		}
 		// fmt.Printf("hnswIndexCount: %d\n", hnswIndexCount)
 		if _, ok := smsg.(*PastaIngredient); ok {
-			require.Equal(t, 2, hnswIndexCount, "Should have 2 hnsw indexes") // 2 enums = 2 indexes
+			require.Equal(t, 3, hnswIndexCount, "Should have 3 hnsw indexes") // 2 vector enums + 1 min_hash_bits index
 			require.Equal(t, 1, partialIndexCount, "Should have 1 partial index")
 		} else {
 			require.Equal(t, 0, hnswIndexCount, "Should have 0 hnsw indexes")
@@ -1049,6 +1049,16 @@ func TestKSUIDCollationV17(t *testing.T) {
 		_, err := pg.DB.Exec(ctx, line)
 		require.NoErrorf(t, err, "failed to execute sql: '\n%s\n'", line)
 	}
+
+	// Create tenant partitions for the partitioned table
+	fakeTenantIds := []string{"t1"}
+	tenantIter := TenantIteratorTest(ctx, fakeTenantIds)
+	err = pgdb_v1.TenantPartitionsUpdate(ctx, pg.DB, smsg, pgdb_v1.DialectV17, tenantIter, func(ctx context.Context, schema string, args ...interface{}) error {
+		_, err := pg.DB.Exec(ctx, schema, args...)
+		require.NoError(t, err)
+		return nil
+	})
+	require.NoError(t, err)
 
 	// Verify the column collations
 	var collation1 string

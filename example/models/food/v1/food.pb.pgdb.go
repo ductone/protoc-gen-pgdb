@@ -14,6 +14,7 @@ import (
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	"github.com/ductone/protoc-gen-pgdb/pgdb/v1/xpq"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type pgdbDescriptorPasta struct {
@@ -68,12 +69,20 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -91,12 +100,20 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -114,12 +131,20 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -137,12 +162,20 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -154,12 +187,20 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -168,12 +209,20 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -181,12 +230,20 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -202,39 +259,71 @@ func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 		Name:               df.ColumnName("updated_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_models_food_v1_29fd1107"),
 		Name:               df.ColumnName("deleted_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("deleted_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -1124,12 +1213,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1147,12 +1244,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1170,12 +1275,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1193,12 +1306,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1210,12 +1331,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -1224,12 +1353,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1237,12 +1374,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1250,12 +1395,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 			Name:               df.ColumnName("model_embeddings_1"),
 			Type:               "vector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "vector(3)",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(6),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{8}),
+			ProtoPath:          df.ExtendProtoPath("model_embeddings"),
+			ProtoKind:          protoreflect.Kind(11),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1263,12 +1416,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 			Name:               df.ColumnName("model_embeddings_2"),
 			Type:               "vector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "vector(4)",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(6),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{8}),
+			ProtoPath:          df.ExtendProtoPath("model_embeddings"),
+			ProtoKind:          protoreflect.Kind(11),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1284,39 +1445,71 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 		Name:               df.ColumnName("ingredient_id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colingredient_idOverrideExpression,
 		Default:            "''",
 		Collation:          colingredient_idCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("ingredient_id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 		Name:               df.ColumnName("updated_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 		Name:               df.ColumnName("deleted_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("deleted_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	colpasta_idCollation := ""
@@ -1330,12 +1523,20 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 		Name:               df.ColumnName("pasta_id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colpasta_idOverrideExpression,
 		Default:            "''",
 		Collation:          colpasta_idCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{6}),
+		ProtoPath:          df.ExtendProtoPath("pasta_id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	colidCollation := ""
@@ -1349,21 +1550,37 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{7}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
 		Name:               df.ColumnName("min_hash"),
 		Type:               "bit",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "bit(4096)",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{9}),
+		ProtoPath:          df.ExtendProtoPath("min_hash"),
+		ProtoKind:          protoreflect.Kind(12),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -2767,12 +2984,20 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -2790,12 +3015,20 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -2813,12 +3046,20 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -2836,12 +3077,20 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -2853,12 +3102,20 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -2867,12 +3124,20 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -2880,12 +3145,20 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -2901,48 +3174,88 @@ func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 		Name:               df.ColumnName("updated_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 		Name:               df.ColumnName("deleted_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("deleted_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_sauce_ingredient_models_food_v1_e37b4524"),
 		Name:               df.ColumnName("source_addr"),
 		Type:               "inet",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "NULL",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{6}),
+		ProtoPath:          df.ExtendProtoPath("source_addr"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -3944,12 +4257,20 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -3967,12 +4288,20 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -3990,12 +4319,20 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4013,12 +4350,20 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4030,12 +4375,20 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -4044,12 +4397,20 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4057,12 +4418,20 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4078,48 +4447,88 @@ func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 		Name:               df.ColumnName("updated_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 		Name:               df.ColumnName("deleted_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("deleted_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_garlic_ingredient_models_food_v1_9fa66ee2"),
 		Name:               df.ColumnName("source_addr"),
 		Type:               "inet",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "NULL",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{6}),
+		ProtoPath:          df.ExtendProtoPath("source_addr"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -5184,12 +5593,20 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5207,12 +5624,20 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5230,12 +5655,20 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5253,12 +5686,20 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5270,12 +5711,20 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -5284,12 +5733,20 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5297,12 +5754,20 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5318,12 +5783,20 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	colevent_idCollation := ""
@@ -5337,39 +5810,71 @@ func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldO
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 		Name:               df.ColumnName("event_id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colevent_idOverrideExpression,
 		Default:            "''",
 		Collation:          colevent_idCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("event_id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 		Name:               df.ColumnName("updated_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 		Name:               df.ColumnName("deleted_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("deleted_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_cheese_ingredient_models_food_v1_886942a1"),
 		Name:               df.ColumnName("source_addr"),
 		Type:               "inet",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "NULL",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{6}),
+		ProtoPath:          df.ExtendProtoPath("source_addr"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -6422,21 +6927,37 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) Fields(opts ...pgdb_v1.De
 	rv := make([]*pgdb_v1.Column, 0)
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_model_embedding_models_food_v1_de910e59"),
 		Name:               df.ColumnName("model"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("model"),
+		ProtoKind:          protoreflect.Kind(14),
+		ProtoTypeName:      ".models.llm.v1.Model",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_model_embedding_models_food_v1_de910e59"),
 		Name:               df.ColumnName("embedding"),
 		Type:               "_float4",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("embedding"),
+		ProtoKind:          protoreflect.Kind(2),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	return rv

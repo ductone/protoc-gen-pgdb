@@ -73,3 +73,73 @@ func TestNestedIndexes(t *testing.T) {
 		"bad resolution for medium medium: %s", numId.column,
 	)
 }
+
+// TestNestedColumnMetadata verifies that nested columns have correct metadata,
+// including the parent's table name and full proto paths.
+func TestNestedColumnMetadata(t *testing.T) {
+	desc := (*Attractions)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor()
+	expectedTableName := desc.TableName()
+	columns := desc.Fields()
+
+	// Find columns by their ProtoPath to verify correct metadata
+	var tenantCol, zooShopFurCol, zooShopAnythingSfixed64Col *pgdb_v1.Column
+	for _, col := range columns {
+		switch col.ProtoPath {
+		case "tenant_id":
+			tenantCol = col
+		case "zoo_shop.fur":
+			zooShopFurCol = col
+		case "zoo_shop.anything.sfixed_64":
+			zooShopAnythingSfixed64Col = col
+		}
+	}
+
+	// Test direct field
+	require.NotNil(t, tenantCol, "should find tenant_id column")
+	require.Equal(t, expectedTableName, tenantCol.Table, "tenant_id should have Attractions table name")
+	require.Equal(t, "pb$tenant_id", tenantCol.Name, "tenant_id column name")
+	require.Equal(t, []int32{1}, tenantCol.ProtoFieldPath, "tenant_id proto field path")
+
+	// Test nested field (Shop.fur) - should have Attractions table, not Shop table
+	require.NotNil(t, zooShopFurCol, "should find zoo_shop.fur column")
+	require.Equal(t, expectedTableName, zooShopFurCol.Table,
+		"nested fur column should have Attractions table name, not Shop table name")
+	require.Equal(t, "pb$11$fur", zooShopFurCol.Name, "zoo_shop.fur column name with nested prefix")
+	require.Equal(t, []int32{11, 4}, zooShopFurCol.ProtoFieldPath, "zoo_shop.fur proto field path")
+	require.Equal(t, ".models.animals.v1.FurType", zooShopFurCol.ProtoTypeName,
+		"zoo_shop.fur should have enum type name")
+
+	// Test deeply nested field (Shop.anything.sfixed_64)
+	require.NotNil(t, zooShopAnythingSfixed64Col, "should find zoo_shop.anything.sfixed_64 column")
+	require.Equal(t, expectedTableName, zooShopAnythingSfixed64Col.Table,
+		"deeply nested column should have Attractions table name")
+	require.Equal(t, "pb$11$52$sfixed_64", zooShopAnythingSfixed64Col.Name,
+		"deeply nested column name with nested prefixes")
+	require.Equal(t, []int32{11, 52, 14}, zooShopAnythingSfixed64Col.ProtoFieldPath,
+		"zoo_shop.anything.sfixed_64 proto field path (field 52=anything, 14=sfixed_64)")
+}
+
+// TestColumnIdentifier verifies that Column.Identifier() returns correct goqu expression.
+func TestColumnIdentifier(t *testing.T) {
+	desc := (*Attractions)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor()
+	expectedTableName := desc.TableName()
+	columns := desc.Fields()
+
+	// Find a nested column
+	var zooShopFurCol *pgdb_v1.Column
+	for _, col := range columns {
+		if col.ProtoPath == "zoo_shop.fur" {
+			zooShopFurCol = col
+			break
+		}
+	}
+
+	require.NotNil(t, zooShopFurCol, "should find zoo_shop.fur column")
+
+	// Verify Identifier() returns correct expression
+	ident := zooShopFurCol.Identifier()
+	require.Equal(t, expectedTableName, ident.GetTable(),
+		"Identifier() should return parent table name for nested columns")
+	require.Equal(t, "pb$11$fur", ident.GetCol().(string),
+		"Identifier() should return correct column name")
+}

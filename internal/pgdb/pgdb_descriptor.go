@@ -27,6 +27,7 @@ type descriptorTemplateContext struct {
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
 	ix.PGDBV1 = true
+	ix.ProtobufReflect = true // For proto field metadata in Column struct
 	fext := pgdb_v1.MessageOptions{}
 	_, err := m.Extension(pgdb_v1.E_Msg, &fext)
 	if err != nil {
@@ -74,9 +75,11 @@ func getDescriptorType(ctx pgsgo.Context, m pgs.Message) string {
 }
 
 type nestedFieldContext struct {
-	GoName   string
-	TypeName string
-	Prefix   string
+	GoName    string
+	TypeName  string
+	Prefix    string
+	FieldNum  int32  // Proto field number
+	FieldName string // Proto field name (snake_case)
 }
 
 func getNestedFieldNames(fields []*fieldContext) []string {
@@ -96,10 +99,13 @@ func getNesteFields(ctx pgsgo.Context, fields []*fieldContext, ix *importTracker
 		if !f.Nested {
 			continue
 		}
+		fieldNum := int32(*f.Field.Descriptor().Number)
 		rv = append(rv, &nestedFieldContext{
-			GoName:   f.GoName,
-			Prefix:   strconv.FormatInt(int64(*f.Field.Descriptor().Number), 10) + "$",
-			TypeName: ix.Type(f.Field).String(),
+			GoName:    f.GoName,
+			Prefix:    strconv.FormatInt(int64(fieldNum), 10) + "$",
+			TypeName:  ix.Type(f.Field).String(),
+			FieldNum:  fieldNum,
+			FieldName: f.Field.Name().LowerSnakeCase().String(),
 		})
 	}
 	return rv

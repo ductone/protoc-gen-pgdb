@@ -13,6 +13,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type pgdbDescriptorPet struct {
@@ -67,12 +68,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -90,12 +99,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -113,12 +130,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -136,12 +161,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -153,12 +186,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -167,12 +208,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -180,12 +229,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -201,120 +258,224 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("updated_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("deleted_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("deleted_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("display_name"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{6}),
+		ProtoPath:          df.ExtendProtoPath("display_name"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("description"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{7}),
+		ProtoPath:          df.ExtendProtoPath("description"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("system_builtin"),
 		Type:               "bool",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "false",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{9}),
+		ProtoPath:          df.ExtendProtoPath("system_builtin"),
+		ProtoKind:          protoreflect.Kind(8),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("elapsed"),
 		Type:               "interval",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{10}),
+		ProtoPath:          df.ExtendProtoPath("elapsed"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Duration",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("profile"),
 		Type:               "jsonb",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{11}),
+		ProtoPath:          df.ExtendProtoPath("profile"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Struct",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("cuteness"),
 		Type:               "float4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0.0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{12}),
+		ProtoPath:          df.ExtendProtoPath("cuteness"),
+		ProtoKind:          protoreflect.Kind(2),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("price"),
 		Type:               "float8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0.0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{13}),
+		ProtoPath:          df.ExtendProtoPath("price"),
+		ProtoKind:          protoreflect.Kind(1),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("14"),
 		Type:               "bool",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "false",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{14}),
+		ProtoPath:          df.ExtendProtoPath("very_long_naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame"),
+		ProtoKind:          protoreflect.Kind(8),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("extra_profiles"),
 		Type:               "_jsonb",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{15}),
+		ProtoPath:          df.ExtendProtoPath("extra_profiles"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Struct",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	colfield_with_v17_collation_onlyCollation := ""
@@ -328,12 +489,20 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("field_with_v17_collation_only"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colfield_with_v17_collation_onlyOverrideExpression,
 		Default:            "''",
 		Collation:          colfield_with_v17_collation_onlyCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{16}),
+		ProtoPath:          df.ExtendProtoPath("field_with_v17_collation_only"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -1583,12 +1752,20 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1606,12 +1783,20 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1629,12 +1814,20 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1652,12 +1845,20 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1669,12 +1870,20 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -1683,12 +1892,20 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1696,12 +1913,20 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -1717,327 +1942,615 @@ func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOption
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("double"),
 		Type:               "float8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0.0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("double"),
+		ProtoKind:          protoreflect.Kind(1),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("float"),
 		Type:               "float4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0.0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("float"),
+		ProtoKind:          protoreflect.Kind(2),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("int_32"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("int_32"),
+		ProtoKind:          protoreflect.Kind(5),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("int_64"),
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{6}),
+		ProtoPath:          df.ExtendProtoPath("int_64"),
+		ProtoKind:          protoreflect.Kind(3),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("uint_32"),
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{7}),
+		ProtoPath:          df.ExtendProtoPath("uint_32"),
+		ProtoKind:          protoreflect.Kind(13),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("uint_64"),
 		Type:               "numeric",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{8}),
+		ProtoPath:          df.ExtendProtoPath("uint_64"),
+		ProtoKind:          protoreflect.Kind(4),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("sint_32"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{9}),
+		ProtoPath:          df.ExtendProtoPath("sint_32"),
+		ProtoKind:          protoreflect.Kind(17),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("sint_64"),
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{10}),
+		ProtoPath:          df.ExtendProtoPath("sint_64"),
+		ProtoKind:          protoreflect.Kind(18),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("fixed_32"),
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{11}),
+		ProtoPath:          df.ExtendProtoPath("fixed_32"),
+		ProtoKind:          protoreflect.Kind(7),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("fixed_64"),
 		Type:               "numeric",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{12}),
+		ProtoPath:          df.ExtendProtoPath("fixed_64"),
+		ProtoKind:          protoreflect.Kind(6),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("sfixed_32"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{13}),
+		ProtoPath:          df.ExtendProtoPath("sfixed_32"),
+		ProtoKind:          protoreflect.Kind(15),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("sfixed_64"),
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{14}),
+		ProtoPath:          df.ExtendProtoPath("sfixed_64"),
+		ProtoKind:          protoreflect.Kind(16),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("bool"),
 		Type:               "bool",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "false",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{15}),
+		ProtoPath:          df.ExtendProtoPath("bool"),
+		ProtoKind:          protoreflect.Kind(8),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("string"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{16}),
+		ProtoPath:          df.ExtendProtoPath("string"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("bytes"),
 		Type:               "bytea",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{17}),
+		ProtoPath:          df.ExtendProtoPath("bytes"),
+		ProtoKind:          protoreflect.Kind(12),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_double"),
 		Type:               "_float8",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{23}),
+		ProtoPath:          df.ExtendProtoPath("repeated_double"),
+		ProtoKind:          protoreflect.Kind(1),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_float"),
 		Type:               "_float4",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{24}),
+		ProtoPath:          df.ExtendProtoPath("repeated_float"),
+		ProtoKind:          protoreflect.Kind(2),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_int32"),
 		Type:               "_int4",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{25}),
+		ProtoPath:          df.ExtendProtoPath("repeated_int32"),
+		ProtoKind:          protoreflect.Kind(5),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_int64"),
 		Type:               "_int8",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{26}),
+		ProtoPath:          df.ExtendProtoPath("repeated_int64"),
+		ProtoKind:          protoreflect.Kind(3),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_uint32"),
 		Type:               "_int8",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{27}),
+		ProtoPath:          df.ExtendProtoPath("repeated_uint32"),
+		ProtoKind:          protoreflect.Kind(13),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_uint64"),
 		Type:               "_numeric",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{28}),
+		ProtoPath:          df.ExtendProtoPath("repeated_uint64"),
+		ProtoKind:          protoreflect.Kind(4),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_sint32"),
 		Type:               "_int4",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{29}),
+		ProtoPath:          df.ExtendProtoPath("repeated_sint32"),
+		ProtoKind:          protoreflect.Kind(17),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_sint64"),
 		Type:               "_int8",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{30}),
+		ProtoPath:          df.ExtendProtoPath("repeated_sint64"),
+		ProtoKind:          protoreflect.Kind(18),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_fixed32"),
 		Type:               "_int8",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{31}),
+		ProtoPath:          df.ExtendProtoPath("repeated_fixed32"),
+		ProtoKind:          protoreflect.Kind(7),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_fixed64"),
 		Type:               "_numeric",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{32}),
+		ProtoPath:          df.ExtendProtoPath("repeated_fixed64"),
+		ProtoKind:          protoreflect.Kind(6),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_sfixed32"),
 		Type:               "_int4",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{33}),
+		ProtoPath:          df.ExtendProtoPath("repeated_sfixed32"),
+		ProtoKind:          protoreflect.Kind(15),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_sfixed64"),
 		Type:               "_int8",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{34}),
+		ProtoPath:          df.ExtendProtoPath("repeated_sfixed64"),
+		ProtoKind:          protoreflect.Kind(16),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_bool"),
 		Type:               "_bool",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{35}),
+		ProtoPath:          df.ExtendProtoPath("repeated_bool"),
+		ProtoKind:          protoreflect.Kind(8),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_string"),
 		Type:               "_text",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{36}),
+		ProtoPath:          df.ExtendProtoPath("repeated_string"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_bytes"),
 		Type:               "_bytea",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{37}),
+		ProtoPath:          df.ExtendProtoPath("repeated_bytes"),
+		ProtoKind:          protoreflect.Kind(12),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("repeated_enum"),
 		Type:               "_int4",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{38}),
+		ProtoPath:          df.ExtendProtoPath("repeated_enum"),
+		ProtoKind:          protoreflect.Kind(14),
+		ProtoTypeName:      ".models.animals.v1.FurType",
+		IsRepeated:         true,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("string_map"),
 		Type:               "jsonb",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{39}),
+		ProtoPath:          df.ExtendProtoPath("string_map"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{40}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("str_ptr"),
 		Type:               "text",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{100}),
+		ProtoPath:          df.ExtendProtoPath("str_ptr"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.StringValue",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_scalar_value_models_animals_v1_35025835"),
 		Name:               df.ColumnName("bool_ptr"),
 		Type:               "bool",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{101}),
+		ProtoPath:          df.ExtendProtoPath("bool_ptr"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.BoolValue",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -4086,12 +4599,20 @@ func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) 
 	rv := make([]*pgdb_v1.Column, 0)
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_e_book_models_animals_v1_a344683d"),
 		Name:               df.ColumnName("size"),
 		Type:               "int8",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("size"),
+		ProtoKind:          protoreflect.Kind(3),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -4318,12 +4839,20 @@ func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 	rv := make([]*pgdb_v1.Column, 0)
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_paper_book_models_animals_v1_ba82559d"),
 		Name:               df.ColumnName("pages"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("pages"),
+		ProtoKind:          protoreflect.Kind(5),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
@@ -4562,12 +5091,20 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4585,12 +5122,20 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4608,12 +5153,20 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4631,12 +5184,20 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4648,12 +5209,20 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -4662,12 +5231,20 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4675,12 +5252,20 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -4696,37 +5281,61 @@ func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) [
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 		Name:               df.ColumnName("id"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: colidOverrideExpression,
 		Default:            "''",
 		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_book_models_animals_v1_d871ffce"),
 		Name:               df.ColumnName("medium_oneof"),
 		Type:               "int4",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "0",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(5),
+		ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+		ProtoPath:          df.ExtendProtoPath(""),
+		ProtoKind:          protoreflect.Kind(5),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "medium",
 	})
 
-	rv = append(rv, ((*PaperBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("50$")...)...)
+	rv = append(rv, ((*PaperBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("50$", 50, "paper", "pb_book_models_animals_v1_d871ffce")...)...)
 
-	rv = append(rv, ((*EBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("51$")...)...)
+	rv = append(rv, ((*EBook)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("51$", 51, "ebook", "pb_book_models_animals_v1_d871ffce")...)...)
 
-	rv = append(rv, ((*Newspaper)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.Nested("52$")...)...)
+	rv = append(rv, ((*Newspaper)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("52$", 52, "news", "pb_book_models_animals_v1_d871ffce")...)...)
 
 	return rv
 }
@@ -5663,12 +6272,20 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 			Name:               df.ColumnName("tenant_id"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: coltenant_idOverrideExpression,
 			Default:            "",
 			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5686,12 +6303,20 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 			Name:               df.ColumnName("pksk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkskOverrideExpression,
 			Default:            "",
 			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5709,12 +6334,20 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 			Name:               df.ColumnName("pk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colpkOverrideExpression,
 			Default:            "",
 			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5732,12 +6365,20 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 		}
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 			Name:               df.ColumnName("sk"),
 			Type:               "varchar",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: colskOverrideExpression,
 			Default:            "",
 			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5749,12 +6390,20 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 
 		if d.Dialect() != pgdb_v1.DialectV17 {
 			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 				Name:               df.ColumnName("pkskv2"),
 				Type:               "varchar",
 				Nullable:           df.Nullable(true),
 				OverrideExpression: colpkskv2OverrideExpression,
 				Default:            "",
 				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
 			})
 		}
 
@@ -5763,12 +6412,20 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 			Name:               df.ColumnName("fts_data"),
 			Type:               "tsvector",
 			Nullable:           df.Nullable(true),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
@@ -5776,32 +6433,56 @@ func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFu
 	if !df.IsNested {
 
 		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 			Name:               df.ColumnName("pb_data"),
 			Type:               "bytea",
 			Nullable:           df.Nullable(false),
 			OverrideExpression: "",
 			Default:            "",
 			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
 		})
 
 	}
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 		Name:               df.ColumnName("name"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
 		OverrideExpression: "",
 		Default:            "''",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("name"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_newspaper_models_animals_v1_f52e04fd"),
 		Name:               df.ColumnName("created_at"),
 		Type:               "timestamptz",
 		Nullable:           df.Nullable(true),
 		OverrideExpression: "",
 		Default:            "",
 		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
 	})
 
 	return rv
