@@ -68,12 +68,29 @@ func (fn *varNamer) String() string {
 	return fmt.Sprintf("%s%d", fn.prefix, fn.offset)
 }
 
-func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string, dbPrefix string, humanPrefix string) []*fieldContext {
+func (module *Module) getMessageFieldsDeep(
+	ctx pgsgo.Context,
+	m pgs.Message,
+	ix *importTracker,
+	goPrefix string,
+	dbPrefix string,
+	humanPrefix string,
+) []*fieldContext {
 	// Call the internal implementation with empty proto path (for top-level) and no oneof
 	return module.getMessageFieldsDeepInternal(ctx, m, ix, goPrefix, dbPrefix, humanPrefix, nil, nil, "")
 }
 
-func (module *Module) getMessageFieldsDeepInternal(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string, dbPrefix string, humanPrefix string, protoPath []int32, protoNamePath []string, oneofName string) []*fieldContext {
+func (module *Module) getMessageFieldsDeepInternal(
+	ctx pgsgo.Context,
+	m pgs.Message,
+	ix *importTracker,
+	goPrefix string,
+	dbPrefix string,
+	humanPrefix string,
+	protoPath []int32,
+	protoNamePath []string,
+	oneofName string,
+) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
 	tenantIdField := "tenant_id"
