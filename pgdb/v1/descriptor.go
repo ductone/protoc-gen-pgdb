@@ -8,31 +8,32 @@ import (
 // ColumnSourceKind indicates the origin/nature of a column.
 type ColumnSourceKind int32
 
+//nolint:revive,stylecheck // Using underscore naming to match proto enum style.
 const (
-	// ColumnSourceKind_PROTO_FIELD: Direct mapping to a single proto field.
+	// ColumnSourceKind_PROTO_FIELD is a direct mapping to a single proto field.
 	// ProtoFieldPath and ProtoPath are populated.
 	ColumnSourceKind_PROTO_FIELD ColumnSourceKind = 0
 
-	// ColumnSourceKind_TENANT: The tenant_id column. Maps to a proto field
+	// ColumnSourceKind_TENANT is the tenant_id column. Maps to a proto field
 	// (specified by tenant_id_field option or defaulting to "tenant_id").
 	// ProtoFieldPath points to that field.
 	ColumnSourceKind_TENANT ColumnSourceKind = 1
 
-	// ColumnSourceKind_PRIMARY_KEY: Computed key columns (pk, sk, pksk, pkskv2).
+	// ColumnSourceKind_PRIMARY_KEY is for computed key columns (pk, sk, pksk, pkskv2).
 	// Derived from dynamo key configuration. ProtoFieldPath is nil.
 	ColumnSourceKind_PRIMARY_KEY ColumnSourceKind = 2
 
-	// ColumnSourceKind_DATA: The pb_data column containing serialized protobuf.
+	// ColumnSourceKind_DATA is the pb_data column containing serialized protobuf.
 	ColumnSourceKind_DATA ColumnSourceKind = 3
 
-	// ColumnSourceKind_SEARCH: The fts_data tsvector column for full-text search.
+	// ColumnSourceKind_SEARCH is the fts_data tsvector column for full-text search.
 	ColumnSourceKind_SEARCH ColumnSourceKind = 4
 
-	// ColumnSourceKind_ONEOF: Oneof discriminator column (*_oneof).
+	// ColumnSourceKind_ONEOF is the oneof discriminator column (*_oneof).
 	// OneofName is populated.
 	ColumnSourceKind_ONEOF ColumnSourceKind = 5
 
-	// ColumnSourceKind_VECTOR: Expanded vector column (field_N).
+	// ColumnSourceKind_VECTOR is an expanded vector column (field_N).
 	// ProtoFieldPath points to the source vector field.
 	ColumnSourceKind_VECTOR ColumnSourceKind = 6
 )
@@ -166,7 +167,7 @@ func (r *DescriptorFieldOption) ColumnName(in string) string {
 }
 
 // Nested returns options for a nested message.
-// prefix is the column name prefix (e.g., "11$")
+// The prefix is the column name prefix (e.g., "11$").
 func (r *DescriptorFieldOption) Nested(prefix string) []DescriptorFieldOptionFunc {
 	return []DescriptorFieldOptionFunc{
 		DescriptorFieldPrefix(r.Prefix + prefix),
@@ -175,10 +176,9 @@ func (r *DescriptorFieldOption) Nested(prefix string) []DescriptorFieldOptionFun
 }
 
 // NestedWithPath returns options for a nested message with proto path info.
-// prefix is the column name prefix (e.g., "11$")
-// fieldNum is the proto field number
-// fieldName is the proto field name for the path
-// parentTable is the parent message's table name (nested columns belong to parent's table)
+// The prefix is the column name prefix (e.g., "11$"), fieldNum is the proto field number,
+// fieldName is the proto field name for the path, and parentTable is the parent message's
+// table name (nested columns belong to parent's table).
 func (r *DescriptorFieldOption) NestedWithPath(prefix string, fieldNum int32, fieldName string, parentTable string) []DescriptorFieldOptionFunc {
 	newProtoPath := r.ProtoPathPrefix
 	if newProtoPath == "" {
@@ -264,6 +264,7 @@ type Column struct {
 }
 
 // IsVirtual returns true for columns not directly mapped to a single proto field.
+//
 // Deprecated: Use SourceKind instead for more precise classification.
 func (c *Column) IsVirtual() bool {
 	return c.SourceKind != ColumnSourceKind_PROTO_FIELD

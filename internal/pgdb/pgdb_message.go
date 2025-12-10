@@ -148,10 +148,10 @@ func (module *Module) getMessageFieldsDeepInternal(ctx pgsgo.Context, m pgs.Mess
 		fc.DBFieldNameDeep = dbPrefix + name
 
 		// Build the full proto path for this field
-		fieldNum := int32(field.Descriptor().GetNumber())
+		fieldNum := field.Descriptor().GetNumber()
 		fieldName := field.Name().LowerSnakeCase().String()
-		newProtoPath := appendInt32Slice(protoPath, fieldNum)
-		newProtoNamePath := appendStringSlice(protoNamePath, fieldName)
+		newProtoPath := appendSlice(protoPath, fieldNum)
+		newProtoNamePath := appendSlice(protoNamePath, fieldName)
 
 		// Determine oneofName for this field - either inherited from parent or from this field's oneof
 		fieldOneofName := oneofName
@@ -193,17 +193,9 @@ func (module *Module) getMessageFieldsDeepInternal(ctx pgsgo.Context, m pgs.Mess
 	return rv
 }
 
-// appendInt32Slice creates a new slice with the value appended (doesn't modify original).
-func appendInt32Slice(slice []int32, val int32) []int32 {
-	result := make([]int32, len(slice)+1)
-	copy(result, slice)
-	result[len(slice)] = val
-	return result
-}
-
-// appendStringSlice creates a new slice with the value appended (doesn't modify original).
-func appendStringSlice(slice []string, val string) []string {
-	result := make([]string, len(slice)+1)
+// appendSlice creates a new slice with the value appended (doesn't modify original).
+func appendSlice[T any](slice []T, val T) []T {
+	result := make([]T, len(slice)+1)
 	copy(result, slice)
 	result[len(slice)] = val
 	return result

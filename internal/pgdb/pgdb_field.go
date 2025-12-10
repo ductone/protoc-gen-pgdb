@@ -268,7 +268,7 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			OverrideExpression: overrideExpression,
 			// Proto metadata - will be extended by caller for nested fields
 			SourceKind:     pgdb_v1.ColumnSourceKind_PROTO_FIELD,
-			ProtoFieldPath: []int32{int32(f.Descriptor().GetNumber())},
+			ProtoFieldPath: []int32{f.Descriptor().GetNumber()},
 			ProtoPath:      f.Name().LowerSnakeCase().String(),
 			ProtoKind:      protoTypeToKind(pt),
 			ProtoTypeName:  getProtoTypeName(f),
@@ -338,7 +338,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			Type:           vcDataType.Name,
 			Nullable:       false,
 			SourceKind:     pgdb_v1.ColumnSourceKind_TENANT,
-			ProtoFieldPath: []int32{int32(tenantIdProtoField.Descriptor().GetNumber())},
+			ProtoFieldPath: []int32{tenantIdProtoField.Descriptor().GetNumber()},
 			ProtoPath:      tenantIdFieldName,
 			ProtoKind:      protoreflect.StringKind,
 		},
@@ -554,7 +554,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 					Nullable:           true,
 					OverrideExpression: fmt.Sprintf("vector(%d)", enumExt.GetVectorSize()),
 					SourceKind:         pgdb_v1.ColumnSourceKind_VECTOR,
-					ProtoFieldPath:     []int32{int32(field.Descriptor().GetNumber())},
+					ProtoFieldPath:     []int32{field.Descriptor().GetNumber()},
 					ProtoPath:          field.Name().LowerSnakeCase().String(),
 					ProtoKind:          protoreflect.MessageKind,
 				},
@@ -632,19 +632,19 @@ func getProtoTypeName(f pgs.Field) string {
 	if ft.IsRepeated() && !ft.IsMap() {
 		el := ft.Element()
 		if el.IsEnum() {
-			return string(el.Enum().FullyQualifiedName())
+			return el.Enum().FullyQualifiedName()
 		}
 		if el.IsEmbed() {
-			return string(el.Embed().FullyQualifiedName())
+			return el.Embed().FullyQualifiedName()
 		}
 		return ""
 	}
 
 	if ft.IsEnum() {
-		return string(ft.Enum().FullyQualifiedName())
+		return ft.Enum().FullyQualifiedName()
 	}
 	if ft.IsEmbed() {
-		return string(ft.Embed().FullyQualifiedName())
+		return ft.Embed().FullyQualifiedName()
 	}
 	return ""
 }

@@ -99,7 +99,7 @@ func getNesteFields(ctx pgsgo.Context, fields []*fieldContext, ix *importTracker
 		if !f.Nested {
 			continue
 		}
-		fieldNum := int32(*f.Field.Descriptor().Number)
+		fieldNum := *f.Field.Descriptor().Number
 		rv = append(rv, &nestedFieldContext{
 			GoName:    f.GoName,
 			Prefix:    strconv.FormatInt(int64(fieldNum), 10) + "$",
