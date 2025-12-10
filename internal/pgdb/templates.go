@@ -6,7 +6,12 @@ import (
 	"fmt"
 	"io/fs"
 	"path"
+	"strconv"
+	"strings"
 	"text/template"
+
+	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 var (
@@ -14,6 +19,35 @@ var (
 	templateFiles embed.FS
 	templates     map[string]*template.Template
 )
+
+// templateFuncs contains custom functions for templates.
+var templateFuncs = template.FuncMap{
+	"formatFieldPath":  formatFieldPath,
+	"formatSourceKind": formatSourceKind,
+	"formatProtoKind":  formatProtoKind,
+}
+
+// formatFieldPath converts a []int32 to Go source code representation.
+func formatFieldPath(path []int32) string {
+	if len(path) == 0 {
+		return "nil"
+	}
+	parts := make([]string, len(path))
+	for i, n := range path {
+		parts[i] = strconv.FormatInt(int64(n), 10)
+	}
+	return "[]int32{" + strings.Join(parts, ", ") + "}"
+}
+
+// formatSourceKind converts a ColumnSourceKind to Go source code representation.
+func formatSourceKind(kind pgdb_v1.ColumnSourceKind) string {
+	return fmt.Sprintf("pgdb_v1.ColumnSourceKind(%d)", kind)
+}
+
+// formatProtoKind converts a protoreflect.Kind to Go source code representation.
+func formatProtoKind(kind protoreflect.Kind) string {
+	return fmt.Sprintf("protoreflect.Kind(%d)", kind)
+}
 
 //nolint:gochecknoinits // compling templates from embed
 func init() {
@@ -44,7 +78,7 @@ func loadTemplates() error {
 			continue
 		}
 
-		pt, err := template.ParseFS(templateFiles, path.Join("templates", tmpl.Name()), "templates/layouts/*.tmpl")
+		pt, err := template.New(tmpl.Name()).Funcs(templateFuncs).ParseFS(templateFiles, path.Join("templates", tmpl.Name()), "templates/layouts/*.tmpl")
 		if err != nil {
 			return err
 		}

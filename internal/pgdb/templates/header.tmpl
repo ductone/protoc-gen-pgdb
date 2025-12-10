@@ -19,5 +19,6 @@ import (
 {{ if .Imports.GoquExp }} "github.com/doug-martin/goqu/v9/exp" {{ end }}
 {{ if .Imports.ProtobufProto }} "google.golang.org/protobuf/proto" {{ end }}
 {{ if .Imports.ProtobufEncodingJSON }}"google.golang.org/protobuf/encoding/protojson" {{ end }}
+{{ if .Imports.ProtobufReflect }}"google.golang.org/protobuf/reflect/protoreflect" {{ end }}
 {{ if .Imports.PgType }} "github.com/jackc/pgx/v5/pgtype" {{ end }}
 )

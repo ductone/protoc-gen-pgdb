@@ -3,6 +3,7 @@ package pgdb
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 	pgs "github.com/lyft/protoc-gen-star/v2"
@@ -67,7 +68,29 @@ func (fn *varNamer) String() string {
 	return fmt.Sprintf("%s%d", fn.prefix, fn.offset)
 }
 
-func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string, dbPrefix string, humanPrefix string) []*fieldContext {
+func (module *Module) getMessageFieldsDeep(
+	ctx pgsgo.Context,
+	m pgs.Message,
+	ix *importTracker,
+	goPrefix string,
+	dbPrefix string,
+	humanPrefix string,
+) []*fieldContext {
+	// Call the internal implementation with empty proto path (for top-level) and no oneof
+	return module.getMessageFieldsDeepInternal(ctx, m, ix, goPrefix, dbPrefix, humanPrefix, nil, nil, "")
+}
+
+func (module *Module) getMessageFieldsDeepInternal(
+	ctx pgsgo.Context,
+	m pgs.Message,
+	ix *importTracker,
+	goPrefix string,
+	dbPrefix string,
+	humanPrefix string,
+	protoPath []int32,
+	protoNamePath []string,
+	oneofName string,
+) []*fieldContext {
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
 	tenantIdField := "tenant_id"
@@ -111,6 +134,12 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 		}
 
 		fc.DBFieldNameDeep = dbPrefix + name
+
+		// For nested oneof discriminators, update the proto path prefix
+		if len(protoPath) > 0 && fc.DB != nil {
+			fc.DB.ProtoPath = buildProtoPath(protoNamePath, fc.DB.OneofName)
+		}
+
 		if humanPrefix != "" {
 			fc.GoName = humanPrefix + fc.GoName
 		}
@@ -135,6 +164,25 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 
 		fc.DBFieldNameDeep = dbPrefix + name
 
+		// Build the full proto path for this field
+		fieldNum := field.Descriptor().GetNumber()
+		fieldName := field.Name().LowerSnakeCase().String()
+		newProtoPath := appendSlice(protoPath, fieldNum)
+		newProtoNamePath := appendSlice(protoNamePath, fieldName)
+
+		// Determine oneofName for this field - either inherited from parent or from this field's oneof
+		fieldOneofName := oneofName
+		if oo := field.OneOf(); oo != nil {
+			fieldOneofName = oo.Name().LowerSnakeCase().String()
+		}
+
+		// Update the Column's proto paths
+		if fc.DB != nil {
+			fc.DB.ProtoFieldPath = newProtoPath
+			fc.DB.ProtoPath = strings.Join(newProtoNamePath, ".")
+			fc.DB.OneofName = fieldOneofName
+		}
+
 		rv = append(rv, fc)
 		var embededMessage pgs.Message
 		if fc.Field != nil {
@@ -155,9 +203,27 @@ func (module *Module) getMessageFieldsDeep(ctx pgsgo.Context, m pgs.Message, ix 
 
 		pre := getNestedName(fc.Field)
 
-		rv = append(rv, module.getMessageFieldsDeep(ctx, embededMessage, ix, goPrefix, dbPrefix+pre, nextHumanPrefix)...)
+		// Recurse with extended proto paths, passing the oneof name for nested fields
+		rv = append(rv, module.getMessageFieldsDeepInternal(ctx, embededMessage, ix, goPrefix, dbPrefix+pre, nextHumanPrefix, newProtoPath, newProtoNamePath, fieldOneofName)...)
 	}
+
 	return rv
+}
+
+// appendSlice creates a new slice with the value appended (doesn't modify original).
+func appendSlice[T any](slice []T, val T) []T {
+	result := make([]T, len(slice)+1)
+	copy(result, slice)
+	result[len(slice)] = val
+	return result
+}
+
+// buildProtoPath constructs a dot-delimited path from parts.
+func buildProtoPath(parts []string, suffix string) string {
+	if len(parts) == 0 {
+		return suffix
+	}
+	return strings.Join(parts, ".") + "." + suffix
 }
 
 func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {

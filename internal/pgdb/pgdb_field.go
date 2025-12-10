@@ -7,6 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	pgs "github.com/lyft/protoc-gen-star/v2"
 	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
+	"google.golang.org/protobuf/reflect/protoreflect"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
@@ -265,6 +266,13 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 			Default:            defaultValue,
 			Collation:          ext.GetCollation(),
 			OverrideExpression: overrideExpression,
+			// Proto metadata - will be extended by caller for nested fields
+			SourceKind:     pgdb_v1.ColumnSourceKind_PROTO_FIELD,
+			ProtoFieldPath: []int32{f.Descriptor().GetNumber()},
+			ProtoPath:      f.Name().LowerSnakeCase().String(),
+			ProtoKind:      protoTypeToKind(pt),
+			ProtoTypeName:  getProtoTypeName(f),
+			IsRepeated:     isArray,
 		}
 		rv.DataType = dbTypeRef
 
@@ -315,13 +323,24 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 	byteaDataType := pgDataTypeForName("bytea")
 
+	// Get the actual tenant_id field info for proto metadata
+	tenantIdFieldName, err := getTenantIDField(m)
+	if err != nil {
+		return nil, err
+	}
+	tenantIdProtoField := fieldByName(m, tenantIdFieldName)
+
 	tenantIdField := &fieldContext{
 		ExcludeNested: true,
 		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
-			Name:     "tenant_id",
-			Type:     vcDataType.Name,
-			Nullable: false,
+			Name:           "tenant_id",
+			Type:           vcDataType.Name,
+			Nullable:       false,
+			SourceKind:     pgdb_v1.ColumnSourceKind_TENANT,
+			ProtoFieldPath: []int32{tenantIdProtoField.Descriptor().GetNumber()},
+			ProtoPath:      tenantIdFieldName,
+			ProtoKind:      protoreflect.StringKind,
 		},
 		GoName:   "TenantId",
 		DataType: vcDataType,
@@ -346,6 +365,8 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 			Type:               vcDataType.Name,
 			Nullable:           false,
 			OverrideExpression: "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED",
+			SourceKind:         pgdb_v1.ColumnSourceKind_PRIMARY_KEY,
+			ProtoKind:          protoreflect.StringKind,
 		},
 		GoName:   "PKSK",
 		DataType: vcDataType,
@@ -365,9 +386,11 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		ExcludeNested: true,
 		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
-			Name:     "pk",
-			Type:     vcDataType.Name,
-			Nullable: false,
+			Name:       "pk",
+			Type:       vcDataType.Name,
+			Nullable:   false,
+			SourceKind: pgdb_v1.ColumnSourceKind_PRIMARY_KEY,
+			ProtoKind:  protoreflect.StringKind,
 		},
 		GoName:   "PK",
 		DataType: vcDataType,
@@ -390,9 +413,11 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		ExcludeNested: true,
 		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
-			Name:     "sk",
-			Type:     vcDataType.Name,
-			Nullable: false,
+			Name:       "sk",
+			Type:       vcDataType.Name,
+			Nullable:   false,
+			SourceKind: pgdb_v1.ColumnSourceKind_PRIMARY_KEY,
+			ProtoKind:  protoreflect.StringKind,
 		},
 		GoName:   "SK",
 		DataType: vcDataType,
@@ -415,10 +440,12 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		ExcludeNested: true,
 		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
-			Name:      "pkskv2",
-			Type:      vcDataType.Name,
-			Nullable:  true,
-			Collation: "C",
+			Name:       "pkskv2",
+			Type:       vcDataType.Name,
+			Nullable:   true,
+			Collation:  "C",
+			SourceKind: pgdb_v1.ColumnSourceKind_PRIMARY_KEY,
+			ProtoKind:  protoreflect.StringKind,
 		},
 		GoName:   "PKSKV2",
 		DataType: vcDataType,
@@ -441,9 +468,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		ExcludeNested: true,
 		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
-			Name:     "fts_data",
-			Type:     "tsvector",
-			Nullable: true,
+			Name:       "fts_data",
+			Type:       "tsvector",
+			Nullable:   true,
+			SourceKind: pgdb_v1.ColumnSourceKind_SEARCH,
 		},
 		GoName:   "FTSData",
 		DataType: nil,
@@ -461,9 +489,11 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 		ExcludeNested: true,
 		IsVirtual:     true,
 		DB: &pgdb_v1.Column{
-			Name:     "pb_data",
-			Type:     byteaDataType.Name,
-			Nullable: false,
+			Name:       "pb_data",
+			Type:       byteaDataType.Name,
+			Nullable:   false,
+			SourceKind: pgdb_v1.ColumnSourceKind_DATA,
+			ProtoKind:  protoreflect.BytesKind,
 		},
 		GoName:   "PBData",
 		DataType: byteaDataType,
@@ -523,6 +553,10 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 					Type:               "vector",
 					Nullable:           true,
 					OverrideExpression: fmt.Sprintf("vector(%d)", enumExt.GetVectorSize()),
+					SourceKind:         pgdb_v1.ColumnSourceKind_VECTOR,
+					ProtoFieldPath:     []int32{field.Descriptor().GetNumber()},
+					ProtoPath:          field.Name().LowerSnakeCase().String(),
+					ProtoKind:          protoreflect.MessageKind,
 				},
 				GoName:   goNameString, // Generated go struct name
 				DataType: nil,
@@ -543,4 +577,74 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 	}
 
 	return rv, nil
+}
+
+// protoTypeToKind converts pgs.ProtoType to protoreflect.Kind.
+func protoTypeToKind(pt pgs.ProtoType) protoreflect.Kind {
+	switch pt {
+	case pgs.DoubleT:
+		return protoreflect.DoubleKind
+	case pgs.FloatT:
+		return protoreflect.FloatKind
+	case pgs.Int32T:
+		return protoreflect.Int32Kind
+	case pgs.Int64T:
+		return protoreflect.Int64Kind
+	case pgs.UInt32T:
+		return protoreflect.Uint32Kind
+	case pgs.UInt64T:
+		return protoreflect.Uint64Kind
+	case pgs.SInt32:
+		return protoreflect.Sint32Kind
+	case pgs.SInt64:
+		return protoreflect.Sint64Kind
+	case pgs.Fixed32T:
+		return protoreflect.Fixed32Kind
+	case pgs.Fixed64T:
+		return protoreflect.Fixed64Kind
+	case pgs.SFixed32:
+		return protoreflect.Sfixed32Kind
+	case pgs.SFixed64:
+		return protoreflect.Sfixed64Kind
+	case pgs.BoolT:
+		return protoreflect.BoolKind
+	case pgs.StringT:
+		return protoreflect.StringKind
+	case pgs.BytesT:
+		return protoreflect.BytesKind
+	case pgs.EnumT:
+		return protoreflect.EnumKind
+	case pgs.MessageT:
+		return protoreflect.MessageKind
+	case pgs.GroupT:
+		return protoreflect.GroupKind
+	default:
+		return 0 // Unknown
+	}
+}
+
+// getProtoTypeName returns the fully qualified proto type name for enum/message fields.
+// Returns empty string for scalar types.
+func getProtoTypeName(f pgs.Field) string {
+	ft := f.Type()
+
+	// For repeated fields, look at element type
+	if ft.IsRepeated() && !ft.IsMap() {
+		el := ft.Element()
+		if el.IsEnum() {
+			return el.Enum().FullyQualifiedName()
+		}
+		if el.IsEmbed() {
+			return el.Embed().FullyQualifiedName()
+		}
+		return ""
+	}
+
+	if ft.IsEnum() {
+		return ft.Enum().FullyQualifiedName()
+	}
+	if ft.IsEmbed() {
+		return ft.Embed().FullyQualifiedName()
+	}
+	return ""
 }
