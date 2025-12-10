@@ -1,5 +1,14 @@
 //go:build unsafe
 
+// Package extnetip unsafe conversion implementation.
+//
+// This file is used when built with the 'unsafe' build tag.
+// It provides fast conversions using unsafe.Pointer operations but requires
+// that the internal layout of netip.Addr remains stable.
+//
+// WARNING: This implementation depends on internal Go standard library
+// implementation details and may break with future Go versions.
+
 package extnetip
 
 import (
@@ -26,9 +35,23 @@ type addr struct {
 // z4    - IPv4 address representation
 // z6noz - IPv6 address representation without zone
 var (
-	z4    uintptr = unwrap(netip.AddrFrom4([4]byte{})).z
-	z6noz uintptr = unwrap(netip.AddrFrom16([16]byte{})).z
+	z4    uintptr
+	z6noz uintptr
 )
+
+// Compile-time and runtime sanity checks: fail fast if layout changes.
+// If sizes differ this line triggers a compile-time error (array length mismatch).
+var _ [1]struct{} = [1 - int(unsafe.Sizeof(addr{})-unsafe.Sizeof(netip.Addr{}))]struct{}{}
+
+func init() {
+	if unsafe.Alignof(addr{}) != unsafe.Alignof(netip.Addr{}) {
+		panic("extnetip: netip.Addr alignment changed; rebuild without -tags=unsafe")
+	}
+
+	// Initialize discriminators only after alignment is verified.
+	z4 = unwrap(netip.AddrFrom4([4]byte{})).z
+	z6noz = unwrap(netip.AddrFrom16([16]byte{})).z
+}
 
 // fromUint128 constructs an addr struct from a uint128 IP representation and a flag is4.
 //

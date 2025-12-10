@@ -1,5 +1,15 @@
 //go:build !unsafe
 
+// Package extnetip safe conversion implementation.
+//
+// This file is used when the 'unsafe' build tag is NOT specified.
+// It provides safe conversions between netip.Addr and internal uint128
+// representation using standard library byte manipulation functions.
+//
+// While slower than the unsafe version, this approach avoids potential
+// issues with unsafe pointer operations and is suitable for environments
+// where unsafe operations are prohibited.
+
 package extnetip
 
 import (
@@ -47,7 +57,7 @@ func (a *addr) is4() bool {
 //
 // Precondition: a is a valid IP address.
 func unwrap(a netip.Addr) (b addr) {
-	ip := a.AsSlice() // nil if is a isn't valid!
+	ip := a.AsSlice() // nil if a isn't valid!
 
 	if len(ip) == 4 {
 		b.v4 = true
