@@ -318,7 +318,7 @@ func TestKsuidColOverrideExpression(t *testing.T) {
 	}
 }
 
-// mockDescriptorWithAutovacuum extends mockDescriptor with autovacuum support
+// mockDescriptorWithAutovacuum extends mockDescriptor with autovacuum support.
 type mockDescriptorWithAutovacuum struct {
 	mockDescriptor
 	autovacuum *MessageOptions_AutovacuumOptions

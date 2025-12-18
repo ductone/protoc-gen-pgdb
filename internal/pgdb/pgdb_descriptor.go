@@ -11,19 +11,19 @@ import (
 )
 
 type autovacuumTemplateContext struct {
-	VacuumThreshold   *int32
-	VacuumScaleFactor *float32
-	AnalyzeThreshold  *int32
+	VacuumThreshold    *int32
+	VacuumScaleFactor  *float32
+	AnalyzeThreshold   *int32
 	AnalyzeScaleFactor *float32
-	VacuumCostDelay   *int32
-	VacuumCostLimit   *int32
-	FreezeMinAge      *int64
-	FreezeMaxAge      *int64
-	FreezeTableAge    *int64
-	Fillfactor        *int32
-	ToastTupleTarget  *int32
-	Enabled           *bool
-	HasEnabled        bool
+	VacuumCostDelay    *int32
+	VacuumCostLimit    *int32
+	FreezeMinAge       *int64
+	FreezeMaxAge       *int64
+	FreezeTableAge     *int64
+	Fillfactor         *int32
+	ToastTupleTarget   *int32
+	Enabled            *bool
+	HasEnabled         bool
 }
 
 type descriptorTemplateContext struct {
