@@ -50,6 +50,10 @@ func (d *pgdbDescriptorPasta) GetPartitionDateRange() pgdb_v1.MessageOptions_Par
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
+func (d *pgdbDescriptorPasta) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
 func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -1192,6 +1196,10 @@ func (d *pgdbDescriptorPastaIngredient) GetPartitionedByKsuidFieldName() string 
 
 func (d *pgdbDescriptorPastaIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorPastaIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
 }
 
 func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -2965,6 +2973,10 @@ func (d *pgdbDescriptorSauceIngredient) GetPartitionDateRange() pgdb_v1.MessageO
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
+func (d *pgdbDescriptorSauceIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
 func (d *pgdbDescriptorSauceIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -4236,6 +4248,10 @@ func (d *pgdbDescriptorGarlicIngredient) GetPartitionedByKsuidFieldName() string
 
 func (d *pgdbDescriptorGarlicIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
+}
+
+func (d *pgdbDescriptorGarlicIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
 }
 
 func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -5572,6 +5588,10 @@ func (d *pgdbDescriptorCheeseIngredient) GetPartitionedByKsuidFieldName() string
 
 func (d *pgdbDescriptorCheeseIngredient) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
+}
+
+func (d *pgdbDescriptorCheeseIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
 }
 
 func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -6918,6 +6938,10 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetPartitionedByKsuidFiel
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

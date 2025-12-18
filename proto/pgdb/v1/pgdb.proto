@@ -15,6 +15,25 @@ extend google.protobuf.MessageOptions {
 
 message MessageOptions {
   bool disabled = 1;
+
+  // PostgreSQL storage parameters for the table.
+  // See: https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-STORAGE-PARAMETERS
+  message StorageParameters {
+    optional int32 autovacuum_vacuum_threshold = 1;
+    optional float autovacuum_vacuum_scale_factor = 2;
+    optional int32 autovacuum_analyze_threshold = 3;
+    optional float autovacuum_analyze_scale_factor = 4;
+    optional int32 autovacuum_vacuum_cost_delay = 5;
+    optional int32 autovacuum_vacuum_cost_limit = 6;
+    optional int64 autovacuum_freeze_min_age = 7;
+    optional int64 autovacuum_freeze_max_age = 8;
+    optional int64 autovacuum_freeze_table_age = 9;
+    optional int32 fillfactor = 10;
+    optional int32 toast_tuple_target = 11;
+    optional bool autovacuum_enabled = 12;
+  }
+  StorageParameters storage_parameters = 11;
+
   message Index {
     enum IndexMethod {
       INDEX_METHOD_UNSPECIFIED = 0;

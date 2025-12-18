@@ -72,7 +72,14 @@ func CreateSchema(msg DBReflectMessage, dialect Dialect) ([]string, error) {
 		_, _ = buf.WriteString(")\n")
 	}
 
-	_, _ = buf.WriteString(")\n")
+	_, _ = buf.WriteString(")")
+
+	// Add WITH clause for storage parameters if configured
+	if withClause := storageParams2with(desc); withClause != "" {
+		_, _ = buf.WriteString("\n")
+		_, _ = buf.WriteString(withClause)
+	}
+	_, _ = buf.WriteString("\n")
 
 	switch {
 	case desc.IsPartitioned():
@@ -232,6 +239,66 @@ func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 	return indexes, nil
 }
 
+func readStorageParameters(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]string, error) {
+	dialect := goqu.Dialect("postgres")
+
+	/*
+		SELECT
+		  c.reloptions
+		FROM
+		  pg_class c
+		JOIN
+		  pg_namespace n ON n.oid = c.relnamespace
+		WHERE
+		  c.relname = 'table_name'
+		  AND n.nspname = 'public';
+	*/
+	qb := dialect.From("pg_class")
+	qb = qb.Select("pg_class.reloptions")
+	qb = qb.Join(goqu.T("pg_namespace"), goqu.On(goqu.I("pg_namespace.oid").Eq(goqu.I("pg_class.relnamespace"))))
+	qb = qb.Where(goqu.L("pg_class.relname = ?", desc.TableName()))
+	qb = qb.Where(goqu.L("pg_namespace.nspname = ?", "public"))
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	storageParams := make(map[string]string)
+	if !rows.Next() {
+		// Table doesn't exist or has no storage parameters
+		return storageParams, nil
+	}
+
+	var reloptions []string
+	err = rows.Scan(&reloptions)
+	if err != nil {
+		return nil, err
+	}
+
+	// reloptions can be NULL, so check for nil
+	if reloptions == nil {
+		return storageParams, nil
+	}
+
+	// Parse reloptions array: {"autovacuum_vacuum_threshold=10000", "fillfactor=80"}
+	// Each element is in the format "key=value"
+	for _, opt := range reloptions {
+		parts := strings.SplitN(opt, "=", 2)
+		if len(parts) == 2 {
+			storageParams[parts[0]] = parts[1]
+		}
+	}
+
+	return storageParams, nil
+}
+
 func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string) (bool, error) {
 	dialect := goqu.Dialect("postgres")
 
@@ -330,6 +397,16 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialec
 			rv = append(rv, query)
 			continue
 		}
+	}
+
+	// Handle storage parameters for existing tables
+	existingStorageParams, err := readStorageParameters(ctx, db, desc)
+	if err != nil {
+		return nil, err
+	}
+
+	if storageParamsAlter := storageParams2alter(desc, existingStorageParams); storageParamsAlter != "" {
+		rv = append(rv, storageParamsAlter)
 	}
 
 	return rv, nil
