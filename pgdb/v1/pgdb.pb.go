@@ -507,8 +507,7 @@ func (x *MessageOptions) ClearAutovacuum() {
 type MessageOptions_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
-	Disabled bool
-	// Autovacuum and storage parameters for the table.
+	Disabled   bool
 	Autovacuum *MessageOptions_AutovacuumOptions
 	Indexes    []*MessageOptions_Index
 	// defaults to `tenant_id`.  Must be set if an object does not have a
@@ -739,7 +738,7 @@ func (b0 EnumValueOptions_builder) Build() *EnumValueOptions {
 	return m0
 }
 
-// Autovacuum configuration for the table.
+// PostgreSQL storage parameters for the table.
 // See: https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-STORAGE-PARAMETERS
 type MessageOptions_AutovacuumOptions struct {
 	state                         protoimpl.MessageState `protogen:"opaque.v1"`
@@ -1077,42 +1076,18 @@ func (x *MessageOptions_AutovacuumOptions) ClearEnabled() {
 type MessageOptions_AutovacuumOptions_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
-	// autovacuum_vacuum_threshold: minimum number of dead tuples before vacuum.
-	// Default is 50. Set to reduce vacuum frequency on high-churn tables.
-	VacuumThreshold *int32
-	// autovacuum_vacuum_scale_factor: fraction of table size to add to threshold.
-	// Default is 0.2 (20%). Effective threshold = threshold + (scale_factor * table_size).
-	VacuumScaleFactor *float32
-	// autovacuum_analyze_threshold: minimum number of changed tuples before analyze.
-	// Default is 50.
-	AnalyzeThreshold *int32
-	// autovacuum_analyze_scale_factor: fraction of table size to add to analyze threshold.
-	// Default is 0.1 (10%).
+	VacuumThreshold    *int32
+	VacuumScaleFactor  *float32
+	AnalyzeThreshold   *int32
 	AnalyzeScaleFactor *float32
-	// autovacuum_vacuum_cost_delay: time to sleep between vacuum cycles (milliseconds).
-	// Default is 2ms. Increase to reduce I/O impact.
-	VacuumCostDelay *int32
-	// autovacuum_vacuum_cost_limit: cost limit before sleeping.
-	// Default is 200. Increase for faster vacuums.
-	VacuumCostLimit *int32
-	// autovacuum_freeze_min_age: minimum age before freezing tuples.
-	// Default is 50000000.
-	FreezeMinAge *int64
-	// autovacuum_freeze_max_age: maximum age before forced vacuum for freeze.
-	// Default is 200000000.
-	FreezeMaxAge *int64
-	// autovacuum_freeze_table_age: age at which to scan whole table for freezing.
-	// Default is 150000000.
-	FreezeTableAge *int64
-	// fillfactor: percentage of page to fill before using new page.
-	// Default is 100. Lower values leave room for updates.
-	Fillfactor *int32
-	// toast_tuple_target: minimum tuple size before TOASTing.
-	// Default depends on page size (~2KB for 8KB pages).
-	ToastTupleTarget *int32
-	// autovacuum_enabled: whether autovacuum is enabled for this table.
-	// Default is true. Only disable with extreme caution.
-	Enabled *bool
+	VacuumCostDelay    *int32
+	VacuumCostLimit    *int32
+	FreezeMinAge       *int64
+	FreezeMaxAge       *int64
+	FreezeTableAge     *int64
+	Fillfactor         *int32
+	ToastTupleTarget   *int32
+	Enabled            *bool
 }
 
 func (b0 MessageOptions_AutovacuumOptions_builder) Build() *MessageOptions_AutovacuumOptions {
