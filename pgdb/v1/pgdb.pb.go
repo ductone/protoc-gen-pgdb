@@ -327,7 +327,7 @@ func (x FieldOptions_MessageBehavior) Number() protoreflect.EnumNumber {
 type MessageOptions struct {
 	state                                  protoimpl.MessageState                `protogen:"opaque.v1"`
 	xxx_hidden_Disabled                    bool                                  `protobuf:"varint,1,opt,name=disabled,proto3"`
-	xxx_hidden_Autovacuum                  *MessageOptions_AutovacuumOptions     `protobuf:"bytes,11,opt,name=autovacuum,proto3"`
+	xxx_hidden_StorageParameters           *MessageOptions_StorageParameters     `protobuf:"bytes,11,opt,name=storage_parameters,json=storageParameters,proto3"`
 	xxx_hidden_Indexes                     *[]*MessageOptions_Index              `protobuf:"bytes,2,rep,name=indexes,proto3"`
 	xxx_hidden_TenantIdField               string                                `protobuf:"bytes,3,opt,name=tenant_id_field,json=tenantIdField,proto3"`
 	xxx_hidden_NestedOnly                  bool                                  `protobuf:"varint,4,opt,name=nested_only,json=nestedOnly,proto3"`
@@ -373,9 +373,9 @@ func (x *MessageOptions) GetDisabled() bool {
 	return false
 }
 
-func (x *MessageOptions) GetAutovacuum() *MessageOptions_AutovacuumOptions {
+func (x *MessageOptions) GetStorageParameters() *MessageOptions_StorageParameters {
 	if x != nil {
-		return x.xxx_hidden_Autovacuum
+		return x.xxx_hidden_StorageParameters
 	}
 	return nil
 }
@@ -452,8 +452,8 @@ func (x *MessageOptions) SetDisabled(v bool) {
 	x.xxx_hidden_Disabled = v
 }
 
-func (x *MessageOptions) SetAutovacuum(v *MessageOptions_AutovacuumOptions) {
-	x.xxx_hidden_Autovacuum = v
+func (x *MessageOptions) SetStorageParameters(v *MessageOptions_StorageParameters) {
+	x.xxx_hidden_StorageParameters = v
 }
 
 func (x *MessageOptions) SetIndexes(v []*MessageOptions_Index) {
@@ -493,23 +493,23 @@ func (x *MessageOptions) SetUsePkskv2Column(v bool) {
 	x.xxx_hidden_UsePkskv2Column = v
 }
 
-func (x *MessageOptions) HasAutovacuum() bool {
+func (x *MessageOptions) HasStorageParameters() bool {
 	if x == nil {
 		return false
 	}
-	return x.xxx_hidden_Autovacuum != nil
+	return x.xxx_hidden_StorageParameters != nil
 }
 
-func (x *MessageOptions) ClearAutovacuum() {
-	x.xxx_hidden_Autovacuum = nil
+func (x *MessageOptions) ClearStorageParameters() {
+	x.xxx_hidden_StorageParameters = nil
 }
 
 type MessageOptions_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
-	Disabled   bool
-	Autovacuum *MessageOptions_AutovacuumOptions
-	Indexes    []*MessageOptions_Index
+	Disabled          bool
+	StorageParameters *MessageOptions_StorageParameters
+	Indexes           []*MessageOptions_Index
 	// defaults to `tenant_id`.  Must be set if an object does not have a
 	// `tenant_id` field.
 	TenantIdField string
@@ -538,7 +538,7 @@ func (b0 MessageOptions_builder) Build() *MessageOptions {
 	b, x := &b0, m0
 	_, _ = b, x
 	x.xxx_hidden_Disabled = b.Disabled
-	x.xxx_hidden_Autovacuum = b.Autovacuum
+	x.xxx_hidden_StorageParameters = b.StorageParameters
 	x.xxx_hidden_Indexes = &b.Indexes
 	x.xxx_hidden_TenantIdField = b.TenantIdField
 	x.xxx_hidden_NestedOnly = b.NestedOnly
@@ -740,40 +740,40 @@ func (b0 EnumValueOptions_builder) Build() *EnumValueOptions {
 
 // PostgreSQL storage parameters for the table.
 // See: https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-STORAGE-PARAMETERS
-type MessageOptions_AutovacuumOptions struct {
-	state                         protoimpl.MessageState `protogen:"opaque.v1"`
-	xxx_hidden_VacuumThreshold    int32                  `protobuf:"varint,1,opt,name=vacuum_threshold,json=vacuumThreshold,proto3,oneof"`
-	xxx_hidden_VacuumScaleFactor  float32                `protobuf:"fixed32,2,opt,name=vacuum_scale_factor,json=vacuumScaleFactor,proto3,oneof"`
-	xxx_hidden_AnalyzeThreshold   int32                  `protobuf:"varint,3,opt,name=analyze_threshold,json=analyzeThreshold,proto3,oneof"`
-	xxx_hidden_AnalyzeScaleFactor float32                `protobuf:"fixed32,4,opt,name=analyze_scale_factor,json=analyzeScaleFactor,proto3,oneof"`
-	xxx_hidden_VacuumCostDelay    int32                  `protobuf:"varint,5,opt,name=vacuum_cost_delay,json=vacuumCostDelay,proto3,oneof"`
-	xxx_hidden_VacuumCostLimit    int32                  `protobuf:"varint,6,opt,name=vacuum_cost_limit,json=vacuumCostLimit,proto3,oneof"`
-	xxx_hidden_FreezeMinAge       int64                  `protobuf:"varint,7,opt,name=freeze_min_age,json=freezeMinAge,proto3,oneof"`
-	xxx_hidden_FreezeMaxAge       int64                  `protobuf:"varint,8,opt,name=freeze_max_age,json=freezeMaxAge,proto3,oneof"`
-	xxx_hidden_FreezeTableAge     int64                  `protobuf:"varint,9,opt,name=freeze_table_age,json=freezeTableAge,proto3,oneof"`
-	xxx_hidden_Fillfactor         int32                  `protobuf:"varint,10,opt,name=fillfactor,proto3,oneof"`
-	xxx_hidden_ToastTupleTarget   int32                  `protobuf:"varint,11,opt,name=toast_tuple_target,json=toastTupleTarget,proto3,oneof"`
-	xxx_hidden_Enabled            bool                   `protobuf:"varint,12,opt,name=enabled,proto3,oneof"`
-	XXX_raceDetectHookData        protoimpl.RaceDetectHookData
-	XXX_presence                  [1]uint32
-	unknownFields                 protoimpl.UnknownFields
-	sizeCache                     protoimpl.SizeCache
+type MessageOptions_StorageParameters struct {
+	state                                   protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_AutovacuumVacuumThreshold    int32                  `protobuf:"varint,1,opt,name=autovacuum_vacuum_threshold,json=autovacuumVacuumThreshold,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumScaleFactor  float32                `protobuf:"fixed32,2,opt,name=autovacuum_vacuum_scale_factor,json=autovacuumVacuumScaleFactor,proto3,oneof"`
+	xxx_hidden_AutovacuumAnalyzeThreshold   int32                  `protobuf:"varint,3,opt,name=autovacuum_analyze_threshold,json=autovacuumAnalyzeThreshold,proto3,oneof"`
+	xxx_hidden_AutovacuumAnalyzeScaleFactor float32                `protobuf:"fixed32,4,opt,name=autovacuum_analyze_scale_factor,json=autovacuumAnalyzeScaleFactor,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumCostDelay    int32                  `protobuf:"varint,5,opt,name=autovacuum_vacuum_cost_delay,json=autovacuumVacuumCostDelay,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumCostLimit    int32                  `protobuf:"varint,6,opt,name=autovacuum_vacuum_cost_limit,json=autovacuumVacuumCostLimit,proto3,oneof"`
+	xxx_hidden_AutovacuumFreezeMinAge       int64                  `protobuf:"varint,7,opt,name=autovacuum_freeze_min_age,json=autovacuumFreezeMinAge,proto3,oneof"`
+	xxx_hidden_AutovacuumFreezeMaxAge       int64                  `protobuf:"varint,8,opt,name=autovacuum_freeze_max_age,json=autovacuumFreezeMaxAge,proto3,oneof"`
+	xxx_hidden_AutovacuumFreezeTableAge     int64                  `protobuf:"varint,9,opt,name=autovacuum_freeze_table_age,json=autovacuumFreezeTableAge,proto3,oneof"`
+	xxx_hidden_Fillfactor                   int32                  `protobuf:"varint,10,opt,name=fillfactor,proto3,oneof"`
+	xxx_hidden_ToastTupleTarget             int32                  `protobuf:"varint,11,opt,name=toast_tuple_target,json=toastTupleTarget,proto3,oneof"`
+	xxx_hidden_AutovacuumEnabled            bool                   `protobuf:"varint,12,opt,name=autovacuum_enabled,json=autovacuumEnabled,proto3,oneof"`
+	XXX_raceDetectHookData                  protoimpl.RaceDetectHookData
+	XXX_presence                            [1]uint32
+	unknownFields                           protoimpl.UnknownFields
+	sizeCache                               protoimpl.SizeCache
 }
 
-func (x *MessageOptions_AutovacuumOptions) Reset() {
-	*x = MessageOptions_AutovacuumOptions{}
+func (x *MessageOptions_StorageParameters) Reset() {
+	*x = MessageOptions_StorageParameters{}
 	mi := &file_pgdb_v1_pgdb_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *MessageOptions_AutovacuumOptions) String() string {
+func (x *MessageOptions_StorageParameters) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MessageOptions_AutovacuumOptions) ProtoMessage() {}
+func (*MessageOptions_StorageParameters) ProtoMessage() {}
 
-func (x *MessageOptions_AutovacuumOptions) ProtoReflect() protoreflect.Message {
+func (x *MessageOptions_StorageParameters) ProtoReflect() protoreflect.Message {
 	mi := &file_pgdb_v1_pgdb_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -785,350 +785,350 @@ func (x *MessageOptions_AutovacuumOptions) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetVacuumThreshold() int32 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumVacuumThreshold() int32 {
 	if x != nil {
-		return x.xxx_hidden_VacuumThreshold
+		return x.xxx_hidden_AutovacuumVacuumThreshold
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetVacuumScaleFactor() float32 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumVacuumScaleFactor() float32 {
 	if x != nil {
-		return x.xxx_hidden_VacuumScaleFactor
+		return x.xxx_hidden_AutovacuumVacuumScaleFactor
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetAnalyzeThreshold() int32 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumAnalyzeThreshold() int32 {
 	if x != nil {
-		return x.xxx_hidden_AnalyzeThreshold
+		return x.xxx_hidden_AutovacuumAnalyzeThreshold
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetAnalyzeScaleFactor() float32 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumAnalyzeScaleFactor() float32 {
 	if x != nil {
-		return x.xxx_hidden_AnalyzeScaleFactor
+		return x.xxx_hidden_AutovacuumAnalyzeScaleFactor
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetVacuumCostDelay() int32 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumVacuumCostDelay() int32 {
 	if x != nil {
-		return x.xxx_hidden_VacuumCostDelay
+		return x.xxx_hidden_AutovacuumVacuumCostDelay
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetVacuumCostLimit() int32 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumVacuumCostLimit() int32 {
 	if x != nil {
-		return x.xxx_hidden_VacuumCostLimit
+		return x.xxx_hidden_AutovacuumVacuumCostLimit
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetFreezeMinAge() int64 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumFreezeMinAge() int64 {
 	if x != nil {
-		return x.xxx_hidden_FreezeMinAge
+		return x.xxx_hidden_AutovacuumFreezeMinAge
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetFreezeMaxAge() int64 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumFreezeMaxAge() int64 {
 	if x != nil {
-		return x.xxx_hidden_FreezeMaxAge
+		return x.xxx_hidden_AutovacuumFreezeMaxAge
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetFreezeTableAge() int64 {
+func (x *MessageOptions_StorageParameters) GetAutovacuumFreezeTableAge() int64 {
 	if x != nil {
-		return x.xxx_hidden_FreezeTableAge
+		return x.xxx_hidden_AutovacuumFreezeTableAge
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetFillfactor() int32 {
+func (x *MessageOptions_StorageParameters) GetFillfactor() int32 {
 	if x != nil {
 		return x.xxx_hidden_Fillfactor
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetToastTupleTarget() int32 {
+func (x *MessageOptions_StorageParameters) GetToastTupleTarget() int32 {
 	if x != nil {
 		return x.xxx_hidden_ToastTupleTarget
 	}
 	return 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) GetEnabled() bool {
+func (x *MessageOptions_StorageParameters) GetAutovacuumEnabled() bool {
 	if x != nil {
-		return x.xxx_hidden_Enabled
+		return x.xxx_hidden_AutovacuumEnabled
 	}
 	return false
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetVacuumThreshold(v int32) {
-	x.xxx_hidden_VacuumThreshold = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumThreshold(v int32) {
+	x.xxx_hidden_AutovacuumVacuumThreshold = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetVacuumScaleFactor(v float32) {
-	x.xxx_hidden_VacuumScaleFactor = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumScaleFactor(v float32) {
+	x.xxx_hidden_AutovacuumVacuumScaleFactor = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetAnalyzeThreshold(v int32) {
-	x.xxx_hidden_AnalyzeThreshold = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumAnalyzeThreshold(v int32) {
+	x.xxx_hidden_AutovacuumAnalyzeThreshold = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetAnalyzeScaleFactor(v float32) {
-	x.xxx_hidden_AnalyzeScaleFactor = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumAnalyzeScaleFactor(v float32) {
+	x.xxx_hidden_AutovacuumAnalyzeScaleFactor = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetVacuumCostDelay(v int32) {
-	x.xxx_hidden_VacuumCostDelay = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumCostDelay(v int32) {
+	x.xxx_hidden_AutovacuumVacuumCostDelay = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetVacuumCostLimit(v int32) {
-	x.xxx_hidden_VacuumCostLimit = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumCostLimit(v int32) {
+	x.xxx_hidden_AutovacuumVacuumCostLimit = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetFreezeMinAge(v int64) {
-	x.xxx_hidden_FreezeMinAge = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumFreezeMinAge(v int64) {
+	x.xxx_hidden_AutovacuumFreezeMinAge = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetFreezeMaxAge(v int64) {
-	x.xxx_hidden_FreezeMaxAge = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumFreezeMaxAge(v int64) {
+	x.xxx_hidden_AutovacuumFreezeMaxAge = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetFreezeTableAge(v int64) {
-	x.xxx_hidden_FreezeTableAge = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumFreezeTableAge(v int64) {
+	x.xxx_hidden_AutovacuumFreezeTableAge = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 8, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetFillfactor(v int32) {
+func (x *MessageOptions_StorageParameters) SetFillfactor(v int32) {
 	x.xxx_hidden_Fillfactor = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 9, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetToastTupleTarget(v int32) {
+func (x *MessageOptions_StorageParameters) SetToastTupleTarget(v int32) {
 	x.xxx_hidden_ToastTupleTarget = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 10, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) SetEnabled(v bool) {
-	x.xxx_hidden_Enabled = v
+func (x *MessageOptions_StorageParameters) SetAutovacuumEnabled(v bool) {
+	x.xxx_hidden_AutovacuumEnabled = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 11, 12)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasVacuumThreshold() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumVacuumThreshold() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 0)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasVacuumScaleFactor() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumVacuumScaleFactor() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasAnalyzeThreshold() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumAnalyzeThreshold() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 2)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasAnalyzeScaleFactor() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumAnalyzeScaleFactor() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 3)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasVacuumCostDelay() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumVacuumCostDelay() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 4)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasVacuumCostLimit() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumVacuumCostLimit() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 5)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasFreezeMinAge() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumFreezeMinAge() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 6)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasFreezeMaxAge() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumFreezeMaxAge() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 7)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasFreezeTableAge() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumFreezeTableAge() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 8)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasFillfactor() bool {
+func (x *MessageOptions_StorageParameters) HasFillfactor() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 9)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasToastTupleTarget() bool {
+func (x *MessageOptions_StorageParameters) HasToastTupleTarget() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 10)
 }
 
-func (x *MessageOptions_AutovacuumOptions) HasEnabled() bool {
+func (x *MessageOptions_StorageParameters) HasAutovacuumEnabled() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 11)
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearVacuumThreshold() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumVacuumThreshold() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
-	x.xxx_hidden_VacuumThreshold = 0
+	x.xxx_hidden_AutovacuumVacuumThreshold = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearVacuumScaleFactor() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumVacuumScaleFactor() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
-	x.xxx_hidden_VacuumScaleFactor = 0
+	x.xxx_hidden_AutovacuumVacuumScaleFactor = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearAnalyzeThreshold() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumAnalyzeThreshold() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 2)
-	x.xxx_hidden_AnalyzeThreshold = 0
+	x.xxx_hidden_AutovacuumAnalyzeThreshold = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearAnalyzeScaleFactor() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumAnalyzeScaleFactor() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 3)
-	x.xxx_hidden_AnalyzeScaleFactor = 0
+	x.xxx_hidden_AutovacuumAnalyzeScaleFactor = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearVacuumCostDelay() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumVacuumCostDelay() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 4)
-	x.xxx_hidden_VacuumCostDelay = 0
+	x.xxx_hidden_AutovacuumVacuumCostDelay = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearVacuumCostLimit() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumVacuumCostLimit() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 5)
-	x.xxx_hidden_VacuumCostLimit = 0
+	x.xxx_hidden_AutovacuumVacuumCostLimit = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearFreezeMinAge() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumFreezeMinAge() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 6)
-	x.xxx_hidden_FreezeMinAge = 0
+	x.xxx_hidden_AutovacuumFreezeMinAge = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearFreezeMaxAge() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumFreezeMaxAge() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 7)
-	x.xxx_hidden_FreezeMaxAge = 0
+	x.xxx_hidden_AutovacuumFreezeMaxAge = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearFreezeTableAge() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumFreezeTableAge() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 8)
-	x.xxx_hidden_FreezeTableAge = 0
+	x.xxx_hidden_AutovacuumFreezeTableAge = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearFillfactor() {
+func (x *MessageOptions_StorageParameters) ClearFillfactor() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 9)
 	x.xxx_hidden_Fillfactor = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearToastTupleTarget() {
+func (x *MessageOptions_StorageParameters) ClearToastTupleTarget() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 10)
 	x.xxx_hidden_ToastTupleTarget = 0
 }
 
-func (x *MessageOptions_AutovacuumOptions) ClearEnabled() {
+func (x *MessageOptions_StorageParameters) ClearAutovacuumEnabled() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 11)
-	x.xxx_hidden_Enabled = false
+	x.xxx_hidden_AutovacuumEnabled = false
 }
 
-type MessageOptions_AutovacuumOptions_builder struct {
+type MessageOptions_StorageParameters_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
-	VacuumThreshold    *int32
-	VacuumScaleFactor  *float32
-	AnalyzeThreshold   *int32
-	AnalyzeScaleFactor *float32
-	VacuumCostDelay    *int32
-	VacuumCostLimit    *int32
-	FreezeMinAge       *int64
-	FreezeMaxAge       *int64
-	FreezeTableAge     *int64
-	Fillfactor         *int32
-	ToastTupleTarget   *int32
-	Enabled            *bool
+	AutovacuumVacuumThreshold    *int32
+	AutovacuumVacuumScaleFactor  *float32
+	AutovacuumAnalyzeThreshold   *int32
+	AutovacuumAnalyzeScaleFactor *float32
+	AutovacuumVacuumCostDelay    *int32
+	AutovacuumVacuumCostLimit    *int32
+	AutovacuumFreezeMinAge       *int64
+	AutovacuumFreezeMaxAge       *int64
+	AutovacuumFreezeTableAge     *int64
+	Fillfactor                   *int32
+	ToastTupleTarget             *int32
+	AutovacuumEnabled            *bool
 }
 
-func (b0 MessageOptions_AutovacuumOptions_builder) Build() *MessageOptions_AutovacuumOptions {
-	m0 := &MessageOptions_AutovacuumOptions{}
+func (b0 MessageOptions_StorageParameters_builder) Build() *MessageOptions_StorageParameters {
+	m0 := &MessageOptions_StorageParameters{}
 	b, x := &b0, m0
 	_, _ = b, x
-	if b.VacuumThreshold != nil {
+	if b.AutovacuumVacuumThreshold != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 12)
-		x.xxx_hidden_VacuumThreshold = *b.VacuumThreshold
+		x.xxx_hidden_AutovacuumVacuumThreshold = *b.AutovacuumVacuumThreshold
 	}
-	if b.VacuumScaleFactor != nil {
+	if b.AutovacuumVacuumScaleFactor != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 12)
-		x.xxx_hidden_VacuumScaleFactor = *b.VacuumScaleFactor
+		x.xxx_hidden_AutovacuumVacuumScaleFactor = *b.AutovacuumVacuumScaleFactor
 	}
-	if b.AnalyzeThreshold != nil {
+	if b.AutovacuumAnalyzeThreshold != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 12)
-		x.xxx_hidden_AnalyzeThreshold = *b.AnalyzeThreshold
+		x.xxx_hidden_AutovacuumAnalyzeThreshold = *b.AutovacuumAnalyzeThreshold
 	}
-	if b.AnalyzeScaleFactor != nil {
+	if b.AutovacuumAnalyzeScaleFactor != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 12)
-		x.xxx_hidden_AnalyzeScaleFactor = *b.AnalyzeScaleFactor
+		x.xxx_hidden_AutovacuumAnalyzeScaleFactor = *b.AutovacuumAnalyzeScaleFactor
 	}
-	if b.VacuumCostDelay != nil {
+	if b.AutovacuumVacuumCostDelay != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 12)
-		x.xxx_hidden_VacuumCostDelay = *b.VacuumCostDelay
+		x.xxx_hidden_AutovacuumVacuumCostDelay = *b.AutovacuumVacuumCostDelay
 	}
-	if b.VacuumCostLimit != nil {
+	if b.AutovacuumVacuumCostLimit != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 12)
-		x.xxx_hidden_VacuumCostLimit = *b.VacuumCostLimit
+		x.xxx_hidden_AutovacuumVacuumCostLimit = *b.AutovacuumVacuumCostLimit
 	}
-	if b.FreezeMinAge != nil {
+	if b.AutovacuumFreezeMinAge != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 12)
-		x.xxx_hidden_FreezeMinAge = *b.FreezeMinAge
+		x.xxx_hidden_AutovacuumFreezeMinAge = *b.AutovacuumFreezeMinAge
 	}
-	if b.FreezeMaxAge != nil {
+	if b.AutovacuumFreezeMaxAge != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 12)
-		x.xxx_hidden_FreezeMaxAge = *b.FreezeMaxAge
+		x.xxx_hidden_AutovacuumFreezeMaxAge = *b.AutovacuumFreezeMaxAge
 	}
-	if b.FreezeTableAge != nil {
+	if b.AutovacuumFreezeTableAge != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 8, 12)
-		x.xxx_hidden_FreezeTableAge = *b.FreezeTableAge
+		x.xxx_hidden_AutovacuumFreezeTableAge = *b.AutovacuumFreezeTableAge
 	}
 	if b.Fillfactor != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 9, 12)
@@ -1138,9 +1138,9 @@ func (b0 MessageOptions_AutovacuumOptions_builder) Build() *MessageOptions_Autov
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 10, 12)
 		x.xxx_hidden_ToastTupleTarget = *b.ToastTupleTarget
 	}
-	if b.Enabled != nil {
+	if b.AutovacuumEnabled != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 11, 12)
-		x.xxx_hidden_Enabled = *b.Enabled
+		x.xxx_hidden_AutovacuumEnabled = *b.AutovacuumEnabled
 	}
 	return m0
 }
@@ -1424,12 +1424,10 @@ var File_pgdb_v1_pgdb_proto protoreflect.FileDescriptor
 
 const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\n" +
-	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\xe6\x11\n" +
+	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\xb5\x14\n" +
 	"\x0eMessageOptions\x12\x1a\n" +
-	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x12I\n" +
-	"\n" +
-	"autovacuum\x18\v \x01(\v2).pgdb.v1.MessageOptions.AutovacuumOptionsR\n" +
-	"autovacuum\x127\n" +
+	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x12X\n" +
+	"\x12storage_parameters\x18\v \x01(\v2).pgdb.v1.MessageOptions.StorageParametersR\x11storageParameters\x127\n" +
 	"\aindexes\x18\x02 \x03(\v2\x1d.pgdb.v1.MessageOptions.IndexR\aindexes\x12&\n" +
 	"\x0ftenant_id_field\x18\x03 \x01(\tR\rtenantIdField\x12\x1f\n" +
 	"\vnested_only\x18\x04 \x01(\bR\n" +
@@ -1440,37 +1438,36 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\x1fpartitioned_by_ksuid_field_name\x18\t \x01(\tR\x1bpartitionedByKsuidFieldName\x122\n" +
 	"\x05stats\x18\x06 \x03(\v2\x1c.pgdb.v1.MessageOptions.StatR\x05stats\x12.\n" +
 	"\x11use_pkskv2_column\x18\n" +
-	" \x01(\bB\x02\x18\x01R\x0fusePkskv2Column\x1a\xb4\x06\n" +
-	"\x11AutovacuumOptions\x12.\n" +
-	"\x10vacuum_threshold\x18\x01 \x01(\x05H\x00R\x0fvacuumThreshold\x88\x01\x01\x123\n" +
-	"\x13vacuum_scale_factor\x18\x02 \x01(\x02H\x01R\x11vacuumScaleFactor\x88\x01\x01\x120\n" +
-	"\x11analyze_threshold\x18\x03 \x01(\x05H\x02R\x10analyzeThreshold\x88\x01\x01\x125\n" +
-	"\x14analyze_scale_factor\x18\x04 \x01(\x02H\x03R\x12analyzeScaleFactor\x88\x01\x01\x12/\n" +
-	"\x11vacuum_cost_delay\x18\x05 \x01(\x05H\x04R\x0fvacuumCostDelay\x88\x01\x01\x12/\n" +
-	"\x11vacuum_cost_limit\x18\x06 \x01(\x05H\x05R\x0fvacuumCostLimit\x88\x01\x01\x12)\n" +
-	"\x0efreeze_min_age\x18\a \x01(\x03H\x06R\ffreezeMinAge\x88\x01\x01\x12)\n" +
-	"\x0efreeze_max_age\x18\b \x01(\x03H\aR\ffreezeMaxAge\x88\x01\x01\x12-\n" +
-	"\x10freeze_table_age\x18\t \x01(\x03H\bR\x0efreezeTableAge\x88\x01\x01\x12#\n" +
+	" \x01(\bB\x02\x18\x01R\x0fusePkskv2Column\x1a\xf4\b\n" +
+	"\x11StorageParameters\x12C\n" +
+	"\x1bautovacuum_vacuum_threshold\x18\x01 \x01(\x05H\x00R\x19autovacuumVacuumThreshold\x88\x01\x01\x12H\n" +
+	"\x1eautovacuum_vacuum_scale_factor\x18\x02 \x01(\x02H\x01R\x1bautovacuumVacuumScaleFactor\x88\x01\x01\x12E\n" +
+	"\x1cautovacuum_analyze_threshold\x18\x03 \x01(\x05H\x02R\x1aautovacuumAnalyzeThreshold\x88\x01\x01\x12J\n" +
+	"\x1fautovacuum_analyze_scale_factor\x18\x04 \x01(\x02H\x03R\x1cautovacuumAnalyzeScaleFactor\x88\x01\x01\x12D\n" +
+	"\x1cautovacuum_vacuum_cost_delay\x18\x05 \x01(\x05H\x04R\x19autovacuumVacuumCostDelay\x88\x01\x01\x12D\n" +
+	"\x1cautovacuum_vacuum_cost_limit\x18\x06 \x01(\x05H\x05R\x19autovacuumVacuumCostLimit\x88\x01\x01\x12>\n" +
+	"\x19autovacuum_freeze_min_age\x18\a \x01(\x03H\x06R\x16autovacuumFreezeMinAge\x88\x01\x01\x12>\n" +
+	"\x19autovacuum_freeze_max_age\x18\b \x01(\x03H\aR\x16autovacuumFreezeMaxAge\x88\x01\x01\x12B\n" +
+	"\x1bautovacuum_freeze_table_age\x18\t \x01(\x03H\bR\x18autovacuumFreezeTableAge\x88\x01\x01\x12#\n" +
 	"\n" +
 	"fillfactor\x18\n" +
 	" \x01(\x05H\tR\n" +
 	"fillfactor\x88\x01\x01\x121\n" +
 	"\x12toast_tuple_target\x18\v \x01(\x05H\n" +
-	"R\x10toastTupleTarget\x88\x01\x01\x12\x1d\n" +
-	"\aenabled\x18\f \x01(\bH\vR\aenabled\x88\x01\x01B\x13\n" +
-	"\x11_vacuum_thresholdB\x16\n" +
-	"\x14_vacuum_scale_factorB\x14\n" +
-	"\x12_analyze_thresholdB\x17\n" +
-	"\x15_analyze_scale_factorB\x14\n" +
-	"\x12_vacuum_cost_delayB\x14\n" +
-	"\x12_vacuum_cost_limitB\x11\n" +
-	"\x0f_freeze_min_ageB\x11\n" +
-	"\x0f_freeze_max_ageB\x13\n" +
-	"\x11_freeze_table_ageB\r\n" +
+	"R\x10toastTupleTarget\x88\x01\x01\x122\n" +
+	"\x12autovacuum_enabled\x18\f \x01(\bH\vR\x11autovacuumEnabled\x88\x01\x01B\x1e\n" +
+	"\x1c_autovacuum_vacuum_thresholdB!\n" +
+	"\x1f_autovacuum_vacuum_scale_factorB\x1f\n" +
+	"\x1d_autovacuum_analyze_thresholdB\"\n" +
+	" _autovacuum_analyze_scale_factorB\x1f\n" +
+	"\x1d_autovacuum_vacuum_cost_delayB\x1f\n" +
+	"\x1d_autovacuum_vacuum_cost_limitB\x1c\n" +
+	"\x1a_autovacuum_freeze_min_ageB\x1c\n" +
+	"\x1a_autovacuum_freeze_max_ageB\x1e\n" +
+	"\x1c_autovacuum_freeze_table_ageB\r\n" +
 	"\v_fillfactorB\x15\n" +
-	"\x13_toast_tuple_targetB\n" +
-	"\n" +
-	"\b_enabled\x1a\x8c\x03\n" +
+	"\x13_toast_tuple_targetB\x15\n" +
+	"\x13_autovacuum_enabled\x1a\x8c\x03\n" +
 	"\x05Index\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12A\n" +
 	"\x06method\x18\x02 \x01(\x0e2).pgdb.v1.MessageOptions.Index.IndexMethodR\x06method\x12\x18\n" +
@@ -1544,7 +1541,7 @@ var file_pgdb_v1_pgdb_proto_goTypes = []any{
 	(*MessageOptions)(nil),                     // 6: pgdb.v1.MessageOptions
 	(*FieldOptions)(nil),                       // 7: pgdb.v1.FieldOptions
 	(*EnumValueOptions)(nil),                   // 8: pgdb.v1.EnumValueOptions
-	(*MessageOptions_AutovacuumOptions)(nil),   // 9: pgdb.v1.MessageOptions.AutovacuumOptions
+	(*MessageOptions_StorageParameters)(nil),   // 9: pgdb.v1.MessageOptions.StorageParameters
 	(*MessageOptions_Index)(nil),               // 10: pgdb.v1.MessageOptions.Index
 	(*MessageOptions_Stat)(nil),                // 11: pgdb.v1.MessageOptions.Stat
 	(*descriptorpb.MessageOptions)(nil),        // 12: google.protobuf.MessageOptions
@@ -1552,7 +1549,7 @@ var file_pgdb_v1_pgdb_proto_goTypes = []any{
 	(*descriptorpb.EnumValueOptions)(nil),      // 14: google.protobuf.EnumValueOptions
 }
 var file_pgdb_v1_pgdb_proto_depIdxs = []int32{
-	9,  // 0: pgdb.v1.MessageOptions.autovacuum:type_name -> pgdb.v1.MessageOptions.AutovacuumOptions
+	9,  // 0: pgdb.v1.MessageOptions.storage_parameters:type_name -> pgdb.v1.MessageOptions.StorageParameters
 	10, // 1: pgdb.v1.MessageOptions.indexes:type_name -> pgdb.v1.MessageOptions.Index
 	0,  // 2: pgdb.v1.MessageOptions.partitioned_by_date_range:type_name -> pgdb.v1.MessageOptions.PartitionedByDateRange
 	11, // 3: pgdb.v1.MessageOptions.stats:type_name -> pgdb.v1.MessageOptions.Stat

@@ -58,9 +58,7 @@ type Descriptor interface {
 
 	GetPartitionDateRange() MessageOptions_PartitionedByDateRange
 
-	// GetAutovacuum returns the autovacuum storage parameters for this table.
-	// Returns nil if no autovacuum options are configured.
-	GetAutovacuum() *MessageOptions_AutovacuumOptions
+	GetStorageParameters() *MessageOptions_StorageParameters
 }
 
 type DescriptorFieldOption struct {

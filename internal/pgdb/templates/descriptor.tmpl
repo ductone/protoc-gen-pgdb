@@ -31,44 +31,44 @@ func (d *{{.ReceiverType}}) GetPartitionDateRange() pgdb_v1.MessageOptions_Parti
     return {{.PartitionDateRange}}
 }
 
-func (d *{{.ReceiverType}}) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
-    {{- if .HasAutovacuum }}
-    return &pgdb_v1.MessageOptions_AutovacuumOptions{
-        {{- if .Autovacuum.VacuumThreshold }}
-        VacuumThreshold: proto.Int32({{.Autovacuum.VacuumThreshold}}),
+func (d *{{.ReceiverType}}) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+    {{- if .HasStorageParameters }}
+    return &pgdb_v1.MessageOptions_StorageParameters{
+        {{- if .StorageParameters.AutovacuumVacuumThreshold }}
+        AutovacuumVacuumThreshold: proto.Int32({{.StorageParameters.AutovacuumVacuumThreshold}}),
         {{- end }}
-        {{- if .Autovacuum.VacuumScaleFactor }}
-        VacuumScaleFactor: proto.Float32({{.Autovacuum.VacuumScaleFactor}}),
+        {{- if .StorageParameters.AutovacuumVacuumScaleFactor }}
+        AutovacuumVacuumScaleFactor: proto.Float32({{.StorageParameters.AutovacuumVacuumScaleFactor}}),
         {{- end }}
-        {{- if .Autovacuum.AnalyzeThreshold }}
-        AnalyzeThreshold: proto.Int32({{.Autovacuum.AnalyzeThreshold}}),
+        {{- if .StorageParameters.AutovacuumAnalyzeThreshold }}
+        AutovacuumAnalyzeThreshold: proto.Int32({{.StorageParameters.AutovacuumAnalyzeThreshold}}),
         {{- end }}
-        {{- if .Autovacuum.AnalyzeScaleFactor }}
-        AnalyzeScaleFactor: proto.Float32({{.Autovacuum.AnalyzeScaleFactor}}),
+        {{- if .StorageParameters.AutovacuumAnalyzeScaleFactor }}
+        AutovacuumAnalyzeScaleFactor: proto.Float32({{.StorageParameters.AutovacuumAnalyzeScaleFactor}}),
         {{- end }}
-        {{- if .Autovacuum.VacuumCostDelay }}
-        VacuumCostDelay: proto.Int32({{.Autovacuum.VacuumCostDelay}}),
+        {{- if .StorageParameters.AutovacuumVacuumCostDelay }}
+        AutovacuumVacuumCostDelay: proto.Int32({{.StorageParameters.AutovacuumVacuumCostDelay}}),
         {{- end }}
-        {{- if .Autovacuum.VacuumCostLimit }}
-        VacuumCostLimit: proto.Int32({{.Autovacuum.VacuumCostLimit}}),
+        {{- if .StorageParameters.AutovacuumVacuumCostLimit }}
+        AutovacuumVacuumCostLimit: proto.Int32({{.StorageParameters.AutovacuumVacuumCostLimit}}),
         {{- end }}
-        {{- if .Autovacuum.FreezeMinAge }}
-        FreezeMinAge: proto.Int64({{.Autovacuum.FreezeMinAge}}),
+        {{- if .StorageParameters.AutovacuumFreezeMinAge }}
+        AutovacuumFreezeMinAge: proto.Int64({{.StorageParameters.AutovacuumFreezeMinAge}}),
         {{- end }}
-        {{- if .Autovacuum.FreezeMaxAge }}
-        FreezeMaxAge: proto.Int64({{.Autovacuum.FreezeMaxAge}}),
+        {{- if .StorageParameters.AutovacuumFreezeMaxAge }}
+        AutovacuumFreezeMaxAge: proto.Int64({{.StorageParameters.AutovacuumFreezeMaxAge}}),
         {{- end }}
-        {{- if .Autovacuum.FreezeTableAge }}
-        FreezeTableAge: proto.Int64({{.Autovacuum.FreezeTableAge}}),
+        {{- if .StorageParameters.AutovacuumFreezeTableAge }}
+        AutovacuumFreezeTableAge: proto.Int64({{.StorageParameters.AutovacuumFreezeTableAge}}),
         {{- end }}
-        {{- if .Autovacuum.Fillfactor }}
-        Fillfactor: proto.Int32({{.Autovacuum.Fillfactor}}),
+        {{- if .StorageParameters.Fillfactor }}
+        Fillfactor: proto.Int32({{.StorageParameters.Fillfactor}}),
         {{- end }}
-        {{- if .Autovacuum.ToastTupleTarget }}
-        ToastTupleTarget: proto.Int32({{.Autovacuum.ToastTupleTarget}}),
+        {{- if .StorageParameters.ToastTupleTarget }}
+        ToastTupleTarget: proto.Int32({{.StorageParameters.ToastTupleTarget}}),
         {{- end }}
-        {{- if .Autovacuum.HasEnabled }}
-        Enabled: proto.Bool({{.Autovacuum.Enabled}}),
+        {{- if .StorageParameters.HasAutovacuumEnabled }}
+        AutovacuumEnabled: proto.Bool({{.StorageParameters.AutovacuumEnabled}}),
         {{- end }}
     }
     {{- else }}

@@ -50,7 +50,7 @@ func (d *pgdbDescriptorPasta) GetPartitionDateRange() pgdb_v1.MessageOptions_Par
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorPasta) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorPasta) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -1198,7 +1198,7 @@ func (d *pgdbDescriptorPastaIngredient) GetPartitionDateRange() pgdb_v1.MessageO
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorPastaIngredient) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorPastaIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -2973,7 +2973,7 @@ func (d *pgdbDescriptorSauceIngredient) GetPartitionDateRange() pgdb_v1.MessageO
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorSauceIngredient) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorSauceIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -4250,7 +4250,7 @@ func (d *pgdbDescriptorGarlicIngredient) GetPartitionDateRange() pgdb_v1.Message
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
 }
 
-func (d *pgdbDescriptorGarlicIngredient) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorGarlicIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -5590,7 +5590,7 @@ func (d *pgdbDescriptorCheeseIngredient) GetPartitionDateRange() pgdb_v1.Message
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_MONTH
 }
 
-func (d *pgdbDescriptorCheeseIngredient) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorCheeseIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -6940,7 +6940,7 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetPartitionDateRange() p
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 

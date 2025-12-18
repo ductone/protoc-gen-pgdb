@@ -52,7 +52,7 @@ func (d *pgdbDescriptorAttractions) GetPartitionDateRange() pgdb_v1.MessageOptio
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorAttractions) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorAttractions) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 

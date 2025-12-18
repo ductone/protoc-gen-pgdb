@@ -10,20 +10,20 @@ import (
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
 
-type autovacuumTemplateContext struct {
-	VacuumThreshold    *int32
-	VacuumScaleFactor  *float32
-	AnalyzeThreshold   *int32
-	AnalyzeScaleFactor *float32
-	VacuumCostDelay    *int32
-	VacuumCostLimit    *int32
-	FreezeMinAge       *int64
-	FreezeMaxAge       *int64
-	FreezeTableAge     *int64
-	Fillfactor         *int32
-	ToastTupleTarget   *int32
-	Enabled            *bool
-	HasEnabled         bool
+type storageParamsTemplateContext struct {
+	AutovacuumVacuumThreshold    *int32
+	AutovacuumVacuumScaleFactor  *float32
+	AutovacuumAnalyzeThreshold   *int32
+	AutovacuumAnalyzeScaleFactor *float32
+	AutovacuumVacuumCostDelay    *int32
+	AutovacuumVacuumCostLimit    *int32
+	AutovacuumFreezeMinAge       *int64
+	AutovacuumFreezeMaxAge       *int64
+	AutovacuumFreezeTableAge     *int64
+	Fillfactor                   *int32
+	ToastTupleTarget             *int32
+	AutovacuumEnabled            *bool
+	HasAutovacuumEnabled         bool
 }
 
 type descriptorTemplateContext struct {
@@ -39,8 +39,8 @@ type descriptorTemplateContext struct {
 	IsPartitionedByCreatedAt    bool
 	PartitionedByKsuidFieldName string
 	PartitionDateRange          string
-	HasAutovacuum               bool
-	Autovacuum                  *autovacuumTemplateContext
+	HasStorageParameters        bool
+	StorageParameters           *storageParamsTemplateContext
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -70,73 +70,73 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		}
 	}
 
-	// Build autovacuum context if configured
-	var autovacCtx *autovacuumTemplateContext
-	hasAutovacuum := false
-	if av := fext.GetAutovacuum(); av != nil {
-		autovacCtx = &autovacuumTemplateContext{}
-		if av.HasVacuumThreshold() {
-			v := av.GetVacuumThreshold()
-			autovacCtx.VacuumThreshold = &v
-			hasAutovacuum = true
+	// Build storage parameters context if configured
+	var spCtx *storageParamsTemplateContext
+	hasStorageParams := false
+	if sp := fext.GetStorageParameters(); sp != nil {
+		spCtx = &storageParamsTemplateContext{}
+		if sp.HasAutovacuumVacuumThreshold() {
+			v := sp.GetAutovacuumVacuumThreshold()
+			spCtx.AutovacuumVacuumThreshold = &v
+			hasStorageParams = true
 		}
-		if av.HasVacuumScaleFactor() {
-			v := av.GetVacuumScaleFactor()
-			autovacCtx.VacuumScaleFactor = &v
-			hasAutovacuum = true
+		if sp.HasAutovacuumVacuumScaleFactor() {
+			v := sp.GetAutovacuumVacuumScaleFactor()
+			spCtx.AutovacuumVacuumScaleFactor = &v
+			hasStorageParams = true
 		}
-		if av.HasAnalyzeThreshold() {
-			v := av.GetAnalyzeThreshold()
-			autovacCtx.AnalyzeThreshold = &v
-			hasAutovacuum = true
+		if sp.HasAutovacuumAnalyzeThreshold() {
+			v := sp.GetAutovacuumAnalyzeThreshold()
+			spCtx.AutovacuumAnalyzeThreshold = &v
+			hasStorageParams = true
 		}
-		if av.HasAnalyzeScaleFactor() {
-			v := av.GetAnalyzeScaleFactor()
-			autovacCtx.AnalyzeScaleFactor = &v
-			hasAutovacuum = true
+		if sp.HasAutovacuumAnalyzeScaleFactor() {
+			v := sp.GetAutovacuumAnalyzeScaleFactor()
+			spCtx.AutovacuumAnalyzeScaleFactor = &v
+			hasStorageParams = true
 		}
-		if av.HasVacuumCostDelay() {
-			v := av.GetVacuumCostDelay()
-			autovacCtx.VacuumCostDelay = &v
-			hasAutovacuum = true
+		if sp.HasAutovacuumVacuumCostDelay() {
+			v := sp.GetAutovacuumVacuumCostDelay()
+			spCtx.AutovacuumVacuumCostDelay = &v
+			hasStorageParams = true
 		}
-		if av.HasVacuumCostLimit() {
-			v := av.GetVacuumCostLimit()
-			autovacCtx.VacuumCostLimit = &v
-			hasAutovacuum = true
+		if sp.HasAutovacuumVacuumCostLimit() {
+			v := sp.GetAutovacuumVacuumCostLimit()
+			spCtx.AutovacuumVacuumCostLimit = &v
+			hasStorageParams = true
 		}
-		if av.HasFreezeMinAge() {
-			v := av.GetFreezeMinAge()
-			autovacCtx.FreezeMinAge = &v
-			hasAutovacuum = true
+		if sp.HasAutovacuumFreezeMinAge() {
+			v := sp.GetAutovacuumFreezeMinAge()
+			spCtx.AutovacuumFreezeMinAge = &v
+			hasStorageParams = true
 		}
-		if av.HasFreezeMaxAge() {
-			v := av.GetFreezeMaxAge()
-			autovacCtx.FreezeMaxAge = &v
-			hasAutovacuum = true
+		if sp.HasAutovacuumFreezeMaxAge() {
+			v := sp.GetAutovacuumFreezeMaxAge()
+			spCtx.AutovacuumFreezeMaxAge = &v
+			hasStorageParams = true
 		}
-		if av.HasFreezeTableAge() {
-			v := av.GetFreezeTableAge()
-			autovacCtx.FreezeTableAge = &v
-			hasAutovacuum = true
+		if sp.HasAutovacuumFreezeTableAge() {
+			v := sp.GetAutovacuumFreezeTableAge()
+			spCtx.AutovacuumFreezeTableAge = &v
+			hasStorageParams = true
 		}
-		if av.HasFillfactor() {
-			v := av.GetFillfactor()
-			autovacCtx.Fillfactor = &v
-			hasAutovacuum = true
+		if sp.HasFillfactor() {
+			v := sp.GetFillfactor()
+			spCtx.Fillfactor = &v
+			hasStorageParams = true
 		}
-		if av.HasToastTupleTarget() {
-			v := av.GetToastTupleTarget()
-			autovacCtx.ToastTupleTarget = &v
-			hasAutovacuum = true
+		if sp.HasToastTupleTarget() {
+			v := sp.GetToastTupleTarget()
+			spCtx.ToastTupleTarget = &v
+			hasStorageParams = true
 		}
-		if av.HasEnabled() {
-			v := av.GetEnabled()
-			autovacCtx.Enabled = &v
-			autovacCtx.HasEnabled = true
-			hasAutovacuum = true
+		if sp.HasAutovacuumEnabled() {
+			v := sp.GetAutovacuumEnabled()
+			spCtx.AutovacuumEnabled = &v
+			spCtx.HasAutovacuumEnabled = true
+			hasStorageParams = true
 		}
-		if hasAutovacuum {
+		if hasStorageParams {
 			ix.ProtobufProto = true // Need proto package for proto.Int32, etc.
 		}
 	}
@@ -154,8 +154,8 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		IsPartitionedByCreatedAt:    fext.GetPartitionedByCreatedAt(),
 		PartitionedByKsuidFieldName: fext.GetPartitionedByKsuidFieldName(),
 		PartitionDateRange:          "pgdb_v1.MessageOptions_" + fext.GetPartitionedByDateRange().String(),
-		HasAutovacuum:               hasAutovacuum,
-		Autovacuum:                  autovacCtx,
+		HasStorageParameters:        hasStorageParams,
+		StorageParameters:           spCtx,
 	}
 
 	return templates["descriptor.tmpl"].Execute(w, c)

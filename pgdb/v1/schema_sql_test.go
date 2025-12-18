@@ -75,7 +75,7 @@ func (m *mockDescriptor) GetPartitionDateRange() MessageOptions_PartitionedByDat
 	return m.partitionDateRange
 }
 
-func (m *mockDescriptor) GetAutovacuum() *MessageOptions_AutovacuumOptions {
+func (m *mockDescriptor) GetStorageParameters() *MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -318,30 +318,28 @@ func TestKsuidColOverrideExpression(t *testing.T) {
 	}
 }
 
-type mockDescriptorWithAutovacuum struct {
+type mockDescriptorWithStorageParams struct {
 	mockDescriptor
-	autovacuum *MessageOptions_AutovacuumOptions
+	storageParams *MessageOptions_StorageParameters
 }
 
-func (m *mockDescriptorWithAutovacuum) GetAutovacuum() *MessageOptions_AutovacuumOptions {
-	return m.autovacuum
+func (m *mockDescriptorWithStorageParams) GetStorageParameters() *MessageOptions_StorageParameters {
+	return m.storageParams
 }
 
-func TestAutovacuum2with(t *testing.T) {
-	// Helper to create autovacuum options with vacuum threshold
-	makeAutovacuumWithThreshold := func(threshold int32) *MessageOptions_AutovacuumOptions {
-		av := &MessageOptions_AutovacuumOptions{}
-		av.SetVacuumThreshold(threshold)
-		return av
+func TestStorageParams2with(t *testing.T) {
+	makeWithVacuumThreshold := func(threshold int32) *MessageOptions_StorageParameters {
+		sp := &MessageOptions_StorageParameters{}
+		sp.SetAutovacuumVacuumThreshold(threshold)
+		return sp
 	}
 
-	// Helper to create autovacuum options with multiple fields
-	makeAutovacuumMultiple := func() *MessageOptions_AutovacuumOptions {
-		av := &MessageOptions_AutovacuumOptions{}
-		av.SetVacuumThreshold(5000)
-		av.SetVacuumScaleFactor(0.1)
-		av.SetFillfactor(90)
-		return av
+	makeMultiple := func() *MessageOptions_StorageParameters {
+		sp := &MessageOptions_StorageParameters{}
+		sp.SetAutovacuumVacuumThreshold(5000)
+		sp.SetAutovacuumVacuumScaleFactor(0.1)
+		sp.SetFillfactor(90)
+		return sp
 	}
 
 	tests := []struct {
@@ -350,7 +348,7 @@ func TestAutovacuum2with(t *testing.T) {
 		expected string
 	}{
 		{
-			name: "No autovacuum options",
+			name: "No storage parameters",
 			desc: &mockDescriptor{
 				tableName: "test_table",
 			},
@@ -358,9 +356,9 @@ func TestAutovacuum2with(t *testing.T) {
 		},
 		{
 			name: "Vacuum threshold only",
-			desc: &mockDescriptorWithAutovacuum{
+			desc: &mockDescriptorWithStorageParams{
 				mockDescriptor: mockDescriptor{tableName: "test_table"},
-				autovacuum:     makeAutovacuumWithThreshold(10000),
+				storageParams:  makeWithVacuumThreshold(10000),
 			},
 			expected: `WITH (
   autovacuum_vacuum_threshold = 10000
@@ -368,9 +366,9 @@ func TestAutovacuum2with(t *testing.T) {
 		},
 		{
 			name: "Multiple options",
-			desc: &mockDescriptorWithAutovacuum{
+			desc: &mockDescriptorWithStorageParams{
 				mockDescriptor: mockDescriptor{tableName: "test_table"},
-				autovacuum:     makeAutovacuumMultiple(),
+				storageParams:  makeMultiple(),
 			},
 			expected: `WITH (
   autovacuum_vacuum_threshold = 5000,
@@ -382,7 +380,7 @@ func TestAutovacuum2with(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result := autovacuum2with(test.desc)
+			result := storageParams2with(test.desc)
 			if result != test.expected {
 				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
 			}

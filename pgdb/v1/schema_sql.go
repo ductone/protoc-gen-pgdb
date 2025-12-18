@@ -118,49 +118,49 @@ func pgWriteString(buf *bytes.Buffer, input string) {
 	_, _ = buf.WriteString(`"`)
 }
 
-func autovacuum2with(desc Descriptor) string {
-	av := desc.GetAutovacuum()
-	if av == nil {
+func storageParams2with(desc Descriptor) string {
+	sp := desc.GetStorageParameters()
+	if sp == nil {
 		return ""
 	}
 
 	params := make([]string, 0)
 
-	if av.HasVacuumThreshold() {
-		params = append(params, "autovacuum_vacuum_threshold = "+strconv.FormatInt(int64(av.GetVacuumThreshold()), 10))
+	if sp.HasAutovacuumVacuumThreshold() {
+		params = append(params, "autovacuum_vacuum_threshold = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumThreshold()), 10))
 	}
-	if av.HasVacuumScaleFactor() {
-		params = append(params, "autovacuum_vacuum_scale_factor = "+strconv.FormatFloat(float64(av.GetVacuumScaleFactor()), 'f', -1, 32))
+	if sp.HasAutovacuumVacuumScaleFactor() {
+		params = append(params, "autovacuum_vacuum_scale_factor = "+strconv.FormatFloat(float64(sp.GetAutovacuumVacuumScaleFactor()), 'f', -1, 32))
 	}
-	if av.HasAnalyzeThreshold() {
-		params = append(params, "autovacuum_analyze_threshold = "+strconv.FormatInt(int64(av.GetAnalyzeThreshold()), 10))
+	if sp.HasAutovacuumAnalyzeThreshold() {
+		params = append(params, "autovacuum_analyze_threshold = "+strconv.FormatInt(int64(sp.GetAutovacuumAnalyzeThreshold()), 10))
 	}
-	if av.HasAnalyzeScaleFactor() {
-		params = append(params, "autovacuum_analyze_scale_factor = "+strconv.FormatFloat(float64(av.GetAnalyzeScaleFactor()), 'f', -1, 32))
+	if sp.HasAutovacuumAnalyzeScaleFactor() {
+		params = append(params, "autovacuum_analyze_scale_factor = "+strconv.FormatFloat(float64(sp.GetAutovacuumAnalyzeScaleFactor()), 'f', -1, 32))
 	}
-	if av.HasVacuumCostDelay() {
-		params = append(params, "autovacuum_vacuum_cost_delay = "+strconv.FormatInt(int64(av.GetVacuumCostDelay()), 10))
+	if sp.HasAutovacuumVacuumCostDelay() {
+		params = append(params, "autovacuum_vacuum_cost_delay = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumCostDelay()), 10))
 	}
-	if av.HasVacuumCostLimit() {
-		params = append(params, "autovacuum_vacuum_cost_limit = "+strconv.FormatInt(int64(av.GetVacuumCostLimit()), 10))
+	if sp.HasAutovacuumVacuumCostLimit() {
+		params = append(params, "autovacuum_vacuum_cost_limit = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumCostLimit()), 10))
 	}
-	if av.HasFreezeMinAge() {
-		params = append(params, "autovacuum_freeze_min_age = "+strconv.FormatInt(av.GetFreezeMinAge(), 10))
+	if sp.HasAutovacuumFreezeMinAge() {
+		params = append(params, "autovacuum_freeze_min_age = "+strconv.FormatInt(sp.GetAutovacuumFreezeMinAge(), 10))
 	}
-	if av.HasFreezeMaxAge() {
-		params = append(params, "autovacuum_freeze_max_age = "+strconv.FormatInt(av.GetFreezeMaxAge(), 10))
+	if sp.HasAutovacuumFreezeMaxAge() {
+		params = append(params, "autovacuum_freeze_max_age = "+strconv.FormatInt(sp.GetAutovacuumFreezeMaxAge(), 10))
 	}
-	if av.HasFreezeTableAge() {
-		params = append(params, "autovacuum_freeze_table_age = "+strconv.FormatInt(av.GetFreezeTableAge(), 10))
+	if sp.HasAutovacuumFreezeTableAge() {
+		params = append(params, "autovacuum_freeze_table_age = "+strconv.FormatInt(sp.GetAutovacuumFreezeTableAge(), 10))
 	}
-	if av.HasFillfactor() {
-		params = append(params, "fillfactor = "+strconv.FormatInt(int64(av.GetFillfactor()), 10))
+	if sp.HasFillfactor() {
+		params = append(params, "fillfactor = "+strconv.FormatInt(int64(sp.GetFillfactor()), 10))
 	}
-	if av.HasToastTupleTarget() {
-		params = append(params, "toast_tuple_target = "+strconv.FormatInt(int64(av.GetToastTupleTarget()), 10))
+	if sp.HasToastTupleTarget() {
+		params = append(params, "toast_tuple_target = "+strconv.FormatInt(int64(sp.GetToastTupleTarget()), 10))
 	}
-	if av.HasEnabled() {
-		params = append(params, "autovacuum_enabled = "+strconv.FormatBool(av.GetEnabled()))
+	if sp.HasAutovacuumEnabled() {
+		params = append(params, "autovacuum_enabled = "+strconv.FormatBool(sp.GetAutovacuumEnabled()))
 	}
 
 	if len(params) == 0 {

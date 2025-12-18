@@ -49,7 +49,7 @@ func (d *pgdbDescriptorPet) GetPartitionDateRange() pgdb_v1.MessageOptions_Parti
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorPet) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorPet) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -1737,7 +1737,7 @@ func (d *pgdbDescriptorScalarValue) GetPartitionDateRange() pgdb_v1.MessageOptio
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorScalarValue) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorScalarValue) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -4600,7 +4600,7 @@ func (d *pgdbDescriptorEBook) GetPartitionDateRange() pgdb_v1.MessageOptions_Par
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorEBook) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorEBook) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -4844,7 +4844,7 @@ func (d *pgdbDescriptorPaperBook) GetPartitionDateRange() pgdb_v1.MessageOptions
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorPaperBook) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorPaperBook) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -5088,7 +5088,7 @@ func (d *pgdbDescriptorBook) GetPartitionDateRange() pgdb_v1.MessageOptions_Part
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorBook) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorBook) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -6273,7 +6273,7 @@ func (d *pgdbDescriptorNewspaper) GetPartitionDateRange() pgdb_v1.MessageOptions
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorNewspaper) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorNewspaper) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 

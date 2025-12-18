@@ -47,7 +47,7 @@ func (d *pgdbDescriptorShop) GetPartitionDateRange() pgdb_v1.MessageOptions_Part
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorShop) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorShop) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
@@ -1299,7 +1299,7 @@ func (d *pgdbDescriptorShop_Manager) GetPartitionDateRange() pgdb_v1.MessageOpti
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
-func (d *pgdbDescriptorShop_Manager) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+func (d *pgdbDescriptorShop_Manager) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
 	return nil
 }
 
