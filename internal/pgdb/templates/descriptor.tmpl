@@ -31,6 +31,51 @@ func (d *{{.ReceiverType}}) GetPartitionDateRange() pgdb_v1.MessageOptions_Parti
     return {{.PartitionDateRange}}
 }
 
+func (d *{{.ReceiverType}}) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+    {{- if .HasAutovacuum }}
+    return &pgdb_v1.MessageOptions_AutovacuumOptions{
+        {{- if .Autovacuum.VacuumThreshold }}
+        VacuumThreshold: proto.Int32({{.Autovacuum.VacuumThreshold}}),
+        {{- end }}
+        {{- if .Autovacuum.VacuumScaleFactor }}
+        VacuumScaleFactor: proto.Float32({{.Autovacuum.VacuumScaleFactor}}),
+        {{- end }}
+        {{- if .Autovacuum.AnalyzeThreshold }}
+        AnalyzeThreshold: proto.Int32({{.Autovacuum.AnalyzeThreshold}}),
+        {{- end }}
+        {{- if .Autovacuum.AnalyzeScaleFactor }}
+        AnalyzeScaleFactor: proto.Float32({{.Autovacuum.AnalyzeScaleFactor}}),
+        {{- end }}
+        {{- if .Autovacuum.VacuumCostDelay }}
+        VacuumCostDelay: proto.Int32({{.Autovacuum.VacuumCostDelay}}),
+        {{- end }}
+        {{- if .Autovacuum.VacuumCostLimit }}
+        VacuumCostLimit: proto.Int32({{.Autovacuum.VacuumCostLimit}}),
+        {{- end }}
+        {{- if .Autovacuum.FreezeMinAge }}
+        FreezeMinAge: proto.Int64({{.Autovacuum.FreezeMinAge}}),
+        {{- end }}
+        {{- if .Autovacuum.FreezeMaxAge }}
+        FreezeMaxAge: proto.Int64({{.Autovacuum.FreezeMaxAge}}),
+        {{- end }}
+        {{- if .Autovacuum.FreezeTableAge }}
+        FreezeTableAge: proto.Int64({{.Autovacuum.FreezeTableAge}}),
+        {{- end }}
+        {{- if .Autovacuum.Fillfactor }}
+        Fillfactor: proto.Int32({{.Autovacuum.Fillfactor}}),
+        {{- end }}
+        {{- if .Autovacuum.ToastTupleTarget }}
+        ToastTupleTarget: proto.Int32({{.Autovacuum.ToastTupleTarget}}),
+        {{- end }}
+        {{- if .Autovacuum.HasEnabled }}
+        Enabled: proto.Bool({{.Autovacuum.Enabled}}),
+        {{- end }}
+    }
+    {{- else }}
+    return nil
+    {{- end }}
+}
+
 func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
   df := pgdb_v1.NewDescriptorFieldOption(opts)
   _ = df

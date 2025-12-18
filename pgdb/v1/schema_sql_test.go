@@ -75,6 +75,10 @@ func (m *mockDescriptor) GetPartitionDateRange() MessageOptions_PartitionedByDat
 	return m.partitionDateRange
 }
 
+func (m *mockDescriptor) GetAutovacuum() *MessageOptions_AutovacuumOptions {
+	return nil
+}
+
 func TestPgWriteString(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -307,6 +311,79 @@ func TestKsuidColOverrideExpression(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			result := ksuidColOverrideExpression(test.col)
+			if result != test.expected {
+				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
+			}
+		})
+	}
+}
+
+// mockDescriptorWithAutovacuum extends mockDescriptor with autovacuum support
+type mockDescriptorWithAutovacuum struct {
+	mockDescriptor
+	autovacuum *MessageOptions_AutovacuumOptions
+}
+
+func (m *mockDescriptorWithAutovacuum) GetAutovacuum() *MessageOptions_AutovacuumOptions {
+	return m.autovacuum
+}
+
+func TestAutovacuum2with(t *testing.T) {
+	// Helper to create autovacuum options with vacuum threshold
+	makeAutovacuumWithThreshold := func(threshold int32) *MessageOptions_AutovacuumOptions {
+		av := &MessageOptions_AutovacuumOptions{}
+		av.SetVacuumThreshold(threshold)
+		return av
+	}
+
+	// Helper to create autovacuum options with multiple fields
+	makeAutovacuumMultiple := func() *MessageOptions_AutovacuumOptions {
+		av := &MessageOptions_AutovacuumOptions{}
+		av.SetVacuumThreshold(5000)
+		av.SetVacuumScaleFactor(0.1)
+		av.SetFillfactor(90)
+		return av
+	}
+
+	tests := []struct {
+		name     string
+		desc     Descriptor
+		expected string
+	}{
+		{
+			name: "No autovacuum options",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			expected: "",
+		},
+		{
+			name: "Vacuum threshold only",
+			desc: &mockDescriptorWithAutovacuum{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				autovacuum:     makeAutovacuumWithThreshold(10000),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_threshold = 10000
+)`,
+		},
+		{
+			name: "Multiple options",
+			desc: &mockDescriptorWithAutovacuum{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				autovacuum:     makeAutovacuumMultiple(),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_threshold = 5000,
+  autovacuum_vacuum_scale_factor = 0.1,
+  fillfactor = 90
+)`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := autovacuum2with(test.desc)
 			if result != test.expected {
 				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
 			}

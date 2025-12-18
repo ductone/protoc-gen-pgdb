@@ -47,6 +47,10 @@ func (d *pgdbDescriptorShop) GetPartitionDateRange() pgdb_v1.MessageOptions_Part
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
+func (d *pgdbDescriptorShop) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+	return nil
+}
+
 func (d *pgdbDescriptorShop) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -1293,6 +1297,10 @@ func (d *pgdbDescriptorShop_Manager) GetPartitionedByKsuidFieldName() string {
 
 func (d *pgdbDescriptorShop_Manager) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorShop_Manager) GetAutovacuum() *pgdb_v1.MessageOptions_AutovacuumOptions {
+	return nil
 }
 
 func (d *pgdbDescriptorShop_Manager) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

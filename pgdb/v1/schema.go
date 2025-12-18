@@ -72,7 +72,14 @@ func CreateSchema(msg DBReflectMessage, dialect Dialect) ([]string, error) {
 		_, _ = buf.WriteString(")\n")
 	}
 
-	_, _ = buf.WriteString(")\n")
+	_, _ = buf.WriteString(")")
+
+	// Add WITH clause for storage parameters if autovacuum options are configured
+	if withClause := autovacuum2with(desc); withClause != "" {
+		_, _ = buf.WriteString("\n")
+		_, _ = buf.WriteString(withClause)
+	}
+	_, _ = buf.WriteString("\n")
 
 	switch {
 	case desc.IsPartitioned():

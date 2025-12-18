@@ -10,6 +10,22 @@ import (
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
 
+type autovacuumTemplateContext struct {
+	VacuumThreshold   *int32
+	VacuumScaleFactor *float32
+	AnalyzeThreshold  *int32
+	AnalyzeScaleFactor *float32
+	VacuumCostDelay   *int32
+	VacuumCostLimit   *int32
+	FreezeMinAge      *int64
+	FreezeMaxAge      *int64
+	FreezeTableAge    *int64
+	Fillfactor        *int32
+	ToastTupleTarget  *int32
+	Enabled           *bool
+	HasEnabled        bool
+}
+
 type descriptorTemplateContext struct {
 	Type                        string
 	ReceiverType                string
@@ -23,6 +39,8 @@ type descriptorTemplateContext struct {
 	IsPartitionedByCreatedAt    bool
 	PartitionedByKsuidFieldName string
 	PartitionDateRange          string
+	HasAutovacuum               bool
+	Autovacuum                  *autovacuumTemplateContext
 }
 
 func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -52,6 +70,77 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		}
 	}
 
+	// Build autovacuum context if configured
+	var autovacCtx *autovacuumTemplateContext
+	hasAutovacuum := false
+	if av := fext.GetAutovacuum(); av != nil {
+		autovacCtx = &autovacuumTemplateContext{}
+		if av.HasVacuumThreshold() {
+			v := av.GetVacuumThreshold()
+			autovacCtx.VacuumThreshold = &v
+			hasAutovacuum = true
+		}
+		if av.HasVacuumScaleFactor() {
+			v := av.GetVacuumScaleFactor()
+			autovacCtx.VacuumScaleFactor = &v
+			hasAutovacuum = true
+		}
+		if av.HasAnalyzeThreshold() {
+			v := av.GetAnalyzeThreshold()
+			autovacCtx.AnalyzeThreshold = &v
+			hasAutovacuum = true
+		}
+		if av.HasAnalyzeScaleFactor() {
+			v := av.GetAnalyzeScaleFactor()
+			autovacCtx.AnalyzeScaleFactor = &v
+			hasAutovacuum = true
+		}
+		if av.HasVacuumCostDelay() {
+			v := av.GetVacuumCostDelay()
+			autovacCtx.VacuumCostDelay = &v
+			hasAutovacuum = true
+		}
+		if av.HasVacuumCostLimit() {
+			v := av.GetVacuumCostLimit()
+			autovacCtx.VacuumCostLimit = &v
+			hasAutovacuum = true
+		}
+		if av.HasFreezeMinAge() {
+			v := av.GetFreezeMinAge()
+			autovacCtx.FreezeMinAge = &v
+			hasAutovacuum = true
+		}
+		if av.HasFreezeMaxAge() {
+			v := av.GetFreezeMaxAge()
+			autovacCtx.FreezeMaxAge = &v
+			hasAutovacuum = true
+		}
+		if av.HasFreezeTableAge() {
+			v := av.GetFreezeTableAge()
+			autovacCtx.FreezeTableAge = &v
+			hasAutovacuum = true
+		}
+		if av.HasFillfactor() {
+			v := av.GetFillfactor()
+			autovacCtx.Fillfactor = &v
+			hasAutovacuum = true
+		}
+		if av.HasToastTupleTarget() {
+			v := av.GetToastTupleTarget()
+			autovacCtx.ToastTupleTarget = &v
+			hasAutovacuum = true
+		}
+		if av.HasEnabled() {
+			v := av.GetEnabled()
+			autovacCtx.Enabled = &v
+			autovacCtx.HasEnabled = true
+			hasAutovacuum = true
+		}
+		if hasAutovacuum {
+			ix.ProtobufProto = true // Need proto package for proto.Int32, etc.
+		}
+	}
+
 	c := &descriptorTemplateContext{
 		Type:                        mt,
 		ReceiverType:                mt,
@@ -65,6 +154,8 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		IsPartitionedByCreatedAt:    fext.GetPartitionedByCreatedAt(),
 		PartitionedByKsuidFieldName: fext.GetPartitionedByKsuidFieldName(),
 		PartitionDateRange:          "pgdb_v1.MessageOptions_" + fext.GetPartitionedByDateRange().String(),
+		HasAutovacuum:               hasAutovacuum,
+		Autovacuum:                  autovacCtx,
 	}
 
 	return templates["descriptor.tmpl"].Execute(w, c)

@@ -2,6 +2,7 @@ package v1
 
 import (
 	"bytes"
+	"strconv"
 	"strings"
 
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
@@ -115,6 +116,76 @@ func pgWriteString(buf *bytes.Buffer, input string) {
 	// TODO(pquerna): not completely correct escaping
 	_, _ = buf.WriteString(input)
 	_, _ = buf.WriteString(`"`)
+}
+
+// autovacuum2with generates a WITH clause for PostgreSQL storage parameters.
+// Returns empty string if no autovacuum options are configured.
+func autovacuum2with(desc Descriptor) string {
+	av := desc.GetAutovacuum()
+	if av == nil {
+		return ""
+	}
+
+	params := make([]string, 0)
+
+	if av.HasVacuumThreshold() {
+		params = append(params, "autovacuum_vacuum_threshold = "+formatInt32(av.GetVacuumThreshold()))
+	}
+	if av.HasVacuumScaleFactor() {
+		params = append(params, "autovacuum_vacuum_scale_factor = "+formatFloat32(av.GetVacuumScaleFactor()))
+	}
+	if av.HasAnalyzeThreshold() {
+		params = append(params, "autovacuum_analyze_threshold = "+formatInt32(av.GetAnalyzeThreshold()))
+	}
+	if av.HasAnalyzeScaleFactor() {
+		params = append(params, "autovacuum_analyze_scale_factor = "+formatFloat32(av.GetAnalyzeScaleFactor()))
+	}
+	if av.HasVacuumCostDelay() {
+		params = append(params, "autovacuum_vacuum_cost_delay = "+formatInt32(av.GetVacuumCostDelay()))
+	}
+	if av.HasVacuumCostLimit() {
+		params = append(params, "autovacuum_vacuum_cost_limit = "+formatInt32(av.GetVacuumCostLimit()))
+	}
+	if av.HasFreezeMinAge() {
+		params = append(params, "autovacuum_freeze_min_age = "+formatInt64(av.GetFreezeMinAge()))
+	}
+	if av.HasFreezeMaxAge() {
+		params = append(params, "autovacuum_freeze_max_age = "+formatInt64(av.GetFreezeMaxAge()))
+	}
+	if av.HasFreezeTableAge() {
+		params = append(params, "autovacuum_freeze_table_age = "+formatInt64(av.GetFreezeTableAge()))
+	}
+	if av.HasFillfactor() {
+		params = append(params, "fillfactor = "+formatInt32(av.GetFillfactor()))
+	}
+	if av.HasToastTupleTarget() {
+		params = append(params, "toast_tuple_target = "+formatInt32(av.GetToastTupleTarget()))
+	}
+	if av.HasEnabled() {
+		params = append(params, "autovacuum_enabled = "+formatBool(av.GetEnabled()))
+	}
+
+	if len(params) == 0 {
+		return ""
+	}
+
+	return "WITH (\n  " + strings.Join(params, ",\n  ") + "\n)"
+}
+
+func formatInt32(v int32) string {
+	return strconv.FormatInt(int64(v), 10)
+}
+
+func formatInt64(v int64) string {
+	return strconv.FormatInt(v, 10)
+}
+
+func formatFloat32(v float32) string {
+	return strconv.FormatFloat(float64(v), 'f', -1, 32)
+}
+
+func formatBool(v bool) string {
+	return strconv.FormatBool(v)
 }
 
 func col2alter(desc Descriptor, col *Column) string {

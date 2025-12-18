@@ -15,6 +15,62 @@ extend google.protobuf.MessageOptions {
 
 message MessageOptions {
   bool disabled = 1;
+
+  // Autovacuum configuration for the table.
+  // See: https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-STORAGE-PARAMETERS
+  message AutovacuumOptions {
+    // autovacuum_vacuum_threshold: minimum number of dead tuples before vacuum.
+    // Default is 50. Set to reduce vacuum frequency on high-churn tables.
+    optional int32 vacuum_threshold = 1;
+
+    // autovacuum_vacuum_scale_factor: fraction of table size to add to threshold.
+    // Default is 0.2 (20%). Effective threshold = threshold + (scale_factor * table_size).
+    optional float vacuum_scale_factor = 2;
+
+    // autovacuum_analyze_threshold: minimum number of changed tuples before analyze.
+    // Default is 50.
+    optional int32 analyze_threshold = 3;
+
+    // autovacuum_analyze_scale_factor: fraction of table size to add to analyze threshold.
+    // Default is 0.1 (10%).
+    optional float analyze_scale_factor = 4;
+
+    // autovacuum_vacuum_cost_delay: time to sleep between vacuum cycles (milliseconds).
+    // Default is 2ms. Increase to reduce I/O impact.
+    optional int32 vacuum_cost_delay = 5;
+
+    // autovacuum_vacuum_cost_limit: cost limit before sleeping.
+    // Default is 200. Increase for faster vacuums.
+    optional int32 vacuum_cost_limit = 6;
+
+    // autovacuum_freeze_min_age: minimum age before freezing tuples.
+    // Default is 50000000.
+    optional int64 freeze_min_age = 7;
+
+    // autovacuum_freeze_max_age: maximum age before forced vacuum for freeze.
+    // Default is 200000000.
+    optional int64 freeze_max_age = 8;
+
+    // autovacuum_freeze_table_age: age at which to scan whole table for freezing.
+    // Default is 150000000.
+    optional int64 freeze_table_age = 9;
+
+    // fillfactor: percentage of page to fill before using new page.
+    // Default is 100. Lower values leave room for updates.
+    optional int32 fillfactor = 10;
+
+    // toast_tuple_target: minimum tuple size before TOASTing.
+    // Default depends on page size (~2KB for 8KB pages).
+    optional int32 toast_tuple_target = 11;
+
+    // autovacuum_enabled: whether autovacuum is enabled for this table.
+    // Default is true. Only disable with extreme caution.
+    optional bool enabled = 12;
+  }
+
+  // Autovacuum and storage parameters for the table.
+  AutovacuumOptions autovacuum = 11;
+
   message Index {
     enum IndexMethod {
       INDEX_METHOD_UNSPECIFIED = 0;

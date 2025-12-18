@@ -57,6 +57,10 @@ type Descriptor interface {
 	Statistics(opts ...StatisticOptionsFunc) []*Statistic
 
 	GetPartitionDateRange() MessageOptions_PartitionedByDateRange
+
+	// GetAutovacuum returns the autovacuum storage parameters for this table.
+	// Returns nil if no autovacuum options are configured.
+	GetAutovacuum() *MessageOptions_AutovacuumOptions
 }
 
 type DescriptorFieldOption struct {
