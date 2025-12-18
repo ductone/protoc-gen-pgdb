@@ -465,9 +465,9 @@ SET (
 				storageParams:  makeMultiple(),
 			},
 			existingParams: map[string]string{
-				"autovacuum_vacuum_threshold": "5000", // matches
-				"autovacuum_vacuum_scale_factor": "0.2", // differs (0.1 desired)
-				"fillfactor": "80", // differs (90 desired)
+				"autovacuum_vacuum_threshold":    "5000", // matches
+				"autovacuum_vacuum_scale_factor": "0.2",  // differs (0.1 desired)
+				"fillfactor":                     "80",   // differs (90 desired)
 			},
 			expected: `ALTER TABLE "test_table"
 SET (
@@ -484,7 +484,7 @@ SET (
 			},
 			existingParams: map[string]string{
 				"autovacuum_vacuum_threshold": "10000",
-				"fillfactor": "80", // Not in descriptor, should be left alone
+				"fillfactor":                  "80", // Not in descriptor, should be left alone
 			},
 			expected: "",
 		},
