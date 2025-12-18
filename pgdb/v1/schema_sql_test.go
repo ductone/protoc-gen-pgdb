@@ -387,3 +387,168 @@ func TestStorageParams2with(t *testing.T) {
 		})
 	}
 }
+
+func TestStorageParams2alter(t *testing.T) {
+	makeWithVacuumThreshold := func(threshold int32) *MessageOptions_StorageParameters {
+		sp := &MessageOptions_StorageParameters{}
+		sp.SetAutovacuumVacuumThreshold(threshold)
+		return sp
+	}
+
+	makeMultiple := func() *MessageOptions_StorageParameters {
+		sp := &MessageOptions_StorageParameters{}
+		sp.SetAutovacuumVacuumThreshold(5000)
+		sp.SetAutovacuumVacuumScaleFactor(0.1)
+		sp.SetFillfactor(90)
+		return sp
+	}
+
+	tests := []struct {
+		name           string
+		desc           Descriptor
+		existingParams map[string]string
+		expected       string
+	}{
+		{
+			name: "No storage parameters in descriptor",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			existingParams: map[string]string{
+				"fillfactor": "80",
+			},
+			expected: "",
+		},
+		{
+			name: "No existing parameters, set new one",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeWithVacuumThreshold(10000),
+			},
+			existingParams: map[string]string{},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_threshold = 10000
+)
+`,
+		},
+		{
+			name: "Existing parameter matches desired, no update needed",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeWithVacuumThreshold(10000),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_threshold": "10000",
+			},
+			expected: "",
+		},
+		{
+			name: "Existing parameter differs, update needed",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeWithVacuumThreshold(10000),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_threshold": "5000",
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_threshold = 10000
+)
+`,
+		},
+		{
+			name: "Multiple parameters, some match some differ",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeMultiple(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_threshold": "5000", // matches
+				"autovacuum_vacuum_scale_factor": "0.2", // differs (0.1 desired)
+				"fillfactor": "80", // differs (90 desired)
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_scale_factor = 0.1,
+  fillfactor = 90
+)
+`,
+		},
+		{
+			name: "Existing parameter not in descriptor, leave it alone",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeWithVacuumThreshold(10000),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_threshold": "10000",
+				"fillfactor": "80", // Not in descriptor, should be left alone
+			},
+			expected: "",
+		},
+		{
+			name: "Float parameter with precision difference",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumScaleFactor(0.1)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_scale_factor": "0.100000001", // Very close, should match
+			},
+			expected: "",
+		},
+		{
+			name: "Float parameter with significant difference",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumScaleFactor(0.1)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_scale_factor": "0.2", // Different, should update
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_scale_factor = 0.1
+)
+`,
+		},
+		{
+			name: "Boolean parameter",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumEnabled(false)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_enabled": "true", // Different, should update
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_enabled = false
+)
+`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := storageParams2alter(test.desc, test.existingParams)
+			if result != test.expected {
+				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
+			}
+		})
+	}
+}
