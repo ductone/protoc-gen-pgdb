@@ -668,6 +668,7 @@ type PastaDB struct {
 
 type PastaDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type PastaDBQueryUnsafe struct {
@@ -2113,6 +2114,7 @@ type PastaIngredientDB struct {
 
 type PastaIngredientDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type PastaIngredientDBQueryUnsafe struct {
@@ -3635,6 +3637,7 @@ type SauceIngredientDB struct {
 
 type SauceIngredientDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type SauceIngredientDBQueryUnsafe struct {
@@ -4912,6 +4915,7 @@ type GarlicIngredientDB struct {
 
 type GarlicIngredientDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type GarlicIngredientDBQueryUnsafe struct {
@@ -6258,6 +6262,7 @@ type CheeseIngredientDB struct {
 
 type CheeseIngredientDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type CheeseIngredientDBQueryUnsafe struct {
@@ -7122,6 +7127,7 @@ type PastaIngredient_ModelEmbeddingDB struct {
 
 type PastaIngredient_ModelEmbeddingDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type PastaIngredient_ModelEmbeddingDBQueryUnsafe struct {

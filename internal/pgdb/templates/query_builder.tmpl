@@ -9,6 +9,7 @@ type {{ .DbType }} struct {
 
 type {{ .QueryType }} struct {
 	tableName string
+	prefix    string
 }
 
 type {{ .UnsafeType }} struct {
@@ -264,6 +265,221 @@ func (x *{{ $QueryType }}) {{ .Field.GoName -}}() *{{ .OpsTypeName }} {
 {{ end }}
 {{ end }}
 
+{{/* Generate SafeOperators types for nested query builder fields (non-indexed fields) */}}
+{{ range .NestedQueryFields }}
+{{ $v17Disabled := and .Field.V17FieldOverrides .Field.V17FieldOverrides.Disabled }}
+{{ if not $v17Disabled }}
+type {{ .OpsTypeName }} struct {
+	column string
+	tableName string
+}
+
+func  (x *{{ .OpsTypeName }}) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+{{if .Op.Eq }}
+func  (x *{{ .OpsTypeName }}) Eq(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+{{end}}
+
+{{if .Op.Neq }}
+func  (x *{{ .OpsTypeName }}) Neq(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+{{end}}
+
+
+{{if .Op.Gt }}
+func  (x *{{ .OpsTypeName }}) Gt(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+{{end}}
+
+{{if .Op.Gte }}
+func  (x *{{ .OpsTypeName }}) Gte(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+{{end}}
+
+{{if .Op.Lt }}
+func  (x *{{ .OpsTypeName }}) Lt(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+{{end}}
+
+{{if .Op.Lte }}
+func  (x *{{ .OpsTypeName }}) Lte(v {{.InputType}}) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+{{end}}
+
+{{if .Op.In }}
+func  (x *{{ .OpsTypeName }}) In(v []{{.InputType}}) exp.BooleanExpression {
+    if len(v) == 0 {
+        return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+    }
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+{{end}}
+
+{{if .Op.NotIn }}
+func  (x *{{ .OpsTypeName }}) NotIn(v []{{.InputType}}) exp.BooleanExpression {
+    if len(v) == 0 {
+        return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+    }
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+{{end}}
+
+{{if .Op.IsNull }}
+func  (x *{{ .OpsTypeName }}) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+{{end}}
+
+
+{{if .Op.IsNotEmpty }}
+func  (x *{{ .OpsTypeName }}) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+{{end}}
+
+{{if .Op.IsNotNull }}
+func  (x *{{ .OpsTypeName }}) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+{{end}}
+
+{{if .Op.InNetworkPrefix }}
+func  (x *{{ .OpsTypeName }}) InNetworkPrefix(cidr netip.Prefix) exp.RangeExpression {
+    start, end := xpq.NetworkRange(cidr)
+    return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start.String(), end.String()))
+}
+{{end}}
+
+{{if .Op.Distance }}
+func  (x *{{ .OpsTypeName }}) Distance(from {{.InputType}}) exp.Expression {
+	bits := pgdb_v1.BytesToBitVector(from)
+	return exp.NewLiteralExpression("? <~> ?", x.Identifier(), bits)
+}
+{{end}}
+
+
+{{if .Op.Between }}
+func  (x *{{ .OpsTypeName }}) Between(start {{.InputType}}, end {{.InputType}}) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+{{end}}
+
+{{if .Op.NotBetween }}
+func  (x *{{ .OpsTypeName }}) NotBetween(start {{.InputType}}, end {{.InputType}}) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+{{end}}
+
+{{if .Op.ArrayOverlap }}
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func  (x *{{ .OpsTypeName }}) Overlaps(items ...{{.InputType}}) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[{{.InputType}}](items))
+}
+{{end}}
+
+{{if .Op.ArrayNotOverlap }}
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func  (x *{{ .OpsTypeName }}) UnsafeNotOverlaps(items ...{{.InputType}}) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[{{.InputType}}](items))
+}
+{{end}}
+
+{{if .Op.ArrayContains }}
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func  (x *{{ .OpsTypeName }}) Contains(items ...{{.InputType}}) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[{{.InputType}}](items))
+}
+{{end}}
+
+{{if .Op.ArrayNotContains }}
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func  (x *{{ .OpsTypeName }}) UnsafeNotContains(items ...{{.InputType}}) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[{{.InputType}}](items))
+}
+{{end}}
+
+{{if .Op.ArrayIsContained }}
+func  (x *{{ .OpsTypeName }}) IsContainedBy(items ...{{.InputType}}) exp.Expression{
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[{{.InputType}}](items))
+}
+{{end}}
+
+{{if .Op.ObjectContains }}
+func  (x *{{ .OpsTypeName }}) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+{{end}}
+
+{{if .Op.ObjectPathExists }}
+func  (x *{{ .OpsTypeName }}) ObjectPathExists(path string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+{{end}}
+
+{{if .Op.ObjectPath }}
+func  (x *{{ .OpsTypeName }}) ObjectPath(path string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+{{end}}
+
+{{if .Op.ObjectKeyExists }}
+func  (x *{{ .OpsTypeName }}) ObjectKeyExists(key string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+{{end}}
+
+{{if .Op.ObjectAnyKeyExists }}
+func  (x *{{ .OpsTypeName }}) ObjectAnyKeyExists(keys ...string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+{{end}}
+
+{{if .Op.ObjectAllKeyExists }}
+func  (x *{{ .OpsTypeName }}) ObjectAllKeyExists(keys ...string) (exp.Expression) {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+{{end}}
+
+{{ end }}
+{{ end }}
+
 {{ range .UnsafeFields }}
 {{ $ok := ne .GoName "PKSKV2"  }}
 {{ if and .DB $ok -}}
@@ -295,4 +511,40 @@ func (x *{{ $ColumnType }}) {{ .GoName -}}() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "{{- .DB.Name -}}")
 }
 {{- end }}
+{{ end }}
+
+{{/* Generate nested query builder types and accessor methods */}}
+{{ define "nestedQueryBuilder" }}
+{{/* Define the nested query builder struct */}}
+type {{ .TypeName }} struct {
+	tableName string
+	prefix    string
+}
+
+{{/* Generate accessor method from parent to this nested query builder */}}
+func (x *{{ .ParentTypeName }}) {{ .GoName }}() *{{ .TypeName }} {
+	return &{{ .TypeName }}{tableName: x.tableName, prefix: x.prefix + "{{ .Prefix }}"}
+}
+
+{{/* Generate field accessor methods for fields in this nested message */}}
+{{ $typeName := .TypeName }}
+{{ $fullPrefix := .FullPrefix }}
+{{ range .Fields }}
+{{ $v17Disabled := and .Field.V17FieldOverrides .Field.V17FieldOverrides.Disabled }}
+{{ if not $v17Disabled }}
+func (x *{{ $typeName }}) {{ .ShortGoName }}() *{{ .OpsTypeName }} {
+	return &{{ .OpsTypeName }}{tableName: x.tableName, column: "pb$" + x.prefix + "{{ trimPrefix .ColName $fullPrefix }}"}
+}
+{{ end }}
+{{ end }}
+
+{{/* Recursively generate child nested query builders */}}
+{{ range .Children }}
+{{ template "nestedQueryBuilder" . }}
+{{ end }}
+{{ end }}
+
+{{/* Generate all nested query builders */}}
+{{ range .NestedQueryBuilders }}
+{{ template "nestedQueryBuilder" . }}
 {{ end }}
