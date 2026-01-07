@@ -49,6 +49,10 @@ func (d *pgdbDescriptorPet) GetPartitionDateRange() pgdb_v1.MessageOptions_Parti
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
+func (d *pgdbDescriptorPet) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
 func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -1731,6 +1735,10 @@ func (d *pgdbDescriptorScalarValue) GetPartitionedByKsuidFieldName() string {
 
 func (d *pgdbDescriptorScalarValue) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorScalarValue) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
 }
 
 func (d *pgdbDescriptorScalarValue) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -4592,6 +4600,10 @@ func (d *pgdbDescriptorEBook) GetPartitionDateRange() pgdb_v1.MessageOptions_Par
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
+func (d *pgdbDescriptorEBook) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
 func (d *pgdbDescriptorEBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -4832,6 +4844,10 @@ func (d *pgdbDescriptorPaperBook) GetPartitionDateRange() pgdb_v1.MessageOptions
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
 }
 
+func (d *pgdbDescriptorPaperBook) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
 func (d *pgdbDescriptorPaperBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
 	df := pgdb_v1.NewDescriptorFieldOption(opts)
 	_ = df
@@ -5070,6 +5086,10 @@ func (d *pgdbDescriptorBook) GetPartitionedByKsuidFieldName() string {
 
 func (d *pgdbDescriptorBook) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorBook) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
 }
 
 func (d *pgdbDescriptorBook) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -6251,6 +6271,10 @@ func (d *pgdbDescriptorNewspaper) GetPartitionedByKsuidFieldName() string {
 
 func (d *pgdbDescriptorNewspaper) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
 	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorNewspaper) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
 }
 
 func (d *pgdbDescriptorNewspaper) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

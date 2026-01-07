@@ -57,6 +57,8 @@ type Descriptor interface {
 	Statistics(opts ...StatisticOptionsFunc) []*Statistic
 
 	GetPartitionDateRange() MessageOptions_PartitionedByDateRange
+
+	GetStorageParameters() *MessageOptions_StorageParameters
 }
 
 type DescriptorFieldOption struct {

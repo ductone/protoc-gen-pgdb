@@ -31,6 +31,51 @@ func (d *{{.ReceiverType}}) GetPartitionDateRange() pgdb_v1.MessageOptions_Parti
     return {{.PartitionDateRange}}
 }
 
+func (d *{{.ReceiverType}}) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+    {{- if .HasStorageParameters }}
+    return &pgdb_v1.MessageOptions_StorageParameters{
+        {{- if .StorageParameters.AutovacuumVacuumThreshold }}
+        AutovacuumVacuumThreshold: proto.Int32({{.StorageParameters.AutovacuumVacuumThreshold}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumVacuumScaleFactor }}
+        AutovacuumVacuumScaleFactor: proto.Float32({{.StorageParameters.AutovacuumVacuumScaleFactor}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumAnalyzeThreshold }}
+        AutovacuumAnalyzeThreshold: proto.Int32({{.StorageParameters.AutovacuumAnalyzeThreshold}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumAnalyzeScaleFactor }}
+        AutovacuumAnalyzeScaleFactor: proto.Float32({{.StorageParameters.AutovacuumAnalyzeScaleFactor}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumVacuumCostDelay }}
+        AutovacuumVacuumCostDelay: proto.Int32({{.StorageParameters.AutovacuumVacuumCostDelay}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumVacuumCostLimit }}
+        AutovacuumVacuumCostLimit: proto.Int32({{.StorageParameters.AutovacuumVacuumCostLimit}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumFreezeMinAge }}
+        AutovacuumFreezeMinAge: proto.Int64({{.StorageParameters.AutovacuumFreezeMinAge}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumFreezeMaxAge }}
+        AutovacuumFreezeMaxAge: proto.Int64({{.StorageParameters.AutovacuumFreezeMaxAge}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumFreezeTableAge }}
+        AutovacuumFreezeTableAge: proto.Int64({{.StorageParameters.AutovacuumFreezeTableAge}}),
+        {{- end }}
+        {{- if .StorageParameters.Fillfactor }}
+        Fillfactor: proto.Int32({{.StorageParameters.Fillfactor}}),
+        {{- end }}
+        {{- if .StorageParameters.ToastTupleTarget }}
+        ToastTupleTarget: proto.Int32({{.StorageParameters.ToastTupleTarget}}),
+        {{- end }}
+        {{- if .StorageParameters.HasAutovacuumEnabled }}
+        AutovacuumEnabled: proto.Bool({{.StorageParameters.AutovacuumEnabled}}),
+        {{- end }}
+    }
+    {{- else }}
+    return nil
+    {{- end }}
+}
+
 func (d *{{.ReceiverType}}) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
   df := pgdb_v1.NewDescriptorFieldOption(opts)
   _ = df

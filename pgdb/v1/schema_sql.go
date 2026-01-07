@@ -2,6 +2,7 @@ package v1
 
 import (
 	"bytes"
+	"strconv"
 	"strings"
 
 	"github.com/ductone/protoc-gen-pgdb/internal/slice"
@@ -115,6 +116,196 @@ func pgWriteString(buf *bytes.Buffer, input string) {
 	// TODO(pquerna): not completely correct escaping
 	_, _ = buf.WriteString(input)
 	_, _ = buf.WriteString(`"`)
+}
+
+func storageParams2with(desc Descriptor) string {
+	sp := desc.GetStorageParameters()
+	if sp == nil {
+		return ""
+	}
+
+	params := make([]string, 0)
+
+	if sp.HasAutovacuumVacuumThreshold() {
+		params = append(params, "autovacuum_vacuum_threshold = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumThreshold()), 10))
+	}
+	if sp.HasAutovacuumVacuumScaleFactor() {
+		params = append(params, "autovacuum_vacuum_scale_factor = "+strconv.FormatFloat(float64(sp.GetAutovacuumVacuumScaleFactor()), 'f', -1, 32))
+	}
+	if sp.HasAutovacuumAnalyzeThreshold() {
+		params = append(params, "autovacuum_analyze_threshold = "+strconv.FormatInt(int64(sp.GetAutovacuumAnalyzeThreshold()), 10))
+	}
+	if sp.HasAutovacuumAnalyzeScaleFactor() {
+		params = append(params, "autovacuum_analyze_scale_factor = "+strconv.FormatFloat(float64(sp.GetAutovacuumAnalyzeScaleFactor()), 'f', -1, 32))
+	}
+	if sp.HasAutovacuumVacuumCostDelay() {
+		params = append(params, "autovacuum_vacuum_cost_delay = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumCostDelay()), 10))
+	}
+	if sp.HasAutovacuumVacuumCostLimit() {
+		params = append(params, "autovacuum_vacuum_cost_limit = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumCostLimit()), 10))
+	}
+	if sp.HasAutovacuumFreezeMinAge() {
+		params = append(params, "autovacuum_freeze_min_age = "+strconv.FormatInt(sp.GetAutovacuumFreezeMinAge(), 10))
+	}
+	if sp.HasAutovacuumFreezeMaxAge() {
+		params = append(params, "autovacuum_freeze_max_age = "+strconv.FormatInt(sp.GetAutovacuumFreezeMaxAge(), 10))
+	}
+	if sp.HasAutovacuumFreezeTableAge() {
+		params = append(params, "autovacuum_freeze_table_age = "+strconv.FormatInt(sp.GetAutovacuumFreezeTableAge(), 10))
+	}
+	if sp.HasFillfactor() {
+		params = append(params, "fillfactor = "+strconv.FormatInt(int64(sp.GetFillfactor()), 10))
+	}
+	if sp.HasToastTupleTarget() {
+		params = append(params, "toast_tuple_target = "+strconv.FormatInt(int64(sp.GetToastTupleTarget()), 10))
+	}
+	if sp.HasAutovacuumEnabled() {
+		params = append(params, "autovacuum_enabled = "+strconv.FormatBool(sp.GetAutovacuumEnabled()))
+	}
+
+	if len(params) == 0 {
+		return ""
+	}
+
+	return "WITH (\n  " + strings.Join(params, ",\n  ") + "\n)"
+}
+
+func storageParams2alter(desc Descriptor, existingParams map[string]string) string {
+	sp := desc.GetStorageParameters()
+	if sp == nil {
+		return ""
+	}
+
+	params := make([]string, 0)
+
+	// Helper to get existing value as string
+	getExistingValue := func(key string) (string, bool) {
+		val, ok := existingParams[key]
+		return val, ok
+	}
+
+	// Helper to check if values differ
+	needsUpdate := func(key string, desiredValue string, isFloat bool) bool {
+		existing, exists := getExistingValue(key)
+		if !exists {
+			// Parameter not set, but we want to set it
+			return true
+		}
+		// For float values, parse and compare to handle precision differences
+		if isFloat {
+			existingFloat, err1 := strconv.ParseFloat(existing, 32)
+			desiredFloat, err2 := strconv.ParseFloat(desiredValue, 32)
+			if err1 != nil || err2 != nil {
+				// If parsing fails, fall back to string comparison
+				return existing != desiredValue
+			}
+			// Compare floats with small epsilon for precision differences
+			epsilon := 0.0001
+			diff := existingFloat - desiredFloat
+			if diff < 0 {
+				diff = -diff
+			}
+			return diff > epsilon
+		}
+		// For non-float values, direct string comparison
+		return existing != desiredValue
+	}
+
+	if sp.HasAutovacuumVacuumThreshold() {
+		desired := strconv.FormatInt(int64(sp.GetAutovacuumVacuumThreshold()), 10)
+		if needsUpdate("autovacuum_vacuum_threshold", desired, false) {
+			params = append(params, "autovacuum_vacuum_threshold = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumVacuumScaleFactor() {
+		desired := strconv.FormatFloat(float64(sp.GetAutovacuumVacuumScaleFactor()), 'f', -1, 32)
+		if needsUpdate("autovacuum_vacuum_scale_factor", desired, true) {
+			params = append(params, "autovacuum_vacuum_scale_factor = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumAnalyzeThreshold() {
+		desired := strconv.FormatInt(int64(sp.GetAutovacuumAnalyzeThreshold()), 10)
+		if needsUpdate("autovacuum_analyze_threshold", desired, false) {
+			params = append(params, "autovacuum_analyze_threshold = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumAnalyzeScaleFactor() {
+		desired := strconv.FormatFloat(float64(sp.GetAutovacuumAnalyzeScaleFactor()), 'f', -1, 32)
+		if needsUpdate("autovacuum_analyze_scale_factor", desired, true) {
+			params = append(params, "autovacuum_analyze_scale_factor = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumVacuumCostDelay() {
+		desired := strconv.FormatInt(int64(sp.GetAutovacuumVacuumCostDelay()), 10)
+		if needsUpdate("autovacuum_vacuum_cost_delay", desired, false) {
+			params = append(params, "autovacuum_vacuum_cost_delay = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumVacuumCostLimit() {
+		desired := strconv.FormatInt(int64(sp.GetAutovacuumVacuumCostLimit()), 10)
+		if needsUpdate("autovacuum_vacuum_cost_limit", desired, false) {
+			params = append(params, "autovacuum_vacuum_cost_limit = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumFreezeMinAge() {
+		desired := strconv.FormatInt(sp.GetAutovacuumFreezeMinAge(), 10)
+		if needsUpdate("autovacuum_freeze_min_age", desired, false) {
+			params = append(params, "autovacuum_freeze_min_age = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumFreezeMaxAge() {
+		desired := strconv.FormatInt(sp.GetAutovacuumFreezeMaxAge(), 10)
+		if needsUpdate("autovacuum_freeze_max_age", desired, false) {
+			params = append(params, "autovacuum_freeze_max_age = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumFreezeTableAge() {
+		desired := strconv.FormatInt(sp.GetAutovacuumFreezeTableAge(), 10)
+		if needsUpdate("autovacuum_freeze_table_age", desired, false) {
+			params = append(params, "autovacuum_freeze_table_age = "+desired)
+		}
+	}
+
+	if sp.HasFillfactor() {
+		desired := strconv.FormatInt(int64(sp.GetFillfactor()), 10)
+		if needsUpdate("fillfactor", desired, false) {
+			params = append(params, "fillfactor = "+desired)
+		}
+	}
+
+	if sp.HasToastTupleTarget() {
+		desired := strconv.FormatInt(int64(sp.GetToastTupleTarget()), 10)
+		if needsUpdate("toast_tuple_target", desired, false) {
+			params = append(params, "toast_tuple_target = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumEnabled() {
+		desired := strconv.FormatBool(sp.GetAutovacuumEnabled())
+		if needsUpdate("autovacuum_enabled", desired, false) {
+			params = append(params, "autovacuum_enabled = "+desired)
+		}
+	}
+
+	if len(params) == 0 {
+		return ""
+	}
+
+	buf := &bytes.Buffer{}
+	_, _ = buf.WriteString("ALTER TABLE ")
+	pgWriteString(buf, desc.TableName())
+	_, _ = buf.WriteString("\nSET (\n  ")
+	_, _ = buf.WriteString(strings.Join(params, ",\n  "))
+	_, _ = buf.WriteString("\n)\n")
+	return buf.String()
 }
 
 func col2alter(desc Descriptor, col *Column) string {
