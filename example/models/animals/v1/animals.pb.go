@@ -77,6 +77,7 @@ type Pet struct {
 	xxx_hidden_CreatedAt                                                               *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_at,json=createdAt,proto3"`
 	xxx_hidden_UpdatedAt                                                               *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3"`
 	xxx_hidden_DeletedAt                                                               *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt,proto3"`
+	xxx_hidden_InsertedAt                                                              *timestamppb.Timestamp `protobuf:"bytes,20,opt,name=inserted_at,json=insertedAt,proto3"`
 	xxx_hidden_DisplayName                                                             string                 `protobuf:"bytes,6,opt,name=display_name,json=displayName,proto3"`
 	xxx_hidden_Description                                                             string                 `protobuf:"bytes,7,opt,name=description,proto3"`
 	xxx_hidden_SystemBuiltin                                                           bool                   `protobuf:"varint,9,opt,name=system_builtin,json=systemBuiltin,proto3"`
@@ -147,6 +148,13 @@ func (x *Pet) GetUpdatedAt() *timestamppb.Timestamp {
 func (x *Pet) GetDeletedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.xxx_hidden_DeletedAt
+	}
+	return nil
+}
+
+func (x *Pet) GetInsertedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_InsertedAt
 	}
 	return nil
 }
@@ -243,6 +251,10 @@ func (x *Pet) SetDeletedAt(v *timestamppb.Timestamp) {
 	x.xxx_hidden_DeletedAt = v
 }
 
+func (x *Pet) SetInsertedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_InsertedAt = v
+}
+
 func (x *Pet) SetDisplayName(v string) {
 	x.xxx_hidden_DisplayName = v
 }
@@ -304,6 +316,13 @@ func (x *Pet) HasDeletedAt() bool {
 	return x.xxx_hidden_DeletedAt != nil
 }
 
+func (x *Pet) HasInsertedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_InsertedAt != nil
+}
+
 func (x *Pet) HasElapsed() bool {
 	if x == nil {
 		return false
@@ -330,6 +349,10 @@ func (x *Pet) ClearDeletedAt() {
 	x.xxx_hidden_DeletedAt = nil
 }
 
+func (x *Pet) ClearInsertedAt() {
+	x.xxx_hidden_InsertedAt = nil
+}
+
 func (x *Pet) ClearElapsed() {
 	x.xxx_hidden_Elapsed = nil
 }
@@ -341,11 +364,13 @@ func (x *Pet) ClearProfile() {
 type Pet_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
-	TenantId                                                                string
-	Id                                                                      string
-	CreatedAt                                                               *timestamppb.Timestamp
-	UpdatedAt                                                               *timestamppb.Timestamp
-	DeletedAt                                                               *timestamppb.Timestamp
+	TenantId  string
+	Id        string
+	CreatedAt *timestamppb.Timestamp
+	UpdatedAt *timestamppb.Timestamp
+	DeletedAt *timestamppb.Timestamp
+	// Timestamp automatically set by PostgreSQL when row is inserted
+	InsertedAt                                                              *timestamppb.Timestamp
 	DisplayName                                                             string
 	Description                                                             string
 	SystemBuiltin                                                           bool
@@ -367,6 +392,7 @@ func (b0 Pet_builder) Build() *Pet {
 	x.xxx_hidden_CreatedAt = b.CreatedAt
 	x.xxx_hidden_UpdatedAt = b.UpdatedAt
 	x.xxx_hidden_DeletedAt = b.DeletedAt
+	x.xxx_hidden_InsertedAt = b.InsertedAt
 	x.xxx_hidden_DisplayName = b.DisplayName
 	x.xxx_hidden_Description = b.Description
 	x.xxx_hidden_SystemBuiltin = b.SystemBuiltin
@@ -1459,7 +1485,7 @@ var File_models_animals_v1_animals_proto protoreflect.FileDescriptor
 
 const file_models_animals_v1_animals_proto_rawDesc = "" +
 	"\n" +
-	"\x1fmodels/animals/v1/animals.proto\x12\x11models.animals.v1\x1a\x16dynamo/v1/dynamo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x12pgdb/v1/pgdb.proto\"\xef\x06\n" +
+	"\x1fmodels/animals/v1/animals.proto\x12\x11models.animals.v1\x1a\x16dynamo/v1/dynamo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x12pgdb/v1/pgdb.proto\"\xb9\a\n" +
 	"\x03Pet\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x16\n" +
 	"\x02id\x18\x02 \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\x02id\x129\n" +
@@ -1468,7 +1494,9 @@ const file_models_animals_v1_animals_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12+\n" +
+	"deleted_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12H\n" +
+	"\vinserted_at\x18\x14 \x01(\v2\x1a.google.protobuf.TimestampB\v\xd2\xf7\x02\aB\x05NOW()R\n" +
+	"insertedAt\x12+\n" +
 	"\fdisplay_name\x18\x06 \x01(\tB\b\xd2\xf7\x02\x04\b\x02\x10\x03R\vdisplayName\x12(\n" +
 	"\vdescription\x18\a \x01(\tB\x06\xd2\xf7\x02\x02\b\x02R\vdescription\x12%\n" +
 	"\x0esystem_builtin\x18\t \x01(\bR\rsystemBuiltin\x123\n" +
@@ -1577,24 +1605,25 @@ var file_models_animals_v1_animals_proto_depIdxs = []int32{
 	8,  // 0: models.animals.v1.Pet.created_at:type_name -> google.protobuf.Timestamp
 	8,  // 1: models.animals.v1.Pet.updated_at:type_name -> google.protobuf.Timestamp
 	8,  // 2: models.animals.v1.Pet.deleted_at:type_name -> google.protobuf.Timestamp
-	9,  // 3: models.animals.v1.Pet.elapsed:type_name -> google.protobuf.Duration
-	10, // 4: models.animals.v1.Pet.profile:type_name -> google.protobuf.Struct
-	10, // 5: models.animals.v1.Pet.extra_profiles:type_name -> google.protobuf.Struct
-	0,  // 6: models.animals.v1.ScalarValue.repeated_enum:type_name -> models.animals.v1.FurType
-	7,  // 7: models.animals.v1.ScalarValue.string_map:type_name -> models.animals.v1.ScalarValue.StringMapEntry
-	8,  // 8: models.animals.v1.ScalarValue.created_at:type_name -> google.protobuf.Timestamp
-	11, // 9: models.animals.v1.ScalarValue.str_ptr:type_name -> google.protobuf.StringValue
-	12, // 10: models.animals.v1.ScalarValue.bool_ptr:type_name -> google.protobuf.BoolValue
-	8,  // 11: models.animals.v1.Book.created_at:type_name -> google.protobuf.Timestamp
-	4,  // 12: models.animals.v1.Book.paper:type_name -> models.animals.v1.PaperBook
-	3,  // 13: models.animals.v1.Book.ebook:type_name -> models.animals.v1.EBook
-	6,  // 14: models.animals.v1.Book.news:type_name -> models.animals.v1.Newspaper
-	8,  // 15: models.animals.v1.Newspaper.created_at:type_name -> google.protobuf.Timestamp
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	8,  // 3: models.animals.v1.Pet.inserted_at:type_name -> google.protobuf.Timestamp
+	9,  // 4: models.animals.v1.Pet.elapsed:type_name -> google.protobuf.Duration
+	10, // 5: models.animals.v1.Pet.profile:type_name -> google.protobuf.Struct
+	10, // 6: models.animals.v1.Pet.extra_profiles:type_name -> google.protobuf.Struct
+	0,  // 7: models.animals.v1.ScalarValue.repeated_enum:type_name -> models.animals.v1.FurType
+	7,  // 8: models.animals.v1.ScalarValue.string_map:type_name -> models.animals.v1.ScalarValue.StringMapEntry
+	8,  // 9: models.animals.v1.ScalarValue.created_at:type_name -> google.protobuf.Timestamp
+	11, // 10: models.animals.v1.ScalarValue.str_ptr:type_name -> google.protobuf.StringValue
+	12, // 11: models.animals.v1.ScalarValue.bool_ptr:type_name -> google.protobuf.BoolValue
+	8,  // 12: models.animals.v1.Book.created_at:type_name -> google.protobuf.Timestamp
+	4,  // 13: models.animals.v1.Book.paper:type_name -> models.animals.v1.PaperBook
+	3,  // 14: models.animals.v1.Book.ebook:type_name -> models.animals.v1.EBook
+	6,  // 15: models.animals.v1.Book.news:type_name -> models.animals.v1.Newspaper
+	8,  // 16: models.animals.v1.Newspaper.created_at:type_name -> google.protobuf.Timestamp
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_models_animals_v1_animals_proto_init() }

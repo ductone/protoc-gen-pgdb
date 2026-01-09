@@ -38,6 +38,10 @@ message Pet {
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp updated_at = 4;
   google.protobuf.Timestamp deleted_at = 5;
+  // Timestamp automatically set by PostgreSQL when row is inserted
+  google.protobuf.Timestamp inserted_at = 20 [(pgdb.v1.options) = {
+    server_default: "NOW()"
+  }];
   string display_name = 6 [(pgdb.v1.options) = {
     full_text_type: FULL_TEXT_TYPE_ENGLISH
     full_text_weight: FULL_TEXT_WEIGHT_HIGH

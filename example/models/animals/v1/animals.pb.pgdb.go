@@ -331,6 +331,23 @@ func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []
 
 	rv = append(rv, &pgdb_v1.Column{
 		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
+		Name:               df.ColumnName("inserted_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "NOW()",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{20}),
+		ProtoPath:          df.ExtendProtoPath("inserted_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pet_models_animals_v1_8a3723d5"),
 		Name:               df.ColumnName("display_name"),
 		Type:               "text",
 		Nullable:           df.Nullable(false),
@@ -844,99 +861,111 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 		rv[ro.ColumnName("deleted_at")] = v4
 	}
 
-	v5 := strings.ReplaceAll(string(m.self.GetDisplayName()), "\u0000", "")
+	var v5 *time.Time
+	if m.self.GetInsertedAt().IsValid() {
+		v5tmp := m.self.GetInsertedAt().AsTime()
+		v5 = &v5tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("inserted_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("inserted_at")] = v5
+	}
+
+	v6 := strings.ReplaceAll(string(m.self.GetDisplayName()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("display_name")] = nullExp
 	} else {
-		rv[ro.ColumnName("display_name")] = v5
+		rv[ro.ColumnName("display_name")] = v6
 	}
 
-	v6 := strings.ReplaceAll(string(m.self.GetDescription()), "\u0000", "")
+	v7 := strings.ReplaceAll(string(m.self.GetDescription()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("description")] = nullExp
 	} else {
-		rv[ro.ColumnName("description")] = v6
+		rv[ro.ColumnName("description")] = v7
 	}
 
-	v7 := bool(m.self.GetSystemBuiltin())
+	v8 := bool(m.self.GetSystemBuiltin())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("system_builtin")] = nullExp
 	} else {
-		rv[ro.ColumnName("system_builtin")] = v7
+		rv[ro.ColumnName("system_builtin")] = v8
 	}
 
-	v8 := &pgtype.Interval{}
+	v9 := &pgtype.Interval{}
 	if m.self.GetElapsed().IsValid() {
-		v8.Valid = true
-		v8.Microseconds = int64(m.self.GetElapsed().AsDuration()) / 1000
+		v9.Valid = true
+		v9.Microseconds = int64(m.self.GetElapsed().AsDuration()) / 1000
 	}
 
 	if ro.Nulled {
 		rv[ro.ColumnName("elapsed")] = nullExp
 	} else {
-		rv[ro.ColumnName("elapsed")] = v8
+		rv[ro.ColumnName("elapsed")] = v9
 	}
 
-	v9tmp, err := pgdb_v1.MarshalProtoJSON(m.self.GetProfile())
+	v10tmp, err := pgdb_v1.MarshalProtoJSON(m.self.GetProfile())
 	if err != nil {
 		return nil, err
 	}
-	v9 := exp.NewLiteralExpression("?::jsonb", string(v9tmp))
+	v10 := exp.NewLiteralExpression("?::jsonb", string(v10tmp))
 
 	if ro.Nulled {
 		rv[ro.ColumnName("profile")] = nullExp
 	} else {
-		rv[ro.ColumnName("profile")] = v9
+		rv[ro.ColumnName("profile")] = v10
 	}
 
-	v10 := float32(m.self.GetCuteness())
+	v11 := float32(m.self.GetCuteness())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("cuteness")] = nullExp
 	} else {
-		rv[ro.ColumnName("cuteness")] = v10
+		rv[ro.ColumnName("cuteness")] = v11
 	}
 
-	v11 := float64(m.self.GetPrice())
+	v12 := float64(m.self.GetPrice())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("price")] = nullExp
 	} else {
-		rv[ro.ColumnName("price")] = v11
+		rv[ro.ColumnName("price")] = v12
 	}
 
-	v12 := bool(m.self.GetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame())
+	v13 := bool(m.self.GetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame())
 
 	if ro.Nulled {
 		rv[ro.ColumnName("14")] = nullExp
 	} else {
-		rv[ro.ColumnName("14")] = v12
+		rv[ro.ColumnName("14")] = v13
 	}
 
-	v13 := make(xpq.Array[string], 0, len(m.self.GetExtraProfiles()))
-	for _, v13arrTmp := range m.self.GetExtraProfiles() {
-		v13tmp, err := pgdb_v1.MarshalProtoJSON(v13arrTmp)
+	v14 := make(xpq.Array[string], 0, len(m.self.GetExtraProfiles()))
+	for _, v14arrTmp := range m.self.GetExtraProfiles() {
+		v14tmp, err := pgdb_v1.MarshalProtoJSON(v14arrTmp)
 		if err != nil {
 			return nil, err
 		}
-		v13 = append(v13, string(v13tmp))
+		v14 = append(v14, string(v14tmp))
 	}
 
 	if ro.Nulled {
 		rv[ro.ColumnName("extra_profiles")] = nullExp
 	} else {
-		rv[ro.ColumnName("extra_profiles")] = v13
+		rv[ro.ColumnName("extra_profiles")] = v14
 	}
 
-	v14 := strings.ReplaceAll(string(m.self.GetFieldWithV17CollationOnly()), "\u0000", "")
+	v15 := strings.ReplaceAll(string(m.self.GetFieldWithV17CollationOnly()), "\u0000", "")
 
 	if ro.Nulled {
 		rv[ro.ColumnName("field_with_v17_collation_only")] = nullExp
 	} else {
-		rv[ro.ColumnName("field_with_v17_collation_only")] = v14
+		rv[ro.ColumnName("field_with_v17_collation_only")] = v15
 	}
 
 	return rv, nil
@@ -1490,6 +1519,19 @@ func (x *PetDeletedAtQueryType) Identifier() exp.IdentifierExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PetInsertedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PetDBQueryUnsafe) InsertedAt() *PetInsertedAtQueryType {
+	return &PetInsertedAtQueryType{tableName: x.tableName, column: "pb$" + "inserted_at"}
+}
+
+func (x *PetInsertedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type PetDisplayNameQueryType struct {
 	column    string
 	tableName string
@@ -1662,6 +1704,10 @@ func (x *PetDBColumns) UpdatedAt() exp.Expression {
 
 func (x *PetDBColumns) DeletedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "deleted_at")
+}
+
+func (x *PetDBColumns) InsertedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "inserted_at")
 }
 
 func (x *PetDBColumns) DisplayName() exp.Expression {
