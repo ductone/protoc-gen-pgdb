@@ -22,12 +22,12 @@ type qbContext struct {
 	ColumnType          string
 	ColumnFields        []*fieldContext
 	NestedQueryBuilders []*nestedQueryBuilderContext
-	// NestedQueryFields contains all fields from nested query builders that need SafeOperators types generated
-	NestedQueryFields   []*safeFieldContext
+	// NestedQueryFields contains all fields from nested query builders that need SafeOperators types generated.
+	NestedQueryFields []*safeFieldContext
 }
 
 // nestedQueryBuilderContext represents a nested message that should have its own query builder
-// for chaining support (e.g., ticketFields.TicketType().Grant().Source().IsExtension().Eq(true))
+// for chaining support (e.g., ticketFields.TicketType().Grant().Source().IsExtension().Eq(true)).
 type nestedQueryBuilderContext struct {
 	// TypeName is the name of the nested query builder type (e.g., "TicketTicketTypeQueryBuilder")
 	TypeName string
@@ -47,7 +47,7 @@ type nestedQueryBuilderContext struct {
 	Fields []*nestedSafeFieldContext
 }
 
-// nestedSafeFieldContext wraps safeFieldContext with a short field name for nested query builders
+// nestedSafeFieldContext wraps safeFieldContext with a short field name for nested query builders.
 type nestedSafeFieldContext struct {
 	*safeFieldContext
 	// ShortGoName is the field name without the nested prefix (e.g., "Sfixed64" instead of "ZooShopAnythingSfixed64")
@@ -185,7 +185,7 @@ func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *impo
 }
 
 // collectNestedQueryFields recursively collects all unique safeFieldContexts from nested query builders
-// that are not already in the main safeFields list (i.e., fields that need their SafeOperators types generated)
+// that are not already in the main safeFields list (i.e., fields that need their SafeOperators types generated).
 func collectNestedQueryFields(builders []*nestedQueryBuilderContext, existingSafeFields []*safeFieldContext) []*safeFieldContext {
 	// Build a set of existing OpsTypeNames to avoid duplicates
 	existingOps := make(map[string]bool)
@@ -247,10 +247,10 @@ func (module *Module) getNestedQueryBuilders(ctx pgsgo.Context, m pgs.Message, i
 		fieldNum := *f.Field.Descriptor().Number
 		prefix := strconv.FormatInt(int64(fieldNum), 10) + "$"
 		nestedFieldMap[f.GoName] = &nestedFieldInfo{
-			goName:       f.GoName,
-			prefix:       prefix,
-			field:        f.Field,
-			embeddedMsg:  f.Field.Type().Embed(),
+			goName:      f.GoName,
+			prefix:      prefix,
+			field:       f.Field,
+			embeddedMsg: f.Field.Type().Embed(),
 		}
 	}
 
@@ -284,7 +284,7 @@ type nestedFieldInfo struct {
 	embeddedMsg pgs.Message
 }
 
-// getNestedQueryBuildersRecursive builds nested query builders for deeply nested messages
+// getNestedQueryBuildersRecursive builds nested query builders for deeply nested messages.
 func (module *Module) getNestedQueryBuildersRecursive(
 	ctx pgsgo.Context,
 	m pgs.Message,
@@ -350,7 +350,7 @@ func (module *Module) getNestedQueryBuildersRecursive(
 	return rv
 }
 
-// isWellKnownType checks if the type is a Google protobuf well-known type
+// isWellKnownType checks if the type is a Google protobuf well-known type.
 func isWellKnownType(typeName string) bool {
 	switch typeName {
 	case ".google.protobuf.Any",
@@ -370,37 +370,6 @@ func isWellKnownType(typeName string) bool {
 	default:
 		return false
 	}
-}
-
-// filterSafeFieldsByPrefix returns safe fields that start with the given prefix
-func filterSafeFieldsByPrefix(fields []*safeFieldContext, prefix string) []*safeFieldContext {
-	rv := make([]*safeFieldContext, 0)
-	for _, f := range fields {
-		if len(f.ColName) > len(prefix) && f.ColName[:len(prefix)] == prefix {
-			rv = append(rv, f)
-		}
-	}
-	return rv
-}
-
-// filterSafeFieldsByPrefixWithShortName returns safe fields that start with the given prefix
-// and computes the short Go name by stripping the goNamePrefix
-func filterSafeFieldsByPrefixWithShortName(fields []*safeFieldContext, colPrefix string, goNamePrefix string) []*nestedSafeFieldContext {
-	rv := make([]*nestedSafeFieldContext, 0)
-	for _, f := range fields {
-		if len(f.ColName) > len(colPrefix) && f.ColName[:len(colPrefix)] == colPrefix {
-			shortName := f.Field.GoName
-			// Strip the goNamePrefix to get just the field name
-			if len(shortName) > len(goNamePrefix) && shortName[:len(goNamePrefix)] == goNamePrefix {
-				shortName = shortName[len(goNamePrefix):]
-			}
-			rv = append(rv, &nestedSafeFieldContext{
-				safeFieldContext: f,
-				ShortGoName:      shortName,
-			})
-		}
-	}
-	return rv
 }
 
 // getAllNestedFieldsWithShortName returns ALL fields (indexed or not) that match the given prefix,
@@ -458,16 +427,17 @@ func (module *Module) getAllNestedFieldsWithShortName(
 		// Get the actual field name from the proto field definition
 		// The f.GoName can be unreliable for deeply nested fields due to the message expansion logic
 		var shortName string
-		if f.Field != nil {
+		switch {
+		case f.Field != nil:
 			shortName = ctx.Name(f.Field).String()
-		} else if f.GoName != "" {
+		case f.GoName != "":
 			// For virtual fields, use GoName
 			shortName = f.GoName
 			// Try to strip the prefix if it matches
 			if len(shortName) > len(goNamePrefix) && shortName[:len(goNamePrefix)] == goNamePrefix {
 				shortName = shortName[len(goNamePrefix):]
 			}
-		} else {
+		default:
 			continue // Skip if we can't determine a name
 		}
 
@@ -498,7 +468,7 @@ func (module *Module) getAllNestedFieldsWithShortName(
 	return rv
 }
 
-// containsNestedPrefix checks if a column name contains a nested prefix (e.g., "5$field" means it's in a nested message)
+// containsNestedPrefix checks if a column name contains a nested prefix (e.g., "5$field" means it's in a nested message).
 func containsNestedPrefix(colName string) bool {
 	for i, c := range colName {
 		if c == '$' && i > 0 {
