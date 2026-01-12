@@ -526,7 +526,7 @@ func (x *{{ .ParentTypeName }}) {{ .GoName }}() *{{ .TypeName }} {
 	return &{{ .TypeName }}{tableName: x.tableName, prefix: x.prefix + "{{ .Prefix }}"}
 }
 
-{{/* Generate field accessor methods for fields in this nested message */}}
+{{/* Generate field accessor methods for indexed fields in this nested message */}}
 {{ $typeName := .TypeName }}
 {{ $fullPrefix := .FullPrefix }}
 {{ range .Fields }}
@@ -538,9 +538,55 @@ func (x *{{ $typeName }}) {{ .ShortGoName }}() *{{ .OpsTypeName }} {
 {{ end }}
 {{ end }}
 
-{{/* Recursively generate child nested query builders */}}
+{{/* Generate Unsafe accessor methods for non-indexed fields */}}
+{{ range .UnsafeFields }}
+{{ $v17Disabled := and .Field.V17FieldOverrides .Field.V17FieldOverrides.Disabled }}
+{{ if not $v17Disabled }}
+func (x *{{ $typeName }}) Unsafe{{ .ShortGoName }}() *{{ .OpsTypeName }} {
+	return &{{ .OpsTypeName }}{tableName: x.tableName, column: "pb$" + x.prefix + "{{ trimPrefix .ColName $fullPrefix }}"}
+}
+{{ end }}
+{{ end }}
+
+{{/* Recursively generate child nested query builders for indexed paths */}}
 {{ range .Children }}
 {{ template "nestedQueryBuilder" . }}
+{{ end }}
+
+{{/* Generate Unsafe child accessor methods for non-indexed paths */}}
+{{ range .UnsafeChildren }}
+{{ template "unsafeNestedQueryBuilder" . }}
+{{ end }}
+{{ end }}
+
+{{/* Generate unsafe nested query builder for non-indexed paths */}}
+{{ define "unsafeNestedQueryBuilder" }}
+{{/* Define the unsafe nested query builder struct */}}
+type {{ .TypeName }} struct {
+	tableName string
+	prefix    string
+}
+
+{{/* Generate Unsafe accessor method from parent to this nested query builder */}}
+func (x *{{ .ParentTypeName }}) Unsafe{{ .GoName }}() *{{ .TypeName }} {
+	return &{{ .TypeName }}{tableName: x.tableName, prefix: x.prefix + "{{ .Prefix }}"}
+}
+
+{{/* Generate field accessor methods for non-indexed fields */}}
+{{ $typeName := .TypeName }}
+{{ $fullPrefix := .FullPrefix }}
+{{ range .Fields }}
+{{ $v17Disabled := and .Field.V17FieldOverrides .Field.V17FieldOverrides.Disabled }}
+{{ if not $v17Disabled }}
+func (x *{{ $typeName }}) {{ .ShortGoName }}() *{{ .OpsTypeName }} {
+	return &{{ .OpsTypeName }}{tableName: x.tableName, column: "pb$" + x.prefix + "{{ trimPrefix .ColName $fullPrefix }}"}
+}
+{{ end }}
+{{ end }}
+
+{{/* Recursively generate unsafe child nested query builders */}}
+{{ range .Children }}
+{{ template "unsafeNestedQueryBuilder" . }}
 {{ end }}
 {{ end }}
 

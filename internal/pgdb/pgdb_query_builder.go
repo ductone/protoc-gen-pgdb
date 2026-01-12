@@ -41,10 +41,20 @@ type nestedQueryBuilderContext struct {
 	GoNamePrefix string
 	// ParentTypeName is the parent query builder type that will have the accessor method
 	ParentTypeName string
-	// Children are nested query builders within this one
+	// Children are nested query builders within this one (for indexed paths)
 	Children []*nestedQueryBuilderContext
-	// Fields are the safe query fields accessible from this nested query builder
+	// UnsafeChildren are nested query builders for non-indexed paths
+	UnsafeChildren []*nestedQueryBuilderContext
+	// Fields are the safe query fields accessible from this nested query builder (indexed fields)
 	Fields []*nestedSafeFieldContext
+	// UnsafeFields are the non-indexed fields accessible via Unsafe accessors
+	UnsafeFields []*nestedSafeFieldContext
+	// IsUnsafe indicates this is an unsafe query builder (for non-indexed paths)
+	IsUnsafe bool
+	// HasIndexedFields indicates this nested message has at least one indexed field
+	HasIndexedFields bool
+	// HasUnsafeFields indicates this nested message has at least one non-indexed field
+	HasUnsafeFields bool
 }
 
 // nestedSafeFieldContext wraps safeFieldContext with a short field name for nested query builders.
@@ -199,13 +209,24 @@ func collectNestedQueryFields(builders []*nestedQueryBuilderContext, existingSaf
 	var collect func(builders []*nestedQueryBuilderContext)
 	collect = func(builders []*nestedQueryBuilderContext) {
 		for _, b := range builders {
+			// Collect indexed fields
 			for _, f := range b.Fields {
 				if !existingOps[f.OpsTypeName] && !seen[f.OpsTypeName] {
 					seen[f.OpsTypeName] = true
 					rv = append(rv, f.safeFieldContext)
 				}
 			}
+			// Collect unsafe (non-indexed) fields as well - they also need SafeOperators types
+			for _, f := range b.UnsafeFields {
+				if !existingOps[f.OpsTypeName] && !seen[f.OpsTypeName] {
+					seen[f.OpsTypeName] = true
+					rv = append(rv, f.safeFieldContext)
+				}
+			}
+			// Recurse into indexed children
 			collect(b.Children)
+			// Recurse into unsafe children
+			collect(b.UnsafeChildren)
 		}
 	}
 	collect(builders)
@@ -238,6 +259,12 @@ func (module *Module) getNestedQueryBuilders(ctx pgsgo.Context, m pgs.Message, i
 	// Get ALL fields (indexed and non-indexed) for generating query methods
 	allFields := module.getMessageFieldsDeep(ctx, m, ix, "m.self", "", "")
 
+	// Build a set of indexed field paths for quick lookup
+	indexedFieldPaths := make(map[string]bool)
+	for _, sf := range safeFields {
+		indexedFieldPaths[sf.ColName] = true
+	}
+
 	// Build a map of nested fields and their prefixes
 	nestedFieldMap := make(map[string]*nestedFieldInfo)
 	for _, f := range msgFields {
@@ -262,19 +289,48 @@ func (module *Module) getNestedQueryBuilders(ctx pgsgo.Context, m pgs.Message, i
 		}
 		builderTypeName := msgName + nf.goName + "QueryBuilder"
 		goNamePrefix := nf.goName
+
+		// Get all fields and separate them into indexed and unsafe
+		allNestedFields := module.getAllNestedFieldsWithShortName(ctx, allFields, nf.prefix, goNamePrefix, msgName, ix)
+		indexedFields, unsafeFields := separateIndexedAndUnsafeFields(allNestedFields, indexedFieldPaths)
+
+		// Recursively build children with index awareness
+		children, unsafeChildren := module.getNestedQueryBuildersRecursiveWithIndex(
+			ctx, nf.embeddedMsg, ix, builderTypeName, msgName+nf.goName,
+			nf.prefix, goNamePrefix, allFields, indexedFieldPaths,
+		)
+
 		nqb := &nestedQueryBuilderContext{
-			TypeName:       builderTypeName,
-			GoName:         nf.goName,
-			Prefix:         nf.prefix,
-			FullPrefix:     nf.prefix, // For top-level, full prefix equals local prefix
-			GoNamePrefix:   goNamePrefix,
-			ParentTypeName: parentTypeName,
-			Fields:         module.getAllNestedFieldsWithShortName(ctx, allFields, nf.prefix, goNamePrefix, msgName, ix),
-			Children:       module.getNestedQueryBuildersRecursive(ctx, nf.embeddedMsg, ix, builderTypeName, msgName+nf.goName, nf.prefix, goNamePrefix, allFields),
+			TypeName:         builderTypeName,
+			GoName:           nf.goName,
+			Prefix:           nf.prefix,
+			FullPrefix:       nf.prefix, // For top-level, full prefix equals local prefix
+			GoNamePrefix:     goNamePrefix,
+			ParentTypeName:   parentTypeName,
+			Fields:           indexedFields,
+			UnsafeFields:     unsafeFields,
+			Children:         children,
+			UnsafeChildren:   unsafeChildren,
+			HasIndexedFields: len(indexedFields) > 0 || len(children) > 0,
+			HasUnsafeFields:  len(unsafeFields) > 0 || len(unsafeChildren) > 0,
 		}
 		rv = append(rv, nqb)
 	}
 	return rv
+}
+
+// separateIndexedAndUnsafeFields separates nested fields into indexed (safe) and non-indexed (unsafe) categories.
+func separateIndexedAndUnsafeFields(fields []*nestedSafeFieldContext, indexedFieldPaths map[string]bool) (indexed, unsafe []*nestedSafeFieldContext) {
+	indexed = make([]*nestedSafeFieldContext, 0)
+	unsafe = make([]*nestedSafeFieldContext, 0)
+	for _, f := range fields {
+		if indexedFieldPaths[f.ColName] {
+			indexed = append(indexed, f)
+		} else {
+			unsafe = append(unsafe, f)
+		}
+	}
+	return indexed, unsafe
 }
 
 type nestedFieldInfo struct {
@@ -284,8 +340,9 @@ type nestedFieldInfo struct {
 	embeddedMsg pgs.Message
 }
 
-// getNestedQueryBuildersRecursive builds nested query builders for deeply nested messages.
-func (module *Module) getNestedQueryBuildersRecursive(
+// getNestedQueryBuildersRecursiveWithIndex builds nested query builders for deeply nested messages,
+// separating children into indexed and unsafe categories.
+func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 	ctx pgsgo.Context,
 	m pgs.Message,
 	ix *importTracker,
@@ -294,8 +351,10 @@ func (module *Module) getNestedQueryBuildersRecursive(
 	colPrefix string,
 	goNamePrefix string,
 	allFields []*fieldContext,
-) []*nestedQueryBuilderContext {
-	rv := make([]*nestedQueryBuilderContext, 0)
+	indexedFieldPaths map[string]bool,
+) (children, unsafeChildren []*nestedQueryBuilderContext) {
+	children = make([]*nestedQueryBuilderContext, 0)
+	unsafeChildren = make([]*nestedQueryBuilderContext, 0)
 
 	for _, field := range m.Fields() {
 		if field.Type().ProtoType() != pgs.MessageT {
@@ -335,19 +394,61 @@ func (module *Module) getNestedQueryBuildersRecursive(
 		// Extract the root message name from namePrefix (e.g., "AttractionsPet" -> "Attractions")
 		rootMsgName := namePrefix[:len(namePrefix)-len(goNamePrefix)]
 
+		// Get all fields and separate them into indexed and unsafe
+		allNestedFields := module.getAllNestedFieldsWithShortName(ctx, allFields, fullPrefix, newGoNamePrefix, rootMsgName, ix)
+		indexedFields, unsafeFields := separateIndexedAndUnsafeFields(allNestedFields, indexedFieldPaths)
+
+		// Recursively build children
+		childChildren, childUnsafeChildren := module.getNestedQueryBuildersRecursiveWithIndex(
+			ctx, embeddedMsg, ix, builderTypeName, namePrefix+goName,
+			fullPrefix, newGoNamePrefix, allFields, indexedFieldPaths,
+		)
+
+		hasIndexedContent := len(indexedFields) > 0 || len(childChildren) > 0
+		hasUnsafeContent := len(unsafeFields) > 0 || len(childUnsafeChildren) > 0
+
+		// Create a query builder for this nested message
 		nqb := &nestedQueryBuilderContext{
-			TypeName:       builderTypeName,
-			GoName:         goName,
-			Prefix:         fieldPrefix,
-			FullPrefix:     fullPrefix,
-			GoNamePrefix:   newGoNamePrefix,
-			ParentTypeName: parentTypeName,
-			Fields:         module.getAllNestedFieldsWithShortName(ctx, allFields, fullPrefix, newGoNamePrefix, rootMsgName, ix),
-			Children:       module.getNestedQueryBuildersRecursive(ctx, embeddedMsg, ix, builderTypeName, namePrefix+goName, fullPrefix, newGoNamePrefix, allFields),
+			TypeName:         builderTypeName,
+			GoName:           goName,
+			Prefix:           fieldPrefix,
+			FullPrefix:       fullPrefix,
+			GoNamePrefix:     newGoNamePrefix,
+			ParentTypeName:   parentTypeName,
+			Fields:           indexedFields,
+			UnsafeFields:     unsafeFields,
+			Children:         childChildren,
+			UnsafeChildren:   childUnsafeChildren,
+			HasIndexedFields: hasIndexedContent,
+			HasUnsafeFields:  hasUnsafeContent,
 		}
-		rv = append(rv, nqb)
+
+		// Add to appropriate list based on whether it has indexed content
+		// A nested message goes in the "safe" list if it has ANY indexed content
+		// (so users can chain through it to reach indexed fields)
+		if hasIndexedContent {
+			children = append(children, nqb)
+		}
+		// Also add to unsafe children if it has unsafe content
+		// (so users can access non-indexed fields via UnsafeXxx() accessor)
+		if hasUnsafeContent {
+			unsafeNqb := &nestedQueryBuilderContext{
+				TypeName:         namePrefix + goName + "UnsafeQueryBuilder",
+				GoName:           goName,
+				Prefix:           fieldPrefix,
+				FullPrefix:       fullPrefix,
+				GoNamePrefix:     newGoNamePrefix,
+				ParentTypeName:   parentTypeName,
+				Fields:           unsafeFields,
+				Children:         childUnsafeChildren,
+				IsUnsafe:         true,
+				HasUnsafeFields:  true,
+				HasIndexedFields: false,
+			}
+			unsafeChildren = append(unsafeChildren, unsafeNqb)
+		}
 	}
-	return rv
+	return children, unsafeChildren
 }
 
 // isWellKnownType checks if the type is a Google protobuf well-known type.

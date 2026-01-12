@@ -4189,7 +4189,7 @@ func (x *ShopDBQueryBuilder) Paper() *ShopPaperQueryBuilder {
 	return &ShopPaperQueryBuilder{tableName: x.tableName, prefix: x.prefix + "50$"}
 }
 
-func (x *ShopPaperQueryBuilder) Pages() *ShopPaperPagesSafeOperators {
+func (x *ShopPaperQueryBuilder) UnsafePages() *ShopPaperPagesSafeOperators {
 	return &ShopPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
 }
 
@@ -4202,7 +4202,7 @@ func (x *ShopDBQueryBuilder) Ebook() *ShopEbookQueryBuilder {
 	return &ShopEbookQueryBuilder{tableName: x.tableName, prefix: x.prefix + "51$"}
 }
 
-func (x *ShopEbookQueryBuilder) Size() *ShopEbookSizeSafeOperators {
+func (x *ShopEbookQueryBuilder) UnsafeSize() *ShopEbookSizeSafeOperators {
 	return &ShopEbookSizeSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "size"}
 }
 
@@ -4215,139 +4215,139 @@ func (x *ShopDBQueryBuilder) Anything() *ShopAnythingQueryBuilder {
 	return &ShopAnythingQueryBuilder{tableName: x.tableName, prefix: x.prefix + "52$"}
 }
 
-func (x *ShopAnythingQueryBuilder) Id() *ShopAnythingIdSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeId() *ShopAnythingIdSafeOperators {
 	return &ShopAnythingIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
 }
 
-func (x *ShopAnythingQueryBuilder) Double() *ShopAnythingDoubleSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeDouble() *ShopAnythingDoubleSafeOperators {
 	return &ShopAnythingDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "double"}
 }
 
-func (x *ShopAnythingQueryBuilder) Float() *ShopAnythingFloatSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeFloat() *ShopAnythingFloatSafeOperators {
 	return &ShopAnythingFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "float"}
 }
 
-func (x *ShopAnythingQueryBuilder) Int32() *ShopAnythingInt32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeInt32() *ShopAnythingInt32SafeOperators {
 	return &ShopAnythingInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_32"}
 }
 
-func (x *ShopAnythingQueryBuilder) Int64() *ShopAnythingInt64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeInt64() *ShopAnythingInt64SafeOperators {
 	return &ShopAnythingInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_64"}
 }
 
-func (x *ShopAnythingQueryBuilder) Uint32() *ShopAnythingUint32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeUint32() *ShopAnythingUint32SafeOperators {
 	return &ShopAnythingUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_32"}
 }
 
-func (x *ShopAnythingQueryBuilder) Uint64() *ShopAnythingUint64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeUint64() *ShopAnythingUint64SafeOperators {
 	return &ShopAnythingUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_64"}
 }
 
-func (x *ShopAnythingQueryBuilder) Sint32() *ShopAnythingSint32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeSint32() *ShopAnythingSint32SafeOperators {
 	return &ShopAnythingSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_32"}
 }
 
-func (x *ShopAnythingQueryBuilder) Sint64() *ShopAnythingSint64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeSint64() *ShopAnythingSint64SafeOperators {
 	return &ShopAnythingSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_64"}
 }
 
-func (x *ShopAnythingQueryBuilder) Fixed32() *ShopAnythingFixed32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeFixed32() *ShopAnythingFixed32SafeOperators {
 	return &ShopAnythingFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_32"}
 }
 
-func (x *ShopAnythingQueryBuilder) Fixed64() *ShopAnythingFixed64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeFixed64() *ShopAnythingFixed64SafeOperators {
 	return &ShopAnythingFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_64"}
 }
 
-func (x *ShopAnythingQueryBuilder) Sfixed32() *ShopAnythingSfixed32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeSfixed32() *ShopAnythingSfixed32SafeOperators {
 	return &ShopAnythingSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_32"}
 }
 
-func (x *ShopAnythingQueryBuilder) Sfixed64() *ShopAnythingSfixed64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeSfixed64() *ShopAnythingSfixed64SafeOperators {
 	return &ShopAnythingSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_64"}
 }
 
-func (x *ShopAnythingQueryBuilder) Bool() *ShopAnythingBoolSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeBool() *ShopAnythingBoolSafeOperators {
 	return &ShopAnythingBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bool"}
 }
 
-func (x *ShopAnythingQueryBuilder) String_() *ShopAnythingString_SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeString_() *ShopAnythingString_SafeOperators {
 	return &ShopAnythingString_SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string"}
 }
 
-func (x *ShopAnythingQueryBuilder) Bytes() *ShopAnythingBytesSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeBytes() *ShopAnythingBytesSafeOperators {
 	return &ShopAnythingBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bytes"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedDouble() *ShopAnythingRepeatedDoubleSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedDouble() *ShopAnythingRepeatedDoubleSafeOperators {
 	return &ShopAnythingRepeatedDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_double"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedFloat() *ShopAnythingRepeatedFloatSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedFloat() *ShopAnythingRepeatedFloatSafeOperators {
 	return &ShopAnythingRepeatedFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_float"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedInt32() *ShopAnythingRepeatedInt32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedInt32() *ShopAnythingRepeatedInt32SafeOperators {
 	return &ShopAnythingRepeatedInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int32"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedInt64() *ShopAnythingRepeatedInt64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedInt64() *ShopAnythingRepeatedInt64SafeOperators {
 	return &ShopAnythingRepeatedInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int64"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedUint32() *ShopAnythingRepeatedUint32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedUint32() *ShopAnythingRepeatedUint32SafeOperators {
 	return &ShopAnythingRepeatedUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint32"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedUint64() *ShopAnythingRepeatedUint64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedUint64() *ShopAnythingRepeatedUint64SafeOperators {
 	return &ShopAnythingRepeatedUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint64"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedSint32() *ShopAnythingRepeatedSint32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedSint32() *ShopAnythingRepeatedSint32SafeOperators {
 	return &ShopAnythingRepeatedSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint32"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedSint64() *ShopAnythingRepeatedSint64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedSint64() *ShopAnythingRepeatedSint64SafeOperators {
 	return &ShopAnythingRepeatedSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint64"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedFixed32() *ShopAnythingRepeatedFixed32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedFixed32() *ShopAnythingRepeatedFixed32SafeOperators {
 	return &ShopAnythingRepeatedFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed32"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedFixed64() *ShopAnythingRepeatedFixed64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedFixed64() *ShopAnythingRepeatedFixed64SafeOperators {
 	return &ShopAnythingRepeatedFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed64"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedSfixed32() *ShopAnythingRepeatedSfixed32SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedSfixed32() *ShopAnythingRepeatedSfixed32SafeOperators {
 	return &ShopAnythingRepeatedSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed32"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedSfixed64() *ShopAnythingRepeatedSfixed64SafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedSfixed64() *ShopAnythingRepeatedSfixed64SafeOperators {
 	return &ShopAnythingRepeatedSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed64"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedBool() *ShopAnythingRepeatedBoolSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedBool() *ShopAnythingRepeatedBoolSafeOperators {
 	return &ShopAnythingRepeatedBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bool"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedString() *ShopAnythingRepeatedStringSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedString() *ShopAnythingRepeatedStringSafeOperators {
 	return &ShopAnythingRepeatedStringSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_string"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedBytes() *ShopAnythingRepeatedBytesSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedBytes() *ShopAnythingRepeatedBytesSafeOperators {
 	return &ShopAnythingRepeatedBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bytes"}
 }
 
-func (x *ShopAnythingQueryBuilder) RepeatedEnum() *ShopAnythingRepeatedEnumSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeRepeatedEnum() *ShopAnythingRepeatedEnumSafeOperators {
 	return &ShopAnythingRepeatedEnumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_enum"}
 }
 
-func (x *ShopAnythingQueryBuilder) StringMap() *ShopAnythingStringMapSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeStringMap() *ShopAnythingStringMapSafeOperators {
 	return &ShopAnythingStringMapSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string_map"}
 }
 
-func (x *ShopAnythingQueryBuilder) CreatedAt() *ShopAnythingCreatedAtSafeOperators {
+func (x *ShopAnythingQueryBuilder) UnsafeCreatedAt() *ShopAnythingCreatedAtSafeOperators {
 	return &ShopAnythingCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
 }
 
@@ -4360,7 +4360,7 @@ func (x *ShopDBQueryBuilder) Mgr() *ShopMgrQueryBuilder {
 	return &ShopMgrQueryBuilder{tableName: x.tableName, prefix: x.prefix + "5$"}
 }
 
-func (x *ShopMgrQueryBuilder) Id() *ShopMgrIdSafeOperators {
+func (x *ShopMgrQueryBuilder) UnsafeId() *ShopMgrIdSafeOperators {
 	return &ShopMgrIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
 }
 

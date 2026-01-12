@@ -70,7 +70,31 @@ func TestNestedIndexes(t *testing.T) {
 	numId := fields.Unsafe().Numid()
 	require.Equal(t, "pb$numid",
 		numId.column,
-		"bad resolution for medium medium: %s", numId.column,
+		"bad resolution for numid: %s", numId.column,
+	)
+
+	// Test accessing non-indexed nested fields through the Unsafe accessor pattern
+	// zoo_shop.anything.id is NOT indexed - use UnsafeAnything() to access it
+	// (only zoo_shop.anything.sfixed_64 is indexed in city.proto)
+	zooShopAnythingId := fields.ZooShop().UnsafeAnything().Id()
+	require.Equal(t, "pb$11$52$id",
+		zooShopAnythingId.column,
+		"bad resolution for zoo_shop.anything.id via UnsafeAnything(): %s", zooShopAnythingId.column,
+	)
+
+	// zoo_shop.mgr.id is a deeply nested non-indexed field - use UnsafeMgr() to access
+	zooShopMgrId := fields.ZooShop().UnsafeMgr().Id()
+	require.Equal(t, "pb$11$5$id",
+		zooShopMgrId.column,
+		"bad resolution for zoo_shop.mgr.id via UnsafeMgr(): %s", zooShopMgrId.column,
+	)
+
+	// Verify the indexed path still works (for comparison)
+	// zoo_shop.anything.sfixed_64 IS indexed, so it's accessible via the regular Anything() accessor
+	zooShopAnythingSfixed := fields.ZooShop().Anything().Sfixed64()
+	require.Equal(t, "pb$11$52$sfixed_64",
+		zooShopAnythingSfixed.column,
+		"bad resolution for indexed zoo_shop.anything.sfixed_64: %s", zooShopAnythingSfixed.column,
 	)
 }
 

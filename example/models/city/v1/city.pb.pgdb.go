@@ -1438,6 +1438,112 @@ func (x *AttractionsDBQueryBuilder) MediumMedium() *AttractionsMediumMediumSafeO
 	return &AttractionsMediumMediumSafeOperators{tableName: x.tableName, column: "pb$" + "12$medium_oneof"}
 }
 
+type AttractionsPetProfileSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsPetProfileSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsPetProfileSafeOperators) Eq(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsPetProfileSafeOperators) Neq(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsPetProfileSafeOperators) Gt(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsPetProfileSafeOperators) Gte(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsPetProfileSafeOperators) Lt(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsPetProfileSafeOperators) Lte(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsPetProfileSafeOperators) In(v []any) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsPetProfileSafeOperators) NotIn(v []any) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsPetProfileSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsPetProfileSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsPetProfileSafeOperators) Between(start any, end any) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsPetProfileSafeOperators) NotBetween(start any, end any) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsPetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *AttractionsPetProfileSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *AttractionsPetProfileSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *AttractionsPetProfileSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *AttractionsPetProfileSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsPetProfileSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
 type AttractionsPetIdSafeOperators struct {
 	column    string
 	tableName string
@@ -1954,112 +2060,6 @@ func (x *AttractionsPetElapsedSafeOperators) NotBetween(start time.Duration, end
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
-type AttractionsPetProfileSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsPetProfileSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsPetProfileSafeOperators) Eq(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsPetProfileSafeOperators) Neq(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsPetProfileSafeOperators) Gt(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsPetProfileSafeOperators) Gte(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsPetProfileSafeOperators) Lt(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsPetProfileSafeOperators) Lte(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsPetProfileSafeOperators) In(v []any) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsPetProfileSafeOperators) NotIn(v []any) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsPetProfileSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsPetProfileSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsPetProfileSafeOperators) Between(start any, end any) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsPetProfileSafeOperators) NotBetween(start any, end any) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsPetProfileSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *AttractionsPetProfileSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *AttractionsPetProfileSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *AttractionsPetProfileSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *AttractionsPetProfileSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsPetProfileSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
 type AttractionsPetCutenessSafeOperators struct {
 	column    string
 	tableName string
@@ -2506,132 +2506,6 @@ func (x *AttractionsZooShopCreatedAtSafeOperators) Between(start time.Time, end 
 }
 
 func (x *AttractionsZooShopCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsZooShopPaperPagesSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsZooShopPaperPagesSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsZooShopEbookSizeSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) Neq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) Gt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) Gte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) Lt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) Lte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) In(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) NotIn(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) Between(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsZooShopEbookSizeSafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
@@ -5290,6 +5164,132 @@ func (x *AttractionsZooShopAnythingCreatedAtSafeOperators) Between(start time.Ti
 }
 
 func (x *AttractionsZooShopAnythingCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsZooShopPaperPagesSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsZooShopPaperPagesSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsZooShopEbookSizeSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsZooShopEbookSizeSafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
@@ -8642,59 +8642,59 @@ func (x *AttractionsDBQueryBuilder) Pet() *AttractionsPetQueryBuilder {
 	return &AttractionsPetQueryBuilder{tableName: x.tableName, prefix: x.prefix + "10$"}
 }
 
-func (x *AttractionsPetQueryBuilder) Id() *AttractionsPetIdSafeOperators {
-	return &AttractionsPetIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
-}
-
-func (x *AttractionsPetQueryBuilder) CreatedAt() *AttractionsPetCreatedAtSafeOperators {
-	return &AttractionsPetCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
-}
-
-func (x *AttractionsPetQueryBuilder) UpdatedAt() *AttractionsPetUpdatedAtSafeOperators {
-	return &AttractionsPetUpdatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "updated_at"}
-}
-
-func (x *AttractionsPetQueryBuilder) DeletedAt() *AttractionsPetDeletedAtSafeOperators {
-	return &AttractionsPetDeletedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "deleted_at"}
-}
-
-func (x *AttractionsPetQueryBuilder) DisplayName() *AttractionsPetDisplayNameSafeOperators {
-	return &AttractionsPetDisplayNameSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "display_name"}
-}
-
-func (x *AttractionsPetQueryBuilder) Description() *AttractionsPetDescriptionSafeOperators {
-	return &AttractionsPetDescriptionSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "description"}
-}
-
-func (x *AttractionsPetQueryBuilder) SystemBuiltin() *AttractionsPetSystemBuiltinSafeOperators {
-	return &AttractionsPetSystemBuiltinSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "system_builtin"}
-}
-
-func (x *AttractionsPetQueryBuilder) Elapsed() *AttractionsPetElapsedSafeOperators {
-	return &AttractionsPetElapsedSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "elapsed"}
-}
-
 func (x *AttractionsPetQueryBuilder) Profile() *AttractionsPetProfileSafeOperators {
 	return &AttractionsPetProfileSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "profile"}
 }
 
-func (x *AttractionsPetQueryBuilder) Cuteness() *AttractionsPetCutenessSafeOperators {
+func (x *AttractionsPetQueryBuilder) UnsafeId() *AttractionsPetIdSafeOperators {
+	return &AttractionsPetIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+func (x *AttractionsPetQueryBuilder) UnsafeCreatedAt() *AttractionsPetCreatedAtSafeOperators {
+	return &AttractionsPetCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
+}
+
+func (x *AttractionsPetQueryBuilder) UnsafeUpdatedAt() *AttractionsPetUpdatedAtSafeOperators {
+	return &AttractionsPetUpdatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "updated_at"}
+}
+
+func (x *AttractionsPetQueryBuilder) UnsafeDeletedAt() *AttractionsPetDeletedAtSafeOperators {
+	return &AttractionsPetDeletedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "deleted_at"}
+}
+
+func (x *AttractionsPetQueryBuilder) UnsafeDisplayName() *AttractionsPetDisplayNameSafeOperators {
+	return &AttractionsPetDisplayNameSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "display_name"}
+}
+
+func (x *AttractionsPetQueryBuilder) UnsafeDescription() *AttractionsPetDescriptionSafeOperators {
+	return &AttractionsPetDescriptionSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "description"}
+}
+
+func (x *AttractionsPetQueryBuilder) UnsafeSystemBuiltin() *AttractionsPetSystemBuiltinSafeOperators {
+	return &AttractionsPetSystemBuiltinSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "system_builtin"}
+}
+
+func (x *AttractionsPetQueryBuilder) UnsafeElapsed() *AttractionsPetElapsedSafeOperators {
+	return &AttractionsPetElapsedSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "elapsed"}
+}
+
+func (x *AttractionsPetQueryBuilder) UnsafeCuteness() *AttractionsPetCutenessSafeOperators {
 	return &AttractionsPetCutenessSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "cuteness"}
 }
 
-func (x *AttractionsPetQueryBuilder) Price() *AttractionsPetPriceSafeOperators {
+func (x *AttractionsPetQueryBuilder) UnsafePrice() *AttractionsPetPriceSafeOperators {
 	return &AttractionsPetPriceSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "price"}
 }
 
-func (x *AttractionsPetQueryBuilder) VeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame() *AttractionsPetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaameSafeOperators {
+func (x *AttractionsPetQueryBuilder) UnsafeVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame() *AttractionsPetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaameSafeOperators {
 	return &AttractionsPetVeryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaameSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "14"}
 }
 
-func (x *AttractionsPetQueryBuilder) ExtraProfiles() *AttractionsPetExtraProfilesSafeOperators {
+func (x *AttractionsPetQueryBuilder) UnsafeExtraProfiles() *AttractionsPetExtraProfilesSafeOperators {
 	return &AttractionsPetExtraProfilesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "extra_profiles"}
 }
 
-func (x *AttractionsPetQueryBuilder) FieldWithV17CollationOnly() *AttractionsPetFieldWithV17CollationOnlySafeOperators {
+func (x *AttractionsPetQueryBuilder) UnsafeFieldWithV17CollationOnly() *AttractionsPetFieldWithV17CollationOnlySafeOperators {
 	return &AttractionsPetFieldWithV17CollationOnlySafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "field_with_v17_collation_only"}
 }
 
@@ -8711,42 +8711,16 @@ func (x *AttractionsZooShopQueryBuilder) Medium() *AttractionsZooShopMediumSafeO
 	return &AttractionsZooShopMediumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "medium_oneof"}
 }
 
-func (x *AttractionsZooShopQueryBuilder) Id() *AttractionsZooShopIdSafeOperators {
-	return &AttractionsZooShopIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
-}
-
-func (x *AttractionsZooShopQueryBuilder) CreatedAt() *AttractionsZooShopCreatedAtSafeOperators {
-	return &AttractionsZooShopCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
-}
-
 func (x *AttractionsZooShopQueryBuilder) Fur() *AttractionsZooShopFurSafeOperators {
 	return &AttractionsZooShopFurSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fur"}
 }
 
-type AttractionsZooShopPaperQueryBuilder struct {
-	tableName string
-	prefix    string
+func (x *AttractionsZooShopQueryBuilder) UnsafeId() *AttractionsZooShopIdSafeOperators {
+	return &AttractionsZooShopIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
 }
 
-func (x *AttractionsZooShopQueryBuilder) Paper() *AttractionsZooShopPaperQueryBuilder {
-	return &AttractionsZooShopPaperQueryBuilder{tableName: x.tableName, prefix: x.prefix + "50$"}
-}
-
-func (x *AttractionsZooShopPaperQueryBuilder) Pages() *AttractionsZooShopPaperPagesSafeOperators {
-	return &AttractionsZooShopPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
-}
-
-type AttractionsZooShopEbookQueryBuilder struct {
-	tableName string
-	prefix    string
-}
-
-func (x *AttractionsZooShopQueryBuilder) Ebook() *AttractionsZooShopEbookQueryBuilder {
-	return &AttractionsZooShopEbookQueryBuilder{tableName: x.tableName, prefix: x.prefix + "51$"}
-}
-
-func (x *AttractionsZooShopEbookQueryBuilder) Size() *AttractionsZooShopEbookSizeSafeOperators {
-	return &AttractionsZooShopEbookSizeSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "size"}
+func (x *AttractionsZooShopQueryBuilder) UnsafeCreatedAt() *AttractionsZooShopCreatedAtSafeOperators {
+	return &AttractionsZooShopCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
 }
 
 type AttractionsZooShopAnythingQueryBuilder struct {
@@ -8758,152 +8732,319 @@ func (x *AttractionsZooShopQueryBuilder) Anything() *AttractionsZooShopAnythingQ
 	return &AttractionsZooShopAnythingQueryBuilder{tableName: x.tableName, prefix: x.prefix + "52$"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) Id() *AttractionsZooShopAnythingIdSafeOperators {
-	return &AttractionsZooShopAnythingIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Double() *AttractionsZooShopAnythingDoubleSafeOperators {
-	return &AttractionsZooShopAnythingDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "double"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Float() *AttractionsZooShopAnythingFloatSafeOperators {
-	return &AttractionsZooShopAnythingFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "float"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Int32() *AttractionsZooShopAnythingInt32SafeOperators {
-	return &AttractionsZooShopAnythingInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_32"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Int64() *AttractionsZooShopAnythingInt64SafeOperators {
-	return &AttractionsZooShopAnythingInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_64"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Uint32() *AttractionsZooShopAnythingUint32SafeOperators {
-	return &AttractionsZooShopAnythingUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_32"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Uint64() *AttractionsZooShopAnythingUint64SafeOperators {
-	return &AttractionsZooShopAnythingUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_64"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Sint32() *AttractionsZooShopAnythingSint32SafeOperators {
-	return &AttractionsZooShopAnythingSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_32"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Sint64() *AttractionsZooShopAnythingSint64SafeOperators {
-	return &AttractionsZooShopAnythingSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_64"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Fixed32() *AttractionsZooShopAnythingFixed32SafeOperators {
-	return &AttractionsZooShopAnythingFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_32"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Fixed64() *AttractionsZooShopAnythingFixed64SafeOperators {
-	return &AttractionsZooShopAnythingFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_64"}
-}
-
-func (x *AttractionsZooShopAnythingQueryBuilder) Sfixed32() *AttractionsZooShopAnythingSfixed32SafeOperators {
-	return &AttractionsZooShopAnythingSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_32"}
-}
-
 func (x *AttractionsZooShopAnythingQueryBuilder) Sfixed64() *AttractionsZooShopAnythingSfixed64SafeOperators {
 	return &AttractionsZooShopAnythingSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_64"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) Bool() *AttractionsZooShopAnythingBoolSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeId() *AttractionsZooShopAnythingIdSafeOperators {
+	return &AttractionsZooShopAnythingIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeDouble() *AttractionsZooShopAnythingDoubleSafeOperators {
+	return &AttractionsZooShopAnythingDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "double"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeFloat() *AttractionsZooShopAnythingFloatSafeOperators {
+	return &AttractionsZooShopAnythingFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "float"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeInt32() *AttractionsZooShopAnythingInt32SafeOperators {
+	return &AttractionsZooShopAnythingInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_32"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeInt64() *AttractionsZooShopAnythingInt64SafeOperators {
+	return &AttractionsZooShopAnythingInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_64"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeUint32() *AttractionsZooShopAnythingUint32SafeOperators {
+	return &AttractionsZooShopAnythingUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_32"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeUint64() *AttractionsZooShopAnythingUint64SafeOperators {
+	return &AttractionsZooShopAnythingUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_64"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeSint32() *AttractionsZooShopAnythingSint32SafeOperators {
+	return &AttractionsZooShopAnythingSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_32"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeSint64() *AttractionsZooShopAnythingSint64SafeOperators {
+	return &AttractionsZooShopAnythingSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_64"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeFixed32() *AttractionsZooShopAnythingFixed32SafeOperators {
+	return &AttractionsZooShopAnythingFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_32"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeFixed64() *AttractionsZooShopAnythingFixed64SafeOperators {
+	return &AttractionsZooShopAnythingFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_64"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeSfixed32() *AttractionsZooShopAnythingSfixed32SafeOperators {
+	return &AttractionsZooShopAnythingSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_32"}
+}
+
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeBool() *AttractionsZooShopAnythingBoolSafeOperators {
 	return &AttractionsZooShopAnythingBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bool"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) String_() *AttractionsZooShopAnythingString_SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeString_() *AttractionsZooShopAnythingString_SafeOperators {
 	return &AttractionsZooShopAnythingString_SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) Bytes() *AttractionsZooShopAnythingBytesSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeBytes() *AttractionsZooShopAnythingBytesSafeOperators {
 	return &AttractionsZooShopAnythingBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bytes"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedDouble() *AttractionsZooShopAnythingRepeatedDoubleSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedDouble() *AttractionsZooShopAnythingRepeatedDoubleSafeOperators {
 	return &AttractionsZooShopAnythingRepeatedDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_double"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedFloat() *AttractionsZooShopAnythingRepeatedFloatSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedFloat() *AttractionsZooShopAnythingRepeatedFloatSafeOperators {
 	return &AttractionsZooShopAnythingRepeatedFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_float"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedInt32() *AttractionsZooShopAnythingRepeatedInt32SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedInt32() *AttractionsZooShopAnythingRepeatedInt32SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int32"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedInt64() *AttractionsZooShopAnythingRepeatedInt64SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedInt64() *AttractionsZooShopAnythingRepeatedInt64SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int64"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedUint32() *AttractionsZooShopAnythingRepeatedUint32SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedUint32() *AttractionsZooShopAnythingRepeatedUint32SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint32"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedUint64() *AttractionsZooShopAnythingRepeatedUint64SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedUint64() *AttractionsZooShopAnythingRepeatedUint64SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint64"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedSint32() *AttractionsZooShopAnythingRepeatedSint32SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedSint32() *AttractionsZooShopAnythingRepeatedSint32SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint32"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedSint64() *AttractionsZooShopAnythingRepeatedSint64SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedSint64() *AttractionsZooShopAnythingRepeatedSint64SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint64"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedFixed32() *AttractionsZooShopAnythingRepeatedFixed32SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedFixed32() *AttractionsZooShopAnythingRepeatedFixed32SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed32"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedFixed64() *AttractionsZooShopAnythingRepeatedFixed64SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedFixed64() *AttractionsZooShopAnythingRepeatedFixed64SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed64"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedSfixed32() *AttractionsZooShopAnythingRepeatedSfixed32SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedSfixed32() *AttractionsZooShopAnythingRepeatedSfixed32SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed32"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedSfixed64() *AttractionsZooShopAnythingRepeatedSfixed64SafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedSfixed64() *AttractionsZooShopAnythingRepeatedSfixed64SafeOperators {
 	return &AttractionsZooShopAnythingRepeatedSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed64"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedBool() *AttractionsZooShopAnythingRepeatedBoolSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedBool() *AttractionsZooShopAnythingRepeatedBoolSafeOperators {
 	return &AttractionsZooShopAnythingRepeatedBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bool"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedString() *AttractionsZooShopAnythingRepeatedStringSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedString() *AttractionsZooShopAnythingRepeatedStringSafeOperators {
 	return &AttractionsZooShopAnythingRepeatedStringSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_string"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedBytes() *AttractionsZooShopAnythingRepeatedBytesSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedBytes() *AttractionsZooShopAnythingRepeatedBytesSafeOperators {
 	return &AttractionsZooShopAnythingRepeatedBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bytes"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) RepeatedEnum() *AttractionsZooShopAnythingRepeatedEnumSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeRepeatedEnum() *AttractionsZooShopAnythingRepeatedEnumSafeOperators {
 	return &AttractionsZooShopAnythingRepeatedEnumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_enum"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) StringMap() *AttractionsZooShopAnythingStringMapSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeStringMap() *AttractionsZooShopAnythingStringMapSafeOperators {
 	return &AttractionsZooShopAnythingStringMapSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string_map"}
 }
 
-func (x *AttractionsZooShopAnythingQueryBuilder) CreatedAt() *AttractionsZooShopAnythingCreatedAtSafeOperators {
+func (x *AttractionsZooShopAnythingQueryBuilder) UnsafeCreatedAt() *AttractionsZooShopAnythingCreatedAtSafeOperators {
 	return &AttractionsZooShopAnythingCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
 }
 
-type AttractionsZooShopMgrQueryBuilder struct {
+type AttractionsZooShopPaperUnsafeQueryBuilder struct {
 	tableName string
 	prefix    string
 }
 
-func (x *AttractionsZooShopQueryBuilder) Mgr() *AttractionsZooShopMgrQueryBuilder {
-	return &AttractionsZooShopMgrQueryBuilder{tableName: x.tableName, prefix: x.prefix + "5$"}
+func (x *AttractionsZooShopQueryBuilder) UnsafePaper() *AttractionsZooShopPaperUnsafeQueryBuilder {
+	return &AttractionsZooShopPaperUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "50$"}
 }
 
-func (x *AttractionsZooShopMgrQueryBuilder) Id() *AttractionsZooShopMgrIdSafeOperators {
+func (x *AttractionsZooShopPaperUnsafeQueryBuilder) Pages() *AttractionsZooShopPaperPagesSafeOperators {
+	return &AttractionsZooShopPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
+}
+
+type AttractionsZooShopEbookUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsZooShopQueryBuilder) UnsafeEbook() *AttractionsZooShopEbookUnsafeQueryBuilder {
+	return &AttractionsZooShopEbookUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "51$"}
+}
+
+func (x *AttractionsZooShopEbookUnsafeQueryBuilder) Size() *AttractionsZooShopEbookSizeSafeOperators {
+	return &AttractionsZooShopEbookSizeSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "size"}
+}
+
+type AttractionsZooShopAnythingUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsZooShopQueryBuilder) UnsafeAnything() *AttractionsZooShopAnythingUnsafeQueryBuilder {
+	return &AttractionsZooShopAnythingUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "52$"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Id() *AttractionsZooShopAnythingIdSafeOperators {
+	return &AttractionsZooShopAnythingIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Double() *AttractionsZooShopAnythingDoubleSafeOperators {
+	return &AttractionsZooShopAnythingDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "double"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Float() *AttractionsZooShopAnythingFloatSafeOperators {
+	return &AttractionsZooShopAnythingFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "float"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Int32() *AttractionsZooShopAnythingInt32SafeOperators {
+	return &AttractionsZooShopAnythingInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Int64() *AttractionsZooShopAnythingInt64SafeOperators {
+	return &AttractionsZooShopAnythingInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Uint32() *AttractionsZooShopAnythingUint32SafeOperators {
+	return &AttractionsZooShopAnythingUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Uint64() *AttractionsZooShopAnythingUint64SafeOperators {
+	return &AttractionsZooShopAnythingUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Sint32() *AttractionsZooShopAnythingSint32SafeOperators {
+	return &AttractionsZooShopAnythingSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Sint64() *AttractionsZooShopAnythingSint64SafeOperators {
+	return &AttractionsZooShopAnythingSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Fixed32() *AttractionsZooShopAnythingFixed32SafeOperators {
+	return &AttractionsZooShopAnythingFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Fixed64() *AttractionsZooShopAnythingFixed64SafeOperators {
+	return &AttractionsZooShopAnythingFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Sfixed32() *AttractionsZooShopAnythingSfixed32SafeOperators {
+	return &AttractionsZooShopAnythingSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Bool() *AttractionsZooShopAnythingBoolSafeOperators {
+	return &AttractionsZooShopAnythingBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bool"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) String_() *AttractionsZooShopAnythingString_SafeOperators {
+	return &AttractionsZooShopAnythingString_SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) Bytes() *AttractionsZooShopAnythingBytesSafeOperators {
+	return &AttractionsZooShopAnythingBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bytes"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedDouble() *AttractionsZooShopAnythingRepeatedDoubleSafeOperators {
+	return &AttractionsZooShopAnythingRepeatedDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_double"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedFloat() *AttractionsZooShopAnythingRepeatedFloatSafeOperators {
+	return &AttractionsZooShopAnythingRepeatedFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_float"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedInt32() *AttractionsZooShopAnythingRepeatedInt32SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedInt64() *AttractionsZooShopAnythingRepeatedInt64SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedUint32() *AttractionsZooShopAnythingRepeatedUint32SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedUint64() *AttractionsZooShopAnythingRepeatedUint64SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedSint32() *AttractionsZooShopAnythingRepeatedSint32SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedSint64() *AttractionsZooShopAnythingRepeatedSint64SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedFixed32() *AttractionsZooShopAnythingRepeatedFixed32SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedFixed64() *AttractionsZooShopAnythingRepeatedFixed64SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedSfixed32() *AttractionsZooShopAnythingRepeatedSfixed32SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed32"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedSfixed64() *AttractionsZooShopAnythingRepeatedSfixed64SafeOperators {
+	return &AttractionsZooShopAnythingRepeatedSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed64"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedBool() *AttractionsZooShopAnythingRepeatedBoolSafeOperators {
+	return &AttractionsZooShopAnythingRepeatedBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bool"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedString() *AttractionsZooShopAnythingRepeatedStringSafeOperators {
+	return &AttractionsZooShopAnythingRepeatedStringSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_string"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedBytes() *AttractionsZooShopAnythingRepeatedBytesSafeOperators {
+	return &AttractionsZooShopAnythingRepeatedBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bytes"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) RepeatedEnum() *AttractionsZooShopAnythingRepeatedEnumSafeOperators {
+	return &AttractionsZooShopAnythingRepeatedEnumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_enum"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) StringMap() *AttractionsZooShopAnythingStringMapSafeOperators {
+	return &AttractionsZooShopAnythingStringMapSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string_map"}
+}
+
+func (x *AttractionsZooShopAnythingUnsafeQueryBuilder) CreatedAt() *AttractionsZooShopAnythingCreatedAtSafeOperators {
+	return &AttractionsZooShopAnythingCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
+}
+
+type AttractionsZooShopMgrUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsZooShopQueryBuilder) UnsafeMgr() *AttractionsZooShopMgrUnsafeQueryBuilder {
+	return &AttractionsZooShopMgrUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "5$"}
+}
+
+func (x *AttractionsZooShopMgrUnsafeQueryBuilder) Id() *AttractionsZooShopMgrIdSafeOperators {
 	return &AttractionsZooShopMgrIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
 }
 
@@ -8920,198 +9061,198 @@ func (x *AttractionsMediumQueryBuilder) Medium() *AttractionsMediumMediumSafeOpe
 	return &AttractionsMediumMediumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "medium_oneof"}
 }
 
-func (x *AttractionsMediumQueryBuilder) Id() *AttractionsMediumIdSafeOperators {
+func (x *AttractionsMediumQueryBuilder) UnsafeId() *AttractionsMediumIdSafeOperators {
 	return &AttractionsMediumIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
 }
 
-func (x *AttractionsMediumQueryBuilder) CreatedAt() *AttractionsMediumCreatedAtSafeOperators {
+func (x *AttractionsMediumQueryBuilder) UnsafeCreatedAt() *AttractionsMediumCreatedAtSafeOperators {
 	return &AttractionsMediumCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
 }
 
-func (x *AttractionsMediumQueryBuilder) Fur() *AttractionsMediumFurSafeOperators {
+func (x *AttractionsMediumQueryBuilder) UnsafeFur() *AttractionsMediumFurSafeOperators {
 	return &AttractionsMediumFurSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fur"}
 }
 
-type AttractionsMediumPaperQueryBuilder struct {
+type AttractionsMediumPaperUnsafeQueryBuilder struct {
 	tableName string
 	prefix    string
 }
 
-func (x *AttractionsMediumQueryBuilder) Paper() *AttractionsMediumPaperQueryBuilder {
-	return &AttractionsMediumPaperQueryBuilder{tableName: x.tableName, prefix: x.prefix + "50$"}
+func (x *AttractionsMediumQueryBuilder) UnsafePaper() *AttractionsMediumPaperUnsafeQueryBuilder {
+	return &AttractionsMediumPaperUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "50$"}
 }
 
-func (x *AttractionsMediumPaperQueryBuilder) Pages() *AttractionsMediumPaperPagesSafeOperators {
+func (x *AttractionsMediumPaperUnsafeQueryBuilder) Pages() *AttractionsMediumPaperPagesSafeOperators {
 	return &AttractionsMediumPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
 }
 
-type AttractionsMediumEbookQueryBuilder struct {
+type AttractionsMediumEbookUnsafeQueryBuilder struct {
 	tableName string
 	prefix    string
 }
 
-func (x *AttractionsMediumQueryBuilder) Ebook() *AttractionsMediumEbookQueryBuilder {
-	return &AttractionsMediumEbookQueryBuilder{tableName: x.tableName, prefix: x.prefix + "51$"}
+func (x *AttractionsMediumQueryBuilder) UnsafeEbook() *AttractionsMediumEbookUnsafeQueryBuilder {
+	return &AttractionsMediumEbookUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "51$"}
 }
 
-func (x *AttractionsMediumEbookQueryBuilder) Size() *AttractionsMediumEbookSizeSafeOperators {
+func (x *AttractionsMediumEbookUnsafeQueryBuilder) Size() *AttractionsMediumEbookSizeSafeOperators {
 	return &AttractionsMediumEbookSizeSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "size"}
 }
 
-type AttractionsMediumAnythingQueryBuilder struct {
+type AttractionsMediumAnythingUnsafeQueryBuilder struct {
 	tableName string
 	prefix    string
 }
 
-func (x *AttractionsMediumQueryBuilder) Anything() *AttractionsMediumAnythingQueryBuilder {
-	return &AttractionsMediumAnythingQueryBuilder{tableName: x.tableName, prefix: x.prefix + "52$"}
+func (x *AttractionsMediumQueryBuilder) UnsafeAnything() *AttractionsMediumAnythingUnsafeQueryBuilder {
+	return &AttractionsMediumAnythingUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "52$"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Id() *AttractionsMediumAnythingIdSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Id() *AttractionsMediumAnythingIdSafeOperators {
 	return &AttractionsMediumAnythingIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Double() *AttractionsMediumAnythingDoubleSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Double() *AttractionsMediumAnythingDoubleSafeOperators {
 	return &AttractionsMediumAnythingDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "double"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Float() *AttractionsMediumAnythingFloatSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Float() *AttractionsMediumAnythingFloatSafeOperators {
 	return &AttractionsMediumAnythingFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "float"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Int32() *AttractionsMediumAnythingInt32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Int32() *AttractionsMediumAnythingInt32SafeOperators {
 	return &AttractionsMediumAnythingInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Int64() *AttractionsMediumAnythingInt64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Int64() *AttractionsMediumAnythingInt64SafeOperators {
 	return &AttractionsMediumAnythingInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Uint32() *AttractionsMediumAnythingUint32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Uint32() *AttractionsMediumAnythingUint32SafeOperators {
 	return &AttractionsMediumAnythingUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Uint64() *AttractionsMediumAnythingUint64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Uint64() *AttractionsMediumAnythingUint64SafeOperators {
 	return &AttractionsMediumAnythingUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Sint32() *AttractionsMediumAnythingSint32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sint32() *AttractionsMediumAnythingSint32SafeOperators {
 	return &AttractionsMediumAnythingSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Sint64() *AttractionsMediumAnythingSint64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sint64() *AttractionsMediumAnythingSint64SafeOperators {
 	return &AttractionsMediumAnythingSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Fixed32() *AttractionsMediumAnythingFixed32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Fixed32() *AttractionsMediumAnythingFixed32SafeOperators {
 	return &AttractionsMediumAnythingFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Fixed64() *AttractionsMediumAnythingFixed64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Fixed64() *AttractionsMediumAnythingFixed64SafeOperators {
 	return &AttractionsMediumAnythingFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Sfixed32() *AttractionsMediumAnythingSfixed32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sfixed32() *AttractionsMediumAnythingSfixed32SafeOperators {
 	return &AttractionsMediumAnythingSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Sfixed64() *AttractionsMediumAnythingSfixed64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sfixed64() *AttractionsMediumAnythingSfixed64SafeOperators {
 	return &AttractionsMediumAnythingSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Bool() *AttractionsMediumAnythingBoolSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Bool() *AttractionsMediumAnythingBoolSafeOperators {
 	return &AttractionsMediumAnythingBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bool"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) String_() *AttractionsMediumAnythingString_SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) String_() *AttractionsMediumAnythingString_SafeOperators {
 	return &AttractionsMediumAnythingString_SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) Bytes() *AttractionsMediumAnythingBytesSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Bytes() *AttractionsMediumAnythingBytesSafeOperators {
 	return &AttractionsMediumAnythingBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bytes"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedDouble() *AttractionsMediumAnythingRepeatedDoubleSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedDouble() *AttractionsMediumAnythingRepeatedDoubleSafeOperators {
 	return &AttractionsMediumAnythingRepeatedDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_double"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedFloat() *AttractionsMediumAnythingRepeatedFloatSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFloat() *AttractionsMediumAnythingRepeatedFloatSafeOperators {
 	return &AttractionsMediumAnythingRepeatedFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_float"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedInt32() *AttractionsMediumAnythingRepeatedInt32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedInt32() *AttractionsMediumAnythingRepeatedInt32SafeOperators {
 	return &AttractionsMediumAnythingRepeatedInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedInt64() *AttractionsMediumAnythingRepeatedInt64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedInt64() *AttractionsMediumAnythingRepeatedInt64SafeOperators {
 	return &AttractionsMediumAnythingRepeatedInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedUint32() *AttractionsMediumAnythingRepeatedUint32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedUint32() *AttractionsMediumAnythingRepeatedUint32SafeOperators {
 	return &AttractionsMediumAnythingRepeatedUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedUint64() *AttractionsMediumAnythingRepeatedUint64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedUint64() *AttractionsMediumAnythingRepeatedUint64SafeOperators {
 	return &AttractionsMediumAnythingRepeatedUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedSint32() *AttractionsMediumAnythingRepeatedSint32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSint32() *AttractionsMediumAnythingRepeatedSint32SafeOperators {
 	return &AttractionsMediumAnythingRepeatedSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedSint64() *AttractionsMediumAnythingRepeatedSint64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSint64() *AttractionsMediumAnythingRepeatedSint64SafeOperators {
 	return &AttractionsMediumAnythingRepeatedSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedFixed32() *AttractionsMediumAnythingRepeatedFixed32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFixed32() *AttractionsMediumAnythingRepeatedFixed32SafeOperators {
 	return &AttractionsMediumAnythingRepeatedFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedFixed64() *AttractionsMediumAnythingRepeatedFixed64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFixed64() *AttractionsMediumAnythingRepeatedFixed64SafeOperators {
 	return &AttractionsMediumAnythingRepeatedFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedSfixed32() *AttractionsMediumAnythingRepeatedSfixed32SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSfixed32() *AttractionsMediumAnythingRepeatedSfixed32SafeOperators {
 	return &AttractionsMediumAnythingRepeatedSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed32"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedSfixed64() *AttractionsMediumAnythingRepeatedSfixed64SafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSfixed64() *AttractionsMediumAnythingRepeatedSfixed64SafeOperators {
 	return &AttractionsMediumAnythingRepeatedSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed64"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedBool() *AttractionsMediumAnythingRepeatedBoolSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedBool() *AttractionsMediumAnythingRepeatedBoolSafeOperators {
 	return &AttractionsMediumAnythingRepeatedBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bool"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedString() *AttractionsMediumAnythingRepeatedStringSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedString() *AttractionsMediumAnythingRepeatedStringSafeOperators {
 	return &AttractionsMediumAnythingRepeatedStringSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_string"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedBytes() *AttractionsMediumAnythingRepeatedBytesSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedBytes() *AttractionsMediumAnythingRepeatedBytesSafeOperators {
 	return &AttractionsMediumAnythingRepeatedBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bytes"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) RepeatedEnum() *AttractionsMediumAnythingRepeatedEnumSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedEnum() *AttractionsMediumAnythingRepeatedEnumSafeOperators {
 	return &AttractionsMediumAnythingRepeatedEnumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_enum"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) StringMap() *AttractionsMediumAnythingStringMapSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) StringMap() *AttractionsMediumAnythingStringMapSafeOperators {
 	return &AttractionsMediumAnythingStringMapSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string_map"}
 }
 
-func (x *AttractionsMediumAnythingQueryBuilder) CreatedAt() *AttractionsMediumAnythingCreatedAtSafeOperators {
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) CreatedAt() *AttractionsMediumAnythingCreatedAtSafeOperators {
 	return &AttractionsMediumAnythingCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
 }
 
-type AttractionsMediumMgrQueryBuilder struct {
+type AttractionsMediumMgrUnsafeQueryBuilder struct {
 	tableName string
 	prefix    string
 }
 
-func (x *AttractionsMediumQueryBuilder) Mgr() *AttractionsMediumMgrQueryBuilder {
-	return &AttractionsMediumMgrQueryBuilder{tableName: x.tableName, prefix: x.prefix + "5$"}
+func (x *AttractionsMediumQueryBuilder) UnsafeMgr() *AttractionsMediumMgrUnsafeQueryBuilder {
+	return &AttractionsMediumMgrUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "5$"}
 }
 
-func (x *AttractionsMediumMgrQueryBuilder) Id() *AttractionsMediumMgrIdSafeOperators {
+func (x *AttractionsMediumMgrUnsafeQueryBuilder) Id() *AttractionsMediumMgrIdSafeOperators {
 	return &AttractionsMediumMgrIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
 }
