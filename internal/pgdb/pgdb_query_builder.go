@@ -320,9 +320,9 @@ func (module *Module) getNestedQueryBuilders(ctx pgsgo.Context, m pgs.Message, i
 }
 
 // separateIndexedAndUnsafeFields separates nested fields into indexed (safe) and non-indexed (unsafe) categories.
-func separateIndexedAndUnsafeFields(fields []*nestedSafeFieldContext, indexedFieldPaths map[string]bool) (indexed, unsafe []*nestedSafeFieldContext) {
-	indexed = make([]*nestedSafeFieldContext, 0)
-	unsafe = make([]*nestedSafeFieldContext, 0)
+func separateIndexedAndUnsafeFields(fields []*nestedSafeFieldContext, indexedFieldPaths map[string]bool) ([]*nestedSafeFieldContext, []*nestedSafeFieldContext) {
+	indexed := make([]*nestedSafeFieldContext, 0)
+	unsafe := make([]*nestedSafeFieldContext, 0)
 	for _, f := range fields {
 		if indexedFieldPaths[f.ColName] {
 			indexed = append(indexed, f)
@@ -352,9 +352,9 @@ func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 	goNamePrefix string,
 	allFields []*fieldContext,
 	indexedFieldPaths map[string]bool,
-) (children, unsafeChildren []*nestedQueryBuilderContext) {
-	children = make([]*nestedQueryBuilderContext, 0)
-	unsafeChildren = make([]*nestedQueryBuilderContext, 0)
+) ([]*nestedQueryBuilderContext, []*nestedQueryBuilderContext) {
+	children := make([]*nestedQueryBuilderContext, 0)
+	unsafeChildren := make([]*nestedQueryBuilderContext, 0)
 
 	for _, field := range m.Fields() {
 		if field.Type().ProtoType() != pgs.MessageT {
