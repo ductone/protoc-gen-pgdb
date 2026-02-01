@@ -96,9 +96,16 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 			return err
 		}
 
-		err = module.renderQueryBuilder(ctx, buf, in, m, ix)
-		if err != nil {
-			return err
+		// Skip query builder generation for nested_only messages.
+		// They have no table and are only accessible through parent messages,
+		// which generate their own nested query builder types.
+		// Generating standalone query builders for nested_only messages can cause
+		// type name collisions when ParentName + FieldName == NestedOnlyMsgName.
+		if !fext.GetNestedOnly() {
+			err = module.renderQueryBuilder(ctx, buf, in, m, ix)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

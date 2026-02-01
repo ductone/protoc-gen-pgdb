@@ -83,4 +83,34 @@ message Attractions {
     models.zoo.v1.Shop zoo_shop = 11;
   }
   models.zoo.v1.Shop medium = 12;
+  // This field tests the nested_only collision fix:
+  // "Attractions" + "Config" = "AttractionsConfig" (same as the message type name)
+  // Without the fix, this would cause duplicate type definitions.
+  AttractionsConfig config = 13;
+}
+
+// A top-level nested_only message with a nested sub-message.
+// Named to collide when embedded in Attractions: "Attractions" + "Config" = "AttractionsConfig"
+message AttractionsConfig {
+  option (pgdb.v1.msg).nested_only = true;
+
+  message Detail {
+    option (pgdb.v1.msg).nested_only = true;
+    string info = 1;
+  }
+  Detail detail = 1;
+  string name = 2;
+}
+
+// A second parent that also embeds AttractionsConfig (tests multi-embed scenario).
+// "AttractionsV2" + "Config" = "AttractionsV2Config" which does NOT collide with "AttractionsConfig".
+message AttractionsV2 {
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["tenant_id"]
+    sk_fields: ["id"]
+  };
+  string tenant_id = 1;
+  string id = 2;
+  AttractionsConfig config = 3;
+  google.protobuf.Timestamp created_at = 4;
 }
