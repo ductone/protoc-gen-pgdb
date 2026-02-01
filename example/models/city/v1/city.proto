@@ -114,3 +114,49 @@ message AttractionsV2 {
   AttractionsConfig config = 3;
   google.protobuf.Timestamp created_at = 4;
 }
+
+// Test case for nested_only message with oneof embedded through multiple layers.
+// This reproduces a bug where unsafe query builder children have wrong ParentTypeName.
+message NestedOnlyWithOneof {
+  option (pgdb.v1.msg).nested_only = true;
+
+  message ChoiceA {
+    option (pgdb.v1.msg).nested_only = true;
+    string value_a = 1;
+  }
+  message ChoiceB {
+    option (pgdb.v1.msg).nested_only = true;
+    int32 value_b = 1;
+  }
+
+  oneof selector {
+    ChoiceA choice_a = 1;
+    ChoiceB choice_b = 2;
+  }
+}
+
+// Middle layer - has database table, contains nested_only field with oneof
+message NestedOnlyMiddle {
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["tenant_id"]
+    sk_fields: ["id"]
+  };
+  string tenant_id = 1;
+  string id = 2;
+  NestedOnlyWithOneof oneof_field = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// Outer wrapper - embeds NestedOnlyMiddle to create the multi-layer nesting
+message NestedOnlyWrapper {
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["tenant_id"]
+    sk_fields: ["id"]
+  };
+  string tenant_id = 1;
+  string id = 2;
+  NestedOnlyMiddle middle = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}

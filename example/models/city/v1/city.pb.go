@@ -523,6 +523,473 @@ func (b0 AttractionsV2_builder) Build() *AttractionsV2 {
 	return m0
 }
 
+// Test case for nested_only message with oneof embedded through multiple layers.
+// This reproduces a bug where unsafe query builder children have wrong ParentTypeName.
+type NestedOnlyWithOneof struct {
+	state               protoimpl.MessageState         `protogen:"opaque.v1"`
+	xxx_hidden_Selector isNestedOnlyWithOneof_Selector `protobuf_oneof:"selector"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *NestedOnlyWithOneof) Reset() {
+	*x = NestedOnlyWithOneof{}
+	mi := &file_models_city_v1_city_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NestedOnlyWithOneof) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NestedOnlyWithOneof) ProtoMessage() {}
+
+func (x *NestedOnlyWithOneof) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *NestedOnlyWithOneof) GetChoiceA() *NestedOnlyWithOneof_ChoiceA {
+	if x != nil {
+		if x, ok := x.xxx_hidden_Selector.(*nestedOnlyWithOneof_ChoiceA_); ok {
+			return x.ChoiceA
+		}
+	}
+	return nil
+}
+
+func (x *NestedOnlyWithOneof) GetChoiceB() *NestedOnlyWithOneof_ChoiceB {
+	if x != nil {
+		if x, ok := x.xxx_hidden_Selector.(*nestedOnlyWithOneof_ChoiceB_); ok {
+			return x.ChoiceB
+		}
+	}
+	return nil
+}
+
+func (x *NestedOnlyWithOneof) SetChoiceA(v *NestedOnlyWithOneof_ChoiceA) {
+	if v == nil {
+		x.xxx_hidden_Selector = nil
+		return
+	}
+	x.xxx_hidden_Selector = &nestedOnlyWithOneof_ChoiceA_{v}
+}
+
+func (x *NestedOnlyWithOneof) SetChoiceB(v *NestedOnlyWithOneof_ChoiceB) {
+	if v == nil {
+		x.xxx_hidden_Selector = nil
+		return
+	}
+	x.xxx_hidden_Selector = &nestedOnlyWithOneof_ChoiceB_{v}
+}
+
+func (x *NestedOnlyWithOneof) HasSelector() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Selector != nil
+}
+
+func (x *NestedOnlyWithOneof) HasChoiceA() bool {
+	if x == nil {
+		return false
+	}
+	_, ok := x.xxx_hidden_Selector.(*nestedOnlyWithOneof_ChoiceA_)
+	return ok
+}
+
+func (x *NestedOnlyWithOneof) HasChoiceB() bool {
+	if x == nil {
+		return false
+	}
+	_, ok := x.xxx_hidden_Selector.(*nestedOnlyWithOneof_ChoiceB_)
+	return ok
+}
+
+func (x *NestedOnlyWithOneof) ClearSelector() {
+	x.xxx_hidden_Selector = nil
+}
+
+func (x *NestedOnlyWithOneof) ClearChoiceA() {
+	if _, ok := x.xxx_hidden_Selector.(*nestedOnlyWithOneof_ChoiceA_); ok {
+		x.xxx_hidden_Selector = nil
+	}
+}
+
+func (x *NestedOnlyWithOneof) ClearChoiceB() {
+	if _, ok := x.xxx_hidden_Selector.(*nestedOnlyWithOneof_ChoiceB_); ok {
+		x.xxx_hidden_Selector = nil
+	}
+}
+
+const NestedOnlyWithOneof_Selector_not_set_case case_NestedOnlyWithOneof_Selector = 0
+const NestedOnlyWithOneof_ChoiceA_case case_NestedOnlyWithOneof_Selector = 1
+const NestedOnlyWithOneof_ChoiceB_case case_NestedOnlyWithOneof_Selector = 2
+
+func (x *NestedOnlyWithOneof) WhichSelector() case_NestedOnlyWithOneof_Selector {
+	if x == nil {
+		return NestedOnlyWithOneof_Selector_not_set_case
+	}
+	switch x.xxx_hidden_Selector.(type) {
+	case *nestedOnlyWithOneof_ChoiceA_:
+		return NestedOnlyWithOneof_ChoiceA_case
+	case *nestedOnlyWithOneof_ChoiceB_:
+		return NestedOnlyWithOneof_ChoiceB_case
+	default:
+		return NestedOnlyWithOneof_Selector_not_set_case
+	}
+}
+
+type NestedOnlyWithOneof_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	// Fields of oneof xxx_hidden_Selector:
+	ChoiceA *NestedOnlyWithOneof_ChoiceA
+	ChoiceB *NestedOnlyWithOneof_ChoiceB
+	// -- end of xxx_hidden_Selector
+}
+
+func (b0 NestedOnlyWithOneof_builder) Build() *NestedOnlyWithOneof {
+	m0 := &NestedOnlyWithOneof{}
+	b, x := &b0, m0
+	_, _ = b, x
+	if b.ChoiceA != nil {
+		x.xxx_hidden_Selector = &nestedOnlyWithOneof_ChoiceA_{b.ChoiceA}
+	}
+	if b.ChoiceB != nil {
+		x.xxx_hidden_Selector = &nestedOnlyWithOneof_ChoiceB_{b.ChoiceB}
+	}
+	return m0
+}
+
+type case_NestedOnlyWithOneof_Selector protoreflect.FieldNumber
+
+func (x case_NestedOnlyWithOneof_Selector) String() string {
+	md := file_models_city_v1_city_proto_msgTypes[3].Descriptor()
+	if x == 0 {
+		return "not set"
+	}
+	return protoimpl.X.MessageFieldStringOf(md, protoreflect.FieldNumber(x))
+}
+
+type isNestedOnlyWithOneof_Selector interface {
+	isNestedOnlyWithOneof_Selector()
+}
+
+type nestedOnlyWithOneof_ChoiceA_ struct {
+	ChoiceA *NestedOnlyWithOneof_ChoiceA `protobuf:"bytes,1,opt,name=choice_a,json=choiceA,proto3,oneof"`
+}
+
+type nestedOnlyWithOneof_ChoiceB_ struct {
+	ChoiceB *NestedOnlyWithOneof_ChoiceB `protobuf:"bytes,2,opt,name=choice_b,json=choiceB,proto3,oneof"`
+}
+
+func (*nestedOnlyWithOneof_ChoiceA_) isNestedOnlyWithOneof_Selector() {}
+
+func (*nestedOnlyWithOneof_ChoiceB_) isNestedOnlyWithOneof_Selector() {}
+
+// Middle layer - has database table, contains nested_only field with oneof
+type NestedOnlyMiddle struct {
+	state                 protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_TenantId   string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3"`
+	xxx_hidden_Id         string                 `protobuf:"bytes,2,opt,name=id,proto3"`
+	xxx_hidden_OneofField *NestedOnlyWithOneof   `protobuf:"bytes,3,opt,name=oneof_field,json=oneofField,proto3"`
+	xxx_hidden_CreatedAt  *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3"`
+	xxx_hidden_UpdatedAt  *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *NestedOnlyMiddle) Reset() {
+	*x = NestedOnlyMiddle{}
+	mi := &file_models_city_v1_city_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NestedOnlyMiddle) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NestedOnlyMiddle) ProtoMessage() {}
+
+func (x *NestedOnlyMiddle) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *NestedOnlyMiddle) GetTenantId() string {
+	if x != nil {
+		return x.xxx_hidden_TenantId
+	}
+	return ""
+}
+
+func (x *NestedOnlyMiddle) GetId() string {
+	if x != nil {
+		return x.xxx_hidden_Id
+	}
+	return ""
+}
+
+func (x *NestedOnlyMiddle) GetOneofField() *NestedOnlyWithOneof {
+	if x != nil {
+		return x.xxx_hidden_OneofField
+	}
+	return nil
+}
+
+func (x *NestedOnlyMiddle) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_CreatedAt
+	}
+	return nil
+}
+
+func (x *NestedOnlyMiddle) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_UpdatedAt
+	}
+	return nil
+}
+
+func (x *NestedOnlyMiddle) SetTenantId(v string) {
+	x.xxx_hidden_TenantId = v
+}
+
+func (x *NestedOnlyMiddle) SetId(v string) {
+	x.xxx_hidden_Id = v
+}
+
+func (x *NestedOnlyMiddle) SetOneofField(v *NestedOnlyWithOneof) {
+	x.xxx_hidden_OneofField = v
+}
+
+func (x *NestedOnlyMiddle) SetCreatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_CreatedAt = v
+}
+
+func (x *NestedOnlyMiddle) SetUpdatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_UpdatedAt = v
+}
+
+func (x *NestedOnlyMiddle) HasOneofField() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_OneofField != nil
+}
+
+func (x *NestedOnlyMiddle) HasCreatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_CreatedAt != nil
+}
+
+func (x *NestedOnlyMiddle) HasUpdatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_UpdatedAt != nil
+}
+
+func (x *NestedOnlyMiddle) ClearOneofField() {
+	x.xxx_hidden_OneofField = nil
+}
+
+func (x *NestedOnlyMiddle) ClearCreatedAt() {
+	x.xxx_hidden_CreatedAt = nil
+}
+
+func (x *NestedOnlyMiddle) ClearUpdatedAt() {
+	x.xxx_hidden_UpdatedAt = nil
+}
+
+type NestedOnlyMiddle_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	TenantId   string
+	Id         string
+	OneofField *NestedOnlyWithOneof
+	CreatedAt  *timestamppb.Timestamp
+	UpdatedAt  *timestamppb.Timestamp
+}
+
+func (b0 NestedOnlyMiddle_builder) Build() *NestedOnlyMiddle {
+	m0 := &NestedOnlyMiddle{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_TenantId = b.TenantId
+	x.xxx_hidden_Id = b.Id
+	x.xxx_hidden_OneofField = b.OneofField
+	x.xxx_hidden_CreatedAt = b.CreatedAt
+	x.xxx_hidden_UpdatedAt = b.UpdatedAt
+	return m0
+}
+
+// Outer wrapper - embeds NestedOnlyMiddle to create the multi-layer nesting
+type NestedOnlyWrapper struct {
+	state                protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_TenantId  string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3"`
+	xxx_hidden_Id        string                 `protobuf:"bytes,2,opt,name=id,proto3"`
+	xxx_hidden_Middle    *NestedOnlyMiddle      `protobuf:"bytes,3,opt,name=middle,proto3"`
+	xxx_hidden_CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3"`
+	xxx_hidden_UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *NestedOnlyWrapper) Reset() {
+	*x = NestedOnlyWrapper{}
+	mi := &file_models_city_v1_city_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NestedOnlyWrapper) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NestedOnlyWrapper) ProtoMessage() {}
+
+func (x *NestedOnlyWrapper) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *NestedOnlyWrapper) GetTenantId() string {
+	if x != nil {
+		return x.xxx_hidden_TenantId
+	}
+	return ""
+}
+
+func (x *NestedOnlyWrapper) GetId() string {
+	if x != nil {
+		return x.xxx_hidden_Id
+	}
+	return ""
+}
+
+func (x *NestedOnlyWrapper) GetMiddle() *NestedOnlyMiddle {
+	if x != nil {
+		return x.xxx_hidden_Middle
+	}
+	return nil
+}
+
+func (x *NestedOnlyWrapper) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_CreatedAt
+	}
+	return nil
+}
+
+func (x *NestedOnlyWrapper) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_UpdatedAt
+	}
+	return nil
+}
+
+func (x *NestedOnlyWrapper) SetTenantId(v string) {
+	x.xxx_hidden_TenantId = v
+}
+
+func (x *NestedOnlyWrapper) SetId(v string) {
+	x.xxx_hidden_Id = v
+}
+
+func (x *NestedOnlyWrapper) SetMiddle(v *NestedOnlyMiddle) {
+	x.xxx_hidden_Middle = v
+}
+
+func (x *NestedOnlyWrapper) SetCreatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_CreatedAt = v
+}
+
+func (x *NestedOnlyWrapper) SetUpdatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_UpdatedAt = v
+}
+
+func (x *NestedOnlyWrapper) HasMiddle() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Middle != nil
+}
+
+func (x *NestedOnlyWrapper) HasCreatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_CreatedAt != nil
+}
+
+func (x *NestedOnlyWrapper) HasUpdatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_UpdatedAt != nil
+}
+
+func (x *NestedOnlyWrapper) ClearMiddle() {
+	x.xxx_hidden_Middle = nil
+}
+
+func (x *NestedOnlyWrapper) ClearCreatedAt() {
+	x.xxx_hidden_CreatedAt = nil
+}
+
+func (x *NestedOnlyWrapper) ClearUpdatedAt() {
+	x.xxx_hidden_UpdatedAt = nil
+}
+
+type NestedOnlyWrapper_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	TenantId  string
+	Id        string
+	Middle    *NestedOnlyMiddle
+	CreatedAt *timestamppb.Timestamp
+	UpdatedAt *timestamppb.Timestamp
+}
+
+func (b0 NestedOnlyWrapper_builder) Build() *NestedOnlyWrapper {
+	m0 := &NestedOnlyWrapper{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_TenantId = b.TenantId
+	x.xxx_hidden_Id = b.Id
+	x.xxx_hidden_Middle = b.Middle
+	x.xxx_hidden_CreatedAt = b.CreatedAt
+	x.xxx_hidden_UpdatedAt = b.UpdatedAt
+	return m0
+}
+
 type AttractionsConfig_Detail struct {
 	state           protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Info string                 `protobuf:"bytes,1,opt,name=info,proto3"`
@@ -532,7 +999,7 @@ type AttractionsConfig_Detail struct {
 
 func (x *AttractionsConfig_Detail) Reset() {
 	*x = AttractionsConfig_Detail{}
-	mi := &file_models_city_v1_city_proto_msgTypes[3]
+	mi := &file_models_city_v1_city_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -544,7 +1011,7 @@ func (x *AttractionsConfig_Detail) String() string {
 func (*AttractionsConfig_Detail) ProtoMessage() {}
 
 func (x *AttractionsConfig_Detail) ProtoReflect() protoreflect.Message {
-	mi := &file_models_city_v1_city_proto_msgTypes[3]
+	mi := &file_models_city_v1_city_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -577,6 +1044,120 @@ func (b0 AttractionsConfig_Detail_builder) Build() *AttractionsConfig_Detail {
 	b, x := &b0, m0
 	_, _ = b, x
 	x.xxx_hidden_Info = b.Info
+	return m0
+}
+
+type NestedOnlyWithOneof_ChoiceA struct {
+	state             protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_ValueA string                 `protobuf:"bytes,1,opt,name=value_a,json=valueA,proto3"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *NestedOnlyWithOneof_ChoiceA) Reset() {
+	*x = NestedOnlyWithOneof_ChoiceA{}
+	mi := &file_models_city_v1_city_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NestedOnlyWithOneof_ChoiceA) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NestedOnlyWithOneof_ChoiceA) ProtoMessage() {}
+
+func (x *NestedOnlyWithOneof_ChoiceA) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *NestedOnlyWithOneof_ChoiceA) GetValueA() string {
+	if x != nil {
+		return x.xxx_hidden_ValueA
+	}
+	return ""
+}
+
+func (x *NestedOnlyWithOneof_ChoiceA) SetValueA(v string) {
+	x.xxx_hidden_ValueA = v
+}
+
+type NestedOnlyWithOneof_ChoiceA_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	ValueA string
+}
+
+func (b0 NestedOnlyWithOneof_ChoiceA_builder) Build() *NestedOnlyWithOneof_ChoiceA {
+	m0 := &NestedOnlyWithOneof_ChoiceA{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_ValueA = b.ValueA
+	return m0
+}
+
+type NestedOnlyWithOneof_ChoiceB struct {
+	state             protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_ValueB int32                  `protobuf:"varint,1,opt,name=value_b,json=valueB,proto3"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *NestedOnlyWithOneof_ChoiceB) Reset() {
+	*x = NestedOnlyWithOneof_ChoiceB{}
+	mi := &file_models_city_v1_city_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NestedOnlyWithOneof_ChoiceB) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NestedOnlyWithOneof_ChoiceB) ProtoMessage() {}
+
+func (x *NestedOnlyWithOneof_ChoiceB) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *NestedOnlyWithOneof_ChoiceB) GetValueB() int32 {
+	if x != nil {
+		return x.xxx_hidden_ValueB
+	}
+	return 0
+}
+
+func (x *NestedOnlyWithOneof_ChoiceB) SetValueB(v int32) {
+	x.xxx_hidden_ValueB = v
+}
+
+type NestedOnlyWithOneof_ChoiceB_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	ValueB int32
+}
+
+func (b0 NestedOnlyWithOneof_ChoiceB_builder) Build() *NestedOnlyWithOneof_ChoiceB {
+	m0 := &NestedOnlyWithOneof_ChoiceB{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_ValueB = b.ValueB
 	return m0
 }
 
@@ -617,32 +1198,73 @@ const file_models_city_v1_city_proto_rawDesc = "" +
 	"\x06config\x18\x03 \x01(\v2!.models.city.v1.AttractionsConfigR\x06config\x129\n" +
 	"\n" +
 	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt:\x15\x82\xf7\x02\x11\x12\x0f\n" +
+	"\ttenant_id\x12\x02id\"\x95\x02\n" +
+	"\x13NestedOnlyWithOneof\x12H\n" +
+	"\bchoice_a\x18\x01 \x01(\v2+.models.city.v1.NestedOnlyWithOneof.ChoiceAH\x00R\achoiceA\x12H\n" +
+	"\bchoice_b\x18\x02 \x01(\v2+.models.city.v1.NestedOnlyWithOneof.ChoiceBH\x00R\achoiceB\x1a*\n" +
+	"\aChoiceA\x12\x17\n" +
+	"\avalue_a\x18\x01 \x01(\tR\x06valueA:\x06\xd2\xf7\x02\x02 \x01\x1a*\n" +
+	"\aChoiceB\x12\x17\n" +
+	"\avalue_b\x18\x01 \x01(\x05R\x06valueB:\x06\xd2\xf7\x02\x02 \x01:\x06\xd2\xf7\x02\x02 \x01B\n" +
+	"\n" +
+	"\bselector\"\x92\x02\n" +
+	"\x10NestedOnlyMiddle\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x12D\n" +
+	"\voneof_field\x18\x03 \x01(\v2#.models.city.v1.NestedOnlyWithOneofR\n" +
+	"oneofField\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt:\x15\x82\xf7\x02\x11\x12\x0f\n" +
+	"\ttenant_id\x12\x02id\"\x87\x02\n" +
+	"\x11NestedOnlyWrapper\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x128\n" +
+	"\x06middle\x18\x03 \x01(\v2 .models.city.v1.NestedOnlyMiddleR\x06middle\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt:\x15\x82\xf7\x02\x11\x12\x0f\n" +
 	"\ttenant_id\x12\x02idB;Z9github.com/ductone/protoc-gen-pgdb/example/models/city/v1b\x06proto3"
 
-var file_models_city_v1_city_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_models_city_v1_city_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_models_city_v1_city_proto_goTypes = []any{
-	(*Attractions)(nil),              // 0: models.city.v1.Attractions
-	(*AttractionsConfig)(nil),        // 1: models.city.v1.AttractionsConfig
-	(*AttractionsV2)(nil),            // 2: models.city.v1.AttractionsV2
-	(*AttractionsConfig_Detail)(nil), // 3: models.city.v1.AttractionsConfig.Detail
-	(*timestamppb.Timestamp)(nil),    // 4: google.protobuf.Timestamp
-	(*v11.Pet)(nil),                  // 5: models.animals.v1.Pet
-	(*v1.Shop)(nil),                  // 6: models.zoo.v1.Shop
+	(*Attractions)(nil),                 // 0: models.city.v1.Attractions
+	(*AttractionsConfig)(nil),           // 1: models.city.v1.AttractionsConfig
+	(*AttractionsV2)(nil),               // 2: models.city.v1.AttractionsV2
+	(*NestedOnlyWithOneof)(nil),         // 3: models.city.v1.NestedOnlyWithOneof
+	(*NestedOnlyMiddle)(nil),            // 4: models.city.v1.NestedOnlyMiddle
+	(*NestedOnlyWrapper)(nil),           // 5: models.city.v1.NestedOnlyWrapper
+	(*AttractionsConfig_Detail)(nil),    // 6: models.city.v1.AttractionsConfig.Detail
+	(*NestedOnlyWithOneof_ChoiceA)(nil), // 7: models.city.v1.NestedOnlyWithOneof.ChoiceA
+	(*NestedOnlyWithOneof_ChoiceB)(nil), // 8: models.city.v1.NestedOnlyWithOneof.ChoiceB
+	(*timestamppb.Timestamp)(nil),       // 9: google.protobuf.Timestamp
+	(*v11.Pet)(nil),                     // 10: models.animals.v1.Pet
+	(*v1.Shop)(nil),                     // 11: models.zoo.v1.Shop
 }
 var file_models_city_v1_city_proto_depIdxs = []int32{
-	4, // 0: models.city.v1.Attractions.created_at:type_name -> google.protobuf.Timestamp
-	5, // 1: models.city.v1.Attractions.pet:type_name -> models.animals.v1.Pet
-	6, // 2: models.city.v1.Attractions.zoo_shop:type_name -> models.zoo.v1.Shop
-	6, // 3: models.city.v1.Attractions.medium:type_name -> models.zoo.v1.Shop
-	1, // 4: models.city.v1.Attractions.config:type_name -> models.city.v1.AttractionsConfig
-	3, // 5: models.city.v1.AttractionsConfig.detail:type_name -> models.city.v1.AttractionsConfig.Detail
-	1, // 6: models.city.v1.AttractionsV2.config:type_name -> models.city.v1.AttractionsConfig
-	4, // 7: models.city.v1.AttractionsV2.created_at:type_name -> google.protobuf.Timestamp
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	9,  // 0: models.city.v1.Attractions.created_at:type_name -> google.protobuf.Timestamp
+	10, // 1: models.city.v1.Attractions.pet:type_name -> models.animals.v1.Pet
+	11, // 2: models.city.v1.Attractions.zoo_shop:type_name -> models.zoo.v1.Shop
+	11, // 3: models.city.v1.Attractions.medium:type_name -> models.zoo.v1.Shop
+	1,  // 4: models.city.v1.Attractions.config:type_name -> models.city.v1.AttractionsConfig
+	6,  // 5: models.city.v1.AttractionsConfig.detail:type_name -> models.city.v1.AttractionsConfig.Detail
+	1,  // 6: models.city.v1.AttractionsV2.config:type_name -> models.city.v1.AttractionsConfig
+	9,  // 7: models.city.v1.AttractionsV2.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 8: models.city.v1.NestedOnlyWithOneof.choice_a:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceA
+	8,  // 9: models.city.v1.NestedOnlyWithOneof.choice_b:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceB
+	3,  // 10: models.city.v1.NestedOnlyMiddle.oneof_field:type_name -> models.city.v1.NestedOnlyWithOneof
+	9,  // 11: models.city.v1.NestedOnlyMiddle.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 12: models.city.v1.NestedOnlyMiddle.updated_at:type_name -> google.protobuf.Timestamp
+	4,  // 13: models.city.v1.NestedOnlyWrapper.middle:type_name -> models.city.v1.NestedOnlyMiddle
+	9,  // 14: models.city.v1.NestedOnlyWrapper.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 15: models.city.v1.NestedOnlyWrapper.updated_at:type_name -> google.protobuf.Timestamp
+	16, // [16:16] is the sub-list for method output_type
+	16, // [16:16] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_models_city_v1_city_proto_init() }
@@ -654,13 +1276,17 @@ func file_models_city_v1_city_proto_init() {
 		(*attractions_Pet)(nil),
 		(*attractions_ZooShop)(nil),
 	}
+	file_models_city_v1_city_proto_msgTypes[3].OneofWrappers = []any{
+		(*nestedOnlyWithOneof_ChoiceA_)(nil),
+		(*nestedOnlyWithOneof_ChoiceB_)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_models_city_v1_city_proto_rawDesc), len(file_models_city_v1_city_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

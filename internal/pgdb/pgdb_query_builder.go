@@ -432,15 +432,21 @@ func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 		// Also add to unsafe children if it has unsafe content
 		// (so users can access non-indexed fields via UnsafeXxx() accessor)
 		if hasUnsafeContent {
+			unsafeTypeName := namePrefix + goName + "UnsafeQueryBuilder"
+			// Fix: Copy children with correct ParentTypeName pointing to unsafe type.
+			// childUnsafeChildren were built with parentTypeName = builderTypeName (safe type),
+			// but when used as children of unsafeNqb, they need ParentTypeName = unsafeTypeName.
+			fixedChildren := copyChildrenWithParent(childUnsafeChildren, unsafeTypeName)
+
 			unsafeNqb := &nestedQueryBuilderContext{
-				TypeName:         namePrefix + goName + "UnsafeQueryBuilder",
+				TypeName:         unsafeTypeName,
 				GoName:           goName,
 				Prefix:           fieldPrefix,
 				FullPrefix:       fullPrefix,
 				GoNamePrefix:     newGoNamePrefix,
 				ParentTypeName:   parentTypeName,
 				Fields:           unsafeFields,
-				Children:         childUnsafeChildren,
+				Children:         fixedChildren,
 				IsUnsafe:         true,
 				HasUnsafeFields:  true,
 				HasIndexedFields: false,
@@ -449,6 +455,26 @@ func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 		}
 	}
 	return children, unsafeChildren
+}
+
+// copyChildrenWithParent creates a deep copy of nested query builder contexts
+// with the ParentTypeName updated to the new parent type.
+// This is needed because children are built once with a single parentTypeName,
+// but may be used in both safe and unsafe query builder contexts which have
+// different parent type names.
+func copyChildrenWithParent(children []*nestedQueryBuilderContext, newParentTypeName string) []*nestedQueryBuilderContext {
+	if len(children) == 0 {
+		return nil
+	}
+	result := make([]*nestedQueryBuilderContext, len(children))
+	for i, child := range children {
+		copied := *child // shallow copy
+		copied.ParentTypeName = newParentTypeName
+		// Recursively copy children with THIS child's TypeName as their parent
+		copied.Children = copyChildrenWithParent(child.Children, copied.TypeName)
+		result[i] = &copied
+	}
+	return result
 }
 
 // isWellKnownType checks if the type is a Google protobuf well-known type.
