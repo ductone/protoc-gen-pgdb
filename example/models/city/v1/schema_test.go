@@ -392,3 +392,36 @@ func TestNestedOnlyNoStandaloneQueryBuilder(t *testing.T) {
 
 	// The test passes if this compiles - duplicate types would cause compilation failure
 }
+
+// TestNestedOnlyWithOneofThroughMultipleLayers verifies that nested_only messages
+// with oneofs can be accessed through multiple layers of non-nested_only messages.
+// This tests the fix for incorrect ParentTypeName in unsafe query builder children.
+func TestNestedOnlyWithOneofThroughMultipleLayers(t *testing.T) {
+	// Access from outer wrapper through middle to the oneof
+	wrapperFields := (*NestedOnlyWrapper)(nil).DB().Query()
+
+	// Navigate: Wrapper -> Middle -> OneofField -> oneof cases
+	// Middle() returns NestedOnlyWrapperMiddleQueryBuilder
+	middleQB := wrapperFields.Middle()
+	require.NotNil(t, middleQB, "should access middle query builder")
+
+	// UnsafeOneofField() returns NestedOnlyWrapperMiddleOneofFieldUnsafeQueryBuilder
+	oneofQB := middleQB.UnsafeOneofField()
+	require.NotNil(t, oneofQB, "should access oneof field via unsafe accessor")
+
+	// UnsafeChoiceA() should be on the Unsafe type, not on a non-existent safe type
+	choiceAQB := oneofQB.UnsafeChoiceA()
+	require.NotNil(t, choiceAQB, "should access oneof case A")
+
+	// Access leaf field
+	valueAOps := choiceAQB.ValueA()
+	require.NotNil(t, valueAOps, "should access leaf field in oneof case")
+
+	// Similarly for choice B
+	choiceBQB := oneofQB.UnsafeChoiceB()
+	require.NotNil(t, choiceBQB, "should access oneof case B")
+	valueBOps := choiceBQB.ValueB()
+	require.NotNil(t, valueBOps, "should access leaf field in oneof case B")
+
+	// This test passes if it compiles - the bug causes undefined type errors
+}
