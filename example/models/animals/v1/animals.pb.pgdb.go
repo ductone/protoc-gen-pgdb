@@ -977,6 +977,7 @@ type PetDB struct {
 
 type PetDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type PetDBQueryUnsafe struct {
@@ -3266,6 +3267,7 @@ type ScalarValueDB struct {
 
 type ScalarValueDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type ScalarValueDBQueryUnsafe struct {
@@ -4752,6 +4754,7 @@ type EBookDB struct {
 
 type EBookDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type EBookDBQueryUnsafe struct {
@@ -4996,6 +4999,7 @@ type PaperBookDB struct {
 
 type PaperBookDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type PaperBookDBQueryUnsafe struct {
@@ -5760,6 +5764,7 @@ type BookDB struct {
 
 type BookDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type BookDBQueryUnsafe struct {
@@ -6083,6 +6088,329 @@ func (x *BookDBQueryBuilder) FTSData() *BookFTSDataSafeOperators {
 	return &BookFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
+type BookEbookSizeSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *BookEbookSizeSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *BookEbookSizeSafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *BookEbookSizeSafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *BookEbookSizeSafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *BookEbookSizeSafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *BookEbookSizeSafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *BookEbookSizeSafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *BookEbookSizeSafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *BookEbookSizeSafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *BookEbookSizeSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *BookEbookSizeSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *BookEbookSizeSafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *BookEbookSizeSafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type BookNewsIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *BookNewsIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *BookNewsIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *BookNewsIdSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *BookNewsIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *BookNewsIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *BookNewsIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *BookNewsIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *BookNewsIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *BookNewsIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *BookNewsIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *BookNewsIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *BookNewsIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *BookNewsIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *BookNewsIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type BookNewsNameSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *BookNewsNameSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *BookNewsNameSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *BookNewsNameSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *BookNewsNameSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *BookNewsNameSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *BookNewsNameSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *BookNewsNameSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *BookNewsNameSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *BookNewsNameSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *BookNewsNameSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *BookNewsNameSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *BookNewsNameSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *BookNewsNameSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *BookNewsNameSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type BookNewsCreatedAtSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *BookNewsCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) Neq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *BookNewsCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *BookNewsCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *BookNewsCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *BookNewsCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type BookPaperPagesSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *BookPaperPagesSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *BookPaperPagesSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *BookPaperPagesSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *BookPaperPagesSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *BookPaperPagesSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *BookPaperPagesSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *BookPaperPagesSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *BookPaperPagesSafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *BookPaperPagesSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *BookPaperPagesSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *BookPaperPagesSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *BookPaperPagesSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *BookPaperPagesSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
 type BookTenantIdQueryType struct {
 	column    string
 	tableName string
@@ -6238,6 +6566,53 @@ func (x *BookDBColumns) CreatedAt() exp.Expression {
 
 func (x *BookDBColumns) Medium() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "medium_oneof")
+}
+
+type BookEbookQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *BookDBQueryBuilder) Ebook() *BookEbookQueryBuilder {
+	return &BookEbookQueryBuilder{tableName: x.tableName, prefix: x.prefix + "51$"}
+}
+
+func (x *BookEbookQueryBuilder) UnsafeSize() *BookEbookSizeSafeOperators {
+	return &BookEbookSizeSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "size"}
+}
+
+type BookNewsQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *BookDBQueryBuilder) News() *BookNewsQueryBuilder {
+	return &BookNewsQueryBuilder{tableName: x.tableName, prefix: x.prefix + "52$"}
+}
+
+func (x *BookNewsQueryBuilder) UnsafeId() *BookNewsIdSafeOperators {
+	return &BookNewsIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+func (x *BookNewsQueryBuilder) UnsafeName() *BookNewsNameSafeOperators {
+	return &BookNewsNameSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "name"}
+}
+
+func (x *BookNewsQueryBuilder) UnsafeCreatedAt() *BookNewsCreatedAtSafeOperators {
+	return &BookNewsCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
+}
+
+type BookPaperQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *BookDBQueryBuilder) Paper() *BookPaperQueryBuilder {
+	return &BookPaperQueryBuilder{tableName: x.tableName, prefix: x.prefix + "50$"}
+}
+
+func (x *BookPaperQueryBuilder) UnsafePages() *BookPaperPagesSafeOperators {
+	return &BookPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
 }
 
 type pgdbDescriptorNewspaper struct {
@@ -6803,6 +7178,7 @@ type NewspaperDB struct {
 
 type NewspaperDBQueryBuilder struct {
 	tableName string
+	prefix    string
 }
 
 type NewspaperDBQueryUnsafe struct {

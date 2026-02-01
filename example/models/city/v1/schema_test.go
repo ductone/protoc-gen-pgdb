@@ -4,8 +4,12 @@ import (
 	"context"
 	"testing"
 
+	"github.com/doug-martin/goqu/v9"
+	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/stretchr/testify/require"
 
+	animals_v1 "github.com/ductone/protoc-gen-pgdb/example/models/animals/v1"
+	zoo_v1 "github.com/ductone/protoc-gen-pgdb/example/models/zoo/v1"
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
@@ -70,7 +74,31 @@ func TestNestedIndexes(t *testing.T) {
 	numId := fields.Unsafe().Numid()
 	require.Equal(t, "pb$numid",
 		numId.column,
-		"bad resolution for medium medium: %s", numId.column,
+		"bad resolution for numid: %s", numId.column,
+	)
+
+	// Test accessing non-indexed nested fields through the Unsafe accessor pattern
+	// zoo_shop.anything.id is NOT indexed - use UnsafeAnything() to access it
+	// (only zoo_shop.anything.sfixed_64 is indexed in city.proto)
+	zooShopAnythingId := fields.ZooShop().UnsafeAnything().Id()
+	require.Equal(t, "pb$11$52$id",
+		zooShopAnythingId.column,
+		"bad resolution for zoo_shop.anything.id via UnsafeAnything(): %s", zooShopAnythingId.column,
+	)
+
+	// zoo_shop.mgr.id is a deeply nested non-indexed field - use UnsafeMgr() to access
+	zooShopMgrId := fields.ZooShop().UnsafeMgr().Id()
+	require.Equal(t, "pb$11$5$id",
+		zooShopMgrId.column,
+		"bad resolution for zoo_shop.mgr.id via UnsafeMgr(): %s", zooShopMgrId.column,
+	)
+
+	// Verify the indexed path still works (for comparison)
+	// zoo_shop.anything.sfixed_64 IS indexed, so it's accessible via the regular Anything() accessor
+	zooShopAnythingSfixed := fields.ZooShop().Anything().Sfixed64()
+	require.Equal(t, "pb$11$52$sfixed_64",
+		zooShopAnythingSfixed.column,
+		"bad resolution for indexed zoo_shop.anything.sfixed_64: %s", zooShopAnythingSfixed.column,
 	)
 }
 
@@ -142,4 +170,179 @@ func TestColumnIdentifier(t *testing.T) {
 		"Identifier() should return parent table name for nested columns")
 	require.Equal(t, "pb$11$fur", ident.GetCol().(string),
 		"Identifier() should return correct column name")
+}
+
+// TestNestedAccessorSQLGeneration verifies that nested query builder accessors
+// generate correct SQL when used with goqu.
+func TestNestedAccessorSQLGeneration(t *testing.T) {
+	fields := (*Attractions)(nil).DB().Query()
+	tableName := (*Attractions)(nil).DB().TableName()
+	qb := goqu.Dialect("postgres")
+
+	tests := []struct {
+		name        string
+		expr        exp.Expression
+		mustContain string
+	}{
+		{
+			name:        "indexed nested field Eq",
+			expr:        fields.ZooShop().Anything().Sfixed64().Eq(int64(42)),
+			mustContain: `"pb$11$52$sfixed_64" = 42`,
+		},
+		{
+			name:        "unsafe nested field In",
+			expr:        fields.ZooShop().UnsafeAnything().Id().In([]string{"a", "b"}),
+			mustContain: `"pb$11$52$id" IN ('a', 'b')`,
+		},
+		{
+			name:        "deeply nested manager field",
+			expr:        fields.ZooShop().UnsafeMgr().Id().Eq(int32(123)),
+			mustContain: `"pb$11$5$id" = 123`,
+		},
+		{
+			name:        "nested time.Time comparison",
+			expr:        fields.ZooShop().UnsafeCreatedAt().IsNotNull(),
+			mustContain: `"pb$11$created_at" IS NOT NULL`,
+		},
+		{
+			name:        "nested Between range",
+			expr:        fields.ZooShop().UnsafeAnything().Double().Between(1.0, 100.0),
+			mustContain: `"pb$11$52$double" BETWEEN`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			sql, _, err := qb.Select(goqu.L("1")).From(tableName).Where(tt.expr).ToSQL()
+			require.NoError(t, err, "SQL generation should succeed")
+			require.Contains(t, sql, tt.mustContain, "SQL should contain expected clause")
+		})
+	}
+
+}
+
+// TestNestedAccessorQueryExecution is an integration test that verifies
+// queries using nested accessors execute correctly against PostgreSQL.
+func TestNestedAccessorQueryExecution(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	require.NoError(t, err)
+
+	// Create schema
+	schema, err := pgdb_v1.CreateSchema(&Attractions{}, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoError(t, err)
+	}
+
+	// Insert test data with nested message
+	testAttraction := Attractions_builder{
+		TenantId: "tenant1",
+		Id:       "attr1",
+		Numid:    42,
+		ZooShop: zoo_v1.Shop_builder{
+			TenantId: "tenant1",
+			Id:       "shop1",
+			Anything: animals_v1.ScalarValue_builder{
+				TenantId: "tenant1",
+				Id:       "scalar1",
+				Sfixed64: 999,
+				Double:   3.14,
+			}.Build(),
+			Mgr: zoo_v1.Shop_Manager_builder{Id: 123}.Build(),
+		}.Build(),
+	}.Build()
+
+	insertSQL, insertArgs, err := pgdb_v1.Insert(testAttraction, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, insertSQL, insertArgs...)
+	require.NoError(t, err)
+
+	// Query using nested accessors
+	fields := (*Attractions)(nil).DB().Query()
+	tableName := (*Attractions)(nil).DB().TableName()
+	qb := goqu.Dialect("postgres")
+
+	// Test 1: Query indexed nested field
+	query, args, err := qb.Select(
+		fields.TenantId().Identifier(),
+		fields.ZooShop().Anything().Sfixed64().Identifier(),
+	).From(tableName).
+		Where(fields.ZooShop().Anything().Sfixed64().Eq(int64(999))).
+		ToSQL()
+	require.NoError(t, err)
+
+	rows, err := pg.DB.Query(ctx, query, args...)
+	require.NoError(t, err)
+	defer rows.Close()
+
+	require.True(t, rows.Next(), "should find one row")
+	var tenantId string
+	var sfixed64 int64
+	err = rows.Scan(&tenantId, &sfixed64)
+	require.NoError(t, err)
+	require.Equal(t, "tenant1", tenantId)
+	require.Equal(t, int64(999), sfixed64)
+	rows.Close()
+
+	// Test 2: Query unsafe nested field (manager id)
+	query2, args2, err := qb.Select(
+		fields.ZooShop().UnsafeMgr().Id().Identifier(),
+	).From(tableName).
+		Where(fields.ZooShop().UnsafeMgr().Id().Eq(int32(123))).
+		ToSQL()
+	require.NoError(t, err)
+
+	rows2, err := pg.DB.Query(ctx, query2, args2...)
+	require.NoError(t, err)
+	defer rows2.Close()
+
+	require.True(t, rows2.Next(), "should find manager by id")
+	var mgrId int32
+	err = rows2.Scan(&mgrId)
+	require.NoError(t, err)
+	require.Equal(t, int32(123), mgrId)
+}
+
+// TestNestedQueryBuilderTableNamePropagation verifies that table names propagate
+// correctly through chained nested query builder accessors.
+func TestNestedQueryBuilderTableNamePropagation(t *testing.T) {
+	// Use WithTable to set a custom table name
+	customTable := "my_custom_attractions_table"
+	fields := (*Attractions)(nil).DB().Query().WithTable(customTable)
+
+	// Verify table name propagates through chained accessors
+	sfixedOps := fields.ZooShop().Anything().Sfixed64()
+	require.Equal(t, customTable, sfixedOps.tableName, "table name should propagate to indexed nested field")
+
+	unsafeIdOps := fields.ZooShop().UnsafeAnything().Id()
+	require.Equal(t, customTable, unsafeIdOps.tableName, "table name should propagate to unsafe nested field")
+
+	mgrIdOps := fields.ZooShop().UnsafeMgr().Id()
+	require.Equal(t, customTable, mgrIdOps.tableName, "table name should propagate to deeply nested field")
+}
+
+// TestNestedAccessorEmptySliceHandling verifies that empty slices passed to
+// In() and NotIn() operators generate correct SQL (FALSE and TRUE respectively).
+func TestNestedAccessorEmptySliceHandling(t *testing.T) {
+	fields := (*Attractions)(nil).DB().Query()
+	qb := goqu.Dialect("postgres")
+	tableName := (*Attractions)(nil).DB().TableName()
+
+	// Empty In() should return FALSE (no matches possible)
+	emptyInExpr := fields.ZooShop().UnsafeAnything().Id().In([]string{})
+	sql, _, err := qb.Select(goqu.L("1")).From(tableName).Where(emptyInExpr).ToSQL()
+	require.NoError(t, err)
+	require.Contains(t, sql, "FALSE", "empty In() should generate FALSE clause")
+
+	// Empty NotIn() should return TRUE (all rows match)
+	emptyNotInExpr := fields.ZooShop().UnsafeAnything().Id().NotIn([]string{})
+	sql2, _, err := qb.Select(goqu.L("1")).From(tableName).Where(emptyNotInExpr).ToSQL()
+	require.NoError(t, err)
+	require.Contains(t, sql2, "TRUE", "empty NotIn() should generate TRUE clause")
 }

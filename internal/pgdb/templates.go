@@ -25,6 +25,7 @@ var templateFuncs = template.FuncMap{
 	"formatFieldPath":  formatFieldPath,
 	"formatSourceKind": formatSourceKind,
 	"formatProtoKind":  formatProtoKind,
+	"trimPrefix":       strings.TrimPrefix,
 }
 
 // formatFieldPath converts a []int32 to Go source code representation.
