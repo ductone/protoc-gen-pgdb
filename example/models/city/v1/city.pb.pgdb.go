@@ -338,6 +338,8 @@ func (d *pgdbDescriptorAttractions) Fields(opts ...pgdb_v1.DescriptorFieldOption
 
 	rv = append(rv, ((*zoo_v1.Shop)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("12$", 12, "medium", "pb_attractions_models_city_v1_e136cbfc")...)...)
 
+	rv = append(rv, ((*AttractionsConfig)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("13$", 13, "config", "pb_attractions_models_city_v1_e136cbfc")...)...)
+
 	return rv
 }
 
@@ -674,6 +676,8 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		cfv5tmp = append(cfv5tmp, m.self.GetMedium().DBReflect(m.Dialect()).SearchData()...)
 
+		cfv5tmp = append(cfv5tmp, m.self.GetConfig().DBReflect(m.Dialect()).SearchData()...)
+
 		cfv5 := pgdb_v1.FullTextSearchVectors(cfv5tmp)
 
 		if ro.Nulled {
@@ -784,6 +788,25 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 		}
 	}
 
+	v7tmp := m.self.GetConfig()
+	v7opts := ro.Nested("13$")
+	if v7tmp == nil {
+		v7opts = append(v7opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v7, err := pgdb_v1.MarshalNestedMsgRecord(v7tmp.DBReflect(m.Dialect()), v7opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v7 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
 	oneof1 := uint32(m.self.WhichWhat())
 
 	if ro.Nulled {
@@ -810,6 +833,8 @@ func (m *pgdbMessageAttractions) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 	rv = append(rv, m.self.GetZooShop().DBReflect(m.Dialect()).SearchData()...)
 
 	rv = append(rv, m.self.GetMedium().DBReflect(m.Dialect()).SearchData()...)
+
+	rv = append(rv, m.self.GetConfig().DBReflect(m.Dialect()).SearchData()...)
 
 	return rv
 }
@@ -8459,6 +8484,140 @@ func (x *AttractionsMediumMgrIdSafeOperators) NotBetween(start int32, end int32)
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
+type AttractionsConfigNameSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsConfigNameSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsConfigNameSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsConfigNameSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsConfigNameSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsConfigNameSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsConfigDetailInfoSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
 type AttractionsTenantIdQueryType struct {
 	column    string
 	tableName string
@@ -9255,4 +9414,1631 @@ func (x *AttractionsMediumQueryBuilder) UnsafeMgr() *AttractionsMediumMgrUnsafeQ
 
 func (x *AttractionsMediumMgrUnsafeQueryBuilder) Id() *AttractionsMediumMgrIdSafeOperators {
 	return &AttractionsMediumMgrIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+type AttractionsConfigQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsDBQueryBuilder) Config() *AttractionsConfigQueryBuilder {
+	return &AttractionsConfigQueryBuilder{tableName: x.tableName, prefix: x.prefix + "13$"}
+}
+
+func (x *AttractionsConfigQueryBuilder) UnsafeName() *AttractionsConfigNameSafeOperators {
+	return &AttractionsConfigNameSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "name"}
+}
+
+type AttractionsConfigDetailUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsConfigQueryBuilder) UnsafeDetail() *AttractionsConfigDetailUnsafeQueryBuilder {
+	return &AttractionsConfigDetailUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "1$"}
+}
+
+func (x *AttractionsConfigDetailUnsafeQueryBuilder) Info() *AttractionsConfigDetailInfoSafeOperators {
+	return &AttractionsConfigDetailInfoSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "info"}
+}
+
+type pgdbDescriptorAttractionsConfig struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorAttractionsConfig    pgdb_v1.Descriptor = &pgdbDescriptorAttractionsConfig{}
+	instancepgdbDescriptorAttractionsConfigV17 pgdb_v1.Descriptor = &pgdbDescriptorAttractionsConfig{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorAttractionsConfig) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorAttractionsConfig) TableName() string {
+	return "pb_attractions_config_models_city_v1_4e3f35be"
+}
+
+func (d *pgdbDescriptorAttractionsConfig) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorAttractionsConfig) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorAttractionsConfig) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorAttractionsConfig) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorAttractionsConfig) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorAttractionsConfig) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_attractions_config_models_city_v1_4e3f35be"),
+		Name:               df.ColumnName("name"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("name"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, ((*AttractionsConfig_Detail)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("1$", 1, "detail", "pb_attractions_config_models_city_v1_4e3f35be")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorAttractionsConfig) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_attractions_config_models_city_v1_4e3f35be",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorAttractionsConfig) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_attractions_config_models_city_v1_4e3f35be", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorAttractionsConfig) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_attractions_config_models_city_v1_4e3f35be", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorAttractionsConfig) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_attractions_config_models_city_v1_4e3f35be", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorAttractionsConfig) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_attractions_config_models_city_v1_4e3f35be",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorAttractionsConfig) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorAttractionsConfig) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorAttractionsConfig) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageAttractionsConfig struct {
+	self    *AttractionsConfig
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *AttractionsConfig) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageAttractionsConfig{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageAttractionsConfig) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorAttractionsConfigV17
+	default:
+		return instancepgdbDescriptorAttractionsConfig
+	}
+}
+
+func (m *pgdbMessageAttractionsConfig) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1tmp := m.self.GetDetail()
+	v1opts := ro.Nested("1$")
+	if v1tmp == nil {
+		v1opts = append(v1opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v1, err := pgdb_v1.MarshalNestedMsgRecord(v1tmp.DBReflect(m.Dialect()), v1opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v1 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	v2 := strings.ReplaceAll(string(m.self.GetName()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("name")] = nullExp
+	} else {
+		rv[ro.ColumnName("name")] = v2
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageAttractionsConfig) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetDetail().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageAttractionsConfig) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type pgdbDescriptorAttractionsV2 struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorAttractionsV2    pgdb_v1.Descriptor = &pgdbDescriptorAttractionsV2{}
+	instancepgdbDescriptorAttractionsV2V17 pgdb_v1.Descriptor = &pgdbDescriptorAttractionsV2{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorAttractionsV2) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorAttractionsV2) TableName() string {
+	return "pb_attractions_v_2_models_city_v1_8f82a0e4"
+}
+
+func (d *pgdbDescriptorAttractionsV2) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorAttractionsV2) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorAttractionsV2) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorAttractionsV2) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorAttractionsV2) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorAttractionsV2) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: coltenant_idOverrideExpression,
+			Default:            "",
+			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkskOverrideExpression,
+			Default:            "",
+			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkOverrideExpression,
+			Default:            "",
+			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colskOverrideExpression,
+			Default:            "",
+			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
+			})
+		}
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: colidOverrideExpression,
+		Default:            "''",
+		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_attractions_v_2_models_city_v1_8f82a0e4"),
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, ((*AttractionsConfig)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("3$", 3, "config", "pb_attractions_v_2_models_city_v1_8f82a0e4")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorAttractionsV2) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_attractions_v_2_models_city_v1_8f82a0e4",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorAttractionsV2) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_attractions_v_2_models_city_v1_8f82a0e4", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorAttractionsV2) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_attractions_v_2_models_city_v1_8f82a0e4", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorAttractionsV2) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_attractions_v_2_models_city_v1_8f82a0e4", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorAttractionsV2) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_attractions_v_2_models_city_v1_8f82a0e4",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorAttractionsV2) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_attractions_v_2_models_city_v1_81e30e28"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorAttractionsV2) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_attractions_v_2_models_city_v1_81e30e28"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_attractions_v_2_models_city_5b10540f"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_attractions_v_2_models_city_b6d42ea0"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_attractions_v_2_models_city_v1_b495b2b2"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	return rv
+}
+
+func (d *pgdbDescriptorAttractionsV2) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageAttractionsV2 struct {
+	self    *AttractionsV2
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *AttractionsV2) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageAttractionsV2{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageAttractionsV2) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorAttractionsV2V17
+	default:
+		return instancepgdbDescriptorAttractionsV2
+	}
+}
+
+func (m *pgdbMessageAttractionsV2) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_city_v1_attractions_v_2")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.GetTenantId())
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString(m.self.GetId())
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5 := exp.NewLiteralExpression("NULL")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv5
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv6, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv6
+		}
+
+	}
+
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
+
+	v2tmp := m.self.GetConfig()
+	v2opts := ro.Nested("3$")
+	if v2tmp == nil {
+		v2opts = append(v2opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v2, err := pgdb_v1.MarshalNestedMsgRecord(v2tmp.DBReflect(m.Dialect()), v2opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v2 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	var v3 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v3tmp := m.self.GetCreatedAt().AsTime()
+		v3 = &v3tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v3
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageAttractionsV2) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetConfig().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageAttractionsV2) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type AttractionsV2DB struct {
+	tableName string
+}
+
+type AttractionsV2DBQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+type AttractionsV2DBQueryUnsafe struct {
+	tableName string
+}
+
+type AttractionsV2DBColumns struct {
+	tableName string
+}
+
+func (x *AttractionsV2) DB() *AttractionsV2DB {
+	return &AttractionsV2DB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
+}
+
+func (x *AttractionsV2DB) TableName() string {
+	return x.tableName
+}
+
+func (x *AttractionsV2DB) Query() *AttractionsV2DBQueryBuilder {
+	return &AttractionsV2DBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *AttractionsV2DB) Columns() *AttractionsV2DBColumns {
+	return &AttractionsV2DBColumns{tableName: x.tableName}
+}
+
+func (x *AttractionsV2DB) WithTable(t string) *AttractionsV2DB {
+	return &AttractionsV2DB{tableName: t}
+}
+
+func (x *AttractionsV2DBQueryBuilder) WithTable(t string) *AttractionsV2DBQueryBuilder {
+	return &AttractionsV2DBQueryBuilder{tableName: t}
+}
+
+func (x *AttractionsV2DBQueryBuilder) Unsafe() *AttractionsV2DBQueryUnsafe {
+	return &AttractionsV2DBQueryUnsafe{tableName: x.tableName}
+}
+
+type AttractionsV2TenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2TenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2DBQueryBuilder) TenantId() *AttractionsV2TenantIdSafeOperators {
+	return &AttractionsV2TenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type AttractionsV2PKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2PKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2PKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsV2PKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsV2PKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsV2PKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsV2PKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsV2PKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsV2PKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsV2PKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsV2PKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsV2PKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsV2PKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2PKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2DBQueryBuilder) PKSK() *AttractionsV2PKSKSafeOperators {
+	return &AttractionsV2PKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type AttractionsV2PKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2PKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2PKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsV2PKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsV2PKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsV2PKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsV2PKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsV2PKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsV2PKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsV2PKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsV2PKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsV2PKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsV2PKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2PKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2DBQueryBuilder) PK() *AttractionsV2PKSafeOperators {
+	return &AttractionsV2PKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type AttractionsV2SKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2SKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2SKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsV2SKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsV2SKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsV2SKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsV2SKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsV2SKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsV2SKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsV2SKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsV2SKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsV2SKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsV2SKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2SKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2DBQueryBuilder) SK() *AttractionsV2SKSafeOperators {
+	return &AttractionsV2SKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type AttractionsV2FTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2FTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2FTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsV2DBQueryBuilder) FTSData() *AttractionsV2FTSDataSafeOperators {
+	return &AttractionsV2FTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type AttractionsV2ConfigNameSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2ConfigNameSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsV2ConfigDetailInfoSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsV2ConfigDetailInfoSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsV2TenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2DBQueryUnsafe) TenantId() *AttractionsV2TenantIdQueryType {
+	return &AttractionsV2TenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *AttractionsV2TenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type AttractionsV2PKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2DBQueryUnsafe) PKSK() *AttractionsV2PKSKQueryType {
+	return &AttractionsV2PKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *AttractionsV2PKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type AttractionsV2PKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2DBQueryUnsafe) PK() *AttractionsV2PKQueryType {
+	return &AttractionsV2PKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *AttractionsV2PKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type AttractionsV2SKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2DBQueryUnsafe) SK() *AttractionsV2SKQueryType {
+	return &AttractionsV2SKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *AttractionsV2SKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type AttractionsV2FTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2DBQueryUnsafe) FTSData() *AttractionsV2FTSDataQueryType {
+	return &AttractionsV2FTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *AttractionsV2FTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type AttractionsV2PBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2DBQueryUnsafe) PBData() *AttractionsV2PBDataQueryType {
+	return &AttractionsV2PBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *AttractionsV2PBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type AttractionsV2IdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2DBQueryUnsafe) Id() *AttractionsV2IdQueryType {
+	return &AttractionsV2IdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *AttractionsV2IdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type AttractionsV2CreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2DBQueryUnsafe) CreatedAt() *AttractionsV2CreatedAtQueryType {
+	return &AttractionsV2CreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *AttractionsV2CreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2DBColumns) WithTable(t string) *AttractionsV2DBColumns {
+	return &AttractionsV2DBColumns{tableName: t}
+}
+
+func (x *AttractionsV2DBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *AttractionsV2DBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *AttractionsV2DBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *AttractionsV2DBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *AttractionsV2DBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *AttractionsV2DBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *AttractionsV2DBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *AttractionsV2DBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+type AttractionsV2ConfigQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsV2DBQueryBuilder) Config() *AttractionsV2ConfigQueryBuilder {
+	return &AttractionsV2ConfigQueryBuilder{tableName: x.tableName, prefix: x.prefix + "3$"}
+}
+
+func (x *AttractionsV2ConfigQueryBuilder) UnsafeName() *AttractionsV2ConfigNameSafeOperators {
+	return &AttractionsV2ConfigNameSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "name"}
+}
+
+type AttractionsV2ConfigDetailUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsV2ConfigQueryBuilder) UnsafeDetail() *AttractionsV2ConfigDetailUnsafeQueryBuilder {
+	return &AttractionsV2ConfigDetailUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "1$"}
+}
+
+func (x *AttractionsV2ConfigDetailUnsafeQueryBuilder) Info() *AttractionsV2ConfigDetailInfoSafeOperators {
+	return &AttractionsV2ConfigDetailInfoSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "info"}
+}
+
+type pgdbDescriptorAttractionsConfig_Detail struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorAttractionsConfig_Detail    pgdb_v1.Descriptor = &pgdbDescriptorAttractionsConfig_Detail{}
+	instancepgdbDescriptorAttractionsConfig_DetailV17 pgdb_v1.Descriptor = &pgdbDescriptorAttractionsConfig_Detail{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) TableName() string {
+	return "pb_detail_models_city_v1_cb331b3f"
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_detail_models_city_v1_cb331b3f"),
+		Name:               df.ColumnName("info"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("info"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_detail_models_city_v1_cb331b3f",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_detail_models_city_v1_cb331b3f", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_detail_models_city_v1_cb331b3f", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_detail_models_city_v1_cb331b3f", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_detail_models_city_v1_cb331b3f",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorAttractionsConfig_Detail) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageAttractionsConfig_Detail struct {
+	self    *AttractionsConfig_Detail
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *AttractionsConfig_Detail) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageAttractionsConfig_Detail{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageAttractionsConfig_Detail) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorAttractionsConfig_DetailV17
+	default:
+		return instancepgdbDescriptorAttractionsConfig_Detail
+	}
+}
+
+func (m *pgdbMessageAttractionsConfig_Detail) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1 := strings.ReplaceAll(string(m.self.GetInfo()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("info")] = nullExp
+	} else {
+		rv[ro.ColumnName("info")] = v1
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageAttractionsConfig_Detail) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+func (m *pgdbMessageAttractionsConfig_Detail) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
 }

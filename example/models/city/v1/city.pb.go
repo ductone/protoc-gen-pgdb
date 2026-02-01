@@ -33,6 +33,7 @@ type Attractions struct {
 	xxx_hidden_CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3"`
 	xxx_hidden_What      isAttractions_What     `protobuf_oneof:"what"`
 	xxx_hidden_Medium    *v1.Shop               `protobuf:"bytes,12,opt,name=medium,proto3"`
+	xxx_hidden_Config    *AttractionsConfig     `protobuf:"bytes,13,opt,name=config,proto3"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -115,6 +116,13 @@ func (x *Attractions) GetMedium() *v1.Shop {
 	return nil
 }
 
+func (x *Attractions) GetConfig() *AttractionsConfig {
+	if x != nil {
+		return x.xxx_hidden_Config
+	}
+	return nil
+}
+
 func (x *Attractions) SetTenantId(v string) {
 	x.xxx_hidden_TenantId = v
 }
@@ -149,6 +157,10 @@ func (x *Attractions) SetZooShop(v *v1.Shop) {
 
 func (x *Attractions) SetMedium(v *v1.Shop) {
 	x.xxx_hidden_Medium = v
+}
+
+func (x *Attractions) SetConfig(v *AttractionsConfig) {
+	x.xxx_hidden_Config = v
 }
 
 func (x *Attractions) HasCreatedAt() bool {
@@ -188,6 +200,13 @@ func (x *Attractions) HasMedium() bool {
 	return x.xxx_hidden_Medium != nil
 }
 
+func (x *Attractions) HasConfig() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Config != nil
+}
+
 func (x *Attractions) ClearCreatedAt() {
 	x.xxx_hidden_CreatedAt = nil
 }
@@ -210,6 +229,10 @@ func (x *Attractions) ClearZooShop() {
 
 func (x *Attractions) ClearMedium() {
 	x.xxx_hidden_Medium = nil
+}
+
+func (x *Attractions) ClearConfig() {
+	x.xxx_hidden_Config = nil
 }
 
 const Attractions_What_not_set_case case_Attractions_What = 0
@@ -242,6 +265,10 @@ type Attractions_builder struct {
 	ZooShop *v1.Shop
 	// -- end of xxx_hidden_What
 	Medium *v1.Shop
+	// This field tests the nested_only collision fix:
+	// "Attractions" + "Config" = "AttractionsConfig" (same as the message type name)
+	// Without the fix, this would cause duplicate type definitions.
+	Config *AttractionsConfig
 }
 
 func (b0 Attractions_builder) Build() *Attractions {
@@ -259,6 +286,7 @@ func (b0 Attractions_builder) Build() *Attractions {
 		x.xxx_hidden_What = &attractions_ZooShop{b.ZooShop}
 	}
 	x.xxx_hidden_Medium = b.Medium
+	x.xxx_hidden_Config = b.Config
 	return m0
 }
 
@@ -288,11 +316,275 @@ func (*attractions_Pet) isAttractions_What() {}
 
 func (*attractions_ZooShop) isAttractions_What() {}
 
+// A top-level nested_only message with a nested sub-message.
+// Named to collide when embedded in Attractions: "Attractions" + "Config" = "AttractionsConfig"
+type AttractionsConfig struct {
+	state             protoimpl.MessageState    `protogen:"opaque.v1"`
+	xxx_hidden_Detail *AttractionsConfig_Detail `protobuf:"bytes,1,opt,name=detail,proto3"`
+	xxx_hidden_Name   string                    `protobuf:"bytes,2,opt,name=name,proto3"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *AttractionsConfig) Reset() {
+	*x = AttractionsConfig{}
+	mi := &file_models_city_v1_city_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AttractionsConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AttractionsConfig) ProtoMessage() {}
+
+func (x *AttractionsConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *AttractionsConfig) GetDetail() *AttractionsConfig_Detail {
+	if x != nil {
+		return x.xxx_hidden_Detail
+	}
+	return nil
+}
+
+func (x *AttractionsConfig) GetName() string {
+	if x != nil {
+		return x.xxx_hidden_Name
+	}
+	return ""
+}
+
+func (x *AttractionsConfig) SetDetail(v *AttractionsConfig_Detail) {
+	x.xxx_hidden_Detail = v
+}
+
+func (x *AttractionsConfig) SetName(v string) {
+	x.xxx_hidden_Name = v
+}
+
+func (x *AttractionsConfig) HasDetail() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Detail != nil
+}
+
+func (x *AttractionsConfig) ClearDetail() {
+	x.xxx_hidden_Detail = nil
+}
+
+type AttractionsConfig_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	Detail *AttractionsConfig_Detail
+	Name   string
+}
+
+func (b0 AttractionsConfig_builder) Build() *AttractionsConfig {
+	m0 := &AttractionsConfig{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_Detail = b.Detail
+	x.xxx_hidden_Name = b.Name
+	return m0
+}
+
+// A second parent that also embeds AttractionsConfig (tests multi-embed scenario).
+// "AttractionsV2" + "Config" = "AttractionsV2Config" which does NOT collide with "AttractionsConfig".
+type AttractionsV2 struct {
+	state                protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_TenantId  string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3"`
+	xxx_hidden_Id        string                 `protobuf:"bytes,2,opt,name=id,proto3"`
+	xxx_hidden_Config    *AttractionsConfig     `protobuf:"bytes,3,opt,name=config,proto3"`
+	xxx_hidden_CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *AttractionsV2) Reset() {
+	*x = AttractionsV2{}
+	mi := &file_models_city_v1_city_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AttractionsV2) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AttractionsV2) ProtoMessage() {}
+
+func (x *AttractionsV2) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *AttractionsV2) GetTenantId() string {
+	if x != nil {
+		return x.xxx_hidden_TenantId
+	}
+	return ""
+}
+
+func (x *AttractionsV2) GetId() string {
+	if x != nil {
+		return x.xxx_hidden_Id
+	}
+	return ""
+}
+
+func (x *AttractionsV2) GetConfig() *AttractionsConfig {
+	if x != nil {
+		return x.xxx_hidden_Config
+	}
+	return nil
+}
+
+func (x *AttractionsV2) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_CreatedAt
+	}
+	return nil
+}
+
+func (x *AttractionsV2) SetTenantId(v string) {
+	x.xxx_hidden_TenantId = v
+}
+
+func (x *AttractionsV2) SetId(v string) {
+	x.xxx_hidden_Id = v
+}
+
+func (x *AttractionsV2) SetConfig(v *AttractionsConfig) {
+	x.xxx_hidden_Config = v
+}
+
+func (x *AttractionsV2) SetCreatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_CreatedAt = v
+}
+
+func (x *AttractionsV2) HasConfig() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Config != nil
+}
+
+func (x *AttractionsV2) HasCreatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_CreatedAt != nil
+}
+
+func (x *AttractionsV2) ClearConfig() {
+	x.xxx_hidden_Config = nil
+}
+
+func (x *AttractionsV2) ClearCreatedAt() {
+	x.xxx_hidden_CreatedAt = nil
+}
+
+type AttractionsV2_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	TenantId  string
+	Id        string
+	Config    *AttractionsConfig
+	CreatedAt *timestamppb.Timestamp
+}
+
+func (b0 AttractionsV2_builder) Build() *AttractionsV2 {
+	m0 := &AttractionsV2{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_TenantId = b.TenantId
+	x.xxx_hidden_Id = b.Id
+	x.xxx_hidden_Config = b.Config
+	x.xxx_hidden_CreatedAt = b.CreatedAt
+	return m0
+}
+
+type AttractionsConfig_Detail struct {
+	state           protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_Info string                 `protobuf:"bytes,1,opt,name=info,proto3"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *AttractionsConfig_Detail) Reset() {
+	*x = AttractionsConfig_Detail{}
+	mi := &file_models_city_v1_city_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AttractionsConfig_Detail) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AttractionsConfig_Detail) ProtoMessage() {}
+
+func (x *AttractionsConfig_Detail) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *AttractionsConfig_Detail) GetInfo() string {
+	if x != nil {
+		return x.xxx_hidden_Info
+	}
+	return ""
+}
+
+func (x *AttractionsConfig_Detail) SetInfo(v string) {
+	x.xxx_hidden_Info = v
+}
+
+type AttractionsConfig_Detail_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	Info string
+}
+
+func (b0 AttractionsConfig_Detail_builder) Build() *AttractionsConfig_Detail {
+	m0 := &AttractionsConfig_Detail{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_Info = b.Info
+	return m0
+}
+
 var File_models_city_v1_city_proto protoreflect.FileDescriptor
 
 const file_models_city_v1_city_proto_rawDesc = "" +
 	"\n" +
-	"\x19models/city/v1/city.proto\x12\x0emodels.city.v1\x1a\x16dynamo/v1/dynamo.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fmodels/animals/v1/animals.proto\x1a\x17models/zoo/v1/zoo.proto\x1a\x12pgdb/v1/pgdb.proto\"\xe5\x04\n" +
+	"\x19models/city/v1/city.proto\x12\x0emodels.city.v1\x1a\x16dynamo/v1/dynamo.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1fmodels/animals/v1/animals.proto\x1a\x17models/zoo/v1/zoo.proto\x1a\x12pgdb/v1/pgdb.proto\"\xa0\x05\n" +
 	"\vAttractions\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x16\n" +
 	"\x02id\x18\x02 \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\x02id\x12\x14\n" +
@@ -302,7 +594,8 @@ const file_models_city_v1_city_proto_rawDesc = "" +
 	"\x03pet\x18\n" +
 	" \x01(\v2\x16.models.animals.v1.PetH\x00R\x03pet\x120\n" +
 	"\bzoo_shop\x18\v \x01(\v2\x13.models.zoo.v1.ShopH\x00R\azooShop\x12+\n" +
-	"\x06medium\x18\f \x01(\v2\x13.models.zoo.v1.ShopR\x06medium:\xbc\x02\x82\xf7\x02\x18\x12\x16\n" +
+	"\x06medium\x18\f \x01(\v2\x13.models.zoo.v1.ShopR\x06medium\x129\n" +
+	"\x06config\x18\r \x01(\v2!.models.city.v1.AttractionsConfigR\x06config:\xbc\x02\x82\xf7\x02\x18\x12\x16\n" +
 	"\ttenant_id\x12\x02id\x12\x05numid\xd2\xf7\x02\x9b\x02\x12#\n" +
 	"\x06furrrs\x10\x03\x1a\ttenant_id\x1a\fzoo_shop.fur\x12>\n" +
 	"\x12nestednestednested\x10\x03\x1a\ttenant_id\x1a\x1bzoo_shop.anything.sfixed_64\x12\x1a\n" +
@@ -312,25 +605,44 @@ const file_models_city_v1_city_proto_rawDesc = "" +
 	"\n" +
 	"petprofile\x10\x02\x1a\ttenant_id\x1a\vpet.profile\x12\x15\n" +
 	"\x02id\x10\x01\x1a\ttenant_id\x1a\x02idB\x06\n" +
-	"\x04whatB;Z9github.com/ductone/protoc-gen-pgdb/example/models/city/v1b\x06proto3"
+	"\x04what\"\x97\x01\n" +
+	"\x11AttractionsConfig\x12@\n" +
+	"\x06detail\x18\x01 \x01(\v2(.models.city.v1.AttractionsConfig.DetailR\x06detail\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x1a$\n" +
+	"\x06Detail\x12\x12\n" +
+	"\x04info\x18\x01 \x01(\tR\x04info:\x06\xd2\xf7\x02\x02 \x01:\x06\xd2\xf7\x02\x02 \x01\"\xc9\x01\n" +
+	"\rAttractionsV2\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x129\n" +
+	"\x06config\x18\x03 \x01(\v2!.models.city.v1.AttractionsConfigR\x06config\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt:\x15\x82\xf7\x02\x11\x12\x0f\n" +
+	"\ttenant_id\x12\x02idB;Z9github.com/ductone/protoc-gen-pgdb/example/models/city/v1b\x06proto3"
 
-var file_models_city_v1_city_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_models_city_v1_city_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_models_city_v1_city_proto_goTypes = []any{
-	(*Attractions)(nil),           // 0: models.city.v1.Attractions
-	(*timestamppb.Timestamp)(nil), // 1: google.protobuf.Timestamp
-	(*v11.Pet)(nil),               // 2: models.animals.v1.Pet
-	(*v1.Shop)(nil),               // 3: models.zoo.v1.Shop
+	(*Attractions)(nil),              // 0: models.city.v1.Attractions
+	(*AttractionsConfig)(nil),        // 1: models.city.v1.AttractionsConfig
+	(*AttractionsV2)(nil),            // 2: models.city.v1.AttractionsV2
+	(*AttractionsConfig_Detail)(nil), // 3: models.city.v1.AttractionsConfig.Detail
+	(*timestamppb.Timestamp)(nil),    // 4: google.protobuf.Timestamp
+	(*v11.Pet)(nil),                  // 5: models.animals.v1.Pet
+	(*v1.Shop)(nil),                  // 6: models.zoo.v1.Shop
 }
 var file_models_city_v1_city_proto_depIdxs = []int32{
-	1, // 0: models.city.v1.Attractions.created_at:type_name -> google.protobuf.Timestamp
-	2, // 1: models.city.v1.Attractions.pet:type_name -> models.animals.v1.Pet
-	3, // 2: models.city.v1.Attractions.zoo_shop:type_name -> models.zoo.v1.Shop
-	3, // 3: models.city.v1.Attractions.medium:type_name -> models.zoo.v1.Shop
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 0: models.city.v1.Attractions.created_at:type_name -> google.protobuf.Timestamp
+	5, // 1: models.city.v1.Attractions.pet:type_name -> models.animals.v1.Pet
+	6, // 2: models.city.v1.Attractions.zoo_shop:type_name -> models.zoo.v1.Shop
+	6, // 3: models.city.v1.Attractions.medium:type_name -> models.zoo.v1.Shop
+	1, // 4: models.city.v1.Attractions.config:type_name -> models.city.v1.AttractionsConfig
+	3, // 5: models.city.v1.AttractionsConfig.detail:type_name -> models.city.v1.AttractionsConfig.Detail
+	1, // 6: models.city.v1.AttractionsV2.config:type_name -> models.city.v1.AttractionsConfig
+	4, // 7: models.city.v1.AttractionsV2.created_at:type_name -> google.protobuf.Timestamp
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_models_city_v1_city_proto_init() }
@@ -348,7 +660,7 @@ func file_models_city_v1_city_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_models_city_v1_city_proto_rawDesc), len(file_models_city_v1_city_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

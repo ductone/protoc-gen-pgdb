@@ -346,3 +346,49 @@ func TestNestedAccessorEmptySliceHandling(t *testing.T) {
 	require.NoError(t, err)
 	require.Contains(t, sql2, "TRUE", "empty NotIn() should generate TRUE clause")
 }
+
+// TestNestedOnlyNoStandaloneQueryBuilder verifies that nested_only messages
+// do not generate standalone query builders, preventing type name collisions.
+//
+// Without the fix, the combination of:
+//   - AttractionsConfig (nested_only message)
+//   - Attractions.config field of type AttractionsConfig
+//
+// Would cause duplicate type definitions because:
+//   - "Attractions" + "Config" = "AttractionsConfig" (parent + field name)
+//   - "AttractionsConfig" (the message type name)
+//
+// Both would generate "AttractionsConfigDetailSafeOperators" and similar types.
+// This test passes if the code compiles - duplicate types would cause compilation failure.
+func TestNestedOnlyNoStandaloneQueryBuilder(t *testing.T) {
+	// Access nested config through Attractions - this should work
+	fields := (*Attractions)(nil).DB().Query()
+
+	// Verify we can access nested fields through the parent
+	// These use UnsafeDetail() and UnsafeName() because AttractionsConfig fields are not indexed
+	configDetail := fields.Config().UnsafeDetail()
+	require.NotNil(t, configDetail, "should be able to access nested_only message fields")
+
+	configName := fields.Config().UnsafeName()
+	require.NotNil(t, configName, "should be able to access nested_only message fields")
+
+	// Test AttractionsV2 can also access the same nested_only message type
+	// This verifies the same nested_only type can be embedded in multiple parents
+	fieldsV2 := (*AttractionsV2)(nil).DB().Query()
+
+	configDetailV2 := fieldsV2.Config().UnsafeDetail()
+	require.NotNil(t, configDetailV2, "should be able to access nested_only message from second parent")
+
+	configNameV2 := fieldsV2.Config().UnsafeName()
+	require.NotNil(t, configNameV2, "should be able to access nested_only message from second parent")
+
+	// Verify we can access the actual Info field (which is the leaf field in Detail message)
+	// This demonstrates the full path access works without type collisions
+	infoOps := fields.Config().UnsafeDetail().Info()
+	require.NotNil(t, infoOps, "should be able to access leaf field through nested_only message")
+
+	infoOpsV2 := fieldsV2.Config().UnsafeDetail().Info()
+	require.NotNil(t, infoOpsV2, "should be able to access leaf field through nested_only message from V2")
+
+	// The test passes if this compiles - duplicate types would cause compilation failure
+}
