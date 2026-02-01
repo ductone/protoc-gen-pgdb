@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/doug-martin/goqu/v9"
+	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -247,4 +249,47 @@ func TestSchemaScalarValue(t *testing.T) {
 	// spew.Dump(record)
 	// fmt.Fprintf(os.Stderr, "---------\n%s\n\n", query)
 	require.NoError(t, err, "invalid sql insert: %w %s", err, query)
+}
+
+// TestBookOneofNestedAccessors verifies that nested query builder accessors
+// work correctly for oneof fields in the Book message.
+func TestBookOneofNestedAccessors(t *testing.T) {
+	bookFields := (*Book)(nil).DB().Query()
+	qb := goqu.Dialect("postgres")
+	tableName := (*Book)(nil).DB().TableName()
+
+	tests := []struct {
+		name        string
+		expr        exp.Expression
+		mustContain string
+	}{
+		{
+			name:        "paper.pages",
+			expr:        bookFields.Paper().UnsafePages().Gt(int32(100)),
+			mustContain: `"pb$50$pages" > 100`,
+		},
+		{
+			name:        "ebook.size",
+			expr:        bookFields.Ebook().UnsafeSize().Lt(int64(1024 * 1024)),
+			mustContain: `"pb$51$size" <`,
+		},
+		{
+			name:        "news.id",
+			expr:        bookFields.News().UnsafeId().Eq("news123"),
+			mustContain: `"pb$52$id" = 'news123'`,
+		},
+		{
+			name:        "news.created_at",
+			expr:        bookFields.News().UnsafeCreatedAt().IsNotNull(),
+			mustContain: `"pb$52$created_at" IS NOT NULL`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			sql, _, err := qb.Select(goqu.L("1")).From(tableName).Where(tt.expr).ToSQL()
+			require.NoError(t, err)
+			require.Contains(t, sql, tt.mustContain)
+		})
+	}
 }
