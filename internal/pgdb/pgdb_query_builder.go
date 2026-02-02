@@ -3,7 +3,8 @@ package pgdb
 import (
 	"fmt"
 	"io"
-	"sort"
+	"maps"
+	"slices"
 	"strconv"
 
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
@@ -295,11 +296,7 @@ func (module *Module) getNestedQueryBuilders(ctx pgsgo.Context, m pgs.Message, i
 
 	// Build the nested query builders from nested fields
 	// Sort the keys to ensure deterministic output order
-	nestedFieldNames := make([]string, 0, len(nestedFieldMap))
-	for name := range nestedFieldMap {
-		nestedFieldNames = append(nestedFieldNames, name)
-	}
-	sort.Strings(nestedFieldNames)
+	nestedFieldNames := slices.Sorted(maps.Keys(nestedFieldMap))
 
 	rv := make([]*nestedQueryBuilderContext, 0)
 	for _, name := range nestedFieldNames {
