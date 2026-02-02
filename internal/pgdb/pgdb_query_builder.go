@@ -155,15 +155,15 @@ type safeFieldContext struct {
 	Op          *safeOps
 }
 
-func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker, generatedOpsTypes map[string]bool) error {
-	c := module.getQueryBuilder(ctx, m, ix, generatedOpsTypes)
+func (module *Module) renderQueryBuilder(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker, generatedOpsTypes map[string]bool, generatedNestedTypes map[string]bool) error {
+	c := module.getQueryBuilder(ctx, m, ix, generatedOpsTypes, generatedNestedTypes)
 	return templates["query_builder.tmpl"].Execute(w, c)
 }
 
-func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *importTracker, generatedOpsTypes map[string]bool) *qbContext {
+func (module *Module) getQueryBuilder(ctx pgsgo.Context, m pgs.Message, ix *importTracker, generatedOpsTypes map[string]bool, generatedNestedTypes map[string]bool) *qbContext {
 	msgFields := module.getMessageFields(ctx, m, ix, "m.self")
 	safeFields := module.getSafeFields(ctx, m, ix)
-	nestedQueryBuilders := module.getNestedQueryBuilders(ctx, m, ix, safeFields)
+	nestedQueryBuilders := module.getNestedQueryBuilders(ctx, m, ix, safeFields, generatedNestedTypes)
 
 	// Build a set of GoNames used by nested query builders at the root level
 	nestedBuilderNames := make(map[string]bool)
@@ -260,7 +260,9 @@ func getColumnType(ctx pgsgo.Context, m pgs.Message) string {
 
 // getNestedQueryBuilders builds a tree of nested query builder contexts based on the safe fields.
 // It groups fields by their nested message path and creates query builder types for each level.
-func (module *Module) getNestedQueryBuilders(ctx pgsgo.Context, m pgs.Message, ix *importTracker, safeFields []*safeFieldContext) []*nestedQueryBuilderContext {
+// generatedNestedTypes tracks all type names that have been generated across all messages in the file
+// to prevent duplicates when the same nested type is reachable via different paths.
+func (module *Module) getNestedQueryBuilders(ctx pgsgo.Context, m pgs.Message, ix *importTracker, safeFields []*safeFieldContext, generatedNestedTypes map[string]bool) []*nestedQueryBuilderContext {
 	msgFields := module.getMessageFields(ctx, m, ix, "m.self")
 	parentTypeName := getQueryType(ctx, m)
 	msgName := ctx.Name(m).String()
@@ -306,7 +308,7 @@ func (module *Module) getNestedQueryBuilders(ctx pgsgo.Context, m pgs.Message, i
 		// Recursively build children with index awareness
 		children, unsafeChildren := module.getNestedQueryBuildersRecursiveWithIndex(
 			ctx, nf.embeddedMsg, ix, builderTypeName, msgName+nf.goName,
-			nf.prefix, goNamePrefix, allFields, indexedFieldPaths,
+			nf.prefix, goNamePrefix, allFields, indexedFieldPaths, generatedNestedTypes,
 		)
 
 		nqb := &nestedQueryBuilderContext{
@@ -351,6 +353,8 @@ type nestedFieldInfo struct {
 
 // getNestedQueryBuildersRecursiveWithIndex builds nested query builders for deeply nested messages,
 // separating children into indexed and unsafe categories.
+// generatedNestedTypes tracks all type names that have been generated to prevent duplicates
+// when the same type is reachable via different paths.
 func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 	ctx pgsgo.Context,
 	m pgs.Message,
@@ -361,6 +365,7 @@ func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 	goNamePrefix string,
 	allFields []*fieldContext,
 	indexedFieldPaths map[string]bool,
+	generatedNestedTypes map[string]bool,
 ) ([]*nestedQueryBuilderContext, []*nestedQueryBuilderContext) {
 	children := make([]*nestedQueryBuilderContext, 0)
 	unsafeChildren := make([]*nestedQueryBuilderContext, 0)
@@ -410,7 +415,7 @@ func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 		// Recursively build children
 		childChildren, childUnsafeChildren := module.getNestedQueryBuildersRecursiveWithIndex(
 			ctx, embeddedMsg, ix, builderTypeName, namePrefix+goName,
-			fullPrefix, newGoNamePrefix, allFields, indexedFieldPaths,
+			fullPrefix, newGoNamePrefix, allFields, indexedFieldPaths, generatedNestedTypes,
 		)
 
 		hasIndexedContent := len(indexedFields) > 0 || len(childChildren) > 0
@@ -442,29 +447,39 @@ func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 		// (so users can access non-indexed fields via UnsafeXxx() accessor)
 		if hasUnsafeContent {
 			unsafeTypeName := namePrefix + goName + "UnsafeQueryBuilder"
+
+			// Check if this unsafe type was already generated via a different path.
+			// This handles the case where the same type is reachable through different
+			// intermediate paths (e.g., via oneof members that both contain the same nested type).
+			skipUnsafeTypeDef := generatedNestedTypes[unsafeTypeName]
+			if !skipUnsafeTypeDef {
+				generatedNestedTypes[unsafeTypeName] = true
+			}
+
+			// For the children of the unsafe builder:
+			// If there's ALSO a safe builder (hasIndexedContent), the safe builder's UnsafeChildren
+			// will generate the child types. So the unsafe builder's Children should skip type
+			// definitions to avoid duplicates.
+			skipChildTypeDef := hasIndexedContent
+
 			// Fix: Copy children with correct ParentTypeName pointing to unsafe type.
 			// childUnsafeChildren were built with parentTypeName = builderTypeName (safe type),
 			// but when used as children of unsafeNqb, they need ParentTypeName = unsafeTypeName.
-			//
-			// Only skip type definitions if there's ALSO a safe builder (hasIndexedContent).
-			// When both exist, the same child types are generated from nqb.UnsafeChildren,
-			// so unsafeNqb.Children should skip type definitions to avoid duplicates.
-			// When only unsafeNqb exists, we need to generate the types here.
-			skipTypeDef := hasIndexedContent
-			fixedChildren := copyChildrenWithParent(childUnsafeChildren, unsafeTypeName, skipTypeDef)
+			fixedChildren := copyChildrenWithParent(childUnsafeChildren, unsafeTypeName, skipChildTypeDef)
 
 			unsafeNqb := &nestedQueryBuilderContext{
-				TypeName:         unsafeTypeName,
-				GoName:           goName,
-				Prefix:           fieldPrefix,
-				FullPrefix:       fullPrefix,
-				GoNamePrefix:     newGoNamePrefix,
-				ParentTypeName:   parentTypeName,
-				Fields:           unsafeFields,
-				Children:         fixedChildren,
-				IsUnsafe:         true,
-				HasUnsafeFields:  true,
-				HasIndexedFields: false,
+				TypeName:           unsafeTypeName,
+				GoName:             goName,
+				Prefix:             fieldPrefix,
+				FullPrefix:         fullPrefix,
+				GoNamePrefix:       newGoNamePrefix,
+				ParentTypeName:     parentTypeName,
+				Fields:             unsafeFields,
+				Children:           fixedChildren,
+				IsUnsafe:           true,
+				HasUnsafeFields:    true,
+				HasIndexedFields:   false,
+				SkipTypeDefinition: skipUnsafeTypeDef,
 			}
 			unsafeChildren = append(unsafeChildren, unsafeNqb)
 		}

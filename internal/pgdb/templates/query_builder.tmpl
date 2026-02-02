@@ -574,6 +574,8 @@ func (x *{{ .ParentTypeName }}) Unsafe{{ .GoName }}() *{{ .TypeName }} {
 	return &{{ .TypeName }}{tableName: x.tableName, prefix: x.prefix + "{{ .Prefix }}"}
 }
 
+{{/* Skip field methods and children if type was already generated elsewhere */}}
+{{ if not .SkipTypeDefinition }}
 {{/* Generate field accessor methods for non-indexed fields */}}
 {{ $typeName := .TypeName }}
 {{ $fullPrefix := .FullPrefix }}
@@ -589,6 +591,7 @@ func (x *{{ $typeName }}) {{ .ShortGoName }}() *{{ .OpsTypeName }} {
 {{/* Recursively generate unsafe child nested query builders */}}
 {{ range .Children }}
 {{ template "unsafeNestedQueryBuilder" . }}
+{{ end }}
 {{ end }}
 {{ end }}
 

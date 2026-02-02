@@ -230,3 +230,73 @@ message ParentWithEmbeddedDB {
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
 }
+
+// Test case for duplicate method generation (Bug 1)
+// When a nested message has BOTH indexed AND non-indexed fields,
+// the same UnsafeQueryBuilder children are accessible from both
+// the safe QueryBuilder (via UnsafeChildren) and the UnsafeQueryBuilder (via Children).
+// The child's field methods should only be generated once.
+message DuplicateMethodsBugLeaf {
+  option (pgdb.v1.msg).nested_only = true;
+  string leaf_value = 1;
+}
+
+message DuplicateMethodsBugMiddle {
+  option (pgdb.v1.msg).nested_only = true;
+  string indexed_field = 1;
+  string unindexed_field = 2;
+  DuplicateMethodsBugLeaf leaf = 3;
+}
+
+message DuplicateMethodsBugRoot {
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["tenant_id"]
+    sk_fields: ["id"]
+  };
+  option (pgdb.v1.msg).indexes = {
+    name: "middle_indexed"
+    method: INDEX_METHOD_BTREE
+    columns: [
+      "tenant_id",
+      "middle.indexed_field"
+    ]
+  };
+  string tenant_id = 1;
+  string id = 2;
+  DuplicateMethodsBugMiddle middle = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// Test case for duplicate type via different paths (Bug 2)
+// When a grandchild type is reachable through different intermediate paths,
+// it should only be generated once.
+message DuplicateTypePathsBugGrandchild {
+  option (pgdb.v1.msg).nested_only = true;
+  string grandchild_value = 1;
+}
+
+message DuplicateTypePathsBugChildA {
+  option (pgdb.v1.msg).nested_only = true;
+  DuplicateTypePathsBugGrandchild nested = 1;
+}
+
+message DuplicateTypePathsBugChildB {
+  option (pgdb.v1.msg).nested_only = true;
+  DuplicateTypePathsBugGrandchild nested = 1;
+}
+
+message DuplicateTypePathsBugRoot {
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["tenant_id"]
+    sk_fields: ["id"]
+  };
+  string tenant_id = 1;
+  string id = 2;
+  oneof selector {
+    DuplicateTypePathsBugChildA child_a = 10;
+    DuplicateTypePathsBugChildB child_b = 11;
+  }
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
