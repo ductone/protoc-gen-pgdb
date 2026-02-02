@@ -18508,6 +18508,3652 @@ func (x *ParentWithEmbeddedDBEmbeddedInnerUnsafeQueryBuilder) Value() *ParentWit
 	return &ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "value"}
 }
 
+type pgdbDescriptorDuplicateMethodsBugLeaf struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorDuplicateMethodsBugLeaf    pgdb_v1.Descriptor = &pgdbDescriptorDuplicateMethodsBugLeaf{}
+	instancepgdbDescriptorDuplicateMethodsBugLeafV17 pgdb_v1.Descriptor = &pgdbDescriptorDuplicateMethodsBugLeaf{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) TableName() string {
+	return "pb_duplicate_methods_bug_leaf_models_ci_61cd4839"
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_methods_bug_leaf_models_ci_61cd4839"),
+		Name:               df.ColumnName("leaf_value"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("leaf_value"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_methods_bug_leaf_models_ci_61cd4839",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_leaf_models_ci_61cd4839", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_leaf_models_ci_61cd4839", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_leaf_models_ci_61cd4839", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_methods_bug_leaf_models_ci_61cd4839",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugLeaf) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageDuplicateMethodsBugLeaf struct {
+	self    *DuplicateMethodsBugLeaf
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *DuplicateMethodsBugLeaf) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageDuplicateMethodsBugLeaf{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageDuplicateMethodsBugLeaf) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorDuplicateMethodsBugLeafV17
+	default:
+		return instancepgdbDescriptorDuplicateMethodsBugLeaf
+	}
+}
+
+func (m *pgdbMessageDuplicateMethodsBugLeaf) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1 := strings.ReplaceAll(string(m.self.GetLeafValue()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("leaf_value")] = nullExp
+	} else {
+		rv[ro.ColumnName("leaf_value")] = v1
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageDuplicateMethodsBugLeaf) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+func (m *pgdbMessageDuplicateMethodsBugLeaf) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type pgdbDescriptorDuplicateMethodsBugMiddle struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorDuplicateMethodsBugMiddle    pgdb_v1.Descriptor = &pgdbDescriptorDuplicateMethodsBugMiddle{}
+	instancepgdbDescriptorDuplicateMethodsBugMiddleV17 pgdb_v1.Descriptor = &pgdbDescriptorDuplicateMethodsBugMiddle{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) TableName() string {
+	return "pb_duplicate_methods_bug_middle_models_afdc72d1"
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_methods_bug_middle_models_afdc72d1"),
+		Name:               df.ColumnName("indexed_field"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("indexed_field"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_methods_bug_middle_models_afdc72d1"),
+		Name:               df.ColumnName("unindexed_field"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("unindexed_field"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, ((*DuplicateMethodsBugLeaf)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("3$", 3, "leaf", "pb_duplicate_methods_bug_middle_models_afdc72d1")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_methods_bug_middle_models_afdc72d1",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_middle_models_afdc72d1", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_middle_models_afdc72d1", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_middle_models_afdc72d1", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_methods_bug_middle_models_afdc72d1",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugMiddle) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageDuplicateMethodsBugMiddle struct {
+	self    *DuplicateMethodsBugMiddle
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *DuplicateMethodsBugMiddle) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageDuplicateMethodsBugMiddle{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageDuplicateMethodsBugMiddle) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorDuplicateMethodsBugMiddleV17
+	default:
+		return instancepgdbDescriptorDuplicateMethodsBugMiddle
+	}
+}
+
+func (m *pgdbMessageDuplicateMethodsBugMiddle) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1 := strings.ReplaceAll(string(m.self.GetIndexedField()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("indexed_field")] = nullExp
+	} else {
+		rv[ro.ColumnName("indexed_field")] = v1
+	}
+
+	v2 := strings.ReplaceAll(string(m.self.GetUnindexedField()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("unindexed_field")] = nullExp
+	} else {
+		rv[ro.ColumnName("unindexed_field")] = v2
+	}
+
+	v3tmp := m.self.GetLeaf()
+	v3opts := ro.Nested("3$")
+	if v3tmp == nil {
+		v3opts = append(v3opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v3, err := pgdb_v1.MarshalNestedMsgRecord(v3tmp.DBReflect(m.Dialect()), v3opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v3 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageDuplicateMethodsBugMiddle) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetLeaf().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageDuplicateMethodsBugMiddle) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type pgdbDescriptorDuplicateMethodsBugRoot struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorDuplicateMethodsBugRoot    pgdb_v1.Descriptor = &pgdbDescriptorDuplicateMethodsBugRoot{}
+	instancepgdbDescriptorDuplicateMethodsBugRootV17 pgdb_v1.Descriptor = &pgdbDescriptorDuplicateMethodsBugRoot{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) TableName() string {
+	return "pb_duplicate_methods_bug_root_models_ci_0c1beebe"
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: coltenant_idOverrideExpression,
+			Default:            "",
+			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkskOverrideExpression,
+			Default:            "",
+			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkOverrideExpression,
+			Default:            "",
+			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colskOverrideExpression,
+			Default:            "",
+			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
+			})
+		}
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: colidOverrideExpression,
+		Default:            "''",
+		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_methods_bug_root_models_ci_0c1beebe"),
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, ((*DuplicateMethodsBugMiddle)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("3$", 3, "middle", "pb_duplicate_methods_bug_root_models_ci_0c1beebe")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_methods_bug_root_models_ci_0c1beebe",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_root_models_ci_0c1beebe", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_root_models_ci_0c1beebe", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_root_models_ci_0c1beebe", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_methods_bug_root_models_ci_0c1beebe",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_duplicate_methods_bug_root_models_7738552b"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_duplicate_methods_bug_root_models_7738552b"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_duplicate_methods_bug_root_m_5b7fa376"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_duplicate_methods_bug_root_240bae13"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_duplicate_methods_bug_root_mod_a9ce30bc"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("middle_indexed_duplicate_methods_bug_ro_b2da4897"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("3$indexed_field")},
+		OverrideExpression: "",
+		WherePredicate:     "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateMethodsBugRoot) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageDuplicateMethodsBugRoot struct {
+	self    *DuplicateMethodsBugRoot
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *DuplicateMethodsBugRoot) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageDuplicateMethodsBugRoot{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageDuplicateMethodsBugRoot) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorDuplicateMethodsBugRootV17
+	default:
+		return instancepgdbDescriptorDuplicateMethodsBugRoot
+	}
+}
+
+func (m *pgdbMessageDuplicateMethodsBugRoot) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_city_v1_duplicate_methods_bug_root")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.GetTenantId())
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString(m.self.GetId())
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5 := exp.NewLiteralExpression("NULL")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv5
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv6, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv6
+		}
+
+	}
+
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
+
+	v2tmp := m.self.GetMiddle()
+	v2opts := ro.Nested("3$")
+	if v2tmp == nil {
+		v2opts = append(v2opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v2, err := pgdb_v1.MarshalNestedMsgRecord(v2tmp.DBReflect(m.Dialect()), v2opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v2 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	var v3 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v3tmp := m.self.GetCreatedAt().AsTime()
+		v3 = &v3tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v3
+	}
+
+	var v4 *time.Time
+	if m.self.GetUpdatedAt().IsValid() {
+		v4tmp := m.self.GetUpdatedAt().AsTime()
+		v4 = &v4tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v4
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageDuplicateMethodsBugRoot) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetMiddle().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageDuplicateMethodsBugRoot) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type DuplicateMethodsBugRootDB struct {
+	tableName string
+}
+
+type DuplicateMethodsBugRootDBQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+type DuplicateMethodsBugRootDBQueryUnsafe struct {
+	tableName string
+}
+
+type DuplicateMethodsBugRootDBColumns struct {
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRoot) DB() *DuplicateMethodsBugRootDB {
+	return &DuplicateMethodsBugRootDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
+}
+
+func (x *DuplicateMethodsBugRootDB) TableName() string {
+	return x.tableName
+}
+
+func (x *DuplicateMethodsBugRootDB) Query() *DuplicateMethodsBugRootDBQueryBuilder {
+	return &DuplicateMethodsBugRootDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *DuplicateMethodsBugRootDB) Columns() *DuplicateMethodsBugRootDBColumns {
+	return &DuplicateMethodsBugRootDBColumns{tableName: x.tableName}
+}
+
+func (x *DuplicateMethodsBugRootDB) WithTable(t string) *DuplicateMethodsBugRootDB {
+	return &DuplicateMethodsBugRootDB{tableName: t}
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) WithTable(t string) *DuplicateMethodsBugRootDBQueryBuilder {
+	return &DuplicateMethodsBugRootDBQueryBuilder{tableName: t}
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) Unsafe() *DuplicateMethodsBugRootDBQueryUnsafe {
+	return &DuplicateMethodsBugRootDBQueryUnsafe{tableName: x.tableName}
+}
+
+type DuplicateMethodsBugRootTenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) TenantId() *DuplicateMethodsBugRootTenantIdSafeOperators {
+	return &DuplicateMethodsBugRootTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type DuplicateMethodsBugRootPKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) PKSK() *DuplicateMethodsBugRootPKSKSafeOperators {
+	return &DuplicateMethodsBugRootPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type DuplicateMethodsBugRootPKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) PK() *DuplicateMethodsBugRootPKSafeOperators {
+	return &DuplicateMethodsBugRootPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type DuplicateMethodsBugRootSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) SK() *DuplicateMethodsBugRootSKSafeOperators {
+	return &DuplicateMethodsBugRootSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type DuplicateMethodsBugRootFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) FTSData() *DuplicateMethodsBugRootFTSDataSafeOperators {
+	return &DuplicateMethodsBugRootFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) MiddleIndexedField() *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators {
+	return &DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators{tableName: x.tableName, column: "pb$" + "3$indexed_field"}
+}
+
+type DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type DuplicateMethodsBugRootTenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) TenantId() *DuplicateMethodsBugRootTenantIdQueryType {
+	return &DuplicateMethodsBugRootTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *DuplicateMethodsBugRootTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateMethodsBugRootPKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) PKSK() *DuplicateMethodsBugRootPKSKQueryType {
+	return &DuplicateMethodsBugRootPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *DuplicateMethodsBugRootPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateMethodsBugRootPKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) PK() *DuplicateMethodsBugRootPKQueryType {
+	return &DuplicateMethodsBugRootPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *DuplicateMethodsBugRootPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateMethodsBugRootSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) SK() *DuplicateMethodsBugRootSKQueryType {
+	return &DuplicateMethodsBugRootSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *DuplicateMethodsBugRootSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateMethodsBugRootFTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) FTSData() *DuplicateMethodsBugRootFTSDataQueryType {
+	return &DuplicateMethodsBugRootFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *DuplicateMethodsBugRootFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateMethodsBugRootPBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) PBData() *DuplicateMethodsBugRootPBDataQueryType {
+	return &DuplicateMethodsBugRootPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *DuplicateMethodsBugRootPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateMethodsBugRootIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) Id() *DuplicateMethodsBugRootIdQueryType {
+	return &DuplicateMethodsBugRootIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *DuplicateMethodsBugRootIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateMethodsBugRootCreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) CreatedAt() *DuplicateMethodsBugRootCreatedAtQueryType {
+	return &DuplicateMethodsBugRootCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *DuplicateMethodsBugRootCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateMethodsBugRootUpdatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryUnsafe) UpdatedAt() *DuplicateMethodsBugRootUpdatedAtQueryType {
+	return &DuplicateMethodsBugRootUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+}
+
+func (x *DuplicateMethodsBugRootUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) WithTable(t string) *DuplicateMethodsBugRootDBColumns {
+	return &DuplicateMethodsBugRootDBColumns{tableName: t}
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *DuplicateMethodsBugRootDBColumns) UpdatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+}
+
+type DuplicateMethodsBugRootMiddleQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) Middle() *DuplicateMethodsBugRootMiddleQueryBuilder {
+	return &DuplicateMethodsBugRootMiddleQueryBuilder{tableName: x.tableName, prefix: x.prefix + "3$"}
+}
+
+func (x *DuplicateMethodsBugRootMiddleQueryBuilder) IndexedField() *DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators {
+	return &DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "indexed_field"}
+}
+
+func (x *DuplicateMethodsBugRootMiddleQueryBuilder) UnsafeUnindexedField() *DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators {
+	return &DuplicateMethodsBugRootMiddleUnindexedFieldSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "unindexed_field"}
+}
+
+type DuplicateMethodsBugRootMiddleLeafUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *DuplicateMethodsBugRootMiddleQueryBuilder) UnsafeLeaf() *DuplicateMethodsBugRootMiddleLeafUnsafeQueryBuilder {
+	return &DuplicateMethodsBugRootMiddleLeafUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "3$"}
+}
+
+func (x *DuplicateMethodsBugRootMiddleLeafUnsafeQueryBuilder) LeafValue() *DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators {
+	return &DuplicateMethodsBugRootMiddleLeafLeafValueSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "leaf_value"}
+}
+
+type pgdbDescriptorDuplicateTypePathsBugGrandchild struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorDuplicateTypePathsBugGrandchild    pgdb_v1.Descriptor = &pgdbDescriptorDuplicateTypePathsBugGrandchild{}
+	instancepgdbDescriptorDuplicateTypePathsBugGrandchildV17 pgdb_v1.Descriptor = &pgdbDescriptorDuplicateTypePathsBugGrandchild{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) TableName() string {
+	return "pb_duplicate_type_paths_bug_grandchild_1f5292af"
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_type_paths_bug_grandchild_1f5292af"),
+		Name:               df.ColumnName("grandchild_value"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("grandchild_value"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_type_paths_bug_grandchild_1f5292af",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_grandchild_1f5292af", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_grandchild_1f5292af", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_grandchild_1f5292af", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_type_paths_bug_grandchild_1f5292af",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageDuplicateTypePathsBugGrandchild struct {
+	self    *DuplicateTypePathsBugGrandchild
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *DuplicateTypePathsBugGrandchild) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageDuplicateTypePathsBugGrandchild{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugGrandchild) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorDuplicateTypePathsBugGrandchildV17
+	default:
+		return instancepgdbDescriptorDuplicateTypePathsBugGrandchild
+	}
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugGrandchild) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1 := strings.ReplaceAll(string(m.self.GetGrandchildValue()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("grandchild_value")] = nullExp
+	} else {
+		rv[ro.ColumnName("grandchild_value")] = v1
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugGrandchild) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugGrandchild) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type pgdbDescriptorDuplicateTypePathsBugChildA struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorDuplicateTypePathsBugChildA    pgdb_v1.Descriptor = &pgdbDescriptorDuplicateTypePathsBugChildA{}
+	instancepgdbDescriptorDuplicateTypePathsBugChildAV17 pgdb_v1.Descriptor = &pgdbDescriptorDuplicateTypePathsBugChildA{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) TableName() string {
+	return "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b"
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, ((*DuplicateTypePathsBugGrandchild)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("1$", 1, "nested", "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildA) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageDuplicateTypePathsBugChildA struct {
+	self    *DuplicateTypePathsBugChildA
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *DuplicateTypePathsBugChildA) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageDuplicateTypePathsBugChildA{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugChildA) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorDuplicateTypePathsBugChildAV17
+	default:
+		return instancepgdbDescriptorDuplicateTypePathsBugChildA
+	}
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugChildA) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1tmp := m.self.GetNested()
+	v1opts := ro.Nested("1$")
+	if v1tmp == nil {
+		v1opts = append(v1opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v1, err := pgdb_v1.MarshalNestedMsgRecord(v1tmp.DBReflect(m.Dialect()), v1opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v1 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugChildA) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetNested().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugChildA) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type pgdbDescriptorDuplicateTypePathsBugChildB struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorDuplicateTypePathsBugChildB    pgdb_v1.Descriptor = &pgdbDescriptorDuplicateTypePathsBugChildB{}
+	instancepgdbDescriptorDuplicateTypePathsBugChildBV17 pgdb_v1.Descriptor = &pgdbDescriptorDuplicateTypePathsBugChildB{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) TableName() string {
+	return "pb_duplicate_type_paths_bug_child_b_mod_02f63a31"
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, ((*DuplicateTypePathsBugGrandchild)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("1$", 1, "nested", "pb_duplicate_type_paths_bug_child_b_mod_02f63a31")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_type_paths_bug_child_b_mod_02f63a31",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_b_mod_02f63a31", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_b_mod_02f63a31", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_b_mod_02f63a31", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_type_paths_bug_child_b_mod_02f63a31",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugChildB) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageDuplicateTypePathsBugChildB struct {
+	self    *DuplicateTypePathsBugChildB
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *DuplicateTypePathsBugChildB) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageDuplicateTypePathsBugChildB{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugChildB) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorDuplicateTypePathsBugChildBV17
+	default:
+		return instancepgdbDescriptorDuplicateTypePathsBugChildB
+	}
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugChildB) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1tmp := m.self.GetNested()
+	v1opts := ro.Nested("1$")
+	if v1tmp == nil {
+		v1opts = append(v1opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v1, err := pgdb_v1.MarshalNestedMsgRecord(v1tmp.DBReflect(m.Dialect()), v1opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v1 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugChildB) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetNested().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugChildB) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type pgdbDescriptorDuplicateTypePathsBugRoot struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorDuplicateTypePathsBugRoot    pgdb_v1.Descriptor = &pgdbDescriptorDuplicateTypePathsBugRoot{}
+	instancepgdbDescriptorDuplicateTypePathsBugRootV17 pgdb_v1.Descriptor = &pgdbDescriptorDuplicateTypePathsBugRoot{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) TableName() string {
+	return "pb_duplicate_type_paths_bug_root_models_4a5b53c4"
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: coltenant_idOverrideExpression,
+			Default:            "",
+			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkskOverrideExpression,
+			Default:            "",
+			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkOverrideExpression,
+			Default:            "",
+			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colskOverrideExpression,
+			Default:            "",
+			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
+			})
+		}
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: colidOverrideExpression,
+		Default:            "''",
+		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_duplicate_type_paths_bug_root_models_4a5b53c4"),
+		Name:               df.ColumnName("selector_oneof"),
+		Type:               "int4",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "0",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(5),
+		ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+		ProtoPath:          df.ExtendProtoPath(""),
+		ProtoKind:          protoreflect.Kind(5),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "selector",
+	})
+
+	rv = append(rv, ((*DuplicateTypePathsBugChildA)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("10$", 10, "child_a", "pb_duplicate_type_paths_bug_root_models_4a5b53c4")...)...)
+
+	rv = append(rv, ((*DuplicateTypePathsBugChildB)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("11$", 11, "child_b", "pb_duplicate_type_paths_bug_root_models_4a5b53c4")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_type_paths_bug_root_models_4a5b53c4",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_root_models_4a5b53c4", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_root_models_4a5b53c4", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_root_models_4a5b53c4", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_duplicate_type_paths_bug_root_models_4a5b53c4",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_duplicate_type_paths_bug_root_mode_7965cc60"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_duplicate_type_paths_bug_root_mode_7965cc60"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_duplicate_type_paths_bug_roo_fbb10085"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_duplicate_type_paths_bug_ro_effb063e"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_duplicate_type_paths_bug_root_5ccb240c"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	return rv
+}
+
+func (d *pgdbDescriptorDuplicateTypePathsBugRoot) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type DuplicateTypePathsBugRootSelectorType int32
+
+var DuplicateTypePathsBugRootSelector = struct {
+	ChildA DuplicateTypePathsBugRootSelectorType
+	ChildB DuplicateTypePathsBugRootSelectorType
+}{
+	ChildA: 10,
+	ChildB: 11,
+}
+
+type pgdbMessageDuplicateTypePathsBugRoot struct {
+	self    *DuplicateTypePathsBugRoot
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *DuplicateTypePathsBugRoot) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageDuplicateTypePathsBugRoot{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugRoot) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorDuplicateTypePathsBugRootV17
+	default:
+		return instancepgdbDescriptorDuplicateTypePathsBugRoot
+	}
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugRoot) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_city_v1_duplicate_type_paths_bug_root")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.GetTenantId())
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString(m.self.GetId())
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5 := exp.NewLiteralExpression("NULL")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv5
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv6, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv6
+		}
+
+	}
+
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
+
+	v2tmp := m.self.GetChildA()
+	v2opts := ro.Nested("10$")
+	if v2tmp == nil {
+		v2opts = append(v2opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v2, err := pgdb_v1.MarshalNestedMsgRecord(v2tmp.DBReflect(m.Dialect()), v2opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v2 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	v3tmp := m.self.GetChildB()
+	v3opts := ro.Nested("11$")
+	if v3tmp == nil {
+		v3opts = append(v3opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v3, err := pgdb_v1.MarshalNestedMsgRecord(v3tmp.DBReflect(m.Dialect()), v3opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v3 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	var v4 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v4tmp := m.self.GetCreatedAt().AsTime()
+		v4 = &v4tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v4
+	}
+
+	var v5 *time.Time
+	if m.self.GetUpdatedAt().IsValid() {
+		v5tmp := m.self.GetUpdatedAt().AsTime()
+		v5 = &v5tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v5
+	}
+
+	oneof1 := uint32(m.self.WhichSelector())
+
+	if ro.Nulled {
+		rv[ro.ColumnName("selector_oneof")] = nullExp
+	} else {
+		rv[ro.ColumnName("selector_oneof")] = oneof1
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugRoot) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetChildA().DBReflect(m.Dialect()).SearchData()...)
+
+	rv = append(rv, m.self.GetChildB().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageDuplicateTypePathsBugRoot) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type DuplicateTypePathsBugRootDB struct {
+	tableName string
+}
+
+type DuplicateTypePathsBugRootDBQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+type DuplicateTypePathsBugRootDBQueryUnsafe struct {
+	tableName string
+}
+
+type DuplicateTypePathsBugRootDBColumns struct {
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRoot) DB() *DuplicateTypePathsBugRootDB {
+	return &DuplicateTypePathsBugRootDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
+}
+
+func (x *DuplicateTypePathsBugRootDB) TableName() string {
+	return x.tableName
+}
+
+func (x *DuplicateTypePathsBugRootDB) Query() *DuplicateTypePathsBugRootDBQueryBuilder {
+	return &DuplicateTypePathsBugRootDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *DuplicateTypePathsBugRootDB) Columns() *DuplicateTypePathsBugRootDBColumns {
+	return &DuplicateTypePathsBugRootDBColumns{tableName: x.tableName}
+}
+
+func (x *DuplicateTypePathsBugRootDB) WithTable(t string) *DuplicateTypePathsBugRootDB {
+	return &DuplicateTypePathsBugRootDB{tableName: t}
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) WithTable(t string) *DuplicateTypePathsBugRootDBQueryBuilder {
+	return &DuplicateTypePathsBugRootDBQueryBuilder{tableName: t}
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) Unsafe() *DuplicateTypePathsBugRootDBQueryUnsafe {
+	return &DuplicateTypePathsBugRootDBQueryUnsafe{tableName: x.tableName}
+}
+
+type DuplicateTypePathsBugRootTenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) TenantId() *DuplicateTypePathsBugRootTenantIdSafeOperators {
+	return &DuplicateTypePathsBugRootTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type DuplicateTypePathsBugRootPKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) PKSK() *DuplicateTypePathsBugRootPKSKSafeOperators {
+	return &DuplicateTypePathsBugRootPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type DuplicateTypePathsBugRootPKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) PK() *DuplicateTypePathsBugRootPKSafeOperators {
+	return &DuplicateTypePathsBugRootPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type DuplicateTypePathsBugRootSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) SK() *DuplicateTypePathsBugRootSKSafeOperators {
+	return &DuplicateTypePathsBugRootSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type DuplicateTypePathsBugRootFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) FTSData() *DuplicateTypePathsBugRootFTSDataSafeOperators {
+	return &DuplicateTypePathsBugRootFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type DuplicateTypePathsBugRootTenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) TenantId() *DuplicateTypePathsBugRootTenantIdQueryType {
+	return &DuplicateTypePathsBugRootTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *DuplicateTypePathsBugRootTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootPKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) PKSK() *DuplicateTypePathsBugRootPKSKQueryType {
+	return &DuplicateTypePathsBugRootPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *DuplicateTypePathsBugRootPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootPKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) PK() *DuplicateTypePathsBugRootPKQueryType {
+	return &DuplicateTypePathsBugRootPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *DuplicateTypePathsBugRootPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) SK() *DuplicateTypePathsBugRootSKQueryType {
+	return &DuplicateTypePathsBugRootSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *DuplicateTypePathsBugRootSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootFTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) FTSData() *DuplicateTypePathsBugRootFTSDataQueryType {
+	return &DuplicateTypePathsBugRootFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *DuplicateTypePathsBugRootFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootPBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) PBData() *DuplicateTypePathsBugRootPBDataQueryType {
+	return &DuplicateTypePathsBugRootPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *DuplicateTypePathsBugRootPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) Id() *DuplicateTypePathsBugRootIdQueryType {
+	return &DuplicateTypePathsBugRootIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *DuplicateTypePathsBugRootIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootCreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) CreatedAt() *DuplicateTypePathsBugRootCreatedAtQueryType {
+	return &DuplicateTypePathsBugRootCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *DuplicateTypePathsBugRootCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootUpdatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) UpdatedAt() *DuplicateTypePathsBugRootUpdatedAtQueryType {
+	return &DuplicateTypePathsBugRootUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+}
+
+func (x *DuplicateTypePathsBugRootUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type DuplicateTypePathsBugRootSelectorQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryUnsafe) Selector() *DuplicateTypePathsBugRootSelectorQueryType {
+	return &DuplicateTypePathsBugRootSelectorQueryType{tableName: x.tableName, column: "pb$" + "selector_oneof"}
+}
+
+func (x *DuplicateTypePathsBugRootSelectorQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) WithTable(t string) *DuplicateTypePathsBugRootDBColumns {
+	return &DuplicateTypePathsBugRootDBColumns{tableName: t}
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) UpdatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+}
+
+func (x *DuplicateTypePathsBugRootDBColumns) Selector() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "selector_oneof")
+}
+
+type DuplicateTypePathsBugRootChildAQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) ChildA() *DuplicateTypePathsBugRootChildAQueryBuilder {
+	return &DuplicateTypePathsBugRootChildAQueryBuilder{tableName: x.tableName, prefix: x.prefix + "10$"}
+}
+
+type DuplicateTypePathsBugRootChildANestedUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *DuplicateTypePathsBugRootChildAQueryBuilder) UnsafeNested() *DuplicateTypePathsBugRootChildANestedUnsafeQueryBuilder {
+	return &DuplicateTypePathsBugRootChildANestedUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "1$"}
+}
+
+func (x *DuplicateTypePathsBugRootChildANestedUnsafeQueryBuilder) GrandchildValue() *DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators {
+	return &DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "grandchild_value"}
+}
+
+type DuplicateTypePathsBugRootChildBQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) ChildB() *DuplicateTypePathsBugRootChildBQueryBuilder {
+	return &DuplicateTypePathsBugRootChildBQueryBuilder{tableName: x.tableName, prefix: x.prefix + "11$"}
+}
+
+type DuplicateTypePathsBugRootChildBNestedUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *DuplicateTypePathsBugRootChildBQueryBuilder) UnsafeNested() *DuplicateTypePathsBugRootChildBNestedUnsafeQueryBuilder {
+	return &DuplicateTypePathsBugRootChildBNestedUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "1$"}
+}
+
+func (x *DuplicateTypePathsBugRootChildBNestedUnsafeQueryBuilder) GrandchildValue() *DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators {
+	return &DuplicateTypePathsBugRootChildBNestedGrandchildValueSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "grandchild_value"}
+}
+
 type pgdbDescriptorAttractionsConfig_Detail struct {
 	dialect pgdb_v1.Dialect
 }
