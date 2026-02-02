@@ -75,6 +75,11 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 	}
 	buf := &bytes.Buffer{}
 
+	// Track generated SafeOperators type names across all messages to prevent duplicates.
+	// This handles the case where message A embeds message B (both with their own DB types),
+	// and both would generate SafeOperators types like "ABChildSafeOperators".
+	generatedOpsTypes := make(map[string]bool)
+
 	for _, m := range in.AllMessages() {
 		fext := pgdb_v1.MessageOptions{}
 		_, err := m.Extension(pgdb_v1.E_Msg, &fext)
@@ -102,7 +107,7 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 		// Generating standalone query builders for nested_only messages can cause
 		// type name collisions when ParentName + FieldName == NestedOnlyMsgName.
 		if !fext.GetNestedOnly() {
-			err = module.renderQueryBuilder(ctx, buf, in, m, ix)
+			err = module.renderQueryBuilder(ctx, buf, in, m, ix, generatedOpsTypes)
 			if err != nil {
 				return err
 			}

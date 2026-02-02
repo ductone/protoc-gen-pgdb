@@ -457,3 +457,27 @@ func TestDuplicateTypeBug(t *testing.T) {
 	// duplicated if we also generated them for the unsafe path.
 	// This test verifies that the code compiles - duplicate types would cause failure.
 }
+
+// TestEmbeddedWithOwnDBNoCollision verifies that embedding a message with its own DB
+// does NOT cause duplicate type declarations. When message B (with its own DB) is
+// embedded in message A, A should NOT generate types for B's children because B
+// will generate those types itself.
+func TestEmbeddedWithOwnDBNoCollision(t *testing.T) {
+	// This test passes if it compiles - duplicate types would cause compilation failure.
+
+	// Access from parent - should have accessor to embedded but NOT its children
+	parentFields := (*ParentWithEmbeddedDB)(nil).DB().Query()
+	require.NotNil(t, parentFields, "parent should have query builder")
+
+	// Access from embedded's own query builder
+	embeddedFields := (*EmbeddedWithOwnDB)(nil).DB().Query()
+	require.NotNil(t, embeddedFields, "embedded should have its own query builder")
+
+	// The inner nested_only field should be accessible from EmbeddedWithOwnDB
+	innerQB := embeddedFields.Inner()
+	require.NotNil(t, innerQB, "embedded should have accessor to its nested_only child")
+
+	// Access the value field from the inner nested message (non-indexed, so Unsafe prefix)
+	valueOps := innerQB.UnsafeValue()
+	require.NotNil(t, valueOps, "should access value field from inner nested message")
+}

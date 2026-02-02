@@ -196,3 +196,37 @@ message DuplicateTypeBugOuter {
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
 }
+
+// Test case: embedding a message that has its own DB type.
+// This should NOT cause duplicate type generation because the
+// parent should NOT traverse into messages with their own DB.
+message EmbeddedDBInnerConfig {
+  option (pgdb.v1.msg).nested_only = true;
+  string value = 1;
+}
+
+message EmbeddedWithOwnDB {
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["tenant_id"]
+    sk_fields: ["id"]
+  };
+  string tenant_id = 1;
+  string id = 2;
+  EmbeddedDBInnerConfig inner = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// Parent embeds EmbeddedWithOwnDB - should NOT generate types for EmbeddedWithOwnDB's children
+// because EmbeddedWithOwnDB has its own DB type and will generate those types itself.
+message ParentWithEmbeddedDB {
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["tenant_id"]
+    sk_fields: ["id"]
+  };
+  string tenant_id = 1;
+  string id = 2;
+  EmbeddedWithOwnDB embedded = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
