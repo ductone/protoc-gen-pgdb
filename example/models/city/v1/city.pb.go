@@ -1292,6 +1292,360 @@ func (b0 DuplicateTypeBugOuter_builder) Build() *DuplicateTypeBugOuter {
 	return m0
 }
 
+// Test case: embedding a message that has its own DB type.
+// This should NOT cause duplicate type generation because the
+// parent should NOT traverse into messages with their own DB.
+type EmbeddedDBInnerConfig struct {
+	state            protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_Value string                 `protobuf:"bytes,1,opt,name=value,proto3"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *EmbeddedDBInnerConfig) Reset() {
+	*x = EmbeddedDBInnerConfig{}
+	mi := &file_models_city_v1_city_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EmbeddedDBInnerConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EmbeddedDBInnerConfig) ProtoMessage() {}
+
+func (x *EmbeddedDBInnerConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *EmbeddedDBInnerConfig) GetValue() string {
+	if x != nil {
+		return x.xxx_hidden_Value
+	}
+	return ""
+}
+
+func (x *EmbeddedDBInnerConfig) SetValue(v string) {
+	x.xxx_hidden_Value = v
+}
+
+type EmbeddedDBInnerConfig_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	Value string
+}
+
+func (b0 EmbeddedDBInnerConfig_builder) Build() *EmbeddedDBInnerConfig {
+	m0 := &EmbeddedDBInnerConfig{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_Value = b.Value
+	return m0
+}
+
+type EmbeddedWithOwnDB struct {
+	state                protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_TenantId  string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3"`
+	xxx_hidden_Id        string                 `protobuf:"bytes,2,opt,name=id,proto3"`
+	xxx_hidden_Inner     *EmbeddedDBInnerConfig `protobuf:"bytes,3,opt,name=inner,proto3"`
+	xxx_hidden_CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3"`
+	xxx_hidden_UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *EmbeddedWithOwnDB) Reset() {
+	*x = EmbeddedWithOwnDB{}
+	mi := &file_models_city_v1_city_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EmbeddedWithOwnDB) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EmbeddedWithOwnDB) ProtoMessage() {}
+
+func (x *EmbeddedWithOwnDB) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *EmbeddedWithOwnDB) GetTenantId() string {
+	if x != nil {
+		return x.xxx_hidden_TenantId
+	}
+	return ""
+}
+
+func (x *EmbeddedWithOwnDB) GetId() string {
+	if x != nil {
+		return x.xxx_hidden_Id
+	}
+	return ""
+}
+
+func (x *EmbeddedWithOwnDB) GetInner() *EmbeddedDBInnerConfig {
+	if x != nil {
+		return x.xxx_hidden_Inner
+	}
+	return nil
+}
+
+func (x *EmbeddedWithOwnDB) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_CreatedAt
+	}
+	return nil
+}
+
+func (x *EmbeddedWithOwnDB) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_UpdatedAt
+	}
+	return nil
+}
+
+func (x *EmbeddedWithOwnDB) SetTenantId(v string) {
+	x.xxx_hidden_TenantId = v
+}
+
+func (x *EmbeddedWithOwnDB) SetId(v string) {
+	x.xxx_hidden_Id = v
+}
+
+func (x *EmbeddedWithOwnDB) SetInner(v *EmbeddedDBInnerConfig) {
+	x.xxx_hidden_Inner = v
+}
+
+func (x *EmbeddedWithOwnDB) SetCreatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_CreatedAt = v
+}
+
+func (x *EmbeddedWithOwnDB) SetUpdatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_UpdatedAt = v
+}
+
+func (x *EmbeddedWithOwnDB) HasInner() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Inner != nil
+}
+
+func (x *EmbeddedWithOwnDB) HasCreatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_CreatedAt != nil
+}
+
+func (x *EmbeddedWithOwnDB) HasUpdatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_UpdatedAt != nil
+}
+
+func (x *EmbeddedWithOwnDB) ClearInner() {
+	x.xxx_hidden_Inner = nil
+}
+
+func (x *EmbeddedWithOwnDB) ClearCreatedAt() {
+	x.xxx_hidden_CreatedAt = nil
+}
+
+func (x *EmbeddedWithOwnDB) ClearUpdatedAt() {
+	x.xxx_hidden_UpdatedAt = nil
+}
+
+type EmbeddedWithOwnDB_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	TenantId  string
+	Id        string
+	Inner     *EmbeddedDBInnerConfig
+	CreatedAt *timestamppb.Timestamp
+	UpdatedAt *timestamppb.Timestamp
+}
+
+func (b0 EmbeddedWithOwnDB_builder) Build() *EmbeddedWithOwnDB {
+	m0 := &EmbeddedWithOwnDB{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_TenantId = b.TenantId
+	x.xxx_hidden_Id = b.Id
+	x.xxx_hidden_Inner = b.Inner
+	x.xxx_hidden_CreatedAt = b.CreatedAt
+	x.xxx_hidden_UpdatedAt = b.UpdatedAt
+	return m0
+}
+
+// Parent embeds EmbeddedWithOwnDB - should NOT generate types for EmbeddedWithOwnDB's children
+// because EmbeddedWithOwnDB has its own DB type and will generate those types itself.
+type ParentWithEmbeddedDB struct {
+	state                protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_TenantId  string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3"`
+	xxx_hidden_Id        string                 `protobuf:"bytes,2,opt,name=id,proto3"`
+	xxx_hidden_Embedded  *EmbeddedWithOwnDB     `protobuf:"bytes,3,opt,name=embedded,proto3"`
+	xxx_hidden_CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3"`
+	xxx_hidden_UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *ParentWithEmbeddedDB) Reset() {
+	*x = ParentWithEmbeddedDB{}
+	mi := &file_models_city_v1_city_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ParentWithEmbeddedDB) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ParentWithEmbeddedDB) ProtoMessage() {}
+
+func (x *ParentWithEmbeddedDB) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *ParentWithEmbeddedDB) GetTenantId() string {
+	if x != nil {
+		return x.xxx_hidden_TenantId
+	}
+	return ""
+}
+
+func (x *ParentWithEmbeddedDB) GetId() string {
+	if x != nil {
+		return x.xxx_hidden_Id
+	}
+	return ""
+}
+
+func (x *ParentWithEmbeddedDB) GetEmbedded() *EmbeddedWithOwnDB {
+	if x != nil {
+		return x.xxx_hidden_Embedded
+	}
+	return nil
+}
+
+func (x *ParentWithEmbeddedDB) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_CreatedAt
+	}
+	return nil
+}
+
+func (x *ParentWithEmbeddedDB) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_UpdatedAt
+	}
+	return nil
+}
+
+func (x *ParentWithEmbeddedDB) SetTenantId(v string) {
+	x.xxx_hidden_TenantId = v
+}
+
+func (x *ParentWithEmbeddedDB) SetId(v string) {
+	x.xxx_hidden_Id = v
+}
+
+func (x *ParentWithEmbeddedDB) SetEmbedded(v *EmbeddedWithOwnDB) {
+	x.xxx_hidden_Embedded = v
+}
+
+func (x *ParentWithEmbeddedDB) SetCreatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_CreatedAt = v
+}
+
+func (x *ParentWithEmbeddedDB) SetUpdatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_UpdatedAt = v
+}
+
+func (x *ParentWithEmbeddedDB) HasEmbedded() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Embedded != nil
+}
+
+func (x *ParentWithEmbeddedDB) HasCreatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_CreatedAt != nil
+}
+
+func (x *ParentWithEmbeddedDB) HasUpdatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_UpdatedAt != nil
+}
+
+func (x *ParentWithEmbeddedDB) ClearEmbedded() {
+	x.xxx_hidden_Embedded = nil
+}
+
+func (x *ParentWithEmbeddedDB) ClearCreatedAt() {
+	x.xxx_hidden_CreatedAt = nil
+}
+
+func (x *ParentWithEmbeddedDB) ClearUpdatedAt() {
+	x.xxx_hidden_UpdatedAt = nil
+}
+
+type ParentWithEmbeddedDB_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	TenantId  string
+	Id        string
+	Embedded  *EmbeddedWithOwnDB
+	CreatedAt *timestamppb.Timestamp
+	UpdatedAt *timestamppb.Timestamp
+}
+
+func (b0 ParentWithEmbeddedDB_builder) Build() *ParentWithEmbeddedDB {
+	m0 := &ParentWithEmbeddedDB{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_TenantId = b.TenantId
+	x.xxx_hidden_Id = b.Id
+	x.xxx_hidden_Embedded = b.Embedded
+	x.xxx_hidden_CreatedAt = b.CreatedAt
+	x.xxx_hidden_UpdatedAt = b.UpdatedAt
+	return m0
+}
+
 type AttractionsConfig_Detail struct {
 	state           protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Info string                 `protobuf:"bytes,1,opt,name=info,proto3"`
@@ -1301,7 +1655,7 @@ type AttractionsConfig_Detail struct {
 
 func (x *AttractionsConfig_Detail) Reset() {
 	*x = AttractionsConfig_Detail{}
-	mi := &file_models_city_v1_city_proto_msgTypes[9]
+	mi := &file_models_city_v1_city_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1313,7 +1667,7 @@ func (x *AttractionsConfig_Detail) String() string {
 func (*AttractionsConfig_Detail) ProtoMessage() {}
 
 func (x *AttractionsConfig_Detail) ProtoReflect() protoreflect.Message {
-	mi := &file_models_city_v1_city_proto_msgTypes[9]
+	mi := &file_models_city_v1_city_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1358,7 +1712,7 @@ type NestedOnlyWithOneof_ChoiceA struct {
 
 func (x *NestedOnlyWithOneof_ChoiceA) Reset() {
 	*x = NestedOnlyWithOneof_ChoiceA{}
-	mi := &file_models_city_v1_city_proto_msgTypes[10]
+	mi := &file_models_city_v1_city_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1370,7 +1724,7 @@ func (x *NestedOnlyWithOneof_ChoiceA) String() string {
 func (*NestedOnlyWithOneof_ChoiceA) ProtoMessage() {}
 
 func (x *NestedOnlyWithOneof_ChoiceA) ProtoReflect() protoreflect.Message {
-	mi := &file_models_city_v1_city_proto_msgTypes[10]
+	mi := &file_models_city_v1_city_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1415,7 +1769,7 @@ type NestedOnlyWithOneof_ChoiceB struct {
 
 func (x *NestedOnlyWithOneof_ChoiceB) Reset() {
 	*x = NestedOnlyWithOneof_ChoiceB{}
-	mi := &file_models_city_v1_city_proto_msgTypes[11]
+	mi := &file_models_city_v1_city_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1427,7 +1781,7 @@ func (x *NestedOnlyWithOneof_ChoiceB) String() string {
 func (*NestedOnlyWithOneof_ChoiceB) ProtoMessage() {}
 
 func (x *NestedOnlyWithOneof_ChoiceB) ProtoReflect() protoreflect.Message {
-	mi := &file_models_city_v1_city_proto_msgTypes[11]
+	mi := &file_models_city_v1_city_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1545,9 +1899,29 @@ const file_models_city_v1_city_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt:N\x82\xf7\x02\x11\x12\x0f\n" +
 	"\ttenant_id\x12\x02id\xd2\xf7\x025\x123\n" +
-	"\x0enested_indexed\x10\x01\x1a\ttenant_id\x1a\x14nested.indexed_fieldB;Z9github.com/ductone/protoc-gen-pgdb/example/models/city/v1b\x06proto3"
+	"\x0enested_indexed\x10\x01\x1a\ttenant_id\x1a\x14nested.indexed_field\"5\n" +
+	"\x15EmbeddedDBInnerConfig\x12\x14\n" +
+	"\x05value\x18\x01 \x01(\tR\x05value:\x06\xd2\xf7\x02\x02 \x01\"\x8a\x02\n" +
+	"\x11EmbeddedWithOwnDB\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x12;\n" +
+	"\x05inner\x18\x03 \x01(\v2%.models.city.v1.EmbeddedDBInnerConfigR\x05inner\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt:\x15\x82\xf7\x02\x11\x12\x0f\n" +
+	"\ttenant_id\x12\x02id\"\x8f\x02\n" +
+	"\x14ParentWithEmbeddedDB\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x12=\n" +
+	"\bembedded\x18\x03 \x01(\v2!.models.city.v1.EmbeddedWithOwnDBR\bembedded\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt:\x15\x82\xf7\x02\x11\x12\x0f\n" +
+	"\ttenant_id\x12\x02idB;Z9github.com/ductone/protoc-gen-pgdb/example/models/city/v1b\x06proto3"
 
-var file_models_city_v1_city_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_models_city_v1_city_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_models_city_v1_city_proto_goTypes = []any{
 	(*Attractions)(nil),                 // 0: models.city.v1.Attractions
 	(*AttractionsConfig)(nil),           // 1: models.city.v1.AttractionsConfig
@@ -1558,39 +1932,48 @@ var file_models_city_v1_city_proto_goTypes = []any{
 	(*DuplicateTypeBugInner)(nil),       // 6: models.city.v1.DuplicateTypeBugInner
 	(*DuplicateTypeBugNested)(nil),      // 7: models.city.v1.DuplicateTypeBugNested
 	(*DuplicateTypeBugOuter)(nil),       // 8: models.city.v1.DuplicateTypeBugOuter
-	(*AttractionsConfig_Detail)(nil),    // 9: models.city.v1.AttractionsConfig.Detail
-	(*NestedOnlyWithOneof_ChoiceA)(nil), // 10: models.city.v1.NestedOnlyWithOneof.ChoiceA
-	(*NestedOnlyWithOneof_ChoiceB)(nil), // 11: models.city.v1.NestedOnlyWithOneof.ChoiceB
-	(*timestamppb.Timestamp)(nil),       // 12: google.protobuf.Timestamp
-	(*v11.Pet)(nil),                     // 13: models.animals.v1.Pet
-	(*v1.Shop)(nil),                     // 14: models.zoo.v1.Shop
+	(*EmbeddedDBInnerConfig)(nil),       // 9: models.city.v1.EmbeddedDBInnerConfig
+	(*EmbeddedWithOwnDB)(nil),           // 10: models.city.v1.EmbeddedWithOwnDB
+	(*ParentWithEmbeddedDB)(nil),        // 11: models.city.v1.ParentWithEmbeddedDB
+	(*AttractionsConfig_Detail)(nil),    // 12: models.city.v1.AttractionsConfig.Detail
+	(*NestedOnlyWithOneof_ChoiceA)(nil), // 13: models.city.v1.NestedOnlyWithOneof.ChoiceA
+	(*NestedOnlyWithOneof_ChoiceB)(nil), // 14: models.city.v1.NestedOnlyWithOneof.ChoiceB
+	(*timestamppb.Timestamp)(nil),       // 15: google.protobuf.Timestamp
+	(*v11.Pet)(nil),                     // 16: models.animals.v1.Pet
+	(*v1.Shop)(nil),                     // 17: models.zoo.v1.Shop
 }
 var file_models_city_v1_city_proto_depIdxs = []int32{
-	12, // 0: models.city.v1.Attractions.created_at:type_name -> google.protobuf.Timestamp
-	13, // 1: models.city.v1.Attractions.pet:type_name -> models.animals.v1.Pet
-	14, // 2: models.city.v1.Attractions.zoo_shop:type_name -> models.zoo.v1.Shop
-	14, // 3: models.city.v1.Attractions.medium:type_name -> models.zoo.v1.Shop
+	15, // 0: models.city.v1.Attractions.created_at:type_name -> google.protobuf.Timestamp
+	16, // 1: models.city.v1.Attractions.pet:type_name -> models.animals.v1.Pet
+	17, // 2: models.city.v1.Attractions.zoo_shop:type_name -> models.zoo.v1.Shop
+	17, // 3: models.city.v1.Attractions.medium:type_name -> models.zoo.v1.Shop
 	1,  // 4: models.city.v1.Attractions.config:type_name -> models.city.v1.AttractionsConfig
-	9,  // 5: models.city.v1.AttractionsConfig.detail:type_name -> models.city.v1.AttractionsConfig.Detail
+	12, // 5: models.city.v1.AttractionsConfig.detail:type_name -> models.city.v1.AttractionsConfig.Detail
 	1,  // 6: models.city.v1.AttractionsV2.config:type_name -> models.city.v1.AttractionsConfig
-	12, // 7: models.city.v1.AttractionsV2.created_at:type_name -> google.protobuf.Timestamp
-	10, // 8: models.city.v1.NestedOnlyWithOneof.choice_a:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceA
-	11, // 9: models.city.v1.NestedOnlyWithOneof.choice_b:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceB
+	15, // 7: models.city.v1.AttractionsV2.created_at:type_name -> google.protobuf.Timestamp
+	13, // 8: models.city.v1.NestedOnlyWithOneof.choice_a:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceA
+	14, // 9: models.city.v1.NestedOnlyWithOneof.choice_b:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceB
 	3,  // 10: models.city.v1.NestedOnlyMiddle.oneof_field:type_name -> models.city.v1.NestedOnlyWithOneof
-	12, // 11: models.city.v1.NestedOnlyMiddle.created_at:type_name -> google.protobuf.Timestamp
-	12, // 12: models.city.v1.NestedOnlyMiddle.updated_at:type_name -> google.protobuf.Timestamp
+	15, // 11: models.city.v1.NestedOnlyMiddle.created_at:type_name -> google.protobuf.Timestamp
+	15, // 12: models.city.v1.NestedOnlyMiddle.updated_at:type_name -> google.protobuf.Timestamp
 	4,  // 13: models.city.v1.NestedOnlyWrapper.middle:type_name -> models.city.v1.NestedOnlyMiddle
-	12, // 14: models.city.v1.NestedOnlyWrapper.created_at:type_name -> google.protobuf.Timestamp
-	12, // 15: models.city.v1.NestedOnlyWrapper.updated_at:type_name -> google.protobuf.Timestamp
+	15, // 14: models.city.v1.NestedOnlyWrapper.created_at:type_name -> google.protobuf.Timestamp
+	15, // 15: models.city.v1.NestedOnlyWrapper.updated_at:type_name -> google.protobuf.Timestamp
 	6,  // 16: models.city.v1.DuplicateTypeBugNested.inner:type_name -> models.city.v1.DuplicateTypeBugInner
 	7,  // 17: models.city.v1.DuplicateTypeBugOuter.nested:type_name -> models.city.v1.DuplicateTypeBugNested
-	12, // 18: models.city.v1.DuplicateTypeBugOuter.created_at:type_name -> google.protobuf.Timestamp
-	12, // 19: models.city.v1.DuplicateTypeBugOuter.updated_at:type_name -> google.protobuf.Timestamp
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	15, // 18: models.city.v1.DuplicateTypeBugOuter.created_at:type_name -> google.protobuf.Timestamp
+	15, // 19: models.city.v1.DuplicateTypeBugOuter.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 20: models.city.v1.EmbeddedWithOwnDB.inner:type_name -> models.city.v1.EmbeddedDBInnerConfig
+	15, // 21: models.city.v1.EmbeddedWithOwnDB.created_at:type_name -> google.protobuf.Timestamp
+	15, // 22: models.city.v1.EmbeddedWithOwnDB.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 23: models.city.v1.ParentWithEmbeddedDB.embedded:type_name -> models.city.v1.EmbeddedWithOwnDB
+	15, // 24: models.city.v1.ParentWithEmbeddedDB.created_at:type_name -> google.protobuf.Timestamp
+	15, // 25: models.city.v1.ParentWithEmbeddedDB.updated_at:type_name -> google.protobuf.Timestamp
+	26, // [26:26] is the sub-list for method output_type
+	26, // [26:26] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_models_city_v1_city_proto_init() }
@@ -1612,7 +1995,7 @@ func file_models_city_v1_city_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_models_city_v1_city_proto_rawDesc), len(file_models_city_v1_city_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

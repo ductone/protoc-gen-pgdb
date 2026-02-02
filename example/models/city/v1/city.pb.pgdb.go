@@ -1463,3243 +1463,6 @@ func (x *AttractionsDBQueryBuilder) MediumMedium() *AttractionsMediumMediumSafeO
 	return &AttractionsMediumMediumSafeOperators{tableName: x.tableName, column: "pb$" + "12$medium_oneof"}
 }
 
-type AttractionsMediumIdSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumIdSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumIdSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumIdSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumIdSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumIdSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumIdSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumIdSafeOperators) In(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumIdSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumIdSafeOperators) IsNotEmpty() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
-}
-
-func (x *AttractionsMediumIdSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumIdSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumCreatedAtSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) Neq(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumFurSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumFurSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumFurSafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumFurSafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumFurSafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumFurSafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumFurSafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumFurSafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumFurSafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumFurSafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumFurSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumFurSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumFurSafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumFurSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumPaperPagesSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumPaperPagesSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumEbookSizeSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) Neq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) Gt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) Gte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) Lt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) Lte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) In(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) NotIn(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) Between(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumEbookSizeSafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingIdSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) In(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) IsNotEmpty() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingDoubleSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) Eq(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) Neq(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) Gt(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) Gte(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) Lt(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) Lte(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) In(v []float64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) NotIn(v []float64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) Between(start float64, end float64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingDoubleSafeOperators) NotBetween(start float64, end float64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingFloatSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) Eq(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) Neq(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) Gt(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) Gte(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) Lt(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) Lte(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) In(v []float32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) NotIn(v []float32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) Between(start float32, end float32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingFloatSafeOperators) NotBetween(start float32, end float32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingInt32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingInt32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingInt64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) Neq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) Gt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) Gte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) Lt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) Lte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) In(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingInt64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingUint32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) Eq(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) Neq(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) Gt(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) Gte(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) Lt(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) Lte(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) In(v []uint32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) NotIn(v []uint32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) Between(start uint32, end uint32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingUint32SafeOperators) NotBetween(start uint32, end uint32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingUint64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) Eq(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) Neq(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) Gt(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) Gte(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) Lt(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) Lte(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) In(v []uint64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) NotIn(v []uint64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) Between(start uint64, end uint64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingUint64SafeOperators) NotBetween(start uint64, end uint64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingSint32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingSint32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingSint64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) Neq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) Gt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) Gte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) Lt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) Lte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) In(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingSint64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingFixed32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) Eq(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) Neq(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) Gt(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) Gte(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) Lt(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) Lte(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) In(v []uint32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) NotIn(v []uint32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) Between(start uint32, end uint32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingFixed32SafeOperators) NotBetween(start uint32, end uint32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingFixed64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) Eq(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) Neq(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) Gt(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) Gte(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) Lt(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) Lte(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) In(v []uint64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) NotIn(v []uint64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) Between(start uint64, end uint64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingFixed64SafeOperators) NotBetween(start uint64, end uint64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingSfixed32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingSfixed32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingSfixed64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) Neq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) Gt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) Gte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) Lt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) Lte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) In(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingSfixed64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingBoolSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) Eq(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) Neq(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) Gt(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) Gte(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) Lt(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) Lte(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) In(v []bool) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) NotIn(v []bool) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) Between(start bool, end bool) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingBoolSafeOperators) NotBetween(start bool, end bool) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingString_SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) In(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) NotIn(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) IsNotEmpty() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingString_SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingBytesSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) Eq(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) Neq(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) Gt(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) Gte(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) Lt(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) Lte(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) In(v [][]byte) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) NotIn(v [][]byte) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) Between(start []byte, end []byte) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingBytesSafeOperators) NotBetween(start []byte, end []byte) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumAnythingRepeatedDoubleSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Eq(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Neq(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Gt(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Gte(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Lt(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Lte(v float64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) In(v []float64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) NotIn(v []float64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Between(start float64, end float64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) NotBetween(start float64, end float64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Overlaps(items ...float64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[float64](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) UnsafeNotOverlaps(items ...float64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[float64](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Contains(items ...float64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[float64](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) UnsafeNotContains(items ...float64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[float64](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) IsContainedBy(items ...float64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[float64](items))
-}
-
-type AttractionsMediumAnythingRepeatedFloatSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Eq(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Neq(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Gt(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Gte(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Lt(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Lte(v float32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) In(v []float32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) NotIn(v []float32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Between(start float32, end float32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) NotBetween(start float32, end float32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Overlaps(items ...float32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[float32](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) UnsafeNotOverlaps(items ...float32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[float32](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Contains(items ...float32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[float32](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) UnsafeNotContains(items ...float32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[float32](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) IsContainedBy(items ...float32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[float32](items))
-}
-
-type AttractionsMediumAnythingRepeatedInt32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Overlaps(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Contains(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) IsContainedBy(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
-}
-
-type AttractionsMediumAnythingRepeatedInt64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Neq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Gt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Gte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Lt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Lte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) In(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Overlaps(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int64](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) UnsafeNotOverlaps(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int64](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Contains(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int64](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) UnsafeNotContains(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int64](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) IsContainedBy(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int64](items))
-}
-
-type AttractionsMediumAnythingRepeatedUint32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Eq(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Neq(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Gt(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Gte(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Lt(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Lte(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) In(v []uint32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) NotIn(v []uint32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Between(start uint32, end uint32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) NotBetween(start uint32, end uint32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Overlaps(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[uint32](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) UnsafeNotOverlaps(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[uint32](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Contains(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[uint32](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) UnsafeNotContains(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[uint32](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) IsContainedBy(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[uint32](items))
-}
-
-type AttractionsMediumAnythingRepeatedUint64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Eq(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Neq(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Gt(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Gte(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Lt(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Lte(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) In(v []uint64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) NotIn(v []uint64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Between(start uint64, end uint64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) NotBetween(start uint64, end uint64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Overlaps(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[uint64](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) UnsafeNotOverlaps(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[uint64](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Contains(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[uint64](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) UnsafeNotContains(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[uint64](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) IsContainedBy(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[uint64](items))
-}
-
-type AttractionsMediumAnythingRepeatedSint32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Overlaps(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Contains(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) IsContainedBy(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
-}
-
-type AttractionsMediumAnythingRepeatedSint64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Neq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Gt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Gte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Lt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Lte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) In(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Overlaps(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int64](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) UnsafeNotOverlaps(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int64](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Contains(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int64](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) UnsafeNotContains(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int64](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) IsContainedBy(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int64](items))
-}
-
-type AttractionsMediumAnythingRepeatedFixed32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Eq(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Neq(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Gt(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Gte(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Lt(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Lte(v uint32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) In(v []uint32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) NotIn(v []uint32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Between(start uint32, end uint32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) NotBetween(start uint32, end uint32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Overlaps(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[uint32](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) UnsafeNotOverlaps(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[uint32](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Contains(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[uint32](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) UnsafeNotContains(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[uint32](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) IsContainedBy(items ...uint32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[uint32](items))
-}
-
-type AttractionsMediumAnythingRepeatedFixed64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Eq(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Neq(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Gt(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Gte(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Lt(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Lte(v uint64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) In(v []uint64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) NotIn(v []uint64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Between(start uint64, end uint64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) NotBetween(start uint64, end uint64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Overlaps(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[uint64](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) UnsafeNotOverlaps(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[uint64](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Contains(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[uint64](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) UnsafeNotContains(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[uint64](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) IsContainedBy(items ...uint64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[uint64](items))
-}
-
-type AttractionsMediumAnythingRepeatedSfixed32SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Overlaps(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Contains(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) IsContainedBy(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
-}
-
-type AttractionsMediumAnythingRepeatedSfixed64SafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Eq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Neq(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Gt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Gte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Lt(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Lte(v int64) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) In(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Overlaps(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int64](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) UnsafeNotOverlaps(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int64](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Contains(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int64](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) UnsafeNotContains(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int64](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) IsContainedBy(items ...int64) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int64](items))
-}
-
-type AttractionsMediumAnythingRepeatedBoolSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Eq(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Neq(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Gt(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Gte(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Lt(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Lte(v bool) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) In(v []bool) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) NotIn(v []bool) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Between(start bool, end bool) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) NotBetween(start bool, end bool) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Overlaps(items ...bool) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[bool](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) UnsafeNotOverlaps(items ...bool) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[bool](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Contains(items ...bool) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[bool](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) UnsafeNotContains(items ...bool) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[bool](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) IsContainedBy(items ...bool) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[bool](items))
-}
-
-type AttractionsMediumAnythingRepeatedStringSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) In(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Overlaps(items ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[string](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) UnsafeNotOverlaps(items ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[string](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Contains(items ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[string](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) UnsafeNotContains(items ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[string](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) IsContainedBy(items ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[string](items))
-}
-
-type AttractionsMediumAnythingRepeatedBytesSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Eq(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Neq(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Gt(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Gte(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Lt(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Lte(v []byte) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) In(v [][]byte) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) NotIn(v [][]byte) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Between(start []byte, end []byte) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) NotBetween(start []byte, end []byte) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Overlaps(items ...[]byte) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[[]byte](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) UnsafeNotOverlaps(items ...[]byte) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[[]byte](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Contains(items ...[]byte) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[[]byte](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) UnsafeNotContains(items ...[]byte) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[[]byte](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) IsContainedBy(items ...[]byte) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[[]byte](items))
-}
-
-type AttractionsMediumAnythingRepeatedEnumSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-// Overlaps checks if the field contains ANY items in the arg.
-// [a, b] && [a] = true, [a, b] && [a, c] = true
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Overlaps(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
-}
-
-// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
-// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
-}
-
-// Contains checks if the field contains ALL items in the arg.
-// [a, b] @> [a] = true, [a, b] @> [a, c] = false
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Contains(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
-}
-
-// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
-// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
-}
-
-func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) IsContainedBy(items ...int32) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
-}
-
-type AttractionsMediumAnythingStringMapSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) Eq(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) Neq(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) Gt(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) Gte(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) Lt(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) Lte(v any) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) In(v []any) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) NotIn(v []any) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) Between(start any, end any) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) NotBetween(start any, end any) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
-	var err error
-	var data []byte
-
-	pm, ok := obj.(proto.Message)
-	if ok {
-		data, err = protojson.Marshal(pm)
-	} else {
-		data, err = json.Marshal(obj)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectPathExists(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectPath(path string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? @@ ?", idExp, path)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectKeyExists(key string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("? \\? ?", idExp, key)
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
-}
-
-func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
-	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
-	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
-}
-
-type AttractionsMediumAnythingCreatedAtSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Neq(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumAnythingCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsMediumMgrIdSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) Eq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) Neq(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) Gt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) Gte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) Lt(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) Lte(v int32) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) In(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) NotIn(v []int32) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) Between(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsMediumMgrIdSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsConfigNameSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsConfigNameSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsConfigNameSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsConfigNameSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsConfigNameSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsConfigNameSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsConfigNameSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsConfigNameSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsConfigNameSafeOperators) In(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsConfigNameSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsConfigNameSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsConfigNameSafeOperators) IsNotEmpty() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
-}
-
-func (x *AttractionsConfigNameSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsConfigNameSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsConfigNameSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
-type AttractionsConfigDetailInfoSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) Neq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) Gt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) Gte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) Lt(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) Lte(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) In(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) NotIn(v []string) exp.BooleanExpression {
-	if len(v) == 0 {
-		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
-	}
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) IsNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) IsNotEmpty() exp.Expression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) IsNotNull() exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) Between(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
-}
-
-func (x *AttractionsConfigDetailInfoSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
-}
-
 type AttractionsPetProfileSafeOperators struct {
 	column    string
 	tableName string
@@ -8618,6 +5381,3243 @@ func (x *AttractionsZooShopMgrIdSafeOperators) NotBetween(start int32, end int32
 	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
 }
 
+type AttractionsMediumIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumIdSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsMediumIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumCreatedAtSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) Neq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumFurSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumFurSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumFurSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumFurSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumFurSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumFurSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumFurSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumFurSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumFurSafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumFurSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumFurSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumFurSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumFurSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumFurSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumPaperPagesSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumPaperPagesSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumEbookSizeSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumEbookSizeSafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingDoubleSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) Eq(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) Neq(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) Gt(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) Gte(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) Lt(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) Lte(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) In(v []float64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) NotIn(v []float64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) Between(start float64, end float64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingDoubleSafeOperators) NotBetween(start float64, end float64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingFloatSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) Eq(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) Neq(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) Gt(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) Gte(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) Lt(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) Lte(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) In(v []float32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) NotIn(v []float32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) Between(start float32, end float32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingFloatSafeOperators) NotBetween(start float32, end float32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingInt32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingInt32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingInt64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingInt64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingUint32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) Eq(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) Neq(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) Gt(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) Gte(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) Lt(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) Lte(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) In(v []uint32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) NotIn(v []uint32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) Between(start uint32, end uint32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingUint32SafeOperators) NotBetween(start uint32, end uint32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingUint64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) Eq(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) Neq(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) Gt(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) Gte(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) Lt(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) Lte(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) In(v []uint64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) NotIn(v []uint64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) Between(start uint64, end uint64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingUint64SafeOperators) NotBetween(start uint64, end uint64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingSint32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingSint32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingSint64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingSint64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingFixed32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) Eq(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) Neq(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) Gt(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) Gte(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) Lt(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) Lte(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) In(v []uint32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) NotIn(v []uint32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) Between(start uint32, end uint32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingFixed32SafeOperators) NotBetween(start uint32, end uint32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingFixed64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) Eq(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) Neq(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) Gt(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) Gte(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) Lt(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) Lte(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) In(v []uint64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) NotIn(v []uint64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) Between(start uint64, end uint64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingFixed64SafeOperators) NotBetween(start uint64, end uint64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingSfixed32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingSfixed32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingSfixed64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingSfixed64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingBoolSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) Eq(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) Neq(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) Gt(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) Gte(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) Lt(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) Lte(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) In(v []bool) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) NotIn(v []bool) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) Between(start bool, end bool) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingBoolSafeOperators) NotBetween(start bool, end bool) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingString_SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingString_SafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingBytesSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) Eq(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) Neq(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) Gt(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) Gte(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) Lt(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) Lte(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) In(v [][]byte) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) NotIn(v [][]byte) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) Between(start []byte, end []byte) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingBytesSafeOperators) NotBetween(start []byte, end []byte) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumAnythingRepeatedDoubleSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Eq(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Neq(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Gt(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Gte(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Lt(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Lte(v float64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) In(v []float64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) NotIn(v []float64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Between(start float64, end float64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) NotBetween(start float64, end float64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Overlaps(items ...float64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[float64](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) UnsafeNotOverlaps(items ...float64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[float64](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) Contains(items ...float64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[float64](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) UnsafeNotContains(items ...float64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[float64](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedDoubleSafeOperators) IsContainedBy(items ...float64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[float64](items))
+}
+
+type AttractionsMediumAnythingRepeatedFloatSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Eq(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Neq(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Gt(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Gte(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Lt(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Lte(v float32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) In(v []float32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) NotIn(v []float32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Between(start float32, end float32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) NotBetween(start float32, end float32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Overlaps(items ...float32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[float32](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) UnsafeNotOverlaps(items ...float32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[float32](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) Contains(items ...float32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[float32](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) UnsafeNotContains(items ...float32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[float32](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedFloatSafeOperators) IsContainedBy(items ...float32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[float32](items))
+}
+
+type AttractionsMediumAnythingRepeatedInt32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Overlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) Contains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt32SafeOperators) IsContainedBy(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
+}
+
+type AttractionsMediumAnythingRepeatedInt64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Overlaps(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int64](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) UnsafeNotOverlaps(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int64](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) Contains(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int64](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) UnsafeNotContains(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int64](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedInt64SafeOperators) IsContainedBy(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int64](items))
+}
+
+type AttractionsMediumAnythingRepeatedUint32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Eq(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Neq(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Gt(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Gte(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Lt(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Lte(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) In(v []uint32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) NotIn(v []uint32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Between(start uint32, end uint32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) NotBetween(start uint32, end uint32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Overlaps(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[uint32](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) UnsafeNotOverlaps(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[uint32](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) Contains(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[uint32](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) UnsafeNotContains(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[uint32](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint32SafeOperators) IsContainedBy(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[uint32](items))
+}
+
+type AttractionsMediumAnythingRepeatedUint64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Eq(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Neq(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Gt(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Gte(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Lt(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Lte(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) In(v []uint64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) NotIn(v []uint64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Between(start uint64, end uint64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) NotBetween(start uint64, end uint64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Overlaps(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[uint64](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) UnsafeNotOverlaps(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[uint64](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) Contains(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[uint64](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) UnsafeNotContains(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[uint64](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedUint64SafeOperators) IsContainedBy(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[uint64](items))
+}
+
+type AttractionsMediumAnythingRepeatedSint32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Overlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) Contains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint32SafeOperators) IsContainedBy(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
+}
+
+type AttractionsMediumAnythingRepeatedSint64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Overlaps(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int64](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) UnsafeNotOverlaps(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int64](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) Contains(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int64](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) UnsafeNotContains(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int64](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedSint64SafeOperators) IsContainedBy(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int64](items))
+}
+
+type AttractionsMediumAnythingRepeatedFixed32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Eq(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Neq(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Gt(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Gte(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Lt(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Lte(v uint32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) In(v []uint32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) NotIn(v []uint32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Between(start uint32, end uint32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) NotBetween(start uint32, end uint32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Overlaps(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[uint32](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) UnsafeNotOverlaps(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[uint32](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) Contains(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[uint32](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) UnsafeNotContains(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[uint32](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed32SafeOperators) IsContainedBy(items ...uint32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[uint32](items))
+}
+
+type AttractionsMediumAnythingRepeatedFixed64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Eq(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Neq(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Gt(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Gte(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Lt(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Lte(v uint64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) In(v []uint64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) NotIn(v []uint64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Between(start uint64, end uint64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) NotBetween(start uint64, end uint64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Overlaps(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[uint64](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) UnsafeNotOverlaps(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[uint64](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) Contains(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[uint64](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) UnsafeNotContains(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[uint64](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedFixed64SafeOperators) IsContainedBy(items ...uint64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[uint64](items))
+}
+
+type AttractionsMediumAnythingRepeatedSfixed32SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Overlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) Contains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed32SafeOperators) IsContainedBy(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
+}
+
+type AttractionsMediumAnythingRepeatedSfixed64SafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Eq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Neq(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Gt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Gte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Lt(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Lte(v int64) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) In(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) NotIn(v []int64) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Between(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) NotBetween(start int64, end int64) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Overlaps(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int64](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) UnsafeNotOverlaps(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int64](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) Contains(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int64](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) UnsafeNotContains(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int64](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedSfixed64SafeOperators) IsContainedBy(items ...int64) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int64](items))
+}
+
+type AttractionsMediumAnythingRepeatedBoolSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Eq(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Neq(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Gt(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Gte(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Lt(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Lte(v bool) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) In(v []bool) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) NotIn(v []bool) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Between(start bool, end bool) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) NotBetween(start bool, end bool) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Overlaps(items ...bool) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[bool](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) UnsafeNotOverlaps(items ...bool) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[bool](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) Contains(items ...bool) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[bool](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) UnsafeNotContains(items ...bool) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[bool](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedBoolSafeOperators) IsContainedBy(items ...bool) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[bool](items))
+}
+
+type AttractionsMediumAnythingRepeatedStringSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Overlaps(items ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[string](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) UnsafeNotOverlaps(items ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[string](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) Contains(items ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[string](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) UnsafeNotContains(items ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[string](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedStringSafeOperators) IsContainedBy(items ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[string](items))
+}
+
+type AttractionsMediumAnythingRepeatedBytesSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Eq(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Neq(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Gt(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Gte(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Lt(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Lte(v []byte) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) In(v [][]byte) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) NotIn(v [][]byte) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Between(start []byte, end []byte) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) NotBetween(start []byte, end []byte) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Overlaps(items ...[]byte) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[[]byte](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) UnsafeNotOverlaps(items ...[]byte) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[[]byte](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) Contains(items ...[]byte) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[[]byte](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) UnsafeNotContains(items ...[]byte) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[[]byte](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedBytesSafeOperators) IsContainedBy(items ...[]byte) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[[]byte](items))
+}
+
+type AttractionsMediumAnythingRepeatedEnumSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+// Overlaps checks if the field contains ANY items in the arg.
+// [a, b] && [a] = true, [a, b] && [a, c] = true
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Overlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotOverlaps checks if the field contains NONE items in the arg. It will likely not use an index for this scan.
+// NOT ([a, b] && [a]) = false, NOT ([a, b] && [a, c]) = false, NOT ([a, b] && [c]) = true
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) UnsafeNotOverlaps(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? && ?)", idExp, xpq.Array[int32](items))
+}
+
+// Contains checks if the field contains ALL items in the arg.
+// [a, b] @> [a] = true, [a, b] @> [a, c] = false
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) Contains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+// UnsafeNotContains checks if the ANY of the ARG is not in the field. It will likely not use an index for this scan.
+// NOT ([a, b] @> [a]) = false, NOT ([a, b] @> [a, c]) = true, NOT ([a, b] @> [c]) = true
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) UnsafeNotContains(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("NOT (? @> ?)", idExp, xpq.Array[int32](items))
+}
+
+func (x *AttractionsMediumAnythingRepeatedEnumSafeOperators) IsContainedBy(items ...int32) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? <@ ?)", idExp, xpq.Array[int32](items))
+}
+
+type AttractionsMediumAnythingStringMapSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) Eq(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) Neq(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) Gt(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) Gte(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) Lt(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) Lte(v any) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) In(v []any) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) NotIn(v []any) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) Between(start any, end any) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) NotBetween(start any, end any) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectContains(obj interface{}) (exp.Expression, error) {
+	var err error
+	var data []byte
+
+	pm, ok := obj.(proto.Message)
+	if ok {
+		data, err = protojson.Marshal(pm)
+	} else {
+		data, err = json.Marshal(obj)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? @> ?::jsonb)", idExp, string(data)), nil
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectPathExists(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("@?"), path)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectPath(path string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? @@ ?", idExp, path)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectKeyExists(key string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("? \\? ?", idExp, key)
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectAnyKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?|"), xpq.StringArray(keys))
+}
+
+func (x *AttractionsMediumAnythingStringMapSafeOperators) ObjectAllKeyExists(keys ...string) exp.Expression {
+	idExp := exp.NewIdentifierExpression("", x.tableName, x.column)
+	return exp.NewLiteralExpression("(? ? ?)", idExp, exp.NewLiteralExpression("?&"), xpq.StringArray(keys))
+}
+
+type AttractionsMediumAnythingCreatedAtSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Neq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumAnythingCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsMediumMgrIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) Eq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) Neq(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) Gt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) Gte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) Lt(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) Lte(v int32) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) In(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) NotIn(v []int32) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) Between(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsMediumMgrIdSafeOperators) NotBetween(start int32, end int32) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsConfigNameSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsConfigNameSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsConfigNameSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsConfigNameSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsConfigNameSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsConfigNameSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsConfigNameSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type AttractionsConfigDetailInfoSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *AttractionsConfigDetailInfoSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
 type AttractionsTenantIdQueryType struct {
 	column    string
 	tableName string
@@ -8790,241 +8790,6 @@ func (x *AttractionsDBColumns) CreatedAt() exp.Expression {
 
 func (x *AttractionsDBColumns) What() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "what_oneof")
-}
-
-type AttractionsMediumQueryBuilder struct {
-	tableName string
-	prefix    string
-}
-
-func (x *AttractionsDBQueryBuilder) Medium() *AttractionsMediumQueryBuilder {
-	return &AttractionsMediumQueryBuilder{tableName: x.tableName, prefix: x.prefix + "12$"}
-}
-
-func (x *AttractionsMediumQueryBuilder) Medium() *AttractionsMediumMediumSafeOperators {
-	return &AttractionsMediumMediumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "medium_oneof"}
-}
-
-func (x *AttractionsMediumQueryBuilder) UnsafeId() *AttractionsMediumIdSafeOperators {
-	return &AttractionsMediumIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
-}
-
-func (x *AttractionsMediumQueryBuilder) UnsafeCreatedAt() *AttractionsMediumCreatedAtSafeOperators {
-	return &AttractionsMediumCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
-}
-
-func (x *AttractionsMediumQueryBuilder) UnsafeFur() *AttractionsMediumFurSafeOperators {
-	return &AttractionsMediumFurSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fur"}
-}
-
-type AttractionsMediumPaperUnsafeQueryBuilder struct {
-	tableName string
-	prefix    string
-}
-
-func (x *AttractionsMediumQueryBuilder) UnsafePaper() *AttractionsMediumPaperUnsafeQueryBuilder {
-	return &AttractionsMediumPaperUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "50$"}
-}
-
-func (x *AttractionsMediumPaperUnsafeQueryBuilder) Pages() *AttractionsMediumPaperPagesSafeOperators {
-	return &AttractionsMediumPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
-}
-
-type AttractionsMediumEbookUnsafeQueryBuilder struct {
-	tableName string
-	prefix    string
-}
-
-func (x *AttractionsMediumQueryBuilder) UnsafeEbook() *AttractionsMediumEbookUnsafeQueryBuilder {
-	return &AttractionsMediumEbookUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "51$"}
-}
-
-func (x *AttractionsMediumEbookUnsafeQueryBuilder) Size() *AttractionsMediumEbookSizeSafeOperators {
-	return &AttractionsMediumEbookSizeSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "size"}
-}
-
-type AttractionsMediumAnythingUnsafeQueryBuilder struct {
-	tableName string
-	prefix    string
-}
-
-func (x *AttractionsMediumQueryBuilder) UnsafeAnything() *AttractionsMediumAnythingUnsafeQueryBuilder {
-	return &AttractionsMediumAnythingUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "52$"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Id() *AttractionsMediumAnythingIdSafeOperators {
-	return &AttractionsMediumAnythingIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Double() *AttractionsMediumAnythingDoubleSafeOperators {
-	return &AttractionsMediumAnythingDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "double"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Float() *AttractionsMediumAnythingFloatSafeOperators {
-	return &AttractionsMediumAnythingFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "float"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Int32() *AttractionsMediumAnythingInt32SafeOperators {
-	return &AttractionsMediumAnythingInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Int64() *AttractionsMediumAnythingInt64SafeOperators {
-	return &AttractionsMediumAnythingInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Uint32() *AttractionsMediumAnythingUint32SafeOperators {
-	return &AttractionsMediumAnythingUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Uint64() *AttractionsMediumAnythingUint64SafeOperators {
-	return &AttractionsMediumAnythingUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sint32() *AttractionsMediumAnythingSint32SafeOperators {
-	return &AttractionsMediumAnythingSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sint64() *AttractionsMediumAnythingSint64SafeOperators {
-	return &AttractionsMediumAnythingSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Fixed32() *AttractionsMediumAnythingFixed32SafeOperators {
-	return &AttractionsMediumAnythingFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Fixed64() *AttractionsMediumAnythingFixed64SafeOperators {
-	return &AttractionsMediumAnythingFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sfixed32() *AttractionsMediumAnythingSfixed32SafeOperators {
-	return &AttractionsMediumAnythingSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sfixed64() *AttractionsMediumAnythingSfixed64SafeOperators {
-	return &AttractionsMediumAnythingSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Bool() *AttractionsMediumAnythingBoolSafeOperators {
-	return &AttractionsMediumAnythingBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bool"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) String_() *AttractionsMediumAnythingString_SafeOperators {
-	return &AttractionsMediumAnythingString_SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Bytes() *AttractionsMediumAnythingBytesSafeOperators {
-	return &AttractionsMediumAnythingBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bytes"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedDouble() *AttractionsMediumAnythingRepeatedDoubleSafeOperators {
-	return &AttractionsMediumAnythingRepeatedDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_double"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFloat() *AttractionsMediumAnythingRepeatedFloatSafeOperators {
-	return &AttractionsMediumAnythingRepeatedFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_float"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedInt32() *AttractionsMediumAnythingRepeatedInt32SafeOperators {
-	return &AttractionsMediumAnythingRepeatedInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedInt64() *AttractionsMediumAnythingRepeatedInt64SafeOperators {
-	return &AttractionsMediumAnythingRepeatedInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedUint32() *AttractionsMediumAnythingRepeatedUint32SafeOperators {
-	return &AttractionsMediumAnythingRepeatedUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedUint64() *AttractionsMediumAnythingRepeatedUint64SafeOperators {
-	return &AttractionsMediumAnythingRepeatedUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSint32() *AttractionsMediumAnythingRepeatedSint32SafeOperators {
-	return &AttractionsMediumAnythingRepeatedSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSint64() *AttractionsMediumAnythingRepeatedSint64SafeOperators {
-	return &AttractionsMediumAnythingRepeatedSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFixed32() *AttractionsMediumAnythingRepeatedFixed32SafeOperators {
-	return &AttractionsMediumAnythingRepeatedFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFixed64() *AttractionsMediumAnythingRepeatedFixed64SafeOperators {
-	return &AttractionsMediumAnythingRepeatedFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSfixed32() *AttractionsMediumAnythingRepeatedSfixed32SafeOperators {
-	return &AttractionsMediumAnythingRepeatedSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed32"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSfixed64() *AttractionsMediumAnythingRepeatedSfixed64SafeOperators {
-	return &AttractionsMediumAnythingRepeatedSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed64"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedBool() *AttractionsMediumAnythingRepeatedBoolSafeOperators {
-	return &AttractionsMediumAnythingRepeatedBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bool"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedString() *AttractionsMediumAnythingRepeatedStringSafeOperators {
-	return &AttractionsMediumAnythingRepeatedStringSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_string"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedBytes() *AttractionsMediumAnythingRepeatedBytesSafeOperators {
-	return &AttractionsMediumAnythingRepeatedBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bytes"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedEnum() *AttractionsMediumAnythingRepeatedEnumSafeOperators {
-	return &AttractionsMediumAnythingRepeatedEnumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_enum"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) StringMap() *AttractionsMediumAnythingStringMapSafeOperators {
-	return &AttractionsMediumAnythingStringMapSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string_map"}
-}
-
-func (x *AttractionsMediumAnythingUnsafeQueryBuilder) CreatedAt() *AttractionsMediumAnythingCreatedAtSafeOperators {
-	return &AttractionsMediumAnythingCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
-}
-
-type AttractionsMediumMgrUnsafeQueryBuilder struct {
-	tableName string
-	prefix    string
-}
-
-func (x *AttractionsMediumQueryBuilder) UnsafeMgr() *AttractionsMediumMgrUnsafeQueryBuilder {
-	return &AttractionsMediumMgrUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "5$"}
-}
-
-func (x *AttractionsMediumMgrUnsafeQueryBuilder) Id() *AttractionsMediumMgrIdSafeOperators {
-	return &AttractionsMediumMgrIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
-}
-
-type AttractionsConfigQueryBuilder struct {
-	tableName string
-	prefix    string
-}
-
-func (x *AttractionsDBQueryBuilder) Config() *AttractionsConfigQueryBuilder {
-	return &AttractionsConfigQueryBuilder{tableName: x.tableName, prefix: x.prefix + "13$"}
-}
-
-func (x *AttractionsConfigQueryBuilder) UnsafeName() *AttractionsConfigNameSafeOperators {
-	return &AttractionsConfigNameSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "name"}
-}
-
-type AttractionsConfigDetailUnsafeQueryBuilder struct {
-	tableName string
-	prefix    string
-}
-
-func (x *AttractionsConfigQueryBuilder) UnsafeDetail() *AttractionsConfigDetailUnsafeQueryBuilder {
-	return &AttractionsConfigDetailUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "1$"}
-}
-
-func (x *AttractionsConfigDetailUnsafeQueryBuilder) Info() *AttractionsConfigDetailInfoSafeOperators {
-	return &AttractionsConfigDetailInfoSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "info"}
 }
 
 type AttractionsPetQueryBuilder struct {
@@ -9440,6 +9205,241 @@ func (x *AttractionsZooShopQueryBuilder) UnsafeMgr() *AttractionsZooShopMgrUnsaf
 
 func (x *AttractionsZooShopMgrUnsafeQueryBuilder) Id() *AttractionsZooShopMgrIdSafeOperators {
 	return &AttractionsZooShopMgrIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+type AttractionsMediumQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsDBQueryBuilder) Medium() *AttractionsMediumQueryBuilder {
+	return &AttractionsMediumQueryBuilder{tableName: x.tableName, prefix: x.prefix + "12$"}
+}
+
+func (x *AttractionsMediumQueryBuilder) Medium() *AttractionsMediumMediumSafeOperators {
+	return &AttractionsMediumMediumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "medium_oneof"}
+}
+
+func (x *AttractionsMediumQueryBuilder) UnsafeId() *AttractionsMediumIdSafeOperators {
+	return &AttractionsMediumIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+func (x *AttractionsMediumQueryBuilder) UnsafeCreatedAt() *AttractionsMediumCreatedAtSafeOperators {
+	return &AttractionsMediumCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
+}
+
+func (x *AttractionsMediumQueryBuilder) UnsafeFur() *AttractionsMediumFurSafeOperators {
+	return &AttractionsMediumFurSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fur"}
+}
+
+type AttractionsMediumPaperUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsMediumQueryBuilder) UnsafePaper() *AttractionsMediumPaperUnsafeQueryBuilder {
+	return &AttractionsMediumPaperUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "50$"}
+}
+
+func (x *AttractionsMediumPaperUnsafeQueryBuilder) Pages() *AttractionsMediumPaperPagesSafeOperators {
+	return &AttractionsMediumPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
+}
+
+type AttractionsMediumEbookUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsMediumQueryBuilder) UnsafeEbook() *AttractionsMediumEbookUnsafeQueryBuilder {
+	return &AttractionsMediumEbookUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "51$"}
+}
+
+func (x *AttractionsMediumEbookUnsafeQueryBuilder) Size() *AttractionsMediumEbookSizeSafeOperators {
+	return &AttractionsMediumEbookSizeSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "size"}
+}
+
+type AttractionsMediumAnythingUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsMediumQueryBuilder) UnsafeAnything() *AttractionsMediumAnythingUnsafeQueryBuilder {
+	return &AttractionsMediumAnythingUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "52$"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Id() *AttractionsMediumAnythingIdSafeOperators {
+	return &AttractionsMediumAnythingIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Double() *AttractionsMediumAnythingDoubleSafeOperators {
+	return &AttractionsMediumAnythingDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "double"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Float() *AttractionsMediumAnythingFloatSafeOperators {
+	return &AttractionsMediumAnythingFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "float"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Int32() *AttractionsMediumAnythingInt32SafeOperators {
+	return &AttractionsMediumAnythingInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Int64() *AttractionsMediumAnythingInt64SafeOperators {
+	return &AttractionsMediumAnythingInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "int_64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Uint32() *AttractionsMediumAnythingUint32SafeOperators {
+	return &AttractionsMediumAnythingUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Uint64() *AttractionsMediumAnythingUint64SafeOperators {
+	return &AttractionsMediumAnythingUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "uint_64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sint32() *AttractionsMediumAnythingSint32SafeOperators {
+	return &AttractionsMediumAnythingSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sint64() *AttractionsMediumAnythingSint64SafeOperators {
+	return &AttractionsMediumAnythingSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sint_64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Fixed32() *AttractionsMediumAnythingFixed32SafeOperators {
+	return &AttractionsMediumAnythingFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Fixed64() *AttractionsMediumAnythingFixed64SafeOperators {
+	return &AttractionsMediumAnythingFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "fixed_64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sfixed32() *AttractionsMediumAnythingSfixed32SafeOperators {
+	return &AttractionsMediumAnythingSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Sfixed64() *AttractionsMediumAnythingSfixed64SafeOperators {
+	return &AttractionsMediumAnythingSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "sfixed_64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Bool() *AttractionsMediumAnythingBoolSafeOperators {
+	return &AttractionsMediumAnythingBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bool"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) String_() *AttractionsMediumAnythingString_SafeOperators {
+	return &AttractionsMediumAnythingString_SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) Bytes() *AttractionsMediumAnythingBytesSafeOperators {
+	return &AttractionsMediumAnythingBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "bytes"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedDouble() *AttractionsMediumAnythingRepeatedDoubleSafeOperators {
+	return &AttractionsMediumAnythingRepeatedDoubleSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_double"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFloat() *AttractionsMediumAnythingRepeatedFloatSafeOperators {
+	return &AttractionsMediumAnythingRepeatedFloatSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_float"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedInt32() *AttractionsMediumAnythingRepeatedInt32SafeOperators {
+	return &AttractionsMediumAnythingRepeatedInt32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedInt64() *AttractionsMediumAnythingRepeatedInt64SafeOperators {
+	return &AttractionsMediumAnythingRepeatedInt64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_int64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedUint32() *AttractionsMediumAnythingRepeatedUint32SafeOperators {
+	return &AttractionsMediumAnythingRepeatedUint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedUint64() *AttractionsMediumAnythingRepeatedUint64SafeOperators {
+	return &AttractionsMediumAnythingRepeatedUint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_uint64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSint32() *AttractionsMediumAnythingRepeatedSint32SafeOperators {
+	return &AttractionsMediumAnythingRepeatedSint32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSint64() *AttractionsMediumAnythingRepeatedSint64SafeOperators {
+	return &AttractionsMediumAnythingRepeatedSint64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sint64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFixed32() *AttractionsMediumAnythingRepeatedFixed32SafeOperators {
+	return &AttractionsMediumAnythingRepeatedFixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedFixed64() *AttractionsMediumAnythingRepeatedFixed64SafeOperators {
+	return &AttractionsMediumAnythingRepeatedFixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_fixed64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSfixed32() *AttractionsMediumAnythingRepeatedSfixed32SafeOperators {
+	return &AttractionsMediumAnythingRepeatedSfixed32SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed32"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedSfixed64() *AttractionsMediumAnythingRepeatedSfixed64SafeOperators {
+	return &AttractionsMediumAnythingRepeatedSfixed64SafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_sfixed64"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedBool() *AttractionsMediumAnythingRepeatedBoolSafeOperators {
+	return &AttractionsMediumAnythingRepeatedBoolSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bool"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedString() *AttractionsMediumAnythingRepeatedStringSafeOperators {
+	return &AttractionsMediumAnythingRepeatedStringSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_string"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedBytes() *AttractionsMediumAnythingRepeatedBytesSafeOperators {
+	return &AttractionsMediumAnythingRepeatedBytesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_bytes"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) RepeatedEnum() *AttractionsMediumAnythingRepeatedEnumSafeOperators {
+	return &AttractionsMediumAnythingRepeatedEnumSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "repeated_enum"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) StringMap() *AttractionsMediumAnythingStringMapSafeOperators {
+	return &AttractionsMediumAnythingStringMapSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "string_map"}
+}
+
+func (x *AttractionsMediumAnythingUnsafeQueryBuilder) CreatedAt() *AttractionsMediumAnythingCreatedAtSafeOperators {
+	return &AttractionsMediumAnythingCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
+}
+
+type AttractionsMediumMgrUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsMediumQueryBuilder) UnsafeMgr() *AttractionsMediumMgrUnsafeQueryBuilder {
+	return &AttractionsMediumMgrUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "5$"}
+}
+
+func (x *AttractionsMediumMgrUnsafeQueryBuilder) Id() *AttractionsMediumMgrIdSafeOperators {
+	return &AttractionsMediumMgrIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+type AttractionsConfigQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsDBQueryBuilder) Config() *AttractionsConfigQueryBuilder {
+	return &AttractionsConfigQueryBuilder{tableName: x.tableName, prefix: x.prefix + "13$"}
+}
+
+func (x *AttractionsConfigQueryBuilder) UnsafeName() *AttractionsConfigNameSafeOperators {
+	return &AttractionsConfigNameSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "name"}
+}
+
+type AttractionsConfigDetailUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *AttractionsConfigQueryBuilder) UnsafeDetail() *AttractionsConfigDetailUnsafeQueryBuilder {
+	return &AttractionsConfigDetailUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "1$"}
+}
+
+func (x *AttractionsConfigDetailUnsafeQueryBuilder) Info() *AttractionsConfigDetailInfoSafeOperators {
+	return &AttractionsConfigDetailInfoSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "info"}
 }
 
 type pgdbDescriptorAttractionsConfig struct {
@@ -15741,6 +15741,2771 @@ func (x *DuplicateTypeBugOuterNestedQueryBuilder) UnsafeInner() *DuplicateTypeBu
 
 func (x *DuplicateTypeBugOuterNestedInnerUnsafeQueryBuilder) InnerValue() *DuplicateTypeBugOuterNestedInnerInnerValueSafeOperators {
 	return &DuplicateTypeBugOuterNestedInnerInnerValueSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "inner_value"}
+}
+
+type pgdbDescriptorEmbeddedDBInnerConfig struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorEmbeddedDBInnerConfig    pgdb_v1.Descriptor = &pgdbDescriptorEmbeddedDBInnerConfig{}
+	instancepgdbDescriptorEmbeddedDBInnerConfigV17 pgdb_v1.Descriptor = &pgdbDescriptorEmbeddedDBInnerConfig{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) TableName() string {
+	return "pb_embedded_db_inner_config_models_city_12e4a27d"
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_embedded_db_inner_config_models_city_12e4a27d"),
+		Name:               df.ColumnName("value"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("value"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_embedded_db_inner_config_models_city_12e4a27d",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_embedded_db_inner_config_models_city_12e4a27d", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_embedded_db_inner_config_models_city_12e4a27d", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_embedded_db_inner_config_models_city_12e4a27d", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_embedded_db_inner_config_models_city_12e4a27d",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorEmbeddedDBInnerConfig) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageEmbeddedDBInnerConfig struct {
+	self    *EmbeddedDBInnerConfig
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *EmbeddedDBInnerConfig) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageEmbeddedDBInnerConfig{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageEmbeddedDBInnerConfig) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorEmbeddedDBInnerConfigV17
+	default:
+		return instancepgdbDescriptorEmbeddedDBInnerConfig
+	}
+}
+
+func (m *pgdbMessageEmbeddedDBInnerConfig) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1 := strings.ReplaceAll(string(m.self.GetValue()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("value")] = nullExp
+	} else {
+		rv[ro.ColumnName("value")] = v1
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageEmbeddedDBInnerConfig) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+func (m *pgdbMessageEmbeddedDBInnerConfig) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type pgdbDescriptorEmbeddedWithOwnDB struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorEmbeddedWithOwnDB    pgdb_v1.Descriptor = &pgdbDescriptorEmbeddedWithOwnDB{}
+	instancepgdbDescriptorEmbeddedWithOwnDBV17 pgdb_v1.Descriptor = &pgdbDescriptorEmbeddedWithOwnDB{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) TableName() string {
+	return "pb_embedded_with_own_db_models_city_v1_2e0a1e29"
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: coltenant_idOverrideExpression,
+			Default:            "",
+			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkskOverrideExpression,
+			Default:            "",
+			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkOverrideExpression,
+			Default:            "",
+			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colskOverrideExpression,
+			Default:            "",
+			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
+			})
+		}
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: colidOverrideExpression,
+		Default:            "''",
+		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_embedded_with_own_db_models_city_v1_2e0a1e29"),
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, ((*EmbeddedDBInnerConfig)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("3$", 3, "inner", "pb_embedded_with_own_db_models_city_v1_2e0a1e29")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_embedded_with_own_db_models_city_v1_2e0a1e29",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_embedded_with_own_db_models_city_v1_2e0a1e29", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_embedded_with_own_db_models_city_v1_2e0a1e29", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_embedded_with_own_db_models_city_v1_2e0a1e29", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_embedded_with_own_db_models_city_v1_2e0a1e29",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_embedded_with_own_db_models_city_v_76dda42d"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_embedded_with_own_db_models_city_v_76dda42d"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_embedded_with_own_db_models_c64d9c50"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_embedded_with_own_db_models_32b39ad2"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_embedded_with_own_db_models_ci_826a67df"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	return rv
+}
+
+func (d *pgdbDescriptorEmbeddedWithOwnDB) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageEmbeddedWithOwnDB struct {
+	self    *EmbeddedWithOwnDB
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *EmbeddedWithOwnDB) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageEmbeddedWithOwnDB{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageEmbeddedWithOwnDB) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorEmbeddedWithOwnDBV17
+	default:
+		return instancepgdbDescriptorEmbeddedWithOwnDB
+	}
+}
+
+func (m *pgdbMessageEmbeddedWithOwnDB) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_city_v1_embedded_with_own_db")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.GetTenantId())
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString(m.self.GetId())
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5 := exp.NewLiteralExpression("NULL")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv5
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv6, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv6
+		}
+
+	}
+
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
+
+	v2tmp := m.self.GetInner()
+	v2opts := ro.Nested("3$")
+	if v2tmp == nil {
+		v2opts = append(v2opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v2, err := pgdb_v1.MarshalNestedMsgRecord(v2tmp.DBReflect(m.Dialect()), v2opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v2 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	var v3 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v3tmp := m.self.GetCreatedAt().AsTime()
+		v3 = &v3tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v3
+	}
+
+	var v4 *time.Time
+	if m.self.GetUpdatedAt().IsValid() {
+		v4tmp := m.self.GetUpdatedAt().AsTime()
+		v4 = &v4tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v4
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageEmbeddedWithOwnDB) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetInner().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageEmbeddedWithOwnDB) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type EmbeddedWithOwnDBDB struct {
+	tableName string
+}
+
+type EmbeddedWithOwnDBDBQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+type EmbeddedWithOwnDBDBQueryUnsafe struct {
+	tableName string
+}
+
+type EmbeddedWithOwnDBDBColumns struct {
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDB) DB() *EmbeddedWithOwnDBDB {
+	return &EmbeddedWithOwnDBDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
+}
+
+func (x *EmbeddedWithOwnDBDB) TableName() string {
+	return x.tableName
+}
+
+func (x *EmbeddedWithOwnDBDB) Query() *EmbeddedWithOwnDBDBQueryBuilder {
+	return &EmbeddedWithOwnDBDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *EmbeddedWithOwnDBDB) Columns() *EmbeddedWithOwnDBDBColumns {
+	return &EmbeddedWithOwnDBDBColumns{tableName: x.tableName}
+}
+
+func (x *EmbeddedWithOwnDBDB) WithTable(t string) *EmbeddedWithOwnDBDB {
+	return &EmbeddedWithOwnDBDB{tableName: t}
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) WithTable(t string) *EmbeddedWithOwnDBDBQueryBuilder {
+	return &EmbeddedWithOwnDBDBQueryBuilder{tableName: t}
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) Unsafe() *EmbeddedWithOwnDBDBQueryUnsafe {
+	return &EmbeddedWithOwnDBDBQueryUnsafe{tableName: x.tableName}
+}
+
+type EmbeddedWithOwnDBTenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) TenantId() *EmbeddedWithOwnDBTenantIdSafeOperators {
+	return &EmbeddedWithOwnDBTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type EmbeddedWithOwnDBPKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) PKSK() *EmbeddedWithOwnDBPKSKSafeOperators {
+	return &EmbeddedWithOwnDBPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type EmbeddedWithOwnDBPKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) PK() *EmbeddedWithOwnDBPKSafeOperators {
+	return &EmbeddedWithOwnDBPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type EmbeddedWithOwnDBSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) SK() *EmbeddedWithOwnDBSKSafeOperators {
+	return &EmbeddedWithOwnDBSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type EmbeddedWithOwnDBFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *EmbeddedWithOwnDBFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) FTSData() *EmbeddedWithOwnDBFTSDataSafeOperators {
+	return &EmbeddedWithOwnDBFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type EmbeddedWithOwnDBInnerValueSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *EmbeddedWithOwnDBInnerValueSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type EmbeddedWithOwnDBTenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) TenantId() *EmbeddedWithOwnDBTenantIdQueryType {
+	return &EmbeddedWithOwnDBTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *EmbeddedWithOwnDBTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type EmbeddedWithOwnDBPKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) PKSK() *EmbeddedWithOwnDBPKSKQueryType {
+	return &EmbeddedWithOwnDBPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *EmbeddedWithOwnDBPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type EmbeddedWithOwnDBPKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) PK() *EmbeddedWithOwnDBPKQueryType {
+	return &EmbeddedWithOwnDBPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *EmbeddedWithOwnDBPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type EmbeddedWithOwnDBSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) SK() *EmbeddedWithOwnDBSKQueryType {
+	return &EmbeddedWithOwnDBSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *EmbeddedWithOwnDBSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type EmbeddedWithOwnDBFTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) FTSData() *EmbeddedWithOwnDBFTSDataQueryType {
+	return &EmbeddedWithOwnDBFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *EmbeddedWithOwnDBFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type EmbeddedWithOwnDBPBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) PBData() *EmbeddedWithOwnDBPBDataQueryType {
+	return &EmbeddedWithOwnDBPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *EmbeddedWithOwnDBPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type EmbeddedWithOwnDBIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) Id() *EmbeddedWithOwnDBIdQueryType {
+	return &EmbeddedWithOwnDBIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *EmbeddedWithOwnDBIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type EmbeddedWithOwnDBCreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) CreatedAt() *EmbeddedWithOwnDBCreatedAtQueryType {
+	return &EmbeddedWithOwnDBCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *EmbeddedWithOwnDBCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type EmbeddedWithOwnDBUpdatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryUnsafe) UpdatedAt() *EmbeddedWithOwnDBUpdatedAtQueryType {
+	return &EmbeddedWithOwnDBUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+}
+
+func (x *EmbeddedWithOwnDBUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) WithTable(t string) *EmbeddedWithOwnDBDBColumns {
+	return &EmbeddedWithOwnDBDBColumns{tableName: t}
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *EmbeddedWithOwnDBDBColumns) UpdatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+}
+
+type EmbeddedWithOwnDBInnerQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) Inner() *EmbeddedWithOwnDBInnerQueryBuilder {
+	return &EmbeddedWithOwnDBInnerQueryBuilder{tableName: x.tableName, prefix: x.prefix + "3$"}
+}
+
+func (x *EmbeddedWithOwnDBInnerQueryBuilder) UnsafeValue() *EmbeddedWithOwnDBInnerValueSafeOperators {
+	return &EmbeddedWithOwnDBInnerValueSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "value"}
+}
+
+type pgdbDescriptorParentWithEmbeddedDB struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorParentWithEmbeddedDB    pgdb_v1.Descriptor = &pgdbDescriptorParentWithEmbeddedDB{}
+	instancepgdbDescriptorParentWithEmbeddedDBV17 pgdb_v1.Descriptor = &pgdbDescriptorParentWithEmbeddedDB{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) TableName() string {
+	return "pb_parent_with_embedded_db_models_city_1f304a2d"
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: coltenant_idOverrideExpression,
+			Default:            "",
+			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkskOverrideExpression,
+			Default:            "",
+			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkOverrideExpression,
+			Default:            "",
+			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colskOverrideExpression,
+			Default:            "",
+			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
+			})
+		}
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: colidOverrideExpression,
+		Default:            "''",
+		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{4}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_parent_with_embedded_db_models_city_1f304a2d"),
+		Name:               df.ColumnName("updated_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{5}),
+		ProtoPath:          df.ExtendProtoPath("updated_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, ((*EmbeddedWithOwnDB)(nil)).DBReflect(d.Dialect()).Descriptor().Fields(df.NestedWithPath("3$", 3, "embedded", "pb_parent_with_embedded_db_models_city_1f304a2d")...)...)
+
+	return rv
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_parent_with_embedded_db_models_city_1f304a2d",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_parent_with_embedded_db_models_city_1f304a2d", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_parent_with_embedded_db_models_city_1f304a2d", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_parent_with_embedded_db_models_city_1f304a2d", Name: "pb$updated_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_parent_with_embedded_db_models_city_1f304a2d",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_parent_with_embedded_db_models_cit_6560b158"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_parent_with_embedded_db_models_cit_6560b158"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_parent_with_embedded_db_mode_35044929"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_parent_with_embedded_db_mod_4b0eb75a"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_parent_with_embedded_db_models_a6a4c6f0"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	return rv
+}
+
+func (d *pgdbDescriptorParentWithEmbeddedDB) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageParentWithEmbeddedDB struct {
+	self    *ParentWithEmbeddedDB
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *ParentWithEmbeddedDB) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageParentWithEmbeddedDB{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageParentWithEmbeddedDB) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorParentWithEmbeddedDBV17
+	default:
+		return instancepgdbDescriptorParentWithEmbeddedDB
+	}
+}
+
+func (m *pgdbMessageParentWithEmbeddedDB) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb strings.Builder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_city_v1_parent_with_embedded_db")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.GetTenantId())
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString(m.self.GetId())
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5 := exp.NewLiteralExpression("NULL")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv5
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv6, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv6
+		}
+
+	}
+
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
+
+	v2tmp := m.self.GetEmbedded()
+	v2opts := ro.Nested("3$")
+	if v2tmp == nil {
+		v2opts = append(v2opts, pgdb_v1.RecordOptionNulled(true))
+	}
+
+	v2, err := pgdb_v1.MarshalNestedMsgRecord(v2tmp.DBReflect(m.Dialect()), v2opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range v2 {
+		if ro.Nulled {
+			rv[k] = nullExp
+		} else {
+			rv[k] = v
+		}
+	}
+
+	var v3 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v3tmp := m.self.GetCreatedAt().AsTime()
+		v3 = &v3tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v3
+	}
+
+	var v4 *time.Time
+	if m.self.GetUpdatedAt().IsValid() {
+		v4tmp := m.self.GetUpdatedAt().AsTime()
+		v4 = &v4tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("updated_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("updated_at")] = v4
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageParentWithEmbeddedDB) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	rv = append(rv, m.self.GetEmbedded().DBReflect(m.Dialect()).SearchData()...)
+
+	return rv
+}
+
+func (m *pgdbMessageParentWithEmbeddedDB) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+
+type ParentWithEmbeddedDBDB struct {
+	tableName string
+}
+
+type ParentWithEmbeddedDBDBQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+type ParentWithEmbeddedDBDBQueryUnsafe struct {
+	tableName string
+}
+
+type ParentWithEmbeddedDBDBColumns struct {
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDB) DB() *ParentWithEmbeddedDBDB {
+	return &ParentWithEmbeddedDBDB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
+}
+
+func (x *ParentWithEmbeddedDBDB) TableName() string {
+	return x.tableName
+}
+
+func (x *ParentWithEmbeddedDBDB) Query() *ParentWithEmbeddedDBDBQueryBuilder {
+	return &ParentWithEmbeddedDBDBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *ParentWithEmbeddedDBDB) Columns() *ParentWithEmbeddedDBDBColumns {
+	return &ParentWithEmbeddedDBDBColumns{tableName: x.tableName}
+}
+
+func (x *ParentWithEmbeddedDBDB) WithTable(t string) *ParentWithEmbeddedDBDB {
+	return &ParentWithEmbeddedDBDB{tableName: t}
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) WithTable(t string) *ParentWithEmbeddedDBDBQueryBuilder {
+	return &ParentWithEmbeddedDBDBQueryBuilder{tableName: t}
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) Unsafe() *ParentWithEmbeddedDBDBQueryUnsafe {
+	return &ParentWithEmbeddedDBDBQueryUnsafe{tableName: x.tableName}
+}
+
+type ParentWithEmbeddedDBTenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBTenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) TenantId() *ParentWithEmbeddedDBTenantIdSafeOperators {
+	return &ParentWithEmbeddedDBTenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type ParentWithEmbeddedDBPKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBPKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) PKSK() *ParentWithEmbeddedDBPKSKSafeOperators {
+	return &ParentWithEmbeddedDBPKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type ParentWithEmbeddedDBPKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBPKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) PK() *ParentWithEmbeddedDBPKSafeOperators {
+	return &ParentWithEmbeddedDBPKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type ParentWithEmbeddedDBSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) SK() *ParentWithEmbeddedDBSKSafeOperators {
+	return &ParentWithEmbeddedDBSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type ParentWithEmbeddedDBFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) FTSData() *ParentWithEmbeddedDBFTSDataSafeOperators {
+	return &ParentWithEmbeddedDBFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+type ParentWithEmbeddedDBEmbeddedIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) Neq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) Eq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) Neq(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) Gt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) Gte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) Lt(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) Lte(v time.Time) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) In(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) NotIn(v []time.Time) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) Between(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators) NotBetween(start time.Time, end time.Time) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) Neq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Neq(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+type ParentWithEmbeddedDBTenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) TenantId() *ParentWithEmbeddedDBTenantIdQueryType {
+	return &ParentWithEmbeddedDBTenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *ParentWithEmbeddedDBTenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type ParentWithEmbeddedDBPKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) PKSK() *ParentWithEmbeddedDBPKSKQueryType {
+	return &ParentWithEmbeddedDBPKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *ParentWithEmbeddedDBPKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type ParentWithEmbeddedDBPKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) PK() *ParentWithEmbeddedDBPKQueryType {
+	return &ParentWithEmbeddedDBPKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *ParentWithEmbeddedDBPKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type ParentWithEmbeddedDBSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) SK() *ParentWithEmbeddedDBSKQueryType {
+	return &ParentWithEmbeddedDBSKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *ParentWithEmbeddedDBSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type ParentWithEmbeddedDBFTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) FTSData() *ParentWithEmbeddedDBFTSDataQueryType {
+	return &ParentWithEmbeddedDBFTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *ParentWithEmbeddedDBFTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type ParentWithEmbeddedDBPBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) PBData() *ParentWithEmbeddedDBPBDataQueryType {
+	return &ParentWithEmbeddedDBPBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *ParentWithEmbeddedDBPBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type ParentWithEmbeddedDBIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) Id() *ParentWithEmbeddedDBIdQueryType {
+	return &ParentWithEmbeddedDBIdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *ParentWithEmbeddedDBIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type ParentWithEmbeddedDBCreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) CreatedAt() *ParentWithEmbeddedDBCreatedAtQueryType {
+	return &ParentWithEmbeddedDBCreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *ParentWithEmbeddedDBCreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type ParentWithEmbeddedDBUpdatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryUnsafe) UpdatedAt() *ParentWithEmbeddedDBUpdatedAtQueryType {
+	return &ParentWithEmbeddedDBUpdatedAtQueryType{tableName: x.tableName, column: "pb$" + "updated_at"}
+}
+
+func (x *ParentWithEmbeddedDBUpdatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) WithTable(t string) *ParentWithEmbeddedDBDBColumns {
+	return &ParentWithEmbeddedDBDBColumns{tableName: t}
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}
+
+func (x *ParentWithEmbeddedDBDBColumns) UpdatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "updated_at")
+}
+
+type ParentWithEmbeddedDBEmbeddedQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) Embedded() *ParentWithEmbeddedDBEmbeddedQueryBuilder {
+	return &ParentWithEmbeddedDBEmbeddedQueryBuilder{tableName: x.tableName, prefix: x.prefix + "3$"}
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedQueryBuilder) UnsafeId() *ParentWithEmbeddedDBEmbeddedIdSafeOperators {
+	return &ParentWithEmbeddedDBEmbeddedIdSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "id"}
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedQueryBuilder) UnsafeCreatedAt() *ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators {
+	return &ParentWithEmbeddedDBEmbeddedCreatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "created_at"}
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedQueryBuilder) UnsafeUpdatedAt() *ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators {
+	return &ParentWithEmbeddedDBEmbeddedUpdatedAtSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "updated_at"}
+}
+
+type ParentWithEmbeddedDBEmbeddedInnerUnsafeQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedQueryBuilder) UnsafeInner() *ParentWithEmbeddedDBEmbeddedInnerUnsafeQueryBuilder {
+	return &ParentWithEmbeddedDBEmbeddedInnerUnsafeQueryBuilder{tableName: x.tableName, prefix: x.prefix + "3$"}
+}
+
+func (x *ParentWithEmbeddedDBEmbeddedInnerUnsafeQueryBuilder) Value() *ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators {
+	return &ParentWithEmbeddedDBEmbeddedInnerValueSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "value"}
 }
 
 type pgdbDescriptorAttractionsConfig_Detail struct {
