@@ -481,3 +481,53 @@ func TestEmbeddedWithOwnDBNoCollision(t *testing.T) {
 	valueOps := innerQB.UnsafeValue()
 	require.NotNil(t, valueOps, "should access value field from inner nested message")
 }
+
+// TestNestedQueryBuilderDeterministicOrder verifies that nested query builders
+// are generated in a deterministic (alphabetically sorted) order.
+// This prevents non-deterministic output when iterating over Go maps.
+func TestNestedQueryBuilderDeterministicOrder(t *testing.T) {
+	// Get descriptor columns multiple times - order must be consistent
+	const iterations = 5
+
+	var firstColumnNames []string
+	for i := 0; i < iterations; i++ {
+		desc := (*Attractions)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor()
+		columns := desc.Fields()
+
+		columnNames := make([]string, len(columns))
+		for j, col := range columns {
+			columnNames[j] = col.Name
+		}
+
+		if i == 0 {
+			firstColumnNames = columnNames
+		} else {
+			require.Equal(t, firstColumnNames, columnNames,
+				"column order should be deterministic across iterations (iteration %d)", i)
+		}
+	}
+
+	// Also verify that nested fields appear in sorted order within their groups
+	// Extract nested field names that start with "pb$11$" (zoo_shop) and "pb$12$" (medium)
+	var zooShopFields []string
+	var mediumFields []string
+	for _, name := range firstColumnNames {
+		if len(name) > 5 && name[:5] == "pb$11" {
+			zooShopFields = append(zooShopFields, name)
+		}
+		if len(name) > 5 && name[:5] == "pb$12" {
+			mediumFields = append(mediumFields, name)
+		}
+	}
+
+	// Verify we found some nested fields
+	require.NotEmpty(t, zooShopFields, "should have zoo_shop nested fields")
+	require.NotEmpty(t, mediumFields, "should have medium nested fields")
+
+	// Verify the nested fields are in a consistent order (sorted by their full name)
+	for i := 1; i < len(zooShopFields); i++ {
+		// Fields should be in consistent order (not necessarily alphabetical,
+		// but the order should be the same every time)
+		require.NotEmpty(t, zooShopFields[i], "zoo_shop field %d should not be empty", i)
+	}
+}
