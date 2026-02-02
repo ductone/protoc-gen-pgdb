@@ -55,6 +55,10 @@ type nestedQueryBuilderContext struct {
 	HasIndexedFields bool
 	// HasUnsafeFields indicates this nested message has at least one non-indexed field
 	HasUnsafeFields bool
+	// SkipTypeDefinition indicates the type struct has already been generated elsewhere,
+	// so only accessor methods should be generated. This is used when the same child types
+	// are accessible from both safe and unsafe parent query builders.
+	SkipTypeDefinition bool
 }
 
 // nestedSafeFieldContext wraps safeFieldContext with a short field name for nested query builders.
@@ -436,7 +440,13 @@ func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 			// Fix: Copy children with correct ParentTypeName pointing to unsafe type.
 			// childUnsafeChildren were built with parentTypeName = builderTypeName (safe type),
 			// but when used as children of unsafeNqb, they need ParentTypeName = unsafeTypeName.
-			fixedChildren := copyChildrenWithParent(childUnsafeChildren, unsafeTypeName)
+			//
+			// Only skip type definitions if there's ALSO a safe builder (hasIndexedContent).
+			// When both exist, the same child types are generated from nqb.UnsafeChildren,
+			// so unsafeNqb.Children should skip type definitions to avoid duplicates.
+			// When only unsafeNqb exists, we need to generate the types here.
+			skipTypeDef := hasIndexedContent
+			fixedChildren := copyChildrenWithParent(childUnsafeChildren, unsafeTypeName, skipTypeDef)
 
 			unsafeNqb := &nestedQueryBuilderContext{
 				TypeName:         unsafeTypeName,
@@ -462,7 +472,9 @@ func (module *Module) getNestedQueryBuildersRecursiveWithIndex(
 // This is needed because children are built once with a single parentTypeName,
 // but may be used in both safe and unsafe query builder contexts which have
 // different parent type names.
-func copyChildrenWithParent(children []*nestedQueryBuilderContext, newParentTypeName string) []*nestedQueryBuilderContext {
+// If skipTypeDef is true, the copied children will have SkipTypeDefinition=true,
+// indicating the type structs are already generated elsewhere.
+func copyChildrenWithParent(children []*nestedQueryBuilderContext, newParentTypeName string, skipTypeDef bool) []*nestedQueryBuilderContext {
 	if len(children) == 0 {
 		return nil
 	}
@@ -470,8 +482,10 @@ func copyChildrenWithParent(children []*nestedQueryBuilderContext, newParentType
 	for i, child := range children {
 		copied := *child // shallow copy
 		copied.ParentTypeName = newParentTypeName
+		// Only skip type definition if the types are already generated elsewhere
+		copied.SkipTypeDefinition = skipTypeDef
 		// Recursively copy children with THIS child's TypeName as their parent
-		copied.Children = copyChildrenWithParent(child.Children, copied.TypeName)
+		copied.Children = copyChildrenWithParent(child.Children, copied.TypeName, skipTypeDef)
 		result[i] = &copied
 	}
 	return result

@@ -990,6 +990,308 @@ func (b0 NestedOnlyWrapper_builder) Build() *NestedOnlyWrapper {
 	return m0
 }
 
+// Test case for duplicate type generation bug.
+// This structure causes both safe and unsafe query builders to have
+// children with the same TypeName, which would cause duplicate type definitions.
+type DuplicateTypeBugInner struct {
+	state                 protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_InnerValue string                 `protobuf:"bytes,1,opt,name=inner_value,json=innerValue,proto3"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *DuplicateTypeBugInner) Reset() {
+	*x = DuplicateTypeBugInner{}
+	mi := &file_models_city_v1_city_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DuplicateTypeBugInner) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DuplicateTypeBugInner) ProtoMessage() {}
+
+func (x *DuplicateTypeBugInner) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *DuplicateTypeBugInner) GetInnerValue() string {
+	if x != nil {
+		return x.xxx_hidden_InnerValue
+	}
+	return ""
+}
+
+func (x *DuplicateTypeBugInner) SetInnerValue(v string) {
+	x.xxx_hidden_InnerValue = v
+}
+
+type DuplicateTypeBugInner_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	InnerValue string
+}
+
+func (b0 DuplicateTypeBugInner_builder) Build() *DuplicateTypeBugInner {
+	m0 := &DuplicateTypeBugInner{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_InnerValue = b.InnerValue
+	return m0
+}
+
+type DuplicateTypeBugNested struct {
+	state                     protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_IndexedField   string                 `protobuf:"bytes,1,opt,name=indexed_field,json=indexedField,proto3"`
+	xxx_hidden_UnindexedField string                 `protobuf:"bytes,2,opt,name=unindexed_field,json=unindexedField,proto3"`
+	xxx_hidden_Inner          *DuplicateTypeBugInner `protobuf:"bytes,3,opt,name=inner,proto3"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *DuplicateTypeBugNested) Reset() {
+	*x = DuplicateTypeBugNested{}
+	mi := &file_models_city_v1_city_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DuplicateTypeBugNested) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DuplicateTypeBugNested) ProtoMessage() {}
+
+func (x *DuplicateTypeBugNested) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *DuplicateTypeBugNested) GetIndexedField() string {
+	if x != nil {
+		return x.xxx_hidden_IndexedField
+	}
+	return ""
+}
+
+func (x *DuplicateTypeBugNested) GetUnindexedField() string {
+	if x != nil {
+		return x.xxx_hidden_UnindexedField
+	}
+	return ""
+}
+
+func (x *DuplicateTypeBugNested) GetInner() *DuplicateTypeBugInner {
+	if x != nil {
+		return x.xxx_hidden_Inner
+	}
+	return nil
+}
+
+func (x *DuplicateTypeBugNested) SetIndexedField(v string) {
+	x.xxx_hidden_IndexedField = v
+}
+
+func (x *DuplicateTypeBugNested) SetUnindexedField(v string) {
+	x.xxx_hidden_UnindexedField = v
+}
+
+func (x *DuplicateTypeBugNested) SetInner(v *DuplicateTypeBugInner) {
+	x.xxx_hidden_Inner = v
+}
+
+func (x *DuplicateTypeBugNested) HasInner() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Inner != nil
+}
+
+func (x *DuplicateTypeBugNested) ClearInner() {
+	x.xxx_hidden_Inner = nil
+}
+
+type DuplicateTypeBugNested_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	IndexedField   string
+	UnindexedField string
+	Inner          *DuplicateTypeBugInner
+}
+
+func (b0 DuplicateTypeBugNested_builder) Build() *DuplicateTypeBugNested {
+	m0 := &DuplicateTypeBugNested{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_IndexedField = b.IndexedField
+	x.xxx_hidden_UnindexedField = b.UnindexedField
+	x.xxx_hidden_Inner = b.Inner
+	return m0
+}
+
+type DuplicateTypeBugOuter struct {
+	state                protoimpl.MessageState  `protogen:"opaque.v1"`
+	xxx_hidden_TenantId  string                  `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3"`
+	xxx_hidden_Id        string                  `protobuf:"bytes,2,opt,name=id,proto3"`
+	xxx_hidden_Nested    *DuplicateTypeBugNested `protobuf:"bytes,3,opt,name=nested,proto3"`
+	xxx_hidden_CreatedAt *timestamppb.Timestamp  `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3"`
+	xxx_hidden_UpdatedAt *timestamppb.Timestamp  `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *DuplicateTypeBugOuter) Reset() {
+	*x = DuplicateTypeBugOuter{}
+	mi := &file_models_city_v1_city_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DuplicateTypeBugOuter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DuplicateTypeBugOuter) ProtoMessage() {}
+
+func (x *DuplicateTypeBugOuter) ProtoReflect() protoreflect.Message {
+	mi := &file_models_city_v1_city_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *DuplicateTypeBugOuter) GetTenantId() string {
+	if x != nil {
+		return x.xxx_hidden_TenantId
+	}
+	return ""
+}
+
+func (x *DuplicateTypeBugOuter) GetId() string {
+	if x != nil {
+		return x.xxx_hidden_Id
+	}
+	return ""
+}
+
+func (x *DuplicateTypeBugOuter) GetNested() *DuplicateTypeBugNested {
+	if x != nil {
+		return x.xxx_hidden_Nested
+	}
+	return nil
+}
+
+func (x *DuplicateTypeBugOuter) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_CreatedAt
+	}
+	return nil
+}
+
+func (x *DuplicateTypeBugOuter) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_UpdatedAt
+	}
+	return nil
+}
+
+func (x *DuplicateTypeBugOuter) SetTenantId(v string) {
+	x.xxx_hidden_TenantId = v
+}
+
+func (x *DuplicateTypeBugOuter) SetId(v string) {
+	x.xxx_hidden_Id = v
+}
+
+func (x *DuplicateTypeBugOuter) SetNested(v *DuplicateTypeBugNested) {
+	x.xxx_hidden_Nested = v
+}
+
+func (x *DuplicateTypeBugOuter) SetCreatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_CreatedAt = v
+}
+
+func (x *DuplicateTypeBugOuter) SetUpdatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_UpdatedAt = v
+}
+
+func (x *DuplicateTypeBugOuter) HasNested() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Nested != nil
+}
+
+func (x *DuplicateTypeBugOuter) HasCreatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_CreatedAt != nil
+}
+
+func (x *DuplicateTypeBugOuter) HasUpdatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_UpdatedAt != nil
+}
+
+func (x *DuplicateTypeBugOuter) ClearNested() {
+	x.xxx_hidden_Nested = nil
+}
+
+func (x *DuplicateTypeBugOuter) ClearCreatedAt() {
+	x.xxx_hidden_CreatedAt = nil
+}
+
+func (x *DuplicateTypeBugOuter) ClearUpdatedAt() {
+	x.xxx_hidden_UpdatedAt = nil
+}
+
+type DuplicateTypeBugOuter_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	TenantId  string
+	Id        string
+	Nested    *DuplicateTypeBugNested
+	CreatedAt *timestamppb.Timestamp
+	UpdatedAt *timestamppb.Timestamp
+}
+
+func (b0 DuplicateTypeBugOuter_builder) Build() *DuplicateTypeBugOuter {
+	m0 := &DuplicateTypeBugOuter{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_TenantId = b.TenantId
+	x.xxx_hidden_Id = b.Id
+	x.xxx_hidden_Nested = b.Nested
+	x.xxx_hidden_CreatedAt = b.CreatedAt
+	x.xxx_hidden_UpdatedAt = b.UpdatedAt
+	return m0
+}
+
 type AttractionsConfig_Detail struct {
 	state           protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Info string                 `protobuf:"bytes,1,opt,name=info,proto3"`
@@ -999,7 +1301,7 @@ type AttractionsConfig_Detail struct {
 
 func (x *AttractionsConfig_Detail) Reset() {
 	*x = AttractionsConfig_Detail{}
-	mi := &file_models_city_v1_city_proto_msgTypes[6]
+	mi := &file_models_city_v1_city_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1011,7 +1313,7 @@ func (x *AttractionsConfig_Detail) String() string {
 func (*AttractionsConfig_Detail) ProtoMessage() {}
 
 func (x *AttractionsConfig_Detail) ProtoReflect() protoreflect.Message {
-	mi := &file_models_city_v1_city_proto_msgTypes[6]
+	mi := &file_models_city_v1_city_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1056,7 +1358,7 @@ type NestedOnlyWithOneof_ChoiceA struct {
 
 func (x *NestedOnlyWithOneof_ChoiceA) Reset() {
 	*x = NestedOnlyWithOneof_ChoiceA{}
-	mi := &file_models_city_v1_city_proto_msgTypes[7]
+	mi := &file_models_city_v1_city_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1068,7 +1370,7 @@ func (x *NestedOnlyWithOneof_ChoiceA) String() string {
 func (*NestedOnlyWithOneof_ChoiceA) ProtoMessage() {}
 
 func (x *NestedOnlyWithOneof_ChoiceA) ProtoReflect() protoreflect.Message {
-	mi := &file_models_city_v1_city_proto_msgTypes[7]
+	mi := &file_models_city_v1_city_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1113,7 +1415,7 @@ type NestedOnlyWithOneof_ChoiceB struct {
 
 func (x *NestedOnlyWithOneof_ChoiceB) Reset() {
 	*x = NestedOnlyWithOneof_ChoiceB{}
-	mi := &file_models_city_v1_city_proto_msgTypes[8]
+	mi := &file_models_city_v1_city_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1125,7 +1427,7 @@ func (x *NestedOnlyWithOneof_ChoiceB) String() string {
 func (*NestedOnlyWithOneof_ChoiceB) ProtoMessage() {}
 
 func (x *NestedOnlyWithOneof_ChoiceB) ProtoReflect() protoreflect.Message {
-	mi := &file_models_city_v1_city_proto_msgTypes[8]
+	mi := &file_models_city_v1_city_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1226,9 +1528,26 @@ const file_models_city_v1_city_proto_rawDesc = "" +
 	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt:\x15\x82\xf7\x02\x11\x12\x0f\n" +
-	"\ttenant_id\x12\x02idB;Z9github.com/ductone/protoc-gen-pgdb/example/models/city/v1b\x06proto3"
+	"\ttenant_id\x12\x02id\"@\n" +
+	"\x15DuplicateTypeBugInner\x12\x1f\n" +
+	"\vinner_value\x18\x01 \x01(\tR\n" +
+	"innerValue:\x06\xd2\xf7\x02\x02 \x01\"\xab\x01\n" +
+	"\x16DuplicateTypeBugNested\x12#\n" +
+	"\rindexed_field\x18\x01 \x01(\tR\findexedField\x12'\n" +
+	"\x0funindexed_field\x18\x02 \x01(\tR\x0eunindexedField\x12;\n" +
+	"\x05inner\x18\x03 \x01(\v2%.models.city.v1.DuplicateTypeBugInnerR\x05inner:\x06\xd2\xf7\x02\x02 \x01\"\xca\x02\n" +
+	"\x15DuplicateTypeBugOuter\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x12>\n" +
+	"\x06nested\x18\x03 \x01(\v2&.models.city.v1.DuplicateTypeBugNestedR\x06nested\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt:N\x82\xf7\x02\x11\x12\x0f\n" +
+	"\ttenant_id\x12\x02id\xd2\xf7\x025\x123\n" +
+	"\x0enested_indexed\x10\x01\x1a\ttenant_id\x1a\x14nested.indexed_fieldB;Z9github.com/ductone/protoc-gen-pgdb/example/models/city/v1b\x06proto3"
 
-var file_models_city_v1_city_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_models_city_v1_city_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_models_city_v1_city_proto_goTypes = []any{
 	(*Attractions)(nil),                 // 0: models.city.v1.Attractions
 	(*AttractionsConfig)(nil),           // 1: models.city.v1.AttractionsConfig
@@ -1236,35 +1555,42 @@ var file_models_city_v1_city_proto_goTypes = []any{
 	(*NestedOnlyWithOneof)(nil),         // 3: models.city.v1.NestedOnlyWithOneof
 	(*NestedOnlyMiddle)(nil),            // 4: models.city.v1.NestedOnlyMiddle
 	(*NestedOnlyWrapper)(nil),           // 5: models.city.v1.NestedOnlyWrapper
-	(*AttractionsConfig_Detail)(nil),    // 6: models.city.v1.AttractionsConfig.Detail
-	(*NestedOnlyWithOneof_ChoiceA)(nil), // 7: models.city.v1.NestedOnlyWithOneof.ChoiceA
-	(*NestedOnlyWithOneof_ChoiceB)(nil), // 8: models.city.v1.NestedOnlyWithOneof.ChoiceB
-	(*timestamppb.Timestamp)(nil),       // 9: google.protobuf.Timestamp
-	(*v11.Pet)(nil),                     // 10: models.animals.v1.Pet
-	(*v1.Shop)(nil),                     // 11: models.zoo.v1.Shop
+	(*DuplicateTypeBugInner)(nil),       // 6: models.city.v1.DuplicateTypeBugInner
+	(*DuplicateTypeBugNested)(nil),      // 7: models.city.v1.DuplicateTypeBugNested
+	(*DuplicateTypeBugOuter)(nil),       // 8: models.city.v1.DuplicateTypeBugOuter
+	(*AttractionsConfig_Detail)(nil),    // 9: models.city.v1.AttractionsConfig.Detail
+	(*NestedOnlyWithOneof_ChoiceA)(nil), // 10: models.city.v1.NestedOnlyWithOneof.ChoiceA
+	(*NestedOnlyWithOneof_ChoiceB)(nil), // 11: models.city.v1.NestedOnlyWithOneof.ChoiceB
+	(*timestamppb.Timestamp)(nil),       // 12: google.protobuf.Timestamp
+	(*v11.Pet)(nil),                     // 13: models.animals.v1.Pet
+	(*v1.Shop)(nil),                     // 14: models.zoo.v1.Shop
 }
 var file_models_city_v1_city_proto_depIdxs = []int32{
-	9,  // 0: models.city.v1.Attractions.created_at:type_name -> google.protobuf.Timestamp
-	10, // 1: models.city.v1.Attractions.pet:type_name -> models.animals.v1.Pet
-	11, // 2: models.city.v1.Attractions.zoo_shop:type_name -> models.zoo.v1.Shop
-	11, // 3: models.city.v1.Attractions.medium:type_name -> models.zoo.v1.Shop
+	12, // 0: models.city.v1.Attractions.created_at:type_name -> google.protobuf.Timestamp
+	13, // 1: models.city.v1.Attractions.pet:type_name -> models.animals.v1.Pet
+	14, // 2: models.city.v1.Attractions.zoo_shop:type_name -> models.zoo.v1.Shop
+	14, // 3: models.city.v1.Attractions.medium:type_name -> models.zoo.v1.Shop
 	1,  // 4: models.city.v1.Attractions.config:type_name -> models.city.v1.AttractionsConfig
-	6,  // 5: models.city.v1.AttractionsConfig.detail:type_name -> models.city.v1.AttractionsConfig.Detail
+	9,  // 5: models.city.v1.AttractionsConfig.detail:type_name -> models.city.v1.AttractionsConfig.Detail
 	1,  // 6: models.city.v1.AttractionsV2.config:type_name -> models.city.v1.AttractionsConfig
-	9,  // 7: models.city.v1.AttractionsV2.created_at:type_name -> google.protobuf.Timestamp
-	7,  // 8: models.city.v1.NestedOnlyWithOneof.choice_a:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceA
-	8,  // 9: models.city.v1.NestedOnlyWithOneof.choice_b:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceB
+	12, // 7: models.city.v1.AttractionsV2.created_at:type_name -> google.protobuf.Timestamp
+	10, // 8: models.city.v1.NestedOnlyWithOneof.choice_a:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceA
+	11, // 9: models.city.v1.NestedOnlyWithOneof.choice_b:type_name -> models.city.v1.NestedOnlyWithOneof.ChoiceB
 	3,  // 10: models.city.v1.NestedOnlyMiddle.oneof_field:type_name -> models.city.v1.NestedOnlyWithOneof
-	9,  // 11: models.city.v1.NestedOnlyMiddle.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 12: models.city.v1.NestedOnlyMiddle.updated_at:type_name -> google.protobuf.Timestamp
+	12, // 11: models.city.v1.NestedOnlyMiddle.created_at:type_name -> google.protobuf.Timestamp
+	12, // 12: models.city.v1.NestedOnlyMiddle.updated_at:type_name -> google.protobuf.Timestamp
 	4,  // 13: models.city.v1.NestedOnlyWrapper.middle:type_name -> models.city.v1.NestedOnlyMiddle
-	9,  // 14: models.city.v1.NestedOnlyWrapper.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 15: models.city.v1.NestedOnlyWrapper.updated_at:type_name -> google.protobuf.Timestamp
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	12, // 14: models.city.v1.NestedOnlyWrapper.created_at:type_name -> google.protobuf.Timestamp
+	12, // 15: models.city.v1.NestedOnlyWrapper.updated_at:type_name -> google.protobuf.Timestamp
+	6,  // 16: models.city.v1.DuplicateTypeBugNested.inner:type_name -> models.city.v1.DuplicateTypeBugInner
+	7,  // 17: models.city.v1.DuplicateTypeBugOuter.nested:type_name -> models.city.v1.DuplicateTypeBugNested
+	12, // 18: models.city.v1.DuplicateTypeBugOuter.created_at:type_name -> google.protobuf.Timestamp
+	12, // 19: models.city.v1.DuplicateTypeBugOuter.updated_at:type_name -> google.protobuf.Timestamp
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_models_city_v1_city_proto_init() }
@@ -1286,7 +1612,7 @@ func file_models_city_v1_city_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_models_city_v1_city_proto_rawDesc), len(file_models_city_v1_city_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
