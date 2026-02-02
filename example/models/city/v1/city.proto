@@ -160,3 +160,39 @@ message NestedOnlyWrapper {
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
 }
+
+// Test case for duplicate type generation bug.
+// This structure causes both safe and unsafe query builders to have
+// children with the same TypeName, which would cause duplicate type definitions.
+message DuplicateTypeBugInner {
+  option (pgdb.v1.msg).nested_only = true;
+  string inner_value = 1;
+}
+
+message DuplicateTypeBugNested {
+  option (pgdb.v1.msg).nested_only = true;
+  string indexed_field = 1;
+  string unindexed_field = 2;
+  DuplicateTypeBugInner inner = 3;
+}
+
+message DuplicateTypeBugOuter {
+  option (dynamo.v1.msg).key = {
+    pk_fields: ["tenant_id"]
+    sk_fields: ["id"]
+  };
+  // Index on nested.indexed_field creates safe builder with UnsafeChildren
+  option (pgdb.v1.msg).indexes = {
+    name: "nested_indexed"
+    method: INDEX_METHOD_BTREE
+    columns: [
+      "tenant_id",
+      "nested.indexed_field"
+    ]
+  };
+  string tenant_id = 1;
+  string id = 2;
+  DuplicateTypeBugNested nested = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}

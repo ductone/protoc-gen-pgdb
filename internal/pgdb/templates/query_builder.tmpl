@@ -561,11 +561,13 @@ func (x *{{ $typeName }}) Unsafe{{ .ShortGoName }}() *{{ .OpsTypeName }} {
 
 {{/* Generate unsafe nested query builder for non-indexed paths */}}
 {{ define "unsafeNestedQueryBuilder" }}
-{{/* Define the unsafe nested query builder struct */}}
+{{/* Define the unsafe nested query builder struct (skip if already generated elsewhere) */}}
+{{ if not .SkipTypeDefinition }}
 type {{ .TypeName }} struct {
 	tableName string
 	prefix    string
 }
+{{ end }}
 
 {{/* Generate Unsafe accessor method from parent to this nested query builder */}}
 func (x *{{ .ParentTypeName }}) Unsafe{{ .GoName }}() *{{ .TypeName }} {

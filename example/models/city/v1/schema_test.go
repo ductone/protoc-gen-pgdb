@@ -425,3 +425,35 @@ func TestNestedOnlyWithOneofThroughMultipleLayers(t *testing.T) {
 
 	// This test passes if it compiles - the bug causes undefined type errors
 }
+
+// TestDuplicateTypeBug verifies that nested query builders don't generate
+// duplicate type definitions when accessible from both safe and unsafe paths.
+// Bug scenario: when a nested message has both indexed fields (creating safe builder)
+// and non-indexed content (creating unsafe builder), child types should only be defined once.
+func TestDuplicateTypeBug(t *testing.T) {
+	fields := (*DuplicateTypeBugOuter)(nil).DB().Query()
+
+	// Access via safe path (indexed field exists)
+	nestedQB := fields.Nested()
+	require.NotNil(t, nestedQB, "should have safe nested query builder")
+
+	// Access indexed field directly
+	indexedOps := nestedQB.IndexedField()
+	require.NotNil(t, indexedOps, "should access indexed field from safe builder")
+
+	// Access unindexed field via Unsafe accessor
+	unindexedOps := nestedQB.UnsafeUnindexedField()
+	require.NotNil(t, unindexedOps, "should access unindexed field via unsafe accessor")
+
+	// Access deeper nested via Unsafe (from safe builder)
+	innerFromSafe := nestedQB.UnsafeInner()
+	require.NotNil(t, innerFromSafe, "should access inner from safe builder")
+	innerValueFromSafe := innerFromSafe.InnerValue()
+	require.NotNil(t, innerValueFromSafe, "should access inner value from safe path")
+
+	// Note: When there's an indexed field, the Nested() method returns a safe builder
+	// and UnsafeNested() is not generated. The child types (like InnerUnsafeQueryBuilder)
+	// are accessible from both the safe builder's UnsafeChildren path and would be
+	// duplicated if we also generated them for the unsafe path.
+	// This test verifies that the code compiles - duplicate types would cause failure.
+}
