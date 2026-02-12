@@ -151,6 +151,13 @@ message FieldOptions {
   int32 bits_size = 6;
 
   bool ksuid = 7;
+
+  // PostgreSQL server-side default expression.
+  // Examples: "NOW()", "0", "'pending'", "gen_random_uuid()"
+  // When set, this value is used as the DEFAULT clause in CREATE/ALTER TABLE.
+  // The column will be nullable so the application can omit it from INSERT,
+  // letting PostgreSQL provide the default value.
+  string server_default = 8;
 }
 
 extend google.protobuf.EnumValueOptions {
