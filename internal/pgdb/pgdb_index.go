@@ -10,6 +10,16 @@ import (
 	pgsgo "github.com/lyft/protoc-gen-star/v2/lang/go"
 )
 
+// resolveVectorOpsClass returns the HNSW ops class for the given VectorElementType.
+func resolveVectorOpsClass(vet pgdb_v1.VectorElementType) string {
+	switch vet {
+	case pgdb_v1.VectorElementType_VECTOR_ELEMENT_TYPE_FLOAT16:
+		return "halfvec_cosine_ops"
+	default:
+		return "vector_cosine_ops"
+	}
+}
+
 type indexContext struct {
 	DB            pgdb_v1.Index
 	ExcludeNested bool
@@ -241,12 +251,19 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 				continue
 			}
 
+			enumExt := pgdb_v1.EnumValueOptions{}
+			_, err := enumValue.Extension(pgdb_v1.E_Enum, &enumExt)
+			if err != nil {
+				return nil, fmt.Errorf("pgdb: getField: failed to extract enum extension from '%s': %w", enumValue.FullyQualifiedName(), err)
+			}
+
 			vectorIndexName, err := getIndexName(m, fmt.Sprintf("vector_index_%s", enumValue.Name().String()))
 			if err != nil {
 				return nil, err
 			}
 
 			vectorCol := fmt.Sprintf("%s_%d", pgColName, enumValue.Value())
+			opsClass := resolveVectorOpsClass(enumExt.GetVectorElementType())
 
 			tempCtx := &indexContext{
 				ExcludeNested: true,
@@ -256,7 +273,7 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 					Columns: []string{
 						vectorCol,
 					},
-					OverrideExpression: fmt.Sprintf("pb$%s vector_cosine_ops", vectorCol),
+					OverrideExpression: fmt.Sprintf("pb$%s %s", vectorCol, opsClass),
 				},
 			}
 			rv = append(rv, tempCtx)
