@@ -1443,6 +1443,27 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 
 	}
 
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
+			Name:               df.ColumnName("model_embeddings_3"),
+			Type:               "halfvec",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "halfvec(5)",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(6),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{8}),
+			ProtoPath:          df.ExtendProtoPath("model_embeddings"),
+			ProtoKind:          protoreflect.Kind(11),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
 	colingredient_idCollation := ""
 	colingredient_idOverrideExpression := ""
 
@@ -1748,6 +1769,21 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 
 	}
 
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("vector_index_model_5dims_half_pasta_ing_b9be2d62"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("model_embeddings_3")},
+			OverrideExpression: "pb$model_embeddings_3 halfvec_cosine_ops",
+			WherePredicate:     "",
+		})
+
+	}
+
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("pastas_pasta_ingredient_models_food_v1_e3bd47ef"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
@@ -2004,6 +2040,27 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 			rv[ro.ColumnName("model_embeddings_2")] = nullExp
 		} else {
 			rv[ro.ColumnName("model_embeddings_2")] = cfv6
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		var cfv6 interface{} = nullExp
+		for _, v := range m.self.GetModelEmbeddings() {
+			if v.GetModel() != llm_v1.Model_MODEL_5DIMS_HALF {
+				continue
+			}
+			if len(v.GetEmbedding()) == 0 {
+				break
+			}
+			cfv6 = pgdb_v1.FloatToHalfVector(v.GetEmbedding())
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("model_embeddings_3")] = nullExp
+		} else {
+			rv[ro.ColumnName("model_embeddings_3")] = cfv6
 		}
 
 	}
@@ -2464,6 +2521,19 @@ func (x *PastaIngredientDBQueryBuilder) ModelEmbeddings_4DIMS() *PastaIngredient
 	return &PastaIngredientModelEmbeddings_4DIMSSafeOperators{tableName: x.tableName, column: "pb$" + "model_embeddings_2"}
 }
 
+type PastaIngredientModelEmbeddings_5DIMS_HALFSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientModelEmbeddings_5DIMS_HALFSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *PastaIngredientDBQueryBuilder) ModelEmbeddings_5DIMS_HALF() *PastaIngredientModelEmbeddings_5DIMS_HALFSafeOperators {
+	return &PastaIngredientModelEmbeddings_5DIMS_HALFSafeOperators{tableName: x.tableName, column: "pb$" + "model_embeddings_3"}
+}
+
 type PastaIngredientIngredientIdSafeOperators struct {
 	column    string
 	tableName string
@@ -2787,6 +2857,19 @@ func (x *PastaIngredientModelEmbeddings_4DIMSQueryType) Identifier() exp.Identif
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PastaIngredientModelEmbeddings_5DIMS_HALFQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) ModelEmbeddings_5DIMS_HALF() *PastaIngredientModelEmbeddings_5DIMS_HALFQueryType {
+	return &PastaIngredientModelEmbeddings_5DIMS_HALFQueryType{tableName: x.tableName, column: "pb$" + "model_embeddings_3"}
+}
+
+func (x *PastaIngredientModelEmbeddings_5DIMS_HALFQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 type PastaIngredientIngredientIdQueryType struct {
 	column    string
 	tableName string
@@ -2912,6 +2995,10 @@ func (x *PastaIngredientDBColumns) ModelEmbeddings_3DIMS() exp.Expression {
 
 func (x *PastaIngredientDBColumns) ModelEmbeddings_4DIMS() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "model_embeddings_2")
+}
+
+func (x *PastaIngredientDBColumns) ModelEmbeddings_5DIMS_HALF() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "model_embeddings_3")
 }
 
 func (x *PastaIngredientDBColumns) IngredientId() exp.Expression {

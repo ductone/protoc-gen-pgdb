@@ -545,14 +545,16 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 
 			goNameString := ctx.Name(field).String() + strings.TrimPrefix(ctx.Name(enumValue).String(), toTrim)
 
+			vecType := resolveVectorType(enumExt.GetVectorElementType())
+
 			tempCtx := &fieldContext{
 				ExcludeNested: true,
 				IsVirtual:     true,
 				DB: &pgdb_v1.Column{
 					Name:               fmt.Sprintf("%s_%d", pgColName, enumValue.Value()),
-					Type:               "vector",
+					Type:               vecType,
 					Nullable:           true,
-					OverrideExpression: fmt.Sprintf("vector(%d)", enumExt.GetVectorSize()),
+					OverrideExpression: fmt.Sprintf("%s(%d)", vecType, enumExt.GetVectorSize()),
 					SourceKind:         pgdb_v1.ColumnSourceKind_VECTOR,
 					ProtoFieldPath:     []int32{field.Descriptor().GetNumber()},
 					ProtoPath:          field.Name().LowerSnakeCase().String(),
@@ -567,6 +569,7 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 					GoName:         ctx.Name(field).String(),     // Generated go struct name
 					EnumModelValue: ix.EnumValue(field, enumValue).String(),
 					FloatArrayName: ctx.Name(floatField).String(), // Generated float array name
+					VectorType:     vecType,
 				},
 				QueryTypeName: ctx.Name(m).String() + goNameString + "QueryType",
 			}
@@ -577,6 +580,16 @@ func getCommonFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker) ([]*fi
 	}
 
 	return rv, nil
+}
+
+// resolveVectorType returns the PostgreSQL column type for the given VectorElementType.
+func resolveVectorType(vet pgdb_v1.VectorElementType) string {
+	switch vet {
+	case pgdb_v1.VectorElementType_VECTOR_ELEMENT_TYPE_FLOAT16:
+		return "halfvec"
+	default:
+		return "vector"
+	}
 }
 
 // protoTypeToKind converts pgs.ProtoType to protoreflect.Kind.

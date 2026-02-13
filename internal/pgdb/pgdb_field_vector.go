@@ -6,6 +6,7 @@ type pbVectorConvert struct {
 	GoName         string
 	FloatArrayName string
 	EnumModelValue string
+	VectorType     string // "vector" or "halfvec"
 }
 
 func (pbdc *pbVectorConvert) CodeForValue() (string, error) {

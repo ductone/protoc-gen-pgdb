@@ -160,4 +160,11 @@ extend google.protobuf.EnumValueOptions {
 message EnumValueOptions {
   // vector size options
   int32 vector_size = 1;
+  VectorElementType vector_element_type = 2;
+}
+
+enum VectorElementType {
+  VECTOR_ELEMENT_TYPE_UNSPECIFIED = 0; // defaults to vector (float32)
+  VECTOR_ELEMENT_TYPE_FLOAT32 = 1;
+  VECTOR_ELEMENT_TYPE_FLOAT16 = 2; // halfvec
 }
