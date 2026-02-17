@@ -16,4 +16,5 @@ enum Model {
   MODEL_UNSPECIFIED = 0;
   MODEL_3DIMS= 1 [(pgdb.v1.enum).vector_size = 3];
   MODEL_4DIMS = 2 [(pgdb.v1.enum).vector_size = 4];
+  MODEL_5DIMS_HALF = 3 [(pgdb.v1.enum) = {vector_size: 5, vector_element_type: VECTOR_ELEMENT_TYPE_FLOAT16}];
 }

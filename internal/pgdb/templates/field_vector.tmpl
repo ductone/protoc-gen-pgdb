@@ -6,5 +6,9 @@ for _, v := range m.self.Get{{.GoName}}() {
     if len(v.Get{{.FloatArrayName}}()) == 0 {
         break
     }
+    {{- if eq .VectorType "halfvec"}}
+    {{.VarName}} = pgdb_v1.FloatToHalfVector(v.Get{{.FloatArrayName}}())
+    {{- else}}
     {{.VarName}} = pgdb_v1.FloatToVector(v.Get{{.FloatArrayName}}())
+    {{- end}}
 }
