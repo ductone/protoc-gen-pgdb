@@ -210,7 +210,7 @@ func fetchTags(page, pageSize int, site string) (wrapper, error) {
 	if err != nil {
 		return empty, err
 	}
-	r, httpErr := client.Do(req)
+	r, httpErr := client.Do(req) //nolint:gosec // URL is constructed from known constants, not user input.
 	if httpErr != nil {
 		return empty, httpErr
 	}

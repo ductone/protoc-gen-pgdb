@@ -8,7 +8,7 @@ import (
 // ColumnSourceKind indicates the origin/nature of a column.
 type ColumnSourceKind int32
 
-//nolint:revive,stylecheck // Using underscore naming to match proto enum style.
+//nolint:revive // Using underscore naming to match proto enum style.
 const (
 	// ColumnSourceKind_PROTO_FIELD is a direct mapping to a single proto field.
 	// ProtoFieldPath and ProtoPath are populated.
