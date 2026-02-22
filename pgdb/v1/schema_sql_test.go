@@ -376,6 +376,98 @@ func TestStorageParams2with(t *testing.T) {
   fillfactor = 90
 )`,
 		},
+		{
+			name: "Default statistics target",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetDefaultStatisticsTarget(1000)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  default_statistics_target = 1000
+)`,
+		},
+		{
+			name: "Parallel workers",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetParallelWorkers(4)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  parallel_workers = 4
+)`,
+		},
+		{
+			name: "Multixact freeze ages",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumMultixactFreezeMinAge(50000000)
+					sp.SetAutovacuumMultixactFreezeMaxAge(200000000)
+					sp.SetAutovacuumMultixactFreezeTableAge(150000000)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  autovacuum_multixact_freeze_min_age = 50000000,
+  autovacuum_multixact_freeze_max_age = 200000000,
+  autovacuum_multixact_freeze_table_age = 150000000
+)`,
+		},
+		{
+			name: "Log autovacuum min duration",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetLogAutovacuumMinDuration(250)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  log_autovacuum_min_duration = 250
+)`,
+		},
+		{
+			name: "Vacuum index cleanup",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetVacuumIndexCleanup(false)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  vacuum_index_cleanup = false
+)`,
+		},
+		{
+			name: "All new parameters combined",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetDefaultStatisticsTarget(500)
+					sp.SetParallelWorkers(2)
+					sp.SetLogAutovacuumMinDuration(100)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  default_statistics_target = 500,
+  parallel_workers = 2,
+  log_autovacuum_min_duration = 100
+)`,
+		},
 	}
 
 	for _, test := range tests {
@@ -538,6 +630,76 @@ SET (
 			expected: `ALTER TABLE "test_table"
 SET (
   autovacuum_enabled = false
+)
+`,
+		},
+		{
+			name: "Default statistics target needs update",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetDefaultStatisticsTarget(1000)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"default_statistics_target": "100",
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  default_statistics_target = 1000
+)
+`,
+		},
+		{
+			name: "Default statistics target matches, no update",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetDefaultStatisticsTarget(1000)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"default_statistics_target": "1000",
+			},
+			expected: "",
+		},
+		{
+			name: "Parallel workers needs update",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetParallelWorkers(4)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{},
+			expected: `ALTER TABLE "test_table"
+SET (
+  parallel_workers = 4
+)
+`,
+		},
+		{
+			name: "Vacuum index cleanup update",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetVacuumIndexCleanup(false)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"vacuum_index_cleanup": "true",
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  vacuum_index_cleanup = false
 )
 `,
 		},

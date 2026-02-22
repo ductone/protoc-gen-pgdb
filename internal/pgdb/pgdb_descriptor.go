@@ -11,19 +11,27 @@ import (
 )
 
 type storageParamsTemplateContext struct {
-	AutovacuumVacuumThreshold    *int32
-	AutovacuumVacuumScaleFactor  *float32
-	AutovacuumAnalyzeThreshold   *int32
-	AutovacuumAnalyzeScaleFactor *float32
-	AutovacuumVacuumCostDelay    *int32
-	AutovacuumVacuumCostLimit    *int32
-	AutovacuumFreezeMinAge       *int64
-	AutovacuumFreezeMaxAge       *int64
-	AutovacuumFreezeTableAge     *int64
-	Fillfactor                   *int32
-	ToastTupleTarget             *int32
-	AutovacuumEnabled            *bool
-	HasAutovacuumEnabled         bool
+	AutovacuumVacuumThreshold         *int32
+	AutovacuumVacuumScaleFactor       *float32
+	AutovacuumAnalyzeThreshold        *int32
+	AutovacuumAnalyzeScaleFactor      *float32
+	AutovacuumVacuumCostDelay         *int32
+	AutovacuumVacuumCostLimit         *int32
+	AutovacuumFreezeMinAge            *int64
+	AutovacuumFreezeMaxAge            *int64
+	AutovacuumFreezeTableAge          *int64
+	Fillfactor                        *int32
+	ToastTupleTarget                  *int32
+	AutovacuumEnabled                 *bool
+	HasAutovacuumEnabled              bool
+	DefaultStatisticsTarget           *int32
+	ParallelWorkers                   *int32
+	AutovacuumMultixactFreezeMinAge   *int64
+	AutovacuumMultixactFreezeMaxAge   *int64
+	AutovacuumMultixactFreezeTableAge *int64
+	LogAutovacuumMinDuration          *int32
+	VacuumIndexCleanup                *bool
+	HasVacuumIndexCleanup             bool
 }
 
 type descriptorTemplateContext struct {
@@ -134,6 +142,42 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 			v := sp.GetAutovacuumEnabled()
 			spCtx.AutovacuumEnabled = &v
 			spCtx.HasAutovacuumEnabled = true
+			hasStorageParams = true
+		}
+		if sp.HasDefaultStatisticsTarget() {
+			v := sp.GetDefaultStatisticsTarget()
+			spCtx.DefaultStatisticsTarget = &v
+			hasStorageParams = true
+		}
+		if sp.HasParallelWorkers() {
+			v := sp.GetParallelWorkers()
+			spCtx.ParallelWorkers = &v
+			hasStorageParams = true
+		}
+		if sp.HasAutovacuumMultixactFreezeMinAge() {
+			v := sp.GetAutovacuumMultixactFreezeMinAge()
+			spCtx.AutovacuumMultixactFreezeMinAge = &v
+			hasStorageParams = true
+		}
+		if sp.HasAutovacuumMultixactFreezeMaxAge() {
+			v := sp.GetAutovacuumMultixactFreezeMaxAge()
+			spCtx.AutovacuumMultixactFreezeMaxAge = &v
+			hasStorageParams = true
+		}
+		if sp.HasAutovacuumMultixactFreezeTableAge() {
+			v := sp.GetAutovacuumMultixactFreezeTableAge()
+			spCtx.AutovacuumMultixactFreezeTableAge = &v
+			hasStorageParams = true
+		}
+		if sp.HasLogAutovacuumMinDuration() {
+			v := sp.GetLogAutovacuumMinDuration()
+			spCtx.LogAutovacuumMinDuration = &v
+			hasStorageParams = true
+		}
+		if sp.HasVacuumIndexCleanup() {
+			v := sp.GetVacuumIndexCleanup()
+			spCtx.VacuumIndexCleanup = &v
+			spCtx.HasVacuumIndexCleanup = true
 			hasStorageParams = true
 		}
 		if hasStorageParams {

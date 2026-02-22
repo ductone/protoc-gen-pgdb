@@ -162,6 +162,27 @@ func storageParams2with(desc Descriptor) string {
 	if sp.HasAutovacuumEnabled() {
 		params = append(params, "autovacuum_enabled = "+strconv.FormatBool(sp.GetAutovacuumEnabled()))
 	}
+	if sp.HasDefaultStatisticsTarget() {
+		params = append(params, "default_statistics_target = "+strconv.FormatInt(int64(sp.GetDefaultStatisticsTarget()), 10))
+	}
+	if sp.HasParallelWorkers() {
+		params = append(params, "parallel_workers = "+strconv.FormatInt(int64(sp.GetParallelWorkers()), 10))
+	}
+	if sp.HasAutovacuumMultixactFreezeMinAge() {
+		params = append(params, "autovacuum_multixact_freeze_min_age = "+strconv.FormatInt(sp.GetAutovacuumMultixactFreezeMinAge(), 10))
+	}
+	if sp.HasAutovacuumMultixactFreezeMaxAge() {
+		params = append(params, "autovacuum_multixact_freeze_max_age = "+strconv.FormatInt(sp.GetAutovacuumMultixactFreezeMaxAge(), 10))
+	}
+	if sp.HasAutovacuumMultixactFreezeTableAge() {
+		params = append(params, "autovacuum_multixact_freeze_table_age = "+strconv.FormatInt(sp.GetAutovacuumMultixactFreezeTableAge(), 10))
+	}
+	if sp.HasLogAutovacuumMinDuration() {
+		params = append(params, "log_autovacuum_min_duration = "+strconv.FormatInt(int64(sp.GetLogAutovacuumMinDuration()), 10))
+	}
+	if sp.HasVacuumIndexCleanup() {
+		params = append(params, "vacuum_index_cleanup = "+strconv.FormatBool(sp.GetVacuumIndexCleanup()))
+	}
 
 	if len(params) == 0 {
 		return ""
@@ -292,6 +313,55 @@ func storageParams2alter(desc Descriptor, existingParams map[string]string) stri
 		desired := strconv.FormatBool(sp.GetAutovacuumEnabled())
 		if needsUpdate("autovacuum_enabled", desired, false) {
 			params = append(params, "autovacuum_enabled = "+desired)
+		}
+	}
+
+	if sp.HasDefaultStatisticsTarget() {
+		desired := strconv.FormatInt(int64(sp.GetDefaultStatisticsTarget()), 10)
+		if needsUpdate("default_statistics_target", desired, false) {
+			params = append(params, "default_statistics_target = "+desired)
+		}
+	}
+
+	if sp.HasParallelWorkers() {
+		desired := strconv.FormatInt(int64(sp.GetParallelWorkers()), 10)
+		if needsUpdate("parallel_workers", desired, false) {
+			params = append(params, "parallel_workers = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumMultixactFreezeMinAge() {
+		desired := strconv.FormatInt(sp.GetAutovacuumMultixactFreezeMinAge(), 10)
+		if needsUpdate("autovacuum_multixact_freeze_min_age", desired, false) {
+			params = append(params, "autovacuum_multixact_freeze_min_age = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumMultixactFreezeMaxAge() {
+		desired := strconv.FormatInt(sp.GetAutovacuumMultixactFreezeMaxAge(), 10)
+		if needsUpdate("autovacuum_multixact_freeze_max_age", desired, false) {
+			params = append(params, "autovacuum_multixact_freeze_max_age = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumMultixactFreezeTableAge() {
+		desired := strconv.FormatInt(sp.GetAutovacuumMultixactFreezeTableAge(), 10)
+		if needsUpdate("autovacuum_multixact_freeze_table_age", desired, false) {
+			params = append(params, "autovacuum_multixact_freeze_table_age = "+desired)
+		}
+	}
+
+	if sp.HasLogAutovacuumMinDuration() {
+		desired := strconv.FormatInt(int64(sp.GetLogAutovacuumMinDuration()), 10)
+		if needsUpdate("log_autovacuum_min_duration", desired, false) {
+			params = append(params, "log_autovacuum_min_duration = "+desired)
+		}
+	}
+
+	if sp.HasVacuumIndexCleanup() {
+		desired := strconv.FormatBool(sp.GetVacuumIndexCleanup())
+		if needsUpdate("vacuum_index_cleanup", desired, false) {
+			params = append(params, "vacuum_index_cleanup = "+desired)
 		}
 	}
 
