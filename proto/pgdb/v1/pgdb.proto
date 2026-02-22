@@ -31,6 +31,13 @@ message MessageOptions {
     optional int32 fillfactor = 10;
     optional int32 toast_tuple_target = 11;
     optional bool autovacuum_enabled = 12;
+    optional int32 default_statistics_target = 13;
+    optional int32 parallel_workers = 14;
+    optional int64 autovacuum_multixact_freeze_min_age = 15;
+    optional int64 autovacuum_multixact_freeze_max_age = 16;
+    optional int64 autovacuum_multixact_freeze_table_age = 17;
+    optional int32 log_autovacuum_min_duration = 18;
+    optional bool vacuum_index_cleanup = 19;
   }
   StorageParameters storage_parameters = 11;
 

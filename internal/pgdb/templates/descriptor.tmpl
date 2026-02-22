@@ -71,6 +71,27 @@ func (d *{{.ReceiverType}}) GetStorageParameters() *pgdb_v1.MessageOptions_Stora
         {{- if .StorageParameters.HasAutovacuumEnabled }}
         AutovacuumEnabled: proto.Bool({{.StorageParameters.AutovacuumEnabled}}),
         {{- end }}
+        {{- if .StorageParameters.DefaultStatisticsTarget }}
+        DefaultStatisticsTarget: proto.Int32({{.StorageParameters.DefaultStatisticsTarget}}),
+        {{- end }}
+        {{- if .StorageParameters.ParallelWorkers }}
+        ParallelWorkers: proto.Int32({{.StorageParameters.ParallelWorkers}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumMultixactFreezeMinAge }}
+        AutovacuumMultixactFreezeMinAge: proto.Int64({{.StorageParameters.AutovacuumMultixactFreezeMinAge}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumMultixactFreezeMaxAge }}
+        AutovacuumMultixactFreezeMaxAge: proto.Int64({{.StorageParameters.AutovacuumMultixactFreezeMaxAge}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumMultixactFreezeTableAge }}
+        AutovacuumMultixactFreezeTableAge: proto.Int64({{.StorageParameters.AutovacuumMultixactFreezeTableAge}}),
+        {{- end }}
+        {{- if .StorageParameters.LogAutovacuumMinDuration }}
+        LogAutovacuumMinDuration: proto.Int32({{.StorageParameters.LogAutovacuumMinDuration}}),
+        {{- end }}
+        {{- if .StorageParameters.HasVacuumIndexCleanup }}
+        VacuumIndexCleanup: proto.Bool({{.StorageParameters.VacuumIndexCleanup}}),
+        {{- end }}
     }
     {{- else }}
     return nil
