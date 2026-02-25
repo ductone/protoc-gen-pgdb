@@ -774,3 +774,28 @@ func TestIndex2expectedDef(t *testing.T) {
 		})
 	}
 }
+
+func TestIndexRename2sql(t *testing.T) {
+	tests := []struct {
+		name     string
+		oldName  string
+		newName  string
+		expected string
+	}{
+		{
+			name:     "simple rename",
+			oldName:  "pbidx_profile_abc123_new",
+			newName:  "pbidx_profile_abc123",
+			expected: `ALTER INDEX "pbidx_profile_abc123_new" RENAME TO "pbidx_profile_abc123"`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := indexRename2sql(test.oldName, test.newName)
+			if result != test.expected {
+				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
+			}
+		})
+	}
+}

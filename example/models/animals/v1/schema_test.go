@@ -215,15 +215,17 @@ func TestMigrationIndexMutation(t *testing.T) {
 	_, err = pg.DB.Exec(ctx, `CREATE INDEX "`+profileIdx.Name+`" ON "`+tableName+`" USING GIN ("pb$tenant_id")`)
 	require.NoError(t, err)
 
-	// Migrations should detect the drift and emit DROP + CREATE
+	// Migrations should detect the drift and emit CREATE (temp name) + DROP + RENAME
 	migrations, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
-	require.Len(t, migrations, 2, "should have 2 migrations: DROP + CREATE for drifted index")
-	require.Contains(t, migrations[0], "DROP INDEX")
-	require.Contains(t, migrations[0], profileIdx.Name)
-	require.Contains(t, migrations[1], "CREATE INDEX")
+	require.Len(t, migrations, 3, "should have 3 migrations: CREATE temp, DROP old, RENAME")
+	require.Contains(t, migrations[0], "CREATE INDEX")
+	require.Contains(t, migrations[0], profileIdx.Name+"_new")
+	require.Contains(t, migrations[0], "pb$profile")
+	require.Contains(t, migrations[1], "DROP INDEX")
 	require.Contains(t, migrations[1], profileIdx.Name)
-	require.Contains(t, migrations[1], "pb$profile")
+	require.Contains(t, migrations[2], "ALTER INDEX")
+	require.Contains(t, migrations[2], "RENAME TO")
 
 	// Execute the migrations
 	for _, line := range migrations {

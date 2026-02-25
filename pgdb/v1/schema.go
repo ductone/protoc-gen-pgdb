@@ -376,11 +376,18 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialec
 		// Index exists - check if definition has drifted
 		expectedDef := index2expectedDef(desc, idx)
 		if expectedDef != "" && existingDef != expectedDef {
-			// Definition has changed - drop and recreate
+			// Definition has changed - create new index first (with temp name),
+			// then drop the old one, then rename. This ensures there is always
+			// at least one usable index during the transition.
+			tempIdx := *idx
+			tempIdx.Name = idx.Name + "_new"
+			rv = append(rv, index2sql(desc, &tempIdx))
+
 			droppedIdx := *idx
 			droppedIdx.IsDropped = true
 			rv = append(rv, index2sql(desc, &droppedIdx))
-			rv = append(rv, index2sql(desc, idx))
+
+			rv = append(rv, indexRename2sql(tempIdx.Name, idx.Name))
 		}
 	}
 

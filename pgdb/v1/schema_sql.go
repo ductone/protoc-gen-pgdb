@@ -196,6 +196,15 @@ func pgNormalizeExpr(expr string) string {
 	return strings.Join(tokens, " ")
 }
 
+func indexRename2sql(oldName, newName string) string {
+	buf := &bytes.Buffer{}
+	_, _ = buf.WriteString("ALTER INDEX ")
+	pgWriteString(buf, oldName)
+	_, _ = buf.WriteString(" RENAME TO ")
+	pgWriteString(buf, newName)
+	return buf.String()
+}
+
 func pgWriteString(buf *bytes.Buffer, input string) {
 	_, _ = buf.WriteString(`"`)
 	// TODO(pquerna): not completely correct escaping
