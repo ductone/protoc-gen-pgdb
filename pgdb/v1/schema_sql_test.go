@@ -552,3 +552,225 @@ SET (
 		})
 	}
 }
+
+func TestPgQuoteIdent(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "lowercase no special chars",
+			input:    "pbidx_test_abc123",
+			expected: "pbidx_test_abc123",
+		},
+		{
+			name:     "contains dollar sign",
+			input:    "pb$tenant_id",
+			expected: `"pb$tenant_id"`,
+		},
+		{
+			name:     "contains uppercase",
+			input:    "pbidx_vector_index_MODEL_3DIMS_abc123",
+			expected: `"pbidx_vector_index_MODEL_3DIMS_abc123"`,
+		},
+		{
+			name:     "simple table name",
+			input:    "pb_pet_models_animals_v1_8a3723d5",
+			expected: "pb_pet_models_animals_v1_8a3723d5",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := pgQuoteIdent(test.input)
+			if result != test.expected {
+				t.Errorf("Expected %q, got %q", test.expected, result)
+			}
+		})
+	}
+}
+
+func TestPgNormalizeExpr(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "column IS NULL",
+			input:    "pb$deleted_at IS NULL",
+			expected: `"pb$deleted_at" IS NULL`,
+		},
+		{
+			name:     "override expression with ops class",
+			input:    "pb$min_hash bit_hamming_ops",
+			expected: `"pb$min_hash" bit_hamming_ops`,
+		},
+		{
+			name:     "override expression with vector ops",
+			input:    "pb$model_embeddings_1 vector_cosine_ops",
+			expected: `"pb$model_embeddings_1" vector_cosine_ops`,
+		},
+		{
+			name:     "already quoted identifier",
+			input:    `"pb$deleted_at" IS NULL`,
+			expected: `"pb$deleted_at" IS NULL`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := pgNormalizeExpr(test.input)
+			if result != test.expected {
+				t.Errorf("Expected %q, got %q", test.expected, result)
+			}
+		})
+	}
+}
+
+func TestIndex2expectedDef(t *testing.T) {
+	tests := []struct {
+		name     string
+		desc     Descriptor
+		idx      *Index
+		expected string
+	}{
+		{
+			name: "BTREE index with multiple columns",
+			desc: &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx: &Index{
+				Name:    "pbidx_test1_abc123",
+				Method:  MessageOptions_Index_INDEX_METHOD_BTREE,
+				Columns: []string{"pb$tenant_id", "pb$pk", "pb$sk"},
+			},
+			expected: `CREATE INDEX pbidx_test1_abc123 ON public.pb_test_table_abc123 USING btree ("pb$tenant_id", "pb$pk", "pb$sk")`,
+		},
+		{
+			name: "GIN index",
+			desc: &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx: &Index{
+				Name:    "pbidx_test2_abc123",
+				Method:  MessageOptions_Index_INDEX_METHOD_GIN,
+				Columns: []string{"pb$tenant_id", "pb$profile"},
+			},
+			expected: `CREATE INDEX pbidx_test2_abc123 ON public.pb_test_table_abc123 USING gin ("pb$tenant_id", "pb$profile")`,
+		},
+		{
+			name: "BTREE_GIN index renders as gin",
+			desc: &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx: &Index{
+				Name:    "pbidx_fts_abc123",
+				Method:  MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+				Columns: []string{"pb$tenant_id", "pb$fts_data"},
+			},
+			expected: `CREATE INDEX pbidx_fts_abc123 ON public.pb_test_table_abc123 USING gin ("pb$tenant_id", "pb$fts_data")`,
+		},
+		{
+			name: "UNIQUE BTREE index",
+			desc: &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx: &Index{
+				Name:     "pbidx_unique_abc123",
+				Method:   MessageOptions_Index_INDEX_METHOD_BTREE,
+				IsUnique: true,
+				Columns:  []string{"pb$tenant_id", "pb$pksk"},
+			},
+			expected: `CREATE UNIQUE INDEX pbidx_unique_abc123 ON public.pb_test_table_abc123 USING btree ("pb$tenant_id", "pb$pksk")`,
+		},
+		{
+			name: "BTREE index with WHERE predicate",
+			desc: &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx: &Index{
+				Name:           "pbidx_partial_abc123",
+				Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+				Columns:        []string{"pb$id", "pb$tenant_id"},
+				WherePredicate: `pb$deleted_at IS NULL`,
+			},
+			expected: `CREATE INDEX pbidx_partial_abc123 ON public.pb_test_table_abc123 USING btree ("pb$id", "pb$tenant_id") WHERE ("pb$deleted_at" IS NULL)`,
+		},
+		{
+			name: "HNSW index with override expression",
+			desc: &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx: &Index{
+				Name:               "pbidx_hnsw_abc123",
+				Method:             MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
+				Columns:            []string{"pb$min_hash"},
+				OverrideExpression: "pb$min_hash bit_hamming_ops",
+			},
+			expected: `CREATE INDEX pbidx_hnsw_abc123 ON public.pb_test_table_abc123 USING hnsw ("pb$min_hash" bit_hamming_ops)`,
+		},
+		{
+			name: "HNSW index with vector_cosine_ops",
+			desc: &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx: &Index{
+				Name:               "pbidx_vector_abc123",
+				Method:             MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
+				Columns:            []string{"pb$model_embeddings_1"},
+				OverrideExpression: "pb$model_embeddings_1 vector_cosine_ops",
+			},
+			expected: `CREATE INDEX pbidx_vector_abc123 ON public.pb_test_table_abc123 USING hnsw ("pb$model_embeddings_1" vector_cosine_ops)`,
+		},
+		{
+			name: "Index with uppercase in name",
+			desc: &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx: &Index{
+				Name:               "pbidx_vector_index_MODEL_3DIMS_abc123",
+				Method:             MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
+				Columns:            []string{"pb$model_embeddings_1"},
+				OverrideExpression: "pb$model_embeddings_1 vector_cosine_ops",
+			},
+			expected: `CREATE INDEX "pbidx_vector_index_MODEL_3DIMS_abc123" ON public.pb_test_table_abc123 USING hnsw ("pb$model_embeddings_1" vector_cosine_ops)`,
+		},
+		{
+			name: "Partitioned table uses ON ONLY",
+			desc: &mockDescriptor{tableName: "pb_pasta_models_food_v1_29fd1107", isPartitioned: true},
+			idx: &Index{
+				Name:    "pbidx_pksk_split2_abc123",
+				Method:  MessageOptions_Index_INDEX_METHOD_BTREE,
+				Columns: []string{"pb$tenant_id", "pb$pk", "pb$sk"},
+			},
+			expected: `CREATE INDEX pbidx_pksk_split2_abc123 ON ONLY public.pb_pasta_models_food_v1_29fd1107 USING btree ("pb$tenant_id", "pb$pk", "pb$sk")`,
+		},
+		{
+			name: "Date partitioned table uses ON ONLY",
+			desc: &mockDescriptor{tableName: "pb_garlic_abc123", isPartitionedByCreatedAt: true},
+			idx: &Index{
+				Name:    "pbidx_fts_data_abc123",
+				Method:  MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+				Columns: []string{"pb$tenant_id", "pb$fts_data"},
+			},
+			expected: `CREATE INDEX pbidx_fts_data_abc123 ON ONLY public.pb_garlic_abc123 USING gin ("pb$tenant_id", "pb$fts_data")`,
+		},
+		{
+			name: "KSUID partitioned table uses ON ONLY",
+			desc: &mockDescriptor{tableName: "pb_cheese_abc123", partitionedByKsuidFieldName: "event_id"},
+			idx: &Index{
+				Name:    "pbidx_fts_data_abc123",
+				Method:  MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+				Columns: []string{"pb$tenant_id", "pb$fts_data"},
+			},
+			expected: `CREATE INDEX pbidx_fts_data_abc123 ON ONLY public.pb_cheese_abc123 USING gin ("pb$tenant_id", "pb$fts_data")`,
+		},
+		{
+			name:     "Dropped index returns empty",
+			desc:     &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx:      &Index{Name: "pbidx_dropped", IsDropped: true},
+			expected: "",
+		},
+		{
+			name:     "Primary index returns empty",
+			desc:     &mockDescriptor{tableName: "pb_test_table_abc123"},
+			idx:      &Index{Name: "pbidx_primary", IsPrimary: true},
+			expected: "",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := index2expectedDef(test.desc, test.idx)
+			if result != test.expected {
+				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
+			}
+		})
+	}
+}

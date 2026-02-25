@@ -175,6 +175,68 @@ func TestSchemaPet(t *testing.T) {
 
 }
 
+func TestMigrationIndexMutation(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin")
+	require.NoError(t, err)
+
+	// Create initial schema
+	schema, err := pgdb_v1.CreateSchema(&Pet{}, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	for _, line := range schema {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "failed to execute sql: '\n%s\n'", line)
+	}
+
+	// Verify no migrations needed after initial creation
+	m, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{}, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	require.Len(t, m, 0, "should have zero migrations after schema create")
+
+	// Find the profile index (GIN index on tenant_id, profile)
+	desc := (&Pet{}).DBReflect(pgdb_v1.DialectV13).Descriptor()
+	tableName := desc.TableName()
+	var profileIdx *pgdb_v1.Index
+	for _, idx := range desc.Indexes() {
+		if strings.Contains(idx.Name, "profile") {
+			profileIdx = idx
+			break
+		}
+	}
+	require.NotNil(t, profileIdx, "should find the profile index")
+
+	// Drop the existing index and recreate with different columns (simulating drift)
+	_, err = pg.DB.Exec(ctx, `DROP INDEX IF EXISTS "`+profileIdx.Name+`"`)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, `CREATE INDEX "`+profileIdx.Name+`" ON "`+tableName+`" USING GIN ("pb$tenant_id")`)
+	require.NoError(t, err)
+
+	// Migrations should detect the drift and emit DROP + CREATE
+	migrations, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{}, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	require.Len(t, migrations, 2, "should have 2 migrations: DROP + CREATE for drifted index")
+	require.Contains(t, migrations[0], "DROP INDEX")
+	require.Contains(t, migrations[0], profileIdx.Name)
+	require.Contains(t, migrations[1], "CREATE INDEX")
+	require.Contains(t, migrations[1], profileIdx.Name)
+	require.Contains(t, migrations[1], "pb$profile")
+
+	// Execute the migrations
+	for _, line := range migrations {
+		_, err := pg.DB.Exec(ctx, line)
+		require.NoErrorf(t, err, "failed to execute migration: '\n%s\n'", line)
+	}
+
+	// Verify no more migrations needed
+	m, err = pgdb_v1.Migrations(ctx, pg.DB, &Pet{}, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	require.Len(t, m, 0, "should have zero migrations after repair")
+}
+
 func TestSchemaBook(t *testing.T) {
 	ctx := context.Background()
 	pg, err := pgtest.Start()
