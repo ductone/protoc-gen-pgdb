@@ -111,6 +111,100 @@ func statistics2sql(desc Descriptor, st *Statistic) string {
 	return buf.String()
 }
 
+// index2expectedDef generates the expected PostgreSQL indexdef string for an index,
+// matching the format that PostgreSQL stores in pg_indexes.indexdef.
+// This is used to detect index definition drift during migrations.
+// Returns empty string if the expected format cannot be determined.
+func index2expectedDef(desc Descriptor, idx *Index) string {
+	if idx.IsDropped || idx.IsPrimary {
+		return ""
+	}
+
+	buf := &bytes.Buffer{}
+	_, _ = buf.WriteString("CREATE ")
+	if idx.IsUnique {
+		_, _ = buf.WriteString("UNIQUE ")
+	}
+	_, _ = buf.WriteString("INDEX ")
+	_, _ = buf.WriteString(pgQuoteIdent(idx.Name))
+	// Partitioned tables use "ON ONLY" in PostgreSQL's indexdef
+	if desc.IsPartitioned() || desc.IsPartitionedByCreatedAt() || desc.GetPartitionedByKsuidFieldName() != "" {
+		_, _ = buf.WriteString(" ON ONLY public.")
+	} else {
+		_, _ = buf.WriteString(" ON public.")
+	}
+	_, _ = buf.WriteString(pgQuoteIdent(desc.TableName()))
+	_, _ = buf.WriteString(" USING ")
+
+	switch idx.Method {
+	case MessageOptions_Index_INDEX_METHOD_BTREE:
+		_, _ = buf.WriteString("btree")
+	case MessageOptions_Index_INDEX_METHOD_GIN, MessageOptions_Index_INDEX_METHOD_BTREE_GIN:
+		_, _ = buf.WriteString("gin")
+	case MessageOptions_Index_INDEX_METHOD_HNSW_COSINE:
+		_, _ = buf.WriteString("hnsw")
+	default:
+		return ""
+	}
+
+	_, _ = buf.WriteString(" (")
+	if idx.OverrideExpression != "" {
+		_, _ = buf.WriteString(pgNormalizeExpr(idx.OverrideExpression))
+	} else {
+		for i, col := range idx.Columns {
+			if i > 0 {
+				_, _ = buf.WriteString(", ")
+			}
+			_, _ = buf.WriteString(pgQuoteIdent(col))
+		}
+	}
+	_, _ = buf.WriteString(")")
+
+	if idx.WherePredicate != "" {
+		_, _ = buf.WriteString(" WHERE (")
+		_, _ = buf.WriteString(pgNormalizeExpr(idx.WherePredicate))
+		_, _ = buf.WriteString(")")
+	}
+
+	return buf.String()
+}
+
+// pgQuoteIdent quotes a PostgreSQL identifier if it contains characters
+// that require quoting (uppercase letters or $).
+func pgQuoteIdent(ident string) string {
+	for _, c := range ident {
+		if (c >= 'A' && c <= 'Z') || c == '$' {
+			return `"` + ident + `"`
+		}
+	}
+	return ident
+}
+
+// pgNormalizeExpr normalizes identifiers in a SQL expression to match
+// PostgreSQL's indexdef format. It quotes tokens containing $ (column names
+// with the pb$ prefix) while leaving SQL keywords untouched.
+func pgNormalizeExpr(expr string) string {
+	tokens := strings.Fields(expr)
+	for i, token := range tokens {
+		unquoted := strings.Trim(token, `"`)
+		if strings.Contains(unquoted, "$") {
+			tokens[i] = `"` + unquoted + `"`
+		} else {
+			tokens[i] = unquoted
+		}
+	}
+	return strings.Join(tokens, " ")
+}
+
+func indexRename2sql(oldName, newName string) string {
+	buf := &bytes.Buffer{}
+	_, _ = buf.WriteString("ALTER INDEX ")
+	pgWriteString(buf, oldName)
+	_, _ = buf.WriteString(" RENAME TO ")
+	pgWriteString(buf, newName)
+	return buf.String()
+}
+
 func pgWriteString(buf *bytes.Buffer, input string) {
 	_, _ = buf.WriteString(`"`)
 	// TODO(pquerna): not completely correct escaping
