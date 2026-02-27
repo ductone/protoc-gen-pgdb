@@ -596,13 +596,14 @@ func (b0 MessageOptions_builder) Build() *MessageOptions {
 }
 
 type FieldOptions struct {
-	state                      protoimpl.MessageState       `protogen:"opaque.v1"`
-	xxx_hidden_FullTextType    FieldOptions_FullTextType    `protobuf:"varint,1,opt,name=full_text_type,json=fullTextType,proto3,enum=pgdb.v1.FieldOptions_FullTextType"`
-	xxx_hidden_FullTextWeight  FieldOptions_FullTextWeight  `protobuf:"varint,2,opt,name=full_text_weight,json=fullTextWeight,proto3,enum=pgdb.v1.FieldOptions_FullTextWeight"`
-	xxx_hidden_MessageBehavior FieldOptions_MessageBehavior `protobuf:"varint,3,opt,name=message_behavior,json=messageBehavior,proto3,enum=pgdb.v1.FieldOptions_MessageBehavior"`
-	xxx_hidden_Collation       string                       `protobuf:"bytes,5,opt,name=collation,proto3"`
-	xxx_hidden_BitsSize        int32                        `protobuf:"varint,6,opt,name=bits_size,json=bitsSize,proto3"`
-	xxx_hidden_Ksuid           bool                         `protobuf:"varint,7,opt,name=ksuid,proto3"`
+	state                      protoimpl.MessageState          `protogen:"opaque.v1"`
+	xxx_hidden_FullTextType    FieldOptions_FullTextType       `protobuf:"varint,1,opt,name=full_text_type,json=fullTextType,proto3,enum=pgdb.v1.FieldOptions_FullTextType"`
+	xxx_hidden_FullTextWeight  FieldOptions_FullTextWeight     `protobuf:"varint,2,opt,name=full_text_weight,json=fullTextWeight,proto3,enum=pgdb.v1.FieldOptions_FullTextWeight"`
+	xxx_hidden_MessageBehavior FieldOptions_MessageBehavior    `protobuf:"varint,3,opt,name=message_behavior,json=messageBehavior,proto3,enum=pgdb.v1.FieldOptions_MessageBehavior"`
+	xxx_hidden_Collation       string                          `protobuf:"bytes,5,opt,name=collation,proto3"`
+	xxx_hidden_BitsSize        int32                           `protobuf:"varint,6,opt,name=bits_size,json=bitsSize,proto3"`
+	xxx_hidden_Ksuid           bool                            `protobuf:"varint,7,opt,name=ksuid,proto3"`
+	xxx_hidden_Sequence        *FieldOptions_SequenceOptions   `protobuf:"bytes,8,opt,name=sequence,proto3"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
@@ -674,6 +675,20 @@ func (x *FieldOptions) GetKsuid() bool {
 	return false
 }
 
+func (x *FieldOptions) GetSequence() *FieldOptions_SequenceOptions {
+	if x != nil {
+		return x.xxx_hidden_Sequence
+	}
+	return nil
+}
+
+func (x *FieldOptions) HasSequence() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Sequence != nil
+}
+
 func (x *FieldOptions) SetFullTextType(v FieldOptions_FullTextType) {
 	x.xxx_hidden_FullTextType = v
 }
@@ -709,6 +724,8 @@ type FieldOptions_builder struct {
 	// bit vector size options
 	BitsSize int32
 	Ksuid    bool
+	// Sequence generator options for auto-incrementing integer columns.
+	Sequence *FieldOptions_SequenceOptions
 }
 
 func (b0 FieldOptions_builder) Build() *FieldOptions {
@@ -721,6 +738,7 @@ func (b0 FieldOptions_builder) Build() *FieldOptions {
 	x.xxx_hidden_Collation = b.Collation
 	x.xxx_hidden_BitsSize = b.BitsSize
 	x.xxx_hidden_Ksuid = b.Ksuid
+	x.xxx_hidden_Sequence = b.Sequence
 	return m0
 }
 
@@ -1430,6 +1448,181 @@ func (b0 MessageOptions_Stat_builder) Build() *MessageOptions_Stat {
 	x.xxx_hidden_Kinds = b.Kinds
 	x.xxx_hidden_Columns = b.Columns
 	x.xxx_hidden_Dropped = b.Dropped
+	return m0
+}
+
+// FieldOptions_SequenceOptions defines sequence generator options for identity columns.
+// When set on an integer field, the column will use GENERATED AS IDENTITY in PostgreSQL.
+type FieldOptions_SequenceOptions struct {
+	state                protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_Always    bool                   `protobuf:"varint,1,opt,name=always,proto3"`
+	xxx_hidden_Start     int64                  `protobuf:"varint,2,opt,name=start,proto3"`
+	xxx_hidden_Increment int64                  `protobuf:"varint,3,opt,name=increment,proto3"`
+	xxx_hidden_MinValue  int64                  `protobuf:"varint,4,opt,name=min_value,json=minValue,proto3,oneof"`
+	xxx_hidden_MaxValue  int64                  `protobuf:"varint,5,opt,name=max_value,json=maxValue,proto3,oneof"`
+	xxx_hidden_Cycle     bool                   `protobuf:"varint,6,opt,name=cycle,proto3"`
+	xxx_hidden_Cache     int32                  `protobuf:"varint,7,opt,name=cache,proto3,oneof"`
+	XXX_presence         [1]uint32
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *FieldOptions_SequenceOptions) GetAlways() bool {
+	if x != nil {
+		return x.xxx_hidden_Always
+	}
+	return false
+}
+
+func (x *FieldOptions_SequenceOptions) GetStart() int64 {
+	if x != nil {
+		return x.xxx_hidden_Start
+	}
+	return 0
+}
+
+func (x *FieldOptions_SequenceOptions) GetIncrement() int64 {
+	if x != nil {
+		return x.xxx_hidden_Increment
+	}
+	return 0
+}
+
+func (x *FieldOptions_SequenceOptions) GetMinValue() int64 {
+	if x != nil {
+		return x.xxx_hidden_MinValue
+	}
+	return 0
+}
+
+func (x *FieldOptions_SequenceOptions) GetMaxValue() int64 {
+	if x != nil {
+		return x.xxx_hidden_MaxValue
+	}
+	return 0
+}
+
+func (x *FieldOptions_SequenceOptions) GetCycle() bool {
+	if x != nil {
+		return x.xxx_hidden_Cycle
+	}
+	return false
+}
+
+func (x *FieldOptions_SequenceOptions) GetCache() int32 {
+	if x != nil {
+		return x.xxx_hidden_Cache
+	}
+	return 0
+}
+
+func (x *FieldOptions_SequenceOptions) HasMinValue() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 0)
+}
+
+func (x *FieldOptions_SequenceOptions) HasMaxValue() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
+}
+
+func (x *FieldOptions_SequenceOptions) HasCache() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 2)
+}
+
+func (x *FieldOptions_SequenceOptions) SetAlways(v bool) {
+	x.xxx_hidden_Always = v
+}
+
+func (x *FieldOptions_SequenceOptions) SetStart(v int64) {
+	x.xxx_hidden_Start = v
+}
+
+func (x *FieldOptions_SequenceOptions) SetIncrement(v int64) {
+	x.xxx_hidden_Increment = v
+}
+
+func (x *FieldOptions_SequenceOptions) SetMinValue(v int64) {
+	x.xxx_hidden_MinValue = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 3)
+}
+
+func (x *FieldOptions_SequenceOptions) SetMaxValue(v int64) {
+	x.xxx_hidden_MaxValue = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 3)
+}
+
+func (x *FieldOptions_SequenceOptions) SetCycle(v bool) {
+	x.xxx_hidden_Cycle = v
+}
+
+func (x *FieldOptions_SequenceOptions) SetCache(v int32) {
+	x.xxx_hidden_Cache = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 3)
+}
+
+func (x *FieldOptions_SequenceOptions) ClearMinValue() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
+	x.xxx_hidden_MinValue = 0
+}
+
+func (x *FieldOptions_SequenceOptions) ClearMaxValue() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
+	x.xxx_hidden_MaxValue = 0
+}
+
+func (x *FieldOptions_SequenceOptions) ClearCache() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 2)
+	x.xxx_hidden_Cache = 0
+}
+
+type FieldOptions_SequenceOptions_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	// If true, uses GENERATED ALWAYS AS IDENTITY (cannot be overridden by INSERT).
+	// If false, uses GENERATED BY DEFAULT AS IDENTITY (can be overridden).
+	Always bool
+	// Start value for the sequence. Default is 1.
+	Start int64
+	// Increment value for the sequence. Default is 1.
+	Increment int64
+	// Minimum value for the sequence (optional).
+	MinValue *int64
+	// Maximum value for the sequence (optional).
+	MaxValue *int64
+	// If true, the sequence will cycle when max/min value is reached.
+	Cycle bool
+	// Cache size for the sequence (optional, for performance).
+	Cache *int32
+}
+
+func (b0 FieldOptions_SequenceOptions_builder) Build() *FieldOptions_SequenceOptions {
+	m0 := &FieldOptions_SequenceOptions{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_Always = b.Always
+	x.xxx_hidden_Start = b.Start
+	x.xxx_hidden_Increment = b.Increment
+	if b.MinValue != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 3)
+		x.xxx_hidden_MinValue = *b.MinValue
+	}
+	if b.MaxValue != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 3)
+		x.xxx_hidden_MaxValue = *b.MaxValue
+	}
+	x.xxx_hidden_Cycle = b.Cycle
+	if b.Cache != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 3)
+		x.xxx_hidden_Cache = *b.Cache
+	}
 	return m0
 }
 
