@@ -26,6 +26,11 @@ type indexContext struct {
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
+	key := m.FullyQualifiedName()
+	if cached, ok := module.cacheIndexes[key]; ok {
+		return cached
+	}
+
 	ext := pgdb_v1.MessageOptions{}
 	_, err := m.Extension(pgdb_v1.E_Msg, &ext)
 	if err != nil {
@@ -48,6 +53,7 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 		rv = append(rv, module.extraIndexes(ctx, m, ix, index))
 	}
 
+	module.cacheIndexes[key] = rv
 	return rv
 }
 

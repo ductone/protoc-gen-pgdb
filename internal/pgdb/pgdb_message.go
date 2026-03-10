@@ -76,8 +76,15 @@ func (module *Module) getMessageFieldsDeep(
 	dbPrefix string,
 	humanPrefix string,
 ) []*fieldContext {
+	key := m.FullyQualifiedName()
+	if cached, ok := module.cacheFieldsDeep[key]; ok {
+		return cached
+	}
+
 	// Call the internal implementation with empty proto path (for top-level) and no oneof
-	return module.getMessageFieldsDeepInternal(ctx, m, ix, goPrefix, dbPrefix, humanPrefix, nil, nil, "")
+	rv := module.getMessageFieldsDeepInternal(ctx, m, ix, goPrefix, dbPrefix, humanPrefix, nil, nil, "")
+	module.cacheFieldsDeep[key] = rv
+	return rv
 }
 
 func (module *Module) getMessageFieldsDeepInternal(
@@ -212,10 +219,9 @@ func (module *Module) getMessageFieldsDeepInternal(
 
 // appendSlice creates a new slice with the value appended (doesn't modify original).
 func appendSlice[T any](slice []T, val T) []T {
-	result := make([]T, len(slice)+1)
+	result := make([]T, len(slice), len(slice)+1)
 	copy(result, slice)
-	result[len(slice)] = val
-	return result
+	return append(result, val)
 }
 
 // buildProtoPath constructs a dot-delimited path from parts.
@@ -227,6 +233,11 @@ func buildProtoPath(parts []string, suffix string) string {
 }
 
 func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *importTracker, goPrefix string) []*fieldContext {
+	key := m.FullyQualifiedName()
+	if cached, ok := module.cacheFields[key]; ok {
+		return cached
+	}
+
 	fields := m.Fields()
 	rv := make([]*fieldContext, 0, len(fields))
 	ix.ProtobufEncodingJSON = true
@@ -262,6 +273,7 @@ func (module *Module) getMessageFields(ctx pgsgo.Context, m pgs.Message, ix *imp
 		}
 	}
 
+	module.cacheFields[key] = rv
 	return rv
 }
 
