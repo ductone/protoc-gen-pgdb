@@ -20,6 +20,5 @@ func main() {
 	).
 		RegisterModule(pgdb.New()).
 		RegisterPostProcessor(pgsgo.GoImports()).
-		RegisterPostProcessor(pgsgo.GoFmt()).
 		Render()
 }

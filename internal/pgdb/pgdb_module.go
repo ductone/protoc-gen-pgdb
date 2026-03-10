@@ -26,6 +26,12 @@ const (
 type Module struct {
 	*pgs.ModuleBase
 	ctx pgsgo.Context
+
+	// Per-file caches for expensive per-message computations.
+	// Cleared at the start of each file in applyTemplate.
+	cacheFields     map[string][]*fieldContext
+	cacheFieldsDeep map[string][]*fieldContext
+	cacheIndexes    map[string][]*indexContext
 }
 
 var _ pgs.Module = (*Module)(nil)
@@ -73,6 +79,12 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 		input:      in,
 		typeMapper: make(map[pgs.Name]pgs.FilePath),
 	}
+
+	// Reset per-file caches so each file starts fresh.
+	module.cacheFields = make(map[string][]*fieldContext)
+	module.cacheFieldsDeep = make(map[string][]*fieldContext)
+	module.cacheIndexes = make(map[string][]*indexContext)
+
 	buf := &bytes.Buffer{}
 
 	// Track generated SafeOperators type names across all messages to prevent duplicates.
