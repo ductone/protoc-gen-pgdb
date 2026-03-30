@@ -582,99 +582,36 @@ func TestIndex2SQL_IncludeColumns(t *testing.T) {
 				")\n")
 	})
 
-	t.Run("btree with include columns and partial predicate", func(t *testing.T) {
-		got := index2sql(desc, &Index{
-			Name:           "idx_covering_partial",
-			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
-			Columns:        []string{"pb$tenant_id", "pb$app_id"},
-			IncludeColumns: []string{"pb$id"},
-			WherePredicate: `"pb$deleted_at" IS NULL`,
-		})
-
-		expected := "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n" +
-			"  \"idx_covering_partial\"\n" +
-			"ON\n" +
-			"  \"pb_app_resource\"\n" +
-			"USING\n" +
-			"  BTREE\n" +
-			"(\n" +
-			"  \"pb$tenant_id\", \n" +
-			"  \"pb$app_id\"\n" +
-			")\n" +
-			"INCLUDE (\n" +
-			"  \"pb$id\"\n" +
-			")\n" +
-			"WHERE \"pb$deleted_at\" IS NULL\n"
-		if got != expected {
-			t.Errorf("index2sql mismatch.\ngot:\n%s\nexpected:\n%s", got, expected)
-		}
-	})
-
-	t.Run("btree without include columns omits INCLUDE clause", func(t *testing.T) {
-		got := index2sql(desc, &Index{
-			Name:    "idx_no_include",
-			Method:  MessageOptions_Index_INDEX_METHOD_BTREE,
-			Columns: []string{"pb$tenant_id", "pb$app_id"},
-		})
-
-		if strings.Contains(got, "INCLUDE") {
-			t.Errorf("expected no INCLUDE clause, got:\n%s", got)
-		}
-	})
-
 	t.Run("single include column", func(t *testing.T) {
 		got := index2sql(desc, &Index{
-			Name:           "idx_single_include",
+			Name:           "idx_single",
 			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:        []string{"pb$tenant_id"},
 			IncludeColumns: []string{"pb$id"},
 		})
 
-		expected := "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n" +
-			"  \"idx_single_include\"\n" +
-			"ON\n" +
-			"  \"pb_app_resource\"\n" +
-			"USING\n" +
-			"  BTREE\n" +
-			"(\n" +
-			"  \"pb$tenant_id\"\n" +
-			")\n" +
-			"INCLUDE (\n" +
-			"  \"pb$id\"\n" +
-			")\n"
-		if got != expected {
-			t.Errorf("index2sql mismatch.\ngot:\n%s\nexpected:\n%s", got, expected)
-		}
+		assertContains(t, got, "INCLUDE (\n  \"pb$id\"\n)")
 	})
 
-	t.Run("empty include columns slice omits INCLUDE clause", func(t *testing.T) {
+	t.Run("no include columns omits INCLUDE", func(t *testing.T) {
 		got := index2sql(desc, &Index{
-			Name:           "idx_empty_include",
+			Name:    "idx_plain",
+			Method:  MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns: []string{"pb$tenant_id"},
+		})
+
+		assertNotContains(t, got, "INCLUDE")
+	})
+
+	t.Run("empty include columns slice omits INCLUDE", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_empty",
 			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
 			Columns:        []string{"pb$tenant_id"},
 			IncludeColumns: []string{},
 		})
 
-		if strings.Contains(got, "INCLUDE") {
-			t.Errorf("expected no INCLUDE clause for empty slice, got:\n%s", got)
-		}
-	})
-
-	t.Run("partitioned table omits CONCURRENTLY", func(t *testing.T) {
-		partDesc := &mockDescriptor{tableName: "pb_partitioned", isPartitioned: true}
-		got := index2sql(partDesc, &Index{
-			Name:           "idx_part_include",
-			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
-			Columns:        []string{"pb$tenant_id"},
-			IncludeColumns: []string{"pb$id"},
-		})
-
-		if strings.Contains(got, "CONCURRENTLY") {
-			t.Errorf("expected no CONCURRENTLY for partitioned table, got:\n%s", got)
-		}
-		if !strings.Contains(got, "INCLUDE") {
-			t.Errorf("expected INCLUDE clause, got:\n%s", got)
-		}
+		assertNotContains(t, got, "INCLUDE")
 	})
 
 	t.Run("dropped index ignores include columns", func(t *testing.T) {
@@ -686,12 +623,160 @@ func TestIndex2SQL_IncludeColumns(t *testing.T) {
 			IncludeColumns: []string{"pb$id"},
 		})
 
-		if strings.Contains(got, "INCLUDE") {
-			t.Errorf("expected no INCLUDE clause for dropped index, got:\n%s", got)
+		assertContains(t, got, "DROP INDEX")
+		assertNotContains(t, got, "INCLUDE")
+	})
+
+	t.Run("partitioned table omits CONCURRENTLY", func(t *testing.T) {
+		partDesc := &mockDescriptor{tableName: "pb_partitioned", isPartitioned: true}
+		got := index2sql(partDesc, &Index{
+			Name:           "idx_part",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{"pb$tenant_id"},
+			IncludeColumns: []string{"pb$id"},
+		})
+
+		assertNotContains(t, got, "CONCURRENTLY")
+		assertContains(t, got, "INCLUDE")
+	})
+}
+
+func TestIndex2SQL_WherePredicate(t *testing.T) {
+	desc := &mockDescriptor{tableName: "pb_app_resource"}
+
+	t.Run("IS NULL predicate", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_alive",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{"pb$tenant_id", "pb$app_id"},
+			WherePredicate: `"pb$deleted_at" IS NULL`,
+		})
+
+		assertContains(t, got, `WHERE "pb$deleted_at" IS NULL`)
+		assertNotContains(t, got, "INCLUDE")
+	})
+
+	t.Run("IS NOT NULL predicate", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_deleted",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{"pb$tenant_id"},
+			WherePredicate: `"pb$deleted_at" IS NOT NULL`,
+		})
+
+		assertContains(t, got, `WHERE "pb$deleted_at" IS NOT NULL`)
+	})
+
+	t.Run("EQUALS predicate", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_active",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{"pb$tenant_id"},
+			WherePredicate: `"pb$is_active" = true`,
+		})
+
+		assertContains(t, got, `WHERE "pb$is_active" = true`)
+	})
+
+	t.Run("multiple predicates ANDed", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_compound",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{"pb$tenant_id"},
+			WherePredicate: `"pb$deleted_at" IS NULL AND "pb$is_active" = true`,
+		})
+
+		assertContains(t, got, `WHERE "pb$deleted_at" IS NULL AND "pb$is_active" = true`)
+	})
+
+	t.Run("no predicate omits WHERE", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:    "idx_no_where",
+			Method:  MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns: []string{"pb$tenant_id"},
+		})
+
+		assertNotContains(t, got, "WHERE")
+	})
+}
+
+func TestIndex2SQL_CombinedFeatures(t *testing.T) {
+	desc := &mockDescriptor{tableName: "pb_app_resource"}
+
+	t.Run("columns + INCLUDE + WHERE exact output", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_full",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{"pb$tenant_id", "pb$app_id", "pb$app_resource_type_id"},
+			IncludeColumns: []string{"pb$access_config_id", "pb$id"},
+			WherePredicate: `pb$deleted_at IS NULL`,
+		})
+
+		assertExact(t, got,
+			"CREATE INDEX CONCURRENTLY IF NOT EXISTS\n"+
+				"  \"idx_full\"\n"+
+				"ON\n"+
+				"  \"pb_app_resource\"\n"+
+				"USING\n"+
+				"  BTREE\n"+
+				"(\n"+
+				"  \"pb$tenant_id\", \n"+
+				"  \"pb$app_id\", \n"+
+				"  \"pb$app_resource_type_id\"\n"+
+				")\n"+
+				"INCLUDE (\n"+
+				"  \"pb$access_config_id\", \n"+
+				"  \"pb$id\"\n"+
+				")\n"+
+				"WHERE pb$deleted_at IS NULL\n")
+	})
+
+	t.Run("INCLUDE appears before WHERE", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_order",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{"pb$tenant_id"},
+			IncludeColumns: []string{"pb$id"},
+			WherePredicate: `pb$deleted_at IS NULL`,
+		})
+
+		includePos := strings.Index(got, "INCLUDE")
+		wherePos := strings.Index(got, "WHERE")
+		if includePos == -1 || wherePos == -1 {
+			t.Fatalf("expected both INCLUDE and WHERE, got:\n%s", got)
 		}
-		if !strings.Contains(got, "DROP INDEX") {
-			t.Errorf("expected DROP INDEX, got:\n%s", got)
+		if includePos >= wherePos {
+			t.Errorf("INCLUDE (pos %d) should appear before WHERE (pos %d)", includePos, wherePos)
 		}
+	})
+
+	t.Run("unique index with INCLUDE and WHERE", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_unique_covering",
+			IsUnique:       true,
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{"pb$tenant_id", "pb$email"},
+			IncludeColumns: []string{"pb$id"},
+			WherePredicate: `pb$deleted_at IS NULL`,
+		})
+
+		assertContains(t, got, "CREATE UNIQUE INDEX")
+		assertContains(t, got, "INCLUDE")
+		assertContains(t, got, "WHERE")
+	})
+
+	t.Run("override expression bypasses columns but INCLUDE still renders", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:               "idx_override",
+			Method:             MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:            []string{"pb$data"},
+			OverrideExpression: "pb$data jsonb_path_ops",
+			IncludeColumns:     []string{"pb$id"},
+		})
+
+		assertContains(t, got, "pb$data jsonb_path_ops")
+		assertContains(t, got, "INCLUDE")
+		assertNotContains(t, got, "\"pb$data\"")
 	})
 }
 

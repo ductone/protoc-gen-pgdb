@@ -1204,14 +1204,15 @@ func (b0 MessageOptions_StorageParameters_builder) Build() *MessageOptions_Stora
 }
 
 type MessageOptions_Index struct {
-	state                             protoimpl.MessageState           `protogen:"opaque.v1"`
-	xxx_hidden_Name                   string                           `protobuf:"bytes,1,opt,name=name,proto3"`
-	xxx_hidden_Method                 MessageOptions_Index_IndexMethod `protobuf:"varint,2,opt,name=method,proto3,enum=pgdb.v1.MessageOptions_Index_IndexMethod"`
-	xxx_hidden_Columns                []string                         `protobuf:"bytes,3,rep,name=columns,proto3"`
-	xxx_hidden_Dropped                bool                             `protobuf:"varint,4,opt,name=dropped,proto3"`
-	xxx_hidden_PartialDeletedAtIsNull bool                             `protobuf:"varint,5,opt,name=partial_deleted_at_is_null,json=partialDeletedAtIsNull,proto3"`
-	xxx_hidden_BitHammingOps          bool                             `protobuf:"varint,6,opt,name=bit_hamming_ops,json=bitHammingOps,proto3"`
-	xxx_hidden_IncludeColumns         []string                         `protobuf:"bytes,7,rep,name=include_columns,json=includeColumns,proto3"`
+	state                             protoimpl.MessageState            `protogen:"opaque.v1"`
+	xxx_hidden_Name                   string                            `protobuf:"bytes,1,opt,name=name,proto3"`
+	xxx_hidden_Method                 MessageOptions_Index_IndexMethod  `protobuf:"varint,2,opt,name=method,proto3,enum=pgdb.v1.MessageOptions_Index_IndexMethod"`
+	xxx_hidden_Columns                []string                          `protobuf:"bytes,3,rep,name=columns,proto3"`
+	xxx_hidden_Dropped                bool                              `protobuf:"varint,4,opt,name=dropped,proto3"`
+	xxx_hidden_PartialDeletedAtIsNull bool                              `protobuf:"varint,5,opt,name=partial_deleted_at_is_null,json=partialDeletedAtIsNull,proto3"`
+	xxx_hidden_BitHammingOps          bool                              `protobuf:"varint,6,opt,name=bit_hamming_ops,json=bitHammingOps,proto3"`
+	xxx_hidden_IncludeColumns         []string                          `protobuf:"bytes,7,rep,name=include_columns,json=includeColumns,proto3"`
+	xxx_hidden_Where                  *[]*MessageOptions_IndexPredicate `protobuf:"bytes,8,rep,name=where,proto3"`
 	unknownFields                     protoimpl.UnknownFields
 	sizeCache                         protoimpl.SizeCache
 }
@@ -1290,6 +1291,15 @@ func (x *MessageOptions_Index) GetIncludeColumns() []string {
 	return nil
 }
 
+func (x *MessageOptions_Index) GetWhere() []*MessageOptions_IndexPredicate {
+	if x != nil {
+		if x.xxx_hidden_Where != nil {
+			return *x.xxx_hidden_Where
+		}
+	}
+	return nil
+}
+
 func (x *MessageOptions_Index) SetName(v string) {
 	x.xxx_hidden_Name = v
 }
@@ -1318,6 +1328,10 @@ func (x *MessageOptions_Index) SetIncludeColumns(v []string) {
 	x.xxx_hidden_IncludeColumns = v
 }
 
+func (x *MessageOptions_Index) SetWhere(v []*MessageOptions_IndexPredicate) {
+	x.xxx_hidden_Where = &v
+}
+
 type MessageOptions_Index_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
@@ -1332,6 +1346,8 @@ type MessageOptions_Index_builder struct {
 	BitHammingOps bool
 	// non-key columns stored in index leaf pages for covering index (Index Only Scan)
 	IncludeColumns []string
+	// Partial index predicates. ANDed together to form the WHERE clause.
+	Where []*MessageOptions_IndexPredicate
 }
 
 func (b0 MessageOptions_Index_builder) Build() *MessageOptions_Index {
@@ -1345,6 +1361,80 @@ func (b0 MessageOptions_Index_builder) Build() *MessageOptions_Index {
 	x.xxx_hidden_PartialDeletedAtIsNull = b.PartialDeletedAtIsNull
 	x.xxx_hidden_BitHammingOps = b.BitHammingOps
 	x.xxx_hidden_IncludeColumns = b.IncludeColumns
+	x.xxx_hidden_Where = &b.Where
+	return m0
+}
+
+// IndexPredicate represents a single partial index predicate.
+// Column is a field path (resolved at codegen time), Op is a raw SQL operator fragment.
+type MessageOptions_IndexPredicate struct {
+	state             protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_Column string                 `protobuf:"bytes,1,opt,name=column,proto3"`
+	xxx_hidden_Op     string                 `protobuf:"bytes,2,opt,name=op,proto3"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *MessageOptions_IndexPredicate) Reset() {
+	*x = MessageOptions_IndexPredicate{}
+	mi := &file_pgdb_v1_pgdb_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MessageOptions_IndexPredicate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MessageOptions_IndexPredicate) ProtoMessage() {}
+
+func (x *MessageOptions_IndexPredicate) ProtoReflect() protoreflect.Message {
+	mi := &file_pgdb_v1_pgdb_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *MessageOptions_IndexPredicate) GetColumn() string {
+	if x != nil {
+		return x.xxx_hidden_Column
+	}
+	return ""
+}
+
+func (x *MessageOptions_IndexPredicate) GetOp() string {
+	if x != nil {
+		return x.xxx_hidden_Op
+	}
+	return ""
+}
+
+func (x *MessageOptions_IndexPredicate) SetColumn(v string) {
+	x.xxx_hidden_Column = v
+}
+
+func (x *MessageOptions_IndexPredicate) SetOp(v string) {
+	x.xxx_hidden_Op = v
+}
+
+type MessageOptions_IndexPredicate_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	Column string
+	Op     string
+}
+
+func (b0 MessageOptions_IndexPredicate_builder) Build() *MessageOptions_IndexPredicate {
+	m0 := &MessageOptions_IndexPredicate{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_Column = b.Column
+	x.xxx_hidden_Op = b.Op
 	return m0
 }
 
@@ -1360,7 +1450,7 @@ type MessageOptions_Stat struct {
 
 func (x *MessageOptions_Stat) Reset() {
 	*x = MessageOptions_Stat{}
-	mi := &file_pgdb_v1_pgdb_proto_msgTypes[5]
+	mi := &file_pgdb_v1_pgdb_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1372,7 +1462,7 @@ func (x *MessageOptions_Stat) String() string {
 func (*MessageOptions_Stat) ProtoMessage() {}
 
 func (x *MessageOptions_Stat) ProtoReflect() protoreflect.Message {
-	mi := &file_pgdb_v1_pgdb_proto_msgTypes[5]
+	mi := &file_pgdb_v1_pgdb_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1497,7 +1587,7 @@ var File_pgdb_v1_pgdb_proto protoreflect.FileDescriptor
 
 const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\n" +
-	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\xde\x14\n" +
+	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\xd6\x15\n" +
 	"\x0eMessageOptions\x12\x1a\n" +
 	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x12X\n" +
 	"\x12storage_parameters\x18\v \x01(\v2).pgdb.v1.MessageOptions.StorageParametersR\x11storageParameters\x127\n" +
@@ -1540,7 +1630,7 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\x1c_autovacuum_freeze_table_ageB\r\n" +
 	"\v_fillfactorB\x15\n" +
 	"\x13_toast_tuple_targetB\x15\n" +
-	"\x13_autovacuum_enabled\x1a\xb5\x03\n" +
+	"\x13_autovacuum_enabled\x1a\xf3\x03\n" +
 	"\x05Index\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12A\n" +
 	"\x06method\x18\x02 \x01(\x0e2).pgdb.v1.MessageOptions.Index.IndexMethodR\x06method\x12\x18\n" +
@@ -1548,13 +1638,17 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\adropped\x18\x04 \x01(\bR\adropped\x12:\n" +
 	"\x1apartial_deleted_at_is_null\x18\x05 \x01(\bR\x16partialDeletedAtIsNull\x12&\n" +
 	"\x0fbit_hamming_ops\x18\x06 \x01(\bR\rbitHammingOps\x12'\n" +
-	"\x0finclude_columns\x18\a \x03(\tR\x0eincludeColumns\"\x93\x01\n" +
+	"\x0finclude_columns\x18\a \x03(\tR\x0eincludeColumns\x12<\n" +
+	"\x05where\x18\b \x03(\v2&.pgdb.v1.MessageOptions.IndexPredicateR\x05where\"\x93\x01\n" +
 	"\vIndexMethod\x12\x1c\n" +
 	"\x18INDEX_METHOD_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12INDEX_METHOD_BTREE\x10\x01\x12\x14\n" +
 	"\x10INDEX_METHOD_GIN\x10\x02\x12\x1a\n" +
 	"\x16INDEX_METHOD_BTREE_GIN\x10\x03\x12\x1c\n" +
-	"\x18INDEX_METHOD_HNSW_COSINE\x10\x04\x1a\x80\x02\n" +
+	"\x18INDEX_METHOD_HNSW_COSINE\x10\x04\x1a8\n" +
+	"\x0eIndexPredicate\x12\x16\n" +
+	"\x06column\x18\x01 \x01(\tR\x06column\x12\x0e\n" +
+	"\x02op\x18\x02 \x01(\tR\x02op\x1a\x80\x02\n" +
 	"\x04Stat\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12<\n" +
 	"\x05kinds\x18\x02 \x03(\x0e2&.pgdb.v1.MessageOptions.Stat.StatsKindR\x05kinds\x12\x18\n" +
@@ -1609,7 +1703,7 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\vcom.pgdb.v1B\tPgdbProtoP\x01Z*github.com/ductone/protoc-gen-pgdb/pgdb/v1\xa2\x02\x03PXX\xaa\x02\aPgdb.V1\xca\x02\aPgdb\\V1\xe2\x02\x13Pgdb\\V1\\GPBMetadata\xea\x02\bPgdb::V1b\x06proto3"
 
 var file_pgdb_v1_pgdb_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
-var file_pgdb_v1_pgdb_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_pgdb_v1_pgdb_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_pgdb_v1_pgdb_proto_goTypes = []any{
 	(VectorElementType)(0),                     // 0: pgdb.v1.VectorElementType
 	(MessageOptions_PartitionedByDateRange)(0), // 1: pgdb.v1.MessageOptions.PartitionedByDateRange
@@ -1623,33 +1717,35 @@ var file_pgdb_v1_pgdb_proto_goTypes = []any{
 	(*EnumValueOptions)(nil),                   // 9: pgdb.v1.EnumValueOptions
 	(*MessageOptions_StorageParameters)(nil),   // 10: pgdb.v1.MessageOptions.StorageParameters
 	(*MessageOptions_Index)(nil),               // 11: pgdb.v1.MessageOptions.Index
-	(*MessageOptions_Stat)(nil),                // 12: pgdb.v1.MessageOptions.Stat
-	(*descriptorpb.MessageOptions)(nil),        // 13: google.protobuf.MessageOptions
-	(*descriptorpb.FieldOptions)(nil),          // 14: google.protobuf.FieldOptions
-	(*descriptorpb.EnumValueOptions)(nil),      // 15: google.protobuf.EnumValueOptions
+	(*MessageOptions_IndexPredicate)(nil),      // 12: pgdb.v1.MessageOptions.IndexPredicate
+	(*MessageOptions_Stat)(nil),                // 13: pgdb.v1.MessageOptions.Stat
+	(*descriptorpb.MessageOptions)(nil),        // 14: google.protobuf.MessageOptions
+	(*descriptorpb.FieldOptions)(nil),          // 15: google.protobuf.FieldOptions
+	(*descriptorpb.EnumValueOptions)(nil),      // 16: google.protobuf.EnumValueOptions
 }
 var file_pgdb_v1_pgdb_proto_depIdxs = []int32{
 	10, // 0: pgdb.v1.MessageOptions.storage_parameters:type_name -> pgdb.v1.MessageOptions.StorageParameters
 	11, // 1: pgdb.v1.MessageOptions.indexes:type_name -> pgdb.v1.MessageOptions.Index
 	1,  // 2: pgdb.v1.MessageOptions.partitioned_by_date_range:type_name -> pgdb.v1.MessageOptions.PartitionedByDateRange
-	12, // 3: pgdb.v1.MessageOptions.stats:type_name -> pgdb.v1.MessageOptions.Stat
+	13, // 3: pgdb.v1.MessageOptions.stats:type_name -> pgdb.v1.MessageOptions.Stat
 	4,  // 4: pgdb.v1.FieldOptions.full_text_type:type_name -> pgdb.v1.FieldOptions.FullTextType
 	5,  // 5: pgdb.v1.FieldOptions.full_text_weight:type_name -> pgdb.v1.FieldOptions.FullTextWeight
 	6,  // 6: pgdb.v1.FieldOptions.message_behavior:type_name -> pgdb.v1.FieldOptions.MessageBehavior
 	0,  // 7: pgdb.v1.EnumValueOptions.vector_element_type:type_name -> pgdb.v1.VectorElementType
 	2,  // 8: pgdb.v1.MessageOptions.Index.method:type_name -> pgdb.v1.MessageOptions.Index.IndexMethod
-	3,  // 9: pgdb.v1.MessageOptions.Stat.kinds:type_name -> pgdb.v1.MessageOptions.Stat.StatsKind
-	13, // 10: pgdb.v1.msg:extendee -> google.protobuf.MessageOptions
-	14, // 11: pgdb.v1.options:extendee -> google.protobuf.FieldOptions
-	15, // 12: pgdb.v1.enum:extendee -> google.protobuf.EnumValueOptions
-	7,  // 13: pgdb.v1.msg:type_name -> pgdb.v1.MessageOptions
-	8,  // 14: pgdb.v1.options:type_name -> pgdb.v1.FieldOptions
-	9,  // 15: pgdb.v1.enum:type_name -> pgdb.v1.EnumValueOptions
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	13, // [13:16] is the sub-list for extension type_name
-	10, // [10:13] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	12, // 9: pgdb.v1.MessageOptions.Index.where:type_name -> pgdb.v1.MessageOptions.IndexPredicate
+	3,  // 10: pgdb.v1.MessageOptions.Stat.kinds:type_name -> pgdb.v1.MessageOptions.Stat.StatsKind
+	14, // 11: pgdb.v1.msg:extendee -> google.protobuf.MessageOptions
+	15, // 12: pgdb.v1.options:extendee -> google.protobuf.FieldOptions
+	16, // 13: pgdb.v1.enum:extendee -> google.protobuf.EnumValueOptions
+	7,  // 14: pgdb.v1.msg:type_name -> pgdb.v1.MessageOptions
+	8,  // 15: pgdb.v1.options:type_name -> pgdb.v1.FieldOptions
+	9,  // 16: pgdb.v1.enum:type_name -> pgdb.v1.EnumValueOptions
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	14, // [14:17] is the sub-list for extension type_name
+	11, // [11:14] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_pgdb_v1_pgdb_proto_init() }
@@ -1664,7 +1760,7 @@ func file_pgdb_v1_pgdb_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pgdb_v1_pgdb_proto_rawDesc), len(file_pgdb_v1_pgdb_proto_rawDesc)),
 			NumEnums:      7,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 3,
 			NumServices:   0,
 		},

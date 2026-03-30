@@ -55,6 +55,15 @@ message MessageOptions {
     bool bit_hamming_ops = 6;
     // non-key columns stored in index leaf pages for covering index (Index Only Scan)
     repeated string include_columns = 7;
+    // Partial index predicates. ANDed together to form the WHERE clause.
+    repeated IndexPredicate where = 8;
+  }
+
+  // IndexPredicate represents a single partial index predicate.
+  // Column is a field path (resolved at codegen time), Op is a raw SQL operator fragment.
+  message IndexPredicate {
+    string column = 1;
+    string op = 2;
   }
   repeated Index indexes = 2;
   // defaults to `tenant_id`.  Must be set if an object does not have a
