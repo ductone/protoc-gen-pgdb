@@ -288,6 +288,8 @@ type Index struct {
 	// OverrideExpression if set, this string is used to render indexes contents, instead of the Columns list.
 	OverrideExpression string
 	WherePredicate     string
+	// IncludeColumns are non-key columns stored in index leaf pages for covering indexes (Index Only Scans).
+	IncludeColumns []string
 }
 
 type Statistic struct {

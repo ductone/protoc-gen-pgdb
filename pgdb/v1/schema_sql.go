@@ -62,6 +62,13 @@ func index2sql(desc Descriptor, idx *Index) string {
 		}), ", \n"))
 	}
 	_, _ = buf.WriteString("\n)\n")
+	if len(idx.IncludeColumns) > 0 {
+		_, _ = buf.WriteString("INCLUDE (\n")
+		_, _ = buf.WriteString(strings.Join(slice.Convert(idx.IncludeColumns, func(in string) string {
+			return `  "` + in + `"`
+		}), ", \n"))
+		_, _ = buf.WriteString("\n)\n")
+	}
 	if idx.WherePredicate != "" {
 		_, _ = buf.WriteString("WHERE ")
 		_, _ = buf.WriteString(idx.WherePredicate)

@@ -116,6 +116,50 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		}
 	}
 
+	for _, fieldName := range idx.GetIncludeColumns() {
+		path := strings.Split(fieldName, ".")
+		message := m
+		resolution := ""
+		for i, p := range path {
+			lastP := i == len(path)-1
+
+			if !lastP {
+				f := fieldByName(message, p)
+				resolution += getNestedName(f)
+				message = f.Type().Embed()
+				continue
+			}
+
+			name := ""
+			if f, ok := tryFieldByName(message, p); ok {
+				name, err = getColumnName(f)
+				if err != nil {
+					panic(err)
+				}
+			} else {
+				for _, oo := range message.RealOneOfs() {
+					if oo.Name().String() == p {
+						name, err = getColumnOneOfName(oo)
+						if err != nil {
+							panic(err)
+						}
+						break
+					}
+				}
+			}
+			if name == "" {
+				panic(fmt.Errorf("could not find field for include_columns: %s", path))
+			}
+
+			resolution += name
+			rv.DB.IncludeColumns = append(rv.DB.IncludeColumns, resolution)
+		}
+	}
+
+	if len(rv.DB.IncludeColumns) > 0 && rv.DB.Method != pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE {
+		panic(fmt.Errorf("include_columns is only valid for BTREE indexes, got %s on index %s", rv.DB.Method.String(), idx.GetName()))
+	}
+
 	if idx.GetBitHammingOps() && idx.GetMethod() == pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE {
 		rv.DB.OverrideExpression = fmt.Sprintf("pb$%s bit_hamming_ops", rv.DB.Columns[0])
 	}
