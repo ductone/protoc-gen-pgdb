@@ -780,6 +780,85 @@ func TestIndex2SQL_CombinedFeatures(t *testing.T) {
 	})
 }
 
+func TestIndex2SQL_DeletedExclusionEquivalence(t *testing.T) {
+	desc := &mockDescriptor{tableName: "pb_app_resource"}
+	io := NewIndexOptions(nil)
+
+	// The old system (partial_deleted_at_is_null: true) and the new system
+	// (where: [{column: "deleted_at", op: "IS NULL"}]) both emit identical
+	// generated Go code:
+	//   WherePredicate: "" + io.ColumnName("deleted_at") + " IS NULL"
+	//
+	// Build the predicate just like the generated code does so the test
+	// stays correct even if the column-name prefix changes.
+	deletedPredicate := io.ColumnName("deleted_at") + " IS NULL"
+
+	t.Run("basic equivalence", func(t *testing.T) {
+		// Old system: partial_deleted_at_is_null: true
+		oldSQL := index2sql(desc, &Index{
+			Name:           "idx_alive",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{io.ColumnName("tenant_id"), io.ColumnName("app_id")},
+			WherePredicate: deletedPredicate,
+		})
+
+		// New system: where: [{column: "deleted_at", op: "IS NULL"}]
+		newSQL := index2sql(desc, &Index{
+			Name:           "idx_alive",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{io.ColumnName("tenant_id"), io.ColumnName("app_id")},
+			WherePredicate: deletedPredicate,
+		})
+
+		assertExact(t, oldSQL, newSQL)
+		assertContains(t, oldSQL, "WHERE "+deletedPredicate)
+	})
+
+	t.Run("with include columns", func(t *testing.T) {
+		oldSQL := index2sql(desc, &Index{
+			Name:           "idx_alive_covering",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{io.ColumnName("tenant_id"), io.ColumnName("app_id")},
+			IncludeColumns: []string{io.ColumnName("id")},
+			WherePredicate: deletedPredicate,
+		})
+
+		newSQL := index2sql(desc, &Index{
+			Name:           "idx_alive_covering",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{io.ColumnName("tenant_id"), io.ColumnName("app_id")},
+			IncludeColumns: []string{io.ColumnName("id")},
+			WherePredicate: deletedPredicate,
+		})
+
+		assertExact(t, oldSQL, newSQL)
+		assertContains(t, oldSQL, "INCLUDE")
+		assertContains(t, oldSQL, "WHERE "+deletedPredicate)
+	})
+
+	t.Run("exact SQL output", func(t *testing.T) {
+		got := index2sql(desc, &Index{
+			Name:           "idx_alive",
+			Method:         MessageOptions_Index_INDEX_METHOD_BTREE,
+			Columns:        []string{io.ColumnName("tenant_id"), io.ColumnName("app_id")},
+			WherePredicate: deletedPredicate,
+		})
+
+		assertExact(t, got,
+			"CREATE INDEX CONCURRENTLY IF NOT EXISTS\n"+
+				"  \"idx_alive\"\n"+
+				"ON\n"+
+				"  \"pb_app_resource\"\n"+
+				"USING\n"+
+				"  BTREE\n"+
+				"(\n"+
+				"  \""+io.ColumnName("tenant_id")+"\", \n"+
+				"  \""+io.ColumnName("app_id")+"\"\n"+
+				")\n"+
+				"WHERE "+deletedPredicate+"\n")
+	})
+}
+
 func assertExact(t *testing.T, got, expected string) {
 	t.Helper()
 	if got != expected {
