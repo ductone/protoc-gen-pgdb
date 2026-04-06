@@ -169,15 +169,15 @@ func (s *CatalogSnapshot) readAllStorageParams(ctx context.Context, db sqlScanne
 		if reloptions == nil {
 			continue
 		}
-		params := make(map[string]string)
+		sp := make(map[string]string)
 		for _, opt := range reloptions {
 			parts := strings.SplitN(opt, "=", 2)
 			if len(parts) == 2 {
-				params[parts[0]] = parts[1]
+				sp[parts[0]] = parts[1]
 			}
 		}
-		if len(params) > 0 {
-			s.storageParams[tableName] = params
+		if len(sp) > 0 {
+			s.storageParams[tableName] = sp
 		}
 	}
 	return rows.Err()
