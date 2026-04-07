@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestMigrationsWithCatalog_NewTable(t *testing.T) {
+func TestCatalogSnapshot_ColumnsForTable_Missing(t *testing.T) {
 	snap := &CatalogSnapshot{
 		columns:       make(map[string]map[string]struct{}),
 		indexes:       make(map[string]map[string]struct{}),
@@ -12,14 +12,17 @@ func TestMigrationsWithCatalog_NewTable(t *testing.T) {
 		storageParams: make(map[string]map[string]string),
 	}
 
-	// Table doesn't exist in snapshot → should return CreateSchema output
 	cols := snap.columnsForTable("nonexistent_table")
+	if cols != nil {
+		t.Errorf("expected nil for nonexistent table, got %v", cols)
+	}
+	// len(nil map) == 0, which triggers CreateSchema path in MigrationsWithCatalog
 	if len(cols) != 0 {
-		t.Errorf("expected empty columns for nonexistent table, got %d", len(cols))
+		t.Errorf("expected len 0 for nil columns, got %d", len(cols))
 	}
 }
 
-func TestMigrationsWithCatalog_ExistingTable(t *testing.T) {
+func TestCatalogSnapshot_Accessors(t *testing.T) {
 	snap := &CatalogSnapshot{
 		columns: map[string]map[string]struct{}{
 			"test_table": {
@@ -46,13 +49,15 @@ func TestMigrationsWithCatalog_ExistingTable(t *testing.T) {
 		t.Errorf("expected 1 index, got %d", len(indexes))
 	}
 
-	// Non-existent table should return empty maps (not nil)
-	indexes2 := snap.indexesForTable("other_table")
-	if indexes2 == nil {
-		t.Error("expected non-nil map for missing table indexes")
+	// Missing tables return nil (safe for len and lookups)
+	if snap.indexesForTable("other") != nil {
+		t.Error("expected nil for missing table indexes")
 	}
-	if len(indexes2) != 0 {
-		t.Errorf("expected 0 indexes for missing table, got %d", len(indexes2))
+	if snap.statsForTable("other") != nil {
+		t.Error("expected nil for missing table stats")
+	}
+	if snap.storageParamsForTable("other") != nil {
+		t.Error("expected nil for missing table storage params")
 	}
 }
 
@@ -76,13 +81,11 @@ func TestCatalogSnapshot_StorageParams(t *testing.T) {
 	if params["fillfactor"] != "80" {
 		t.Errorf("expected fillfactor=80, got %s", params["fillfactor"])
 	}
+}
 
-	// Non-existent table
-	params2 := snap.storageParamsForTable("other_table")
-	if params2 == nil {
-		t.Error("expected non-nil map for missing table storage params")
-	}
-	if len(params2) != 0 {
-		t.Errorf("expected 0 params for missing table, got %d", len(params2))
+func TestMigrationsWithCatalog_NilSnapshot(t *testing.T) {
+	_, err := MigrationsWithCatalog(nil, nil, 0)
+	if err == nil {
+		t.Error("expected error for nil snapshot")
 	}
 }

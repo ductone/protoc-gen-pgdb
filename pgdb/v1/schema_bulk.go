@@ -148,6 +148,7 @@ func (s *CatalogSnapshot) readAllStorageParams(ctx context.Context, db sqlScanne
 	qb = qb.Select("pg_class.relname", "pg_class.reloptions")
 	qb = qb.Join(goqu.T("pg_namespace"), goqu.On(goqu.I("pg_namespace.oid").Eq(goqu.I("pg_class.relnamespace"))))
 	qb = qb.Where(goqu.L("pg_namespace.nspname = ?", "public"))
+	qb = qb.Where(goqu.L("pg_class.relkind IN (?, ?)", "r", "p"))
 	qb = qb.Where(goqu.L("pg_class.reloptions IS NOT NULL"))
 	query, params, err := qb.ToSQL()
 	if err != nil {
@@ -188,34 +189,29 @@ func (s *CatalogSnapshot) columnsForTable(tableName string) map[string]struct{} 
 	return s.columns[tableName]
 }
 
-// indexesForTable returns the indexes for a table, or an empty map if none exist.
+// indexesForTable returns the indexes for a table, or nil if none exist.
+// Nil maps are safe for len() checks and lookups in Go.
 func (s *CatalogSnapshot) indexesForTable(tableName string) map[string]struct{} {
-	if m := s.indexes[tableName]; m != nil {
-		return m
-	}
-	return make(map[string]struct{})
+	return s.indexes[tableName]
 }
 
-// statsForTable returns the statistics for a table, or an empty map if none exist.
+// statsForTable returns the statistics for a table, or nil if none exist.
 func (s *CatalogSnapshot) statsForTable(tableName string) map[string]struct{} {
-	if m := s.stats[tableName]; m != nil {
-		return m
-	}
-	return make(map[string]struct{})
+	return s.stats[tableName]
 }
 
-// storageParamsForTable returns storage parameters for a table, or an empty map if none exist.
+// storageParamsForTable returns storage parameters for a table, or nil if none exist.
 func (s *CatalogSnapshot) storageParamsForTable(tableName string) map[string]string {
-	if m := s.storageParams[tableName]; m != nil {
-		return m
-	}
-	return make(map[string]string)
+	return s.storageParams[tableName]
 }
 
 // MigrationsWithCatalog computes the DDL migrations needed for a single table using
 // a pre-fetched CatalogSnapshot instead of querying the catalog per table.
 // This is functionally identical to Migrations but avoids per-table catalog queries.
 func MigrationsWithCatalog(snap *CatalogSnapshot, msg DBReflectMessage, dialect Dialect) ([]string, error) {
+	if snap == nil {
+		return nil, fmt.Errorf("nil CatalogSnapshot")
+	}
 	rv := make([]string, 0)
 	dbr := msg.DBReflect(dialect)
 	desc := dbr.Descriptor()
