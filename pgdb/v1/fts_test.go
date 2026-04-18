@@ -1107,6 +1107,63 @@ func TestAcronymSplitDoc(t *testing.T) {
 	}
 }
 
+func TestSearchMultiDotPrefix(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	adVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "ad.ph02t1.admin.securitygroup",
+		},
+	})
+
+	requireQueryTrue(t, pg, adVector, "ad")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin.se")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin.sec")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin.securitygroup")
+	requireQueryTrue(t, pg, adVector, "securitygroup")
+	requireQueryTrue(t, pg, adVector, "admin")
+	requireQueryTrue(t, pg, adVector, "ph02t1")
+	requireQueryFalse(t, pg, adVector, "ad.ph02t1.admin.xyz")
+	requireQueryFalse(t, pg, adVector, "ad.ph02t1.admin.securitygroup.extra")
+	requireQueryFalse(t, pg, adVector, "notfound")
+
+	roleVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "roles/bigquery.dataViewer",
+		},
+	})
+
+	requireQueryTrue(t, pg, roleVector, "bigquery")
+	requireQueryTrue(t, pg, roleVector, "roles")
+	requireQueryTrue(t, pg, roleVector, "bigquery.data")
+	requireQueryTrue(t, pg, roleVector, "bigquery.dataV")
+	requireQueryFalse(t, pg, roleVector, "bigquery.admin")
+
+	deepVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "org.department.team.project.resource",
+		},
+	})
+
+	requireQueryTrue(t, pg, deepVector, "org.department")
+	requireQueryTrue(t, pg, deepVector, "org.department.team")
+	requireQueryTrue(t, pg, deepVector, "org.department.team.pro")
+	requireQueryTrue(t, pg, deepVector, "org.department.team.project")
+	requireQueryTrue(t, pg, deepVector, "org.department.team.project.res")
+	requireQueryTrue(t, pg, deepVector, "org.department.team.project.resource")
+	requireQueryFalse(t, pg, deepVector, "org.department.team.project.missing")
+}
+
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
 	qb := goqu.Dialect("postgres")
 	ctx := context.Background()

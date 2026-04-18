@@ -388,6 +388,7 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 	tokens := jargon.TokenizeString(input).Filter(filters...).Words()
 
 	var searchTerms []string
+	var dotSplitTerms []string
 
 	for {
 		token, err := tokens.Next()
@@ -399,28 +400,81 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 			break
 		}
 
+		raw := token.String()
+
 		t := strings.Map(func(r rune) rune {
 			if unicode.IsDigit(r) || unicode.IsLetter(r) || unicode.IsSpace(r) {
-				return r // keep these
+				return r
 			}
+			return -1
+		}, raw)
 
-			return -1 // drop everything else
-		}, token.String())
+		if strings.TrimSpace(t) != "" {
+			searchTerms = append(searchTerms, t)
+		}
 
-		searchTerms = append(searchTerms, t)
+		ds := strings.Map(func(r rune) rune {
+			if unicode.IsDigit(r) || unicode.IsLetter(r) || unicode.IsSpace(r) {
+				return r
+			}
+			if r == '.' {
+				return ' '
+			}
+			return -1
+		}, raw)
+
+		for _, part := range strings.Fields(ds) {
+			dotSplitTerms = append(dotSplitTerms, part)
+		}
 	}
 
+	origQuery := buildSearchQuery(searchTerms)
+
+	if len(dotSplitTerms) > len(searchTerms) && len(dotSplitTerms) > 1 {
+		splitQuery := buildSearchQuery(dotSplitTerms)
+		return exp.NewLiteralExpression("(? || ?)", origQuery, splitQuery)
+	}
+
+	return origQuery
+}
+
+func buildSearchQuery(searchTerms []string) exp.Expression {
 	searchText := strings.Join(searchTerms, " ")
 	stemmedSearchText, _ := jargon.TokenizeString(searchText).Filter(stemmer.English).String()
 
+	if len(searchTerms) <= 1 {
+		if searchText == stemmedSearchText {
+			return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", searchText)
+		}
+		return exp.NewLiteralExpression(
+			"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
+			searchText,
+			stemmedSearchText)
+	}
+
+	lastTerm := strings.TrimSpace(searchTerms[len(searchTerms)-1])
+	stemmedTerms := strings.Fields(stemmedSearchText)
+	stemmedLastTerm := lastTerm
+	if len(stemmedTerms) > 0 {
+		stemmedLastTerm = stemmedTerms[len(stemmedTerms)-1]
+	}
+
+	prefixText := strings.Join(searchTerms[:len(searchTerms)-1], " ")
+	stemmedPrefixText := prefixText
+	if len(stemmedTerms) > 1 {
+		stemmedPrefixText = strings.Join(stemmedTerms[:len(stemmedTerms)-1], " ")
+	}
+
 	if searchText == stemmedSearchText {
-		return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", searchText)
+		return exp.NewLiteralExpression(
+			"(websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*'))",
+			prefixText, lastTerm)
 	}
 
 	return exp.NewLiteralExpression(
-		"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
-		searchText,
-		stemmedSearchText)
+		"((websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*')) || (websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*')))",
+		prefixText, lastTerm,
+		stemmedPrefixText, stemmedLastTerm)
 }
 
 type lexeme struct {
