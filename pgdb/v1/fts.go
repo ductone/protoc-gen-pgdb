@@ -401,10 +401,10 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 
 		t := strings.Map(func(r rune) rune {
 			if unicode.IsDigit(r) || unicode.IsLetter(r) || unicode.IsSpace(r) {
-				return r // keep these
+				return r
 			}
 
-			return -1 // drop everything else
+			return -1
 		}, token.String())
 
 		if strings.TrimSpace(t) != "" {
@@ -415,12 +415,7 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 	searchText := strings.Join(searchTerms, " ")
 	stemmedSearchText, _ := jargon.TokenizeString(searchText).Filter(stemmer.English).String()
 
-	lastTerm := ""
-	if len(searchTerms) > 0 {
-		lastTerm = strings.TrimSpace(searchTerms[len(searchTerms)-1])
-	}
-
-	if lastTerm == "" {
+	if len(searchTerms) <= 1 {
 		if searchText == stemmedSearchText {
 			return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", searchText)
 		}
@@ -430,21 +425,11 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 			stemmedSearchText)
 	}
 
+	lastTerm := strings.TrimSpace(searchTerms[len(searchTerms)-1])
 	stemmedTerms := strings.Fields(stemmedSearchText)
 	stemmedLastTerm := lastTerm
 	if len(stemmedTerms) > 0 {
 		stemmedLastTerm = stemmedTerms[len(stemmedTerms)-1]
-	}
-
-	if len(searchTerms) == 1 {
-		if lastTerm == stemmedLastTerm {
-			return exp.NewLiteralExpression(
-				"(to_tsquery('simple', ? || ':*'))",
-				lastTerm)
-		}
-		return exp.NewLiteralExpression(
-			"(to_tsquery('simple', ? || ':*') || to_tsquery('simple', ? || ':*'))",
-			lastTerm, stemmedLastTerm)
 	}
 
 	prefixText := strings.Join(searchTerms[:len(searchTerms)-1], " ")
