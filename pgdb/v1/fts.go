@@ -407,7 +407,9 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 			return -1 // drop everything else
 		}, token.String())
 
-		searchTerms = append(searchTerms, t)
+		if strings.TrimSpace(t) != "" {
+			searchTerms = append(searchTerms, t)
+		}
 	}
 
 	searchText := strings.Join(searchTerms, " ")
