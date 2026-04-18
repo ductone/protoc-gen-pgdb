@@ -388,6 +388,8 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 	tokens := jargon.TokenizeString(input).Filter(filters...).Words()
 
 	var searchTerms []string
+	var dotSplitTerms []string
+	hasDotSplit := false
 
 	for {
 		token, err := tokens.Next()
@@ -399,19 +401,49 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 			break
 		}
 
+		raw := token.String()
+
 		t := strings.Map(func(r rune) rune {
 			if unicode.IsDigit(r) || unicode.IsLetter(r) || unicode.IsSpace(r) {
 				return r
 			}
-
 			return -1
-		}, token.String())
+		}, raw)
 
 		if strings.TrimSpace(t) != "" {
 			searchTerms = append(searchTerms, t)
 		}
+
+		ds := strings.Map(func(r rune) rune {
+			if unicode.IsDigit(r) || unicode.IsLetter(r) || unicode.IsSpace(r) {
+				return r
+			}
+			if r == '.' {
+				return ' '
+			}
+			return -1
+		}, raw)
+
+		for _, part := range strings.Fields(ds) {
+			dotSplitTerms = append(dotSplitTerms, part)
+		}
 	}
 
+	if len(dotSplitTerms) > len(searchTerms) {
+		hasDotSplit = true
+	}
+
+	origQuery := buildSearchQuery(searchTerms)
+
+	if hasDotSplit && len(dotSplitTerms) > 1 {
+		splitQuery := buildSearchQuery(dotSplitTerms)
+		return exp.NewLiteralExpression("(? || ?)", origQuery, splitQuery)
+	}
+
+	return origQuery
+}
+
+func buildSearchQuery(searchTerms []string) exp.Expression {
 	searchText := strings.Join(searchTerms, " ")
 	stemmedSearchText, _ := jargon.TokenizeString(searchText).Filter(stemmer.English).String()
 

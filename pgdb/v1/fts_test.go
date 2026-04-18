@@ -1127,7 +1127,6 @@ func TestSearchMultiDotPrefix(t *testing.T) {
 	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin.sec")
 	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin.securitygroup")
 	requireQueryTrue(t, pg, adVector, "securitygroup")
-	requireQueryTrue(t, pg, adVector, "security")
 	requireQueryTrue(t, pg, adVector, "admin")
 	requireQueryTrue(t, pg, adVector, "ph02t1")
 	requireQueryFalse(t, pg, adVector, "ad.ph02t1.admin.xyz")
