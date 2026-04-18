@@ -389,7 +389,6 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 
 	var searchTerms []string
 	var dotSplitTerms []string
-	hasDotSplit := false
 
 	for {
 		token, err := tokens.Next()
@@ -429,13 +428,9 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 		}
 	}
 
-	if len(dotSplitTerms) > len(searchTerms) {
-		hasDotSplit = true
-	}
-
 	origQuery := buildSearchQuery(searchTerms)
 
-	if hasDotSplit && len(dotSplitTerms) > 1 {
+	if len(dotSplitTerms) > len(searchTerms) && len(dotSplitTerms) > 1 {
 		splitQuery := buildSearchQuery(dotSplitTerms)
 		return exp.NewLiteralExpression("(? || ?)", origQuery, splitQuery)
 	}
