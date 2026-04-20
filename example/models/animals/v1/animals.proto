@@ -76,6 +76,15 @@ message ScalarValue {
   string tenant_id = 1;
   string id = 2;
 
+  // Auto-incrementing sequence field using PostgreSQL GENERATED AS IDENTITY
+  int64 sequence_id = 200 [(pgdb.v1.options) = {
+    sequence: {
+      always: true,
+      start: 1,
+      increment: 1
+    }
+  }];
+
   double double = 3;
   float float = 4;
   int32 int32 = 5;
