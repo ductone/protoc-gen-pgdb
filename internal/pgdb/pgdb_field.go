@@ -276,6 +276,13 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		}
 		rv.DataType = dbTypeRef
 
+		// Override default if server_default is specified in proto annotation.
+		// This allows PostgreSQL to provide the value (e.g., NOW()) instead of the application.
+		if ext.GetServerDefault() != "" {
+			rv.DB.Default = ext.GetServerDefault()
+			rv.DB.Nullable = true
+		}
+
 		if ext.GetKsuid() {
 			rv.V17FieldOverrides = &V17FieldOverrides{
 				Collation: "C",
