@@ -1164,6 +1164,54 @@ func TestSearchMultiDotPrefix(t *testing.T) {
 	requireQueryFalse(t, pg, deepVector, "org.department.team.project.missing")
 }
 
+func TestSearchEmailAddress(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	vector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "Grant dluu David Luu Entitlement",
+		},
+	})
+
+	requireQueryTrue(t, pg, vector, "dluu")
+	requireQueryTrue(t, pg, vector, "David Luu")
+	requireQueryTrue(t, pg, vector, "david")
+	requireQueryTrue(t, pg, vector, "luu")
+	requireQueryTrue(t, pg, vector, "dluu@zscaler.com")
+	requireQueryTrue(t, pg, vector, "dluu@example.org")
+
+	requireQueryFalse(t, pg, vector, "zscaler")
+	requireQueryFalse(t, pg, vector, "zscalercom")
+	requireQueryFalse(t, pg, vector, "notauser@example.com")
+}
+
+func TestStripEmailDomains(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"dluu@zscaler.com", "dluu"},
+		{"user@domain.com other terms", "user other terms"},
+		{"David Luu", "David Luu"},
+		{"dluu", "dluu"},
+		{"@orphan", "@orphan"},
+		{"user@domain.com admin@example.org", "user admin"},
+		{"", ""},
+		{"  ", "  "},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.input, func(t *testing.T) {
+			result := stripEmailDomains(tc.input)
+			assert.Equal(t, tc.expected, result)
+		})
+	}
+}
+
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
 	qb := goqu.Dialect("postgres")
 	ctx := context.Background()
