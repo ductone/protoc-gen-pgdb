@@ -382,7 +382,23 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 	return exp.NewLiteralExpression("?::tsvector", sb.String())
 }
 
+func stripEmailDomains(input string) string {
+	words := strings.Fields(input)
+	changed := false
+	for i, word := range words {
+		if atIdx := strings.IndexByte(word, '@'); atIdx > 0 {
+			words[i] = word[:atIdx]
+			changed = true
+		}
+	}
+	if !changed {
+		return input
+	}
+	return strings.Join(words, " ")
+}
+
 func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
+	input = stripEmailDomains(input)
 	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold}
 	filters = append(filters, additionalFilters...)
 	tokens := jargon.TokenizeString(input).Filter(filters...).Words()
