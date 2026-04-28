@@ -31,7 +31,13 @@ message MessageOptions {
     optional int32 fillfactor = 10;
     optional int32 toast_tuple_target = 11;
     optional bool autovacuum_enabled = 12;
-    optional int32 default_statistics_target = 13;
+    // 13 reserved — was default_statistics_target, but Postgres only
+    // accepts that as a server GUC or per-column SET STATISTICS, not as
+    // a table-level WITH(...) storage parameter. Any future per-column
+    // statistics target should be a FieldOptions field, not a
+    // StorageParameters field.
+    reserved 13;
+    reserved "default_statistics_target";
     optional int32 parallel_workers = 14;
     optional int64 autovacuum_multixact_freeze_min_age = 15;
     optional int64 autovacuum_multixact_freeze_max_age = 16;

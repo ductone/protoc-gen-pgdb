@@ -162,9 +162,6 @@ func storageParams2with(desc Descriptor) string {
 	if sp.HasAutovacuumEnabled() {
 		params = append(params, "autovacuum_enabled = "+strconv.FormatBool(sp.GetAutovacuumEnabled()))
 	}
-	if sp.HasDefaultStatisticsTarget() {
-		params = append(params, "default_statistics_target = "+strconv.FormatInt(int64(sp.GetDefaultStatisticsTarget()), 10))
-	}
 	if sp.HasParallelWorkers() {
 		params = append(params, "parallel_workers = "+strconv.FormatInt(int64(sp.GetParallelWorkers()), 10))
 	}
@@ -313,13 +310,6 @@ func storageParams2alter(desc Descriptor, existingParams map[string]string) stri
 		desired := strconv.FormatBool(sp.GetAutovacuumEnabled())
 		if needsUpdate("autovacuum_enabled", desired, false) {
 			params = append(params, "autovacuum_enabled = "+desired)
-		}
-	}
-
-	if sp.HasDefaultStatisticsTarget() {
-		desired := strconv.FormatInt(int64(sp.GetDefaultStatisticsTarget()), 10)
-		if needsUpdate("default_statistics_target", desired, false) {
-			params = append(params, "default_statistics_target = "+desired)
 		}
 	}
 

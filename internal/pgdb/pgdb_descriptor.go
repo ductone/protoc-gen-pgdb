@@ -24,7 +24,6 @@ type storageParamsTemplateContext struct {
 	ToastTupleTarget                  *int32
 	AutovacuumEnabled                 *bool
 	HasAutovacuumEnabled              bool
-	DefaultStatisticsTarget           *int32
 	ParallelWorkers                   *int32
 	AutovacuumMultixactFreezeMinAge   *int64
 	AutovacuumMultixactFreezeMaxAge   *int64
@@ -142,11 +141,6 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 			v := sp.GetAutovacuumEnabled()
 			spCtx.AutovacuumEnabled = &v
 			spCtx.HasAutovacuumEnabled = true
-			hasStorageParams = true
-		}
-		if sp.HasDefaultStatisticsTarget() {
-			v := sp.GetDefaultStatisticsTarget()
-			spCtx.DefaultStatisticsTarget = &v
 			hasStorageParams = true
 		}
 		if sp.HasParallelWorkers() {

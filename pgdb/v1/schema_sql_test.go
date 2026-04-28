@@ -377,20 +377,6 @@ func TestStorageParams2with(t *testing.T) {
 )`,
 		},
 		{
-			name: "Default statistics target",
-			desc: &mockDescriptorWithStorageParams{
-				mockDescriptor: mockDescriptor{tableName: "test_table"},
-				storageParams: func() *MessageOptions_StorageParameters {
-					sp := &MessageOptions_StorageParameters{}
-					sp.SetDefaultStatisticsTarget(1000)
-					return sp
-				}(),
-			},
-			expected: `WITH (
-  default_statistics_target = 1000
-)`,
-		},
-		{
 			name: "Parallel workers",
 			desc: &mockDescriptorWithStorageParams{
 				mockDescriptor: mockDescriptor{tableName: "test_table"},
@@ -456,14 +442,12 @@ func TestStorageParams2with(t *testing.T) {
 				mockDescriptor: mockDescriptor{tableName: "test_table"},
 				storageParams: func() *MessageOptions_StorageParameters {
 					sp := &MessageOptions_StorageParameters{}
-					sp.SetDefaultStatisticsTarget(500)
 					sp.SetParallelWorkers(2)
 					sp.SetLogAutovacuumMinDuration(100)
 					return sp
 				}(),
 			},
 			expected: `WITH (
-  default_statistics_target = 500,
   parallel_workers = 2,
   log_autovacuum_min_duration = 100
 )`,
@@ -632,40 +616,6 @@ SET (
   autovacuum_enabled = false
 )
 `,
-		},
-		{
-			name: "Default statistics target needs update",
-			desc: &mockDescriptorWithStorageParams{
-				mockDescriptor: mockDescriptor{tableName: "test_table"},
-				storageParams: func() *MessageOptions_StorageParameters {
-					sp := &MessageOptions_StorageParameters{}
-					sp.SetDefaultStatisticsTarget(1000)
-					return sp
-				}(),
-			},
-			existingParams: map[string]string{
-				"default_statistics_target": "100",
-			},
-			expected: `ALTER TABLE "test_table"
-SET (
-  default_statistics_target = 1000
-)
-`,
-		},
-		{
-			name: "Default statistics target matches, no update",
-			desc: &mockDescriptorWithStorageParams{
-				mockDescriptor: mockDescriptor{tableName: "test_table"},
-				storageParams: func() *MessageOptions_StorageParameters {
-					sp := &MessageOptions_StorageParameters{}
-					sp.SetDefaultStatisticsTarget(1000)
-					return sp
-				}(),
-			},
-			existingParams: map[string]string{
-				"default_statistics_target": "1000",
-			},
-			expected: "",
 		},
 		{
 			name: "Parallel workers needs update",

@@ -71,9 +71,6 @@ func (d *{{.ReceiverType}}) GetStorageParameters() *pgdb_v1.MessageOptions_Stora
         {{- if .StorageParameters.HasAutovacuumEnabled }}
         AutovacuumEnabled: proto.Bool({{.StorageParameters.AutovacuumEnabled}}),
         {{- end }}
-        {{- if .StorageParameters.DefaultStatisticsTarget }}
-        DefaultStatisticsTarget: proto.Int32({{.StorageParameters.DefaultStatisticsTarget}}),
-        {{- end }}
         {{- if .StorageParameters.ParallelWorkers }}
         ParallelWorkers: proto.Int32({{.StorageParameters.ParallelWorkers}}),
         {{- end }}
