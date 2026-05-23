@@ -209,11 +209,11 @@ func readStats(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]
 	return statNames, nil
 }
 
-func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]struct{}, error) {
+func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[string]string, error) {
 	dialect := goqu.Dialect("postgres")
 
 	qb := dialect.From("pg_indexes")
-	qb = qb.Select("indexname")
+	qb = qb.Select("indexname", "indexdef")
 	qb = qb.Where(goqu.L("tablename = ?", desc.TableName()))
 	query, params, err := qb.ToSQL()
 	if err != nil {
@@ -227,14 +227,14 @@ func readIndexes(ctx context.Context, db sqlScanner, desc Descriptor) (map[strin
 
 	defer rows.Close()
 
-	indexes := make(map[string]struct{})
+	indexes := make(map[string]string)
 	for rows.Next() {
-		var indexName string
-		err = rows.Scan(&indexName)
+		var indexName, indexDef string
+		err = rows.Scan(&indexName, &indexDef)
 		if err != nil {
 			return nil, err
 		}
-		indexes[indexName] = struct{}{}
+		indexes[indexName] = indexDef
 	}
 	return indexes, nil
 }
@@ -357,21 +357,37 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialec
 			continue
 		}
 
-		_, exists := indexes[idx.Name]
-		query := index2sql(desc, idx)
+		existingDef, exists := indexes[idx.Name]
 
 		if idx.IsDropped {
 			// if it should be dropped, and its still here, byeeee
 			if exists {
-				rv = append(rv, query)
+				rv = append(rv, index2sql(desc, idx))
 			}
 			continue
 		}
 
 		// doesn't exist, but should, lets go!
 		if !exists {
-			rv = append(rv, query)
+			rv = append(rv, index2sql(desc, idx))
 			continue
+		}
+
+		// Index exists - check if definition has drifted
+		expectedDef := index2expectedDef(desc, idx)
+		if expectedDef != "" && existingDef != expectedDef {
+			// Definition has changed - create new index first (with temp name),
+			// then drop the old one, then rename. This ensures there is always
+			// at least one usable index during the transition.
+			tempIdx := *idx
+			tempIdx.Name = idx.Name + "_new"
+			rv = append(rv, index2sql(desc, &tempIdx))
+
+			droppedIdx := *idx
+			droppedIdx.IsDropped = true
+			rv = append(rv, index2sql(desc, &droppedIdx))
+
+			rv = append(rv, indexRename2sql(tempIdx.Name, idx.Name))
 		}
 	}
 
