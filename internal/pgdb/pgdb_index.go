@@ -57,6 +57,50 @@ func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *im
 	return rv
 }
 
+// resolveFieldPath resolves a dot-separated field path (e.g., "secret_trait.status")
+// to the fully qualified column name through nested message structures.
+func resolveFieldPath(m pgs.Message, fieldPath string) string {
+	path := strings.Split(fieldPath, ".")
+	message := m
+	resolution := ""
+	for i, p := range path {
+		lastP := i == len(path)-1
+
+		if !lastP {
+			f := fieldByName(message, p)
+			resolution += getNestedName(f)
+			message = f.Type().Embed()
+			continue
+		}
+
+		name := ""
+		if f, ok := tryFieldByName(message, p); ok {
+			var err error
+			name, err = getColumnName(f)
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			for _, oo := range message.RealOneOfs() {
+				if oo.Name().String() == p {
+					var err error
+					name, err = getColumnOneOfName(oo)
+					if err != nil {
+						panic(err)
+					}
+					break
+				}
+			}
+		}
+		if name == "" {
+			panic(fmt.Errorf("could not find field: %s in %s", fieldPath, m.FullyQualifiedName()))
+		}
+
+		resolution += name
+	}
+	return resolution
+}
+
 func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker, idx *pgdb_v1.MessageOptions_Index) *indexContext {
 	indexName, err := getIndexName(m, idx.GetName())
 	if err != nil {
@@ -75,49 +119,23 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 	rv.DB.Method = idx.GetMethod()
 
 	for _, fieldName := range idx.GetColumns() {
-		path := strings.Split(fieldName, ".")
-		message := m
-		resolution := ""
-		for i, p := range path {
-			lastP := i == len(path)-1
+		rv.DB.Columns = append(rv.DB.Columns, resolveFieldPath(m, fieldName))
+	}
 
-			if !lastP {
-				f := fieldByName(message, p)
-				resolution += getNestedName(f)
-				message = f.Type().Embed()
-				continue
-			}
+	for _, fieldName := range idx.GetIncludeColumns() {
+		rv.DB.IncludeColumns = append(rv.DB.IncludeColumns, resolveFieldPath(m, fieldName))
+	}
 
-			name := ""
-			// could be a real field!
-			if f, ok := tryFieldByName(message, p); ok {
-				name, err = getColumnName(f)
-				if err != nil {
-					panic(err)
-				}
-			} else {
-				// look in oneofs!
-				for _, oo := range message.RealOneOfs() {
-					if oo.Name().String() == p {
-						name, err = getColumnOneOfName(oo)
-						if err != nil {
-							panic(err)
-						}
-						break
-					}
-				}
-			}
-			if name == "" {
-				panic(fmt.Errorf("could not find field for index: %s", path))
-			}
-
-			resolution += name
-			rv.DB.Columns = append(rv.DB.Columns, resolution)
-		}
+	if len(rv.DB.IncludeColumns) > 0 && rv.DB.Method != pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE {
+		panic(fmt.Errorf("include_columns is only valid for BTREE indexes, got %s on index %s", rv.DB.Method.String(), idx.GetName()))
 	}
 
 	if idx.GetBitHammingOps() && idx.GetMethod() == pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE {
 		rv.DB.OverrideExpression = fmt.Sprintf("pb$%s bit_hamming_ops", rv.DB.Columns[0])
+	}
+
+	if idx.GetPartialDeletedAtIsNull() && len(idx.GetWhere()) > 0 {
+		panic(fmt.Errorf("index %s: cannot use both partial_deleted_at_is_null and where", idx.GetName()))
 	}
 
 	if idx.GetPartialDeletedAtIsNull() {
@@ -132,9 +150,27 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 				name,
 			)
 		} else {
-			panic(fmt.Sprintf("%s ould not find field for partial index: deleted_at", m.FullyQualifiedName()))
+			panic(fmt.Sprintf("%s could not find field for partial index: deleted_at", m.FullyQualifiedName()))
 		}
 	}
+
+	if len(idx.GetWhere()) > 0 {
+		parts := make([]string, 0, len(idx.GetWhere()))
+		for _, pred := range idx.GetWhere() {
+			if pred.GetColumn() == "" {
+				panic(fmt.Errorf("index %s: where predicate missing column", idx.GetName()))
+			}
+			if pred.GetOp() == "" {
+				panic(fmt.Errorf("index %s: where predicate missing op for column %s", idx.GetName(), pred.GetColumn()))
+			}
+			col := resolveFieldPath(m, pred.GetColumn())
+			parts = append(parts, fmt.Sprintf(
+				`" + io.ColumnName("%s") + " %s`,
+				col, pred.GetOp()))
+		}
+		rv.DB.WherePredicate = strings.Join(parts, ` AND "`)
+	}
+
 	return rv
 }
 
