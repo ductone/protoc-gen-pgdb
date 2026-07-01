@@ -108,6 +108,16 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 			continue
 		}
 
+		// A drop_enabled message only gets DROP TABLE / TRUNCATE TABLE helpers;
+		// no descriptor, message, or query builder code is generated for it.
+		if fext.GetDropEnabled() {
+			err = module.renderDrop(ctx, buf, in, m, ix)
+			if err != nil {
+				return err
+			}
+			continue
+		}
+
 		err = module.renderDescriptor(ctx, buf, in, m, ix)
 		if err != nil {
 			return err

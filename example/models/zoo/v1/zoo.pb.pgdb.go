@@ -4364,6 +4364,14 @@ func (x *ShopPaperQueryBuilder) UnsafePages() *ShopPaperPagesSafeOperators {
 	return &ShopPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
 }
 
+func (x *DeprecatedExhibit) DBDropTableStatement() string {
+	return pgdb_v1.DropTableStatement("pb_deprecated_exhibit_models_zoo_v1_70d47275")
+}
+
+func (x *DeprecatedExhibit) DBTruncateTableStatement() string {
+	return pgdb_v1.TruncateTableStatement("pb_deprecated_exhibit_models_zoo_v1_70d47275")
+}
+
 type pgdbDescriptorShop_Manager struct {
 	dialect pgdb_v1.Dialect
 }

@@ -40,6 +40,7 @@ make build
 The `pgdb.v1.msg` extension provides options for configuring how a protobuf message maps to a PostgreSQL table:
 
 - `disabled`: Disables code generation for this message
+- `drop_enabled`: Generates only `DBDropTableStatement()` and `DBTruncateTableStatement()` helpers (returning the `DROP TABLE` and `TRUNCATE TABLE` statements for the table) and no other code, to mark a message as inactive and prepare it for removal from the database
 - `indexes`: Defines database indexes
 - `tenant_id_field`: Specifies the field to use for multi-tenancy
 - `nested_only`: Indicates that this message should only be used as a nested type

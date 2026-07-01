@@ -16,6 +16,13 @@ extend google.protobuf.MessageOptions {
 message MessageOptions {
   bool disabled = 1;
 
+  // if this message is used then, instead of generating the normal
+  // table/query code, we only generate helpers that return the `DROP TABLE`
+  // and `TRUNCATE TABLE` statements for this record's table. This is a way to
+  // mark a record as completely inactive and prepare it to be removed from
+  // the database. No other code is generated when this is set.
+  bool drop_enabled = 12;
+
   // PostgreSQL storage parameters for the table.
   // See: https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-STORAGE-PARAMETERS
   message StorageParameters {

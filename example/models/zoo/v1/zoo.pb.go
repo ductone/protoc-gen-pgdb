@@ -331,6 +331,80 @@ func (*shop_Ebook) isShop_Medium() {}
 
 func (*shop_Anything) isShop_Medium() {}
 
+// DeprecatedExhibit is marked drop_enabled: it only generates helpers that
+// return the DROP TABLE and TRUNCATE TABLE statements for its table so it can
+// be removed from the database.
+type DeprecatedExhibit struct {
+	state               protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_TenantId string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3"`
+	xxx_hidden_Id       string                 `protobuf:"bytes,2,opt,name=id,proto3"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *DeprecatedExhibit) Reset() {
+	*x = DeprecatedExhibit{}
+	mi := &file_models_zoo_v1_zoo_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeprecatedExhibit) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeprecatedExhibit) ProtoMessage() {}
+
+func (x *DeprecatedExhibit) ProtoReflect() protoreflect.Message {
+	mi := &file_models_zoo_v1_zoo_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *DeprecatedExhibit) GetTenantId() string {
+	if x != nil {
+		return x.xxx_hidden_TenantId
+	}
+	return ""
+}
+
+func (x *DeprecatedExhibit) GetId() string {
+	if x != nil {
+		return x.xxx_hidden_Id
+	}
+	return ""
+}
+
+func (x *DeprecatedExhibit) SetTenantId(v string) {
+	x.xxx_hidden_TenantId = v
+}
+
+func (x *DeprecatedExhibit) SetId(v string) {
+	x.xxx_hidden_Id = v
+}
+
+type DeprecatedExhibit_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	TenantId string
+	Id       string
+}
+
+func (b0 DeprecatedExhibit_builder) Build() *DeprecatedExhibit {
+	m0 := &DeprecatedExhibit{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_TenantId = b.TenantId
+	x.xxx_hidden_Id = b.Id
+	return m0
+}
+
 type Shop_Manager struct {
 	state         protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Id int32                  `protobuf:"varint,1,opt,name=id,proto3"`
@@ -340,7 +414,7 @@ type Shop_Manager struct {
 
 func (x *Shop_Manager) Reset() {
 	*x = Shop_Manager{}
-	mi := &file_models_zoo_v1_zoo_proto_msgTypes[1]
+	mi := &file_models_zoo_v1_zoo_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -352,7 +426,7 @@ func (x *Shop_Manager) String() string {
 func (*Shop_Manager) ProtoMessage() {}
 
 func (x *Shop_Manager) ProtoReflect() protoreflect.Message {
-	mi := &file_models_zoo_v1_zoo_proto_msgTypes[1]
+	mi := &file_models_zoo_v1_zoo_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -407,25 +481,29 @@ const file_models_zoo_v1_zoo_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x05R\x02id:\x06\xd2\xf7\x02\x02 \x01:\x1e\x82\xf7\x02\x1a\x12\x18\n" +
 	"\ttenant_id\n" +
 	"\x02id\x1a\aexampleB\b\n" +
-	"\x06mediumB:Z8github.com/ductone/protoc-gen-pgdb/example/models/zoo/v1b\x06proto3"
+	"\x06medium\"H\n" +
+	"\x11DeprecatedExhibit\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id:\x06\xd2\xf7\x02\x02`\x01B:Z8github.com/ductone/protoc-gen-pgdb/example/models/zoo/v1b\x06proto3"
 
-var file_models_zoo_v1_zoo_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_models_zoo_v1_zoo_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_models_zoo_v1_zoo_proto_goTypes = []any{
 	(*Shop)(nil),                  // 0: models.zoo.v1.Shop
-	(*Shop_Manager)(nil),          // 1: models.zoo.v1.Shop.Manager
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
-	(*v1.PaperBook)(nil),          // 3: models.animals.v1.PaperBook
-	(*v1.EBook)(nil),              // 4: models.animals.v1.EBook
-	(*v1.ScalarValue)(nil),        // 5: models.animals.v1.ScalarValue
-	(v1.FurType)(0),               // 6: models.animals.v1.FurType
+	(*DeprecatedExhibit)(nil),     // 1: models.zoo.v1.DeprecatedExhibit
+	(*Shop_Manager)(nil),          // 2: models.zoo.v1.Shop.Manager
+	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+	(*v1.PaperBook)(nil),          // 4: models.animals.v1.PaperBook
+	(*v1.EBook)(nil),              // 5: models.animals.v1.EBook
+	(*v1.ScalarValue)(nil),        // 6: models.animals.v1.ScalarValue
+	(v1.FurType)(0),               // 7: models.animals.v1.FurType
 }
 var file_models_zoo_v1_zoo_proto_depIdxs = []int32{
-	2, // 0: models.zoo.v1.Shop.created_at:type_name -> google.protobuf.Timestamp
-	3, // 1: models.zoo.v1.Shop.paper:type_name -> models.animals.v1.PaperBook
-	4, // 2: models.zoo.v1.Shop.ebook:type_name -> models.animals.v1.EBook
-	5, // 3: models.zoo.v1.Shop.anything:type_name -> models.animals.v1.ScalarValue
-	6, // 4: models.zoo.v1.Shop.fur:type_name -> models.animals.v1.FurType
-	1, // 5: models.zoo.v1.Shop.mgr:type_name -> models.zoo.v1.Shop.Manager
+	3, // 0: models.zoo.v1.Shop.created_at:type_name -> google.protobuf.Timestamp
+	4, // 1: models.zoo.v1.Shop.paper:type_name -> models.animals.v1.PaperBook
+	5, // 2: models.zoo.v1.Shop.ebook:type_name -> models.animals.v1.EBook
+	6, // 3: models.zoo.v1.Shop.anything:type_name -> models.animals.v1.ScalarValue
+	7, // 4: models.zoo.v1.Shop.fur:type_name -> models.animals.v1.FurType
+	2, // 5: models.zoo.v1.Shop.mgr:type_name -> models.zoo.v1.Shop.Manager
 	6, // [6:6] is the sub-list for method output_type
 	6, // [6:6] is the sub-list for method input_type
 	6, // [6:6] is the sub-list for extension type_name
@@ -449,7 +527,7 @@ func file_models_zoo_v1_zoo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_models_zoo_v1_zoo_proto_rawDesc), len(file_models_zoo_v1_zoo_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

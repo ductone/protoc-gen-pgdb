@@ -32,3 +32,12 @@ message Shop {
   }
   Manager mgr = 5;
 }
+
+// DeprecatedExhibit is marked drop_enabled: it only generates helpers that
+// return the DROP TABLE and TRUNCATE TABLE statements for its table so it can
+// be removed from the database.
+message DeprecatedExhibit {
+  option (pgdb.v1.msg).drop_enabled = true;
+  string tenant_id = 1;
+  string id = 2;
+}
