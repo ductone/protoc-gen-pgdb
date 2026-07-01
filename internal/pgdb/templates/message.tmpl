@@ -91,3 +91,12 @@ func (m *{{.MessageType}}) SearchData(opts ...pgdb_v1.RecordOptionsFunc) ([]*pgd
 func (m *{{.MessageType}}) Dialect() pgdb_v1.Dialect {
     return pgdb_v1.DialectOrDefault(m.dialect)
 }
+
+{{- if .PKField }}
+func (m *{{.MessageType}}) PKSK() string {
+    var sb strings.Builder
+    {{ .PKField.Convert.CodeForValue }}
+    {{ .SKField.Convert.CodeForValue }}
+    return {{ .PKField.Convert.VarForValue }} + "|" + {{ .SKField.Convert.VarForValue }}
+}
+{{- end }}

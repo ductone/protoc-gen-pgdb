@@ -765,6 +765,31 @@ func (m *pgdbMessageShop) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 func (m *pgdbMessageShop) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessageShop) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_zoo_v1_shop")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("example")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type ShopDB struct {
 	tableName string
