@@ -14,7 +14,6 @@ require (
 	github.com/pquerna/protoc-gen-dynamo v0.9.0
 	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/exp v0.0.0-20251209150349-8475f28825e9
 	google.golang.org/protobuf v1.36.11
 )
 

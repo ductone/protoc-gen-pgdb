@@ -1,11 +1,5 @@
 package slice
 
-import (
-	"sort"
-
-	"golang.org/x/exp/constraints"
-)
-
 func Unique[T comparable](slice []T) []T {
 	ret := make([]T, 0, len(slice))
 	dupeTrack := make(map[T]struct{})
@@ -20,10 +14,4 @@ func Unique[T comparable](slice []T) []T {
 	}
 
 	return ret
-}
-
-func Sort[T constraints.Ordered](s []T) {
-	sort.Slice(s, func(i, j int) bool {
-		return s[i] < s[j]
-	})
 }
