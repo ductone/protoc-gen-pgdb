@@ -423,9 +423,7 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 			return -1
 		}, raw)
 
-		for _, part := range strings.Fields(ds) {
-			dotSplitTerms = append(dotSplitTerms, part)
-		}
+		dotSplitTerms = append(dotSplitTerms, strings.Fields(ds)...)
 	}
 
 	origQuery := buildSearchQuery(searchTerms)

@@ -84,6 +84,54 @@ func TestSchemaZooShop(t *testing.T) {
 	require.Contains(t, sql, "''zyx'':")
 }
 
+func TestDropEnabledStatements(t *testing.T) {
+	d := &DeprecatedExhibit{}
+
+	dropSQL := d.DBDropTableStatement()
+	truncSQL := d.DBTruncateTableStatement()
+
+	require.True(t, strings.HasPrefix(dropSQL, `DROP TABLE IF EXISTS "`), "unexpected drop sql: %s", dropSQL)
+	require.True(t, strings.HasPrefix(truncSQL, `TRUNCATE TABLE "`), "unexpected truncate sql: %s", truncSQL)
+
+	// Both statements should reference the same table name.
+	tableName := strings.TrimSuffix(strings.TrimPrefix(dropSQL, `DROP TABLE IF EXISTS "`), `"`)
+	require.Contains(t, truncSQL, `"`+tableName+`"`)
+}
+
+func TestDropEnabledStatementsRoundTrip(t *testing.T) {
+	d := &DeprecatedExhibit{}
+	dropSQL := d.DBDropTableStatement()
+	truncSQL := d.DBTruncateTableStatement()
+	tableName := strings.TrimSuffix(strings.TrimPrefix(dropSQL, `DROP TABLE IF EXISTS "`), `"`)
+
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	// Stand up a table matching the generated name so we can exercise the
+	// generated TRUNCATE and DROP statements against a real database.
+	_, err = pg.DB.Exec(ctx, `CREATE TABLE "`+tableName+`" (id text)`)
+	require.NoError(t, err)
+	_, err = pg.DB.Exec(ctx, `INSERT INTO "`+tableName+`" (id) VALUES ('a')`)
+	require.NoError(t, err)
+
+	_, err = pg.DB.Exec(ctx, truncSQL)
+	require.NoErrorf(t, err, "failed to execute truncate: %s", truncSQL)
+
+	var count int
+	err = pg.DB.QueryRow(ctx, `SELECT count(*) FROM "`+tableName+`"`).Scan(&count)
+	require.NoError(t, err)
+	require.Equal(t, 0, count, "table should be empty after truncate")
+
+	_, err = pg.DB.Exec(ctx, dropSQL)
+	require.NoErrorf(t, err, "failed to execute drop: %s", dropSQL)
+
+	// Running drop again is a no-op thanks to IF EXISTS.
+	_, err = pg.DB.Exec(ctx, dropSQL)
+	require.NoErrorf(t, err, "drop should be idempotent: %s", dropSQL)
+}
+
 func TestSchemaZooShop_V17(t *testing.T) {
 	ctx := context.Background()
 	pg, err := pgtest.Start()

@@ -112,6 +112,18 @@ func TestPgWriteString(t *testing.T) {
 		})
 	}
 }
+func TestDropTableStatement(t *testing.T) {
+	if got, want := DropTableStatement("test_table"), `DROP TABLE IF EXISTS "test_table"`; got != want {
+		t.Errorf("DropTableStatement: expected %q, got %q", want, got)
+	}
+}
+
+func TestTruncateTableStatement(t *testing.T) {
+	if got, want := TruncateTableStatement("test_table"), `TRUNCATE TABLE "test_table"`; got != want {
+		t.Errorf("TruncateTableStatement: expected %q, got %q", want, got)
+	}
+}
+
 func TestCol2alter(t *testing.T) {
 	tests := []struct {
 		name     string

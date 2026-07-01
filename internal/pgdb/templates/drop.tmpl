@@ -1,0 +1,7 @@
+func (x *{{.ReceiverType}}) DBDropTableStatement() string {
+    return pgdb_v1.DropTableStatement("{{.TableName}}")
+}
+
+func (x *{{.ReceiverType}}) DBTruncateTableStatement() string {
+    return pgdb_v1.TruncateTableStatement("{{.TableName}}")
+}

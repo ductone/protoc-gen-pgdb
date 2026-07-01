@@ -111,6 +111,26 @@ func statistics2sql(desc Descriptor, st *Statistic) string {
 	return buf.String()
 }
 
+// DropTableStatement returns a `DROP TABLE IF EXISTS` statement for the given
+// table name. It is used by the code generated for messages that set the
+// `drop_enabled` message option.
+func DropTableStatement(tableName string) string {
+	buf := &bytes.Buffer{}
+	_, _ = buf.WriteString("DROP TABLE IF EXISTS ")
+	pgWriteString(buf, tableName)
+	return buf.String()
+}
+
+// TruncateTableStatement returns a `TRUNCATE TABLE` statement for the given
+// table name. It is used by the code generated for messages that set the
+// `drop_enabled` message option.
+func TruncateTableStatement(tableName string) string {
+	buf := &bytes.Buffer{}
+	_, _ = buf.WriteString("TRUNCATE TABLE ")
+	pgWriteString(buf, tableName)
+	return buf.String()
+}
+
 func pgWriteString(buf *bytes.Buffer, input string) {
 	_, _ = buf.WriteString(`"`)
 	// TODO(pquerna): not completely correct escaping
