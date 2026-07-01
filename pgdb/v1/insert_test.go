@@ -76,6 +76,18 @@ func (m *mockMessage) Dialect() Dialect {
 	return m.dialect
 }
 
+func (m *mockMessage) PKSK() string {
+	pk := m.pk
+	if pk == "" {
+		pk = "pk"
+	}
+	sk := m.sk
+	if sk == "" {
+		sk = "sk"
+	}
+	return pk + "|" + sk
+}
+
 func TestInsert(t *testing.T) {
 	t.Parallel()
 	tt := []struct {

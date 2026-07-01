@@ -661,6 +661,31 @@ func (m *pgdbMessagePasta) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb
 func (m *pgdbMessagePasta) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessagePasta) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_food_v1_pasta")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("example")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type PastaDB struct {
 	tableName string
@@ -2163,6 +2188,39 @@ func (m *pgdbMessagePastaIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFun
 
 func (m *pgdbMessagePastaIngredient) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessagePastaIngredient) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_food_v1_pasta_ingredient")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetPastaId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetIngredientId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("exampleingredient")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type PastaIngredientDB struct {
@@ -3717,6 +3775,31 @@ func (m *pgdbMessageSauceIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFun
 func (m *pgdbMessageSauceIngredient) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessageSauceIngredient) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_food_v1_sauce_ingredient")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("examplesauce")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type SauceIngredientDB struct {
 	tableName string
@@ -4994,6 +5077,31 @@ func (m *pgdbMessageGarlicIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFu
 
 func (m *pgdbMessageGarlicIngredient) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageGarlicIngredient) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_food_v1_garlic_ingredient")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("examplecheese")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type GarlicIngredientDB struct {
@@ -6341,6 +6449,31 @@ func (m *pgdbMessageCheeseIngredient) SearchData(opts ...pgdb_v1.RecordOptionsFu
 
 func (m *pgdbMessageCheeseIngredient) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageCheeseIngredient) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_food_v1_cheese_ingredient")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("examplecheese")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type CheeseIngredientDB struct {

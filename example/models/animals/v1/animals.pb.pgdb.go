@@ -970,6 +970,31 @@ func (m *pgdbMessagePet) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v
 func (m *pgdbMessagePet) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessagePet) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_animals_v1_pet")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("example")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type PetDB struct {
 	tableName string
@@ -3259,6 +3284,27 @@ func (m *pgdbMessageScalarValue) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 
 func (m *pgdbMessageScalarValue) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageScalarValue) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_animals_v1_scalar_value")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type ScalarValueDB struct {
@@ -5625,6 +5671,31 @@ func (m *pgdbMessageBook) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_
 func (m *pgdbMessageBook) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessageBook) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_animals_v1_book")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("example")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type BookDB struct {
 	tableName string
@@ -7038,6 +7109,27 @@ func (m *pgdbMessageNewspaper) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*
 
 func (m *pgdbMessageNewspaper) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageNewspaper) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_animals_v1_newspaper")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("example")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type NewspaperDB struct {

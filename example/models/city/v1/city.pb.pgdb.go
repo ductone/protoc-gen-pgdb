@@ -842,6 +842,31 @@ func (m *pgdbMessageAttractions) SearchData(opts ...pgdb_v1.RecordOptionsFunc) [
 func (m *pgdbMessageAttractions) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessageAttractions) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_attractions")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(strconv.FormatInt(int64(m.self.GetNumid()), 10))
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type AttractionsDB struct {
 	tableName string
@@ -10233,6 +10258,27 @@ func (m *pgdbMessageAttractionsV2) SearchData(opts ...pgdb_v1.RecordOptionsFunc)
 func (m *pgdbMessageAttractionsV2) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessageAttractionsV2) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_attractions_v_2")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type AttractionsV2DB struct {
 	tableName string
@@ -11717,6 +11763,27 @@ func (m *pgdbMessageNestedOnlyMiddle) SearchData(opts ...pgdb_v1.RecordOptionsFu
 func (m *pgdbMessageNestedOnlyMiddle) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessageNestedOnlyMiddle) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_nested_only_middle")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type NestedOnlyMiddleDB struct {
 	tableName string
@@ -13054,6 +13121,27 @@ func (m *pgdbMessageNestedOnlyWrapper) SearchData(opts ...pgdb_v1.RecordOptionsF
 
 func (m *pgdbMessageNestedOnlyWrapper) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageNestedOnlyWrapper) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_nested_only_wrapper")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type NestedOnlyWrapperDB struct {
@@ -15024,6 +15112,27 @@ func (m *pgdbMessageDuplicateTypeBugOuter) SearchData(opts ...pgdb_v1.RecordOpti
 func (m *pgdbMessageDuplicateTypeBugOuter) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessageDuplicateTypeBugOuter) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_duplicate_type_bug_outer")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type DuplicateTypeBugOuterDB struct {
 	tableName string
@@ -16540,6 +16649,27 @@ func (m *pgdbMessageEmbeddedWithOwnDB) SearchData(opts ...pgdb_v1.RecordOptionsF
 func (m *pgdbMessageEmbeddedWithOwnDB) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
+func (m *pgdbMessageEmbeddedWithOwnDB) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_embedded_with_own_db")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
 
 type EmbeddedWithOwnDBDB struct {
 	tableName string
@@ -17725,6 +17855,27 @@ func (m *pgdbMessageParentWithEmbeddedDB) SearchData(opts ...pgdb_v1.RecordOptio
 
 func (m *pgdbMessageParentWithEmbeddedDB) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageParentWithEmbeddedDB) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_parent_with_embedded_db")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type ParentWithEmbeddedDBDB struct {
@@ -19542,6 +19693,27 @@ func (m *pgdbMessageDuplicateMethodsBugRoot) SearchData(opts ...pgdb_v1.RecordOp
 
 func (m *pgdbMessageDuplicateMethodsBugRoot) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageDuplicateMethodsBugRoot) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_duplicate_methods_bug_root")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type DuplicateMethodsBugRootDB struct {
@@ -21470,6 +21642,27 @@ func (m *pgdbMessageDuplicateTypePathsBugRoot) SearchData(opts ...pgdb_v1.Record
 
 func (m *pgdbMessageDuplicateTypePathsBugRoot) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageDuplicateTypePathsBugRoot) PKSK() string {
+	var sb strings.Builder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_city_v1_duplicate_type_paths_bug_root")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
 }
 
 type DuplicateTypePathsBugRootDB struct {

@@ -18,6 +18,11 @@ type messageTemplateContext struct {
 	SearchFields            []*searchFieldContext
 	Indexes                 []*indexContext
 	WantRecordStringBuilder bool
+	// PKField and SKField are the pb$pk / pb$sk key columns, pulled out of
+	// Fields so the template can emit a cheap standalone PKSK() builder. Both
+	// nil for nested-only messages (which have no primary key).
+	PKField *fieldContext
+	SKField *fieldContext
 }
 
 func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File, m pgs.Message, ix *importTracker) error {
@@ -47,12 +52,25 @@ func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File,
 		SearchFields:            getSearchFields(ctx, m),
 		Indexes:                 module.getMessageIndexes(ctx, m, ix),
 		WantRecordStringBuilder: wantRecordStringBuilder,
+		PKField:                 findFieldByDBName(fields, "pk"),
+		SKField:                 findFieldByDBName(fields, "sk"),
 	}
 	return templates["message.tmpl"].Execute(w, c)
 }
 
 func getMessageType(ctx pgsgo.Context, m pgs.Message) string {
 	return "pgdbMessage" + ctx.Name(m).String()
+}
+
+// findFieldByDBName returns the field whose Postgres column name matches, or nil
+// (e.g. nested-only messages have no pk/sk columns).
+func findFieldByDBName(fields []*fieldContext, name string) *fieldContext {
+	for _, f := range fields {
+		if f.DB != nil && f.DB.Name == name {
+			return f
+		}
+	}
+	return nil
 }
 
 type varNamer struct {
