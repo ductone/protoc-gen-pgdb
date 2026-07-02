@@ -1,0 +1,391 @@
+{
+  "animals.v1.Pet": {
+    "table_name": "pb_pet_models_animals_v1_8a3723d5",
+    "create_schema": [
+      "CREATE TABLE IF NOT EXISTS\n  \"pb_pet_models_animals_v1_8a3723d5\"\n(\n  \"pb$tenant_id\" varchar NOT NULL COLLATE \"C\",\n  \"pb$pksk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$pk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$sk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$fts_data\" tsvector,\n  \"pb$pb_data\" bytea NOT NULL,\n  \"pb$id\" text NOT NULL DEFAULT '' COLLATE \"C\",\n  \"pb$created_at\" timestamptz,\n  \"pb$updated_at\" timestamptz,\n  \"pb$deleted_at\" timestamptz,\n  \"pb$display_name\" text NOT NULL DEFAULT '',\n  \"pb$description\" text NOT NULL DEFAULT '',\n  \"pb$system_builtin\" bool NOT NULL DEFAULT false,\n  \"pb$elapsed\" interval,\n  \"pb$profile\" jsonb,\n  \"pb$cuteness\" float4 NOT NULL DEFAULT 0.0,\n  \"pb$price\" float8 NOT NULL DEFAULT 0.0,\n  \"pb$14\" bool NOT NULL DEFAULT false,\n  \"pb$extra_profiles\" _jsonb,\n  \"pb$field_with_v17_collation_only\" text NOT NULL DEFAULT '' COLLATE \"C\",\n  CONSTRAINT pbidx_pksk_pet_models_animals_v1_4fc115ea PRIMARY KEY (\"pb$tenant_id\",\"pb$pksk\")\n)\n",
+      "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n  \"pbidx_pksk_split2_pet_models_animals_v1_e8761e9e\"\nON\n  \"pb_pet_models_animals_v1_8a3723d5\"\nUSING\n  BTREE\n(\n  \"pb$tenant_id\", \n  \"pb$pk\", \n  \"pb$sk\"\n)\n",
+      "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n  \"pbidx_fts_data_pet_models_animals_v1_6d64344b\"\nON\n  \"pb_pet_models_animals_v1_8a3723d5\"\nUSING\n  GIN\n(\n  \"pb$tenant_id\", \n  \"pb$fts_data\"\n)\n",
+      "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n  \"pbidx_profile_pet_models_animals_v1_6b04a2a2\"\nON\n  \"pb_pet_models_animals_v1_8a3723d5\"\nUSING\n  GIN\n(\n  \"pb$tenant_id\", \n  \"pb$profile\"\n)\n"
+    ],
+    "insert_sql": "INSERT INTO \"pb_pet_models_animals_v1_8a3723d5\" (\"pb$14\", \"pb$created_at\", \"pb$cuteness\", \"pb$deleted_at\", \"pb$description\", \"pb$display_name\", \"pb$elapsed\", \"pb$extra_profiles\", \"pb$field_with_v17_collation_only\", \"pb$fts_data\", \"pb$id\", \"pb$pb_data\", \"pb$pk\", \"pb$pksk\", \"pb$price\", \"pb$profile\", \"pb$sk\", \"pb$system_builtin\", \"pb$tenant_id\", \"pb$updated_at\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::tsvector, $11, $12, $13, $14, $15, $16::jsonb, $17, $18, $19, $20) ON CONFLICT ON CONSTRAINT \"pbidx_pksk_pet_models_animals_v1_4fc115ea\" DO UPDATE SET \"pb$14\"=\"excluded\".\"pb$14\",\"pb$created_at\"=\"excluded\".\"pb$created_at\",\"pb$cuteness\"=\"excluded\".\"pb$cuteness\",\"pb$deleted_at\"=\"excluded\".\"pb$deleted_at\",\"pb$description\"=\"excluded\".\"pb$description\",\"pb$display_name\"=\"excluded\".\"pb$display_name\",\"pb$elapsed\"=\"excluded\".\"pb$elapsed\",\"pb$extra_profiles\"=\"excluded\".\"pb$extra_profiles\",\"pb$field_with_v17_collation_only\"=\"excluded\".\"pb$field_with_v17_collation_only\",\"pb$fts_data\"=\"excluded\".\"pb$fts_data\",\"pb$id\"=\"excluded\".\"pb$id\",\"pb$pb_data\"=\"excluded\".\"pb$pb_data\",\"pb$pk\"=\"excluded\".\"pb$pk\",\"pb$price\"=\"excluded\".\"pb$price\",\"pb$profile\"=\"excluded\".\"pb$profile\",\"pb$sk\"=\"excluded\".\"pb$sk\",\"pb$system_builtin\"=\"excluded\".\"pb$system_builtin\",\"pb$updated_at\"=\"excluded\".\"pb$updated_at\" WHERE (\"pb_pet_models_animals_v1_8a3723d5\".\"pb$updated_at\" <= \"excluded\".\"pb$updated_at\")",
+    "insert_params": [
+      {
+        "bool": true
+      },
+      {
+        "t": "2023-01-02T03:04:05Z"
+      },
+      {
+        "f": 0.8999999761581421
+      },
+      {
+        "null": true
+      },
+      {
+        "s": "A very good dog. Best boy!"
+      },
+      {
+        "s": "Fluffy McFlufferson"
+      },
+      {
+        "s": "00:01:30.500000"
+      },
+      {
+        "s": "{\"{\\\"a\\\":1.5}\"}"
+      },
+      {
+        "s": "2K5uidLikeValue"
+      },
+      {
+        "s": "'pet1':1D 'fluffy':6A 'f':6B 'ffy':6B 'fl':6B 'flu':6B 'fluf':6B 'fluff':6B 'fluffy':6B 'luf':6B 'uff':6B 'fluffi':6A 'mcflufferson':13A 'cfl':13B 'ers':13B 'fer':13B 'ffe':13B 'flu':13B 'luf':13B 'm':13B 'mc':13B 'mcf':13B 'mcfl':13B 'mcflu':13B 'mcfluf':13B 'mcfluff':13B 'mcfluffe':13B 'mcfluffer':13B 'mcfluffers':13B 'mcflufferso':13B 'mcflufferson':13B 'rso':13B 'son':13B 'uff':13B 'mcflufferson':13A 'a':25D 'a':25D 'a':25D 'very':27D 'ery':27D 'v':27D 've':27D 'ver':27D 'very':27D 'veri':27D 'good':32D 'g':32D 'go':32D 'goo':32D 'good':32D 'ood':32D 'good':32D 'dog':37D 'd':37D 'do':37D 'dog':37D 'dog':37D 'best':42D 'b':42D 'be':42D 'bes':42D 'best':42D 'est':42D 'best':42D 'boy':47D 'b':47D 'bo':47D 'boy':47D 'boy':47D 'p':5D 'pe':5D 'pet':5D 'pet1':5D 'fluffy':6A 'flufferson':19A 'best':21D 'd':16D 'do':16D 'dog':16D "
+      },
+      {
+        "s": "pet_1"
+      },
+      {
+        "x": "0a02743112057065745f311a0608a593c99d06220608a693c99d063213466c75666679204d63466c7566666572736f6e3a1a41207665727920676f6f6420646f672e204265737420626f792148015208085a1080cab5ee015a360a100a036167651209110000000000000c400a100a05636f6c6f7212071a0562726f776e0a100a0a76616363696e6174656412022001656666663f6948e17a14aeff684070017a100a0e0a0161120911000000000000f83f82010f324b357569644c696b6556616c7565"
+      },
+      {
+        "s": "models_animals_v1_pet:t1:pet_1"
+      },
+      {
+        "s": "models_animals_v1_pet:t1:pet_1|example"
+      },
+      {
+        "f": 199.99
+      },
+      {
+        "s": "{\"age\":3.5, \"color\":\"brown\", \"vaccinated\":true}"
+      },
+      {
+        "s": "example"
+      },
+      {
+        "bool": true
+      },
+      {
+        "s": "t1"
+      },
+      {
+        "t": "2023-01-02T03:04:06Z"
+      }
+    ],
+    "delete_sql": "DELETE FROM \"pb_pet_models_animals_v1_8a3723d5\" WHERE ((\"pb_pet_models_animals_v1_8a3723d5\".\"pb$updated_at\" <= $1::timestamptz) AND (\"pb_pet_models_animals_v1_8a3723d5\".\"pb$tenant_id\" = $2) AND (\"pb_pet_models_animals_v1_8a3723d5\".\"pb$pksk\" = $3))",
+    "delete_params": [
+      {
+        "t": "2023-01-02T03:04:06Z"
+      },
+      {
+        "s": "t1"
+      },
+      {
+        "s": "models_animals_v1_pet:t1:pet_1|example"
+      }
+    ],
+    "pksk": "models_animals_v1_pet:t1:pet_1|example"
+  },
+  "animals.v1.ScalarValue": {
+    "table_name": "pb_scalar_value_models_animals_v1_35025835",
+    "create_schema": [
+      "CREATE TABLE IF NOT EXISTS\n  \"pb_scalar_value_models_animals_v1_35025835\"\n(\n  \"pb$tenant_id\" varchar NOT NULL COLLATE \"C\",\n  \"pb$pksk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$pk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$sk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$fts_data\" tsvector,\n  \"pb$pb_data\" bytea NOT NULL,\n  \"pb$id\" text NOT NULL DEFAULT '' COLLATE \"C\",\n  \"pb$double\" float8 NOT NULL DEFAULT 0.0,\n  \"pb$float\" float4 NOT NULL DEFAULT 0.0,\n  \"pb$int_32\" int4 NOT NULL DEFAULT 0,\n  \"pb$int_64\" int8 NOT NULL DEFAULT 0,\n  \"pb$uint_32\" int8 NOT NULL DEFAULT 0,\n  \"pb$uint_64\" numeric NOT NULL DEFAULT 0,\n  \"pb$sint_32\" int4 NOT NULL DEFAULT 0,\n  \"pb$sint_64\" int8 NOT NULL DEFAULT 0,\n  \"pb$fixed_32\" int8 NOT NULL DEFAULT 0,\n  \"pb$fixed_64\" numeric NOT NULL DEFAULT 0,\n  \"pb$sfixed_32\" int4 NOT NULL DEFAULT 0,\n  \"pb$sfixed_64\" int8 NOT NULL DEFAULT 0,\n  \"pb$bool\" bool NOT NULL DEFAULT false,\n  \"pb$string\" text NOT NULL DEFAULT '',\n  \"pb$bytes\" bytea,\n  \"pb$repeated_double\" _float8,\n  \"pb$repeated_float\" _float4,\n  \"pb$repeated_int32\" _int4,\n  \"pb$repeated_int64\" _int8,\n  \"pb$repeated_uint32\" _int8,\n  \"pb$repeated_uint64\" _numeric,\n  \"pb$repeated_sint32\" _int4,\n  \"pb$repeated_sint64\" _int8,\n  \"pb$repeated_fixed32\" _int8,\n  \"pb$repeated_fixed64\" _numeric,\n  \"pb$repeated_sfixed32\" _int4,\n  \"pb$repeated_sfixed64\" _int8,\n  \"pb$repeated_bool\" _bool,\n  \"pb$repeated_string\" _text,\n  \"pb$repeated_bytes\" _bytea,\n  \"pb$repeated_enum\" _int4,\n  \"pb$string_map\" jsonb,\n  \"pb$created_at\" timestamptz,\n  \"pb$str_ptr\" text,\n  \"pb$bool_ptr\" bool,\n  CONSTRAINT pbidx_pksk_scalar_value_models_animals_v1_19369260 PRIMARY KEY (\"pb$tenant_id\",\"pb$pksk\")\n)\n",
+      "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n  \"pbidx_pksk_split2_scalar_value_models_animals_12c49864\"\nON\n  \"pb_scalar_value_models_animals_v1_35025835\"\nUSING\n  BTREE\n(\n  \"pb$tenant_id\", \n  \"pb$pk\", \n  \"pb$sk\"\n)\n",
+      "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n  \"pbidx_fts_data_scalar_value_models_animals_v1_6f51bd7b\"\nON\n  \"pb_scalar_value_models_animals_v1_35025835\"\nUSING\n  GIN\n(\n  \"pb$tenant_id\", \n  \"pb$fts_data\"\n)\n",
+      "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n  \"pbidx_repeated_sfixed32_scalar_value_models_a_4e825cd3\"\nON\n  \"pb_scalar_value_models_animals_v1_35025835\"\nUSING\n  GIN\n(\n  \"pb$tenant_id\", \n  \"pb$repeated_sfixed32\", \n  \"pb$repeated_sfixed64\", \n  \"pb$repeated_double\", \n  \"pb$repeated_bytes\", \n  \"pb$string_map\"\n)\n"
+    ],
+    "insert_sql": "INSERT INTO \"pb_scalar_value_models_animals_v1_35025835\" (\"pb$bool\", \"pb$bool_ptr\", \"pb$bytes\", \"pb$created_at\", \"pb$double\", \"pb$fixed_32\", \"pb$fixed_64\", \"pb$float\", \"pb$fts_data\", \"pb$id\", \"pb$int_32\", \"pb$int_64\", \"pb$pb_data\", \"pb$pk\", \"pb$pksk\", \"pb$repeated_bool\", \"pb$repeated_bytes\", \"pb$repeated_double\", \"pb$repeated_enum\", \"pb$repeated_fixed32\", \"pb$repeated_fixed64\", \"pb$repeated_float\", \"pb$repeated_int32\", \"pb$repeated_int64\", \"pb$repeated_sfixed32\", \"pb$repeated_sfixed64\", \"pb$repeated_sint32\", \"pb$repeated_sint64\", \"pb$repeated_string\", \"pb$repeated_uint32\", \"pb$repeated_uint64\", \"pb$sfixed_32\", \"pb$sfixed_64\", \"pb$sint_32\", \"pb$sint_64\", \"pb$sk\", \"pb$str_ptr\", \"pb$string\", \"pb$string_map\", \"pb$tenant_id\", \"pb$uint_32\", \"pb$uint_64\") VALUES ($1, NULL, $2, $3, $4, $5, $6, $7, $8::tsvector, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, NULL, $36, $37::jsonb, $38, $39, $40) ON CONFLICT ON CONSTRAINT \"pbidx_pksk_scalar_value_models_animals_v1_19369260\" DO UPDATE SET \"pb$bool\"=\"excluded\".\"pb$bool\",\"pb$bool_ptr\"=\"excluded\".\"pb$bool_ptr\",\"pb$bytes\"=\"excluded\".\"pb$bytes\",\"pb$created_at\"=\"excluded\".\"pb$created_at\",\"pb$double\"=\"excluded\".\"pb$double\",\"pb$fixed_32\"=\"excluded\".\"pb$fixed_32\",\"pb$fixed_64\"=\"excluded\".\"pb$fixed_64\",\"pb$float\"=\"excluded\".\"pb$float\",\"pb$fts_data\"=\"excluded\".\"pb$fts_data\",\"pb$id\"=\"excluded\".\"pb$id\",\"pb$int_32\"=\"excluded\".\"pb$int_32\",\"pb$int_64\"=\"excluded\".\"pb$int_64\",\"pb$pb_data\"=\"excluded\".\"pb$pb_data\",\"pb$pk\"=\"excluded\".\"pb$pk\",\"pb$repeated_bool\"=\"excluded\".\"pb$repeated_bool\",\"pb$repeated_bytes\"=\"excluded\".\"pb$repeated_bytes\",\"pb$repeated_double\"=\"excluded\".\"pb$repeated_double\",\"pb$repeated_enum\"=\"excluded\".\"pb$repeated_enum\",\"pb$repeated_fixed32\"=\"excluded\".\"pb$repeated_fixed32\",\"pb$repeated_fixed64\"=\"excluded\".\"pb$repeated_fixed64\",\"pb$repeated_float\"=\"excluded\".\"pb$repeated_float\",\"pb$repeated_int32\"=\"excluded\".\"pb$repeated_int32\",\"pb$repeated_int64\"=\"excluded\".\"pb$repeated_int64\",\"pb$repeated_sfixed32\"=\"excluded\".\"pb$repeated_sfixed32\",\"pb$repeated_sfixed64\"=\"excluded\".\"pb$repeated_sfixed64\",\"pb$repeated_sint32\"=\"excluded\".\"pb$repeated_sint32\",\"pb$repeated_sint64\"=\"excluded\".\"pb$repeated_sint64\",\"pb$repeated_string\"=\"excluded\".\"pb$repeated_string\",\"pb$repeated_uint32\"=\"excluded\".\"pb$repeated_uint32\",\"pb$repeated_uint64\"=\"excluded\".\"pb$repeated_uint64\",\"pb$sfixed_32\"=\"excluded\".\"pb$sfixed_32\",\"pb$sfixed_64\"=\"excluded\".\"pb$sfixed_64\",\"pb$sint_32\"=\"excluded\".\"pb$sint_32\",\"pb$sint_64\"=\"excluded\".\"pb$sint_64\",\"pb$sk\"=\"excluded\".\"pb$sk\",\"pb$str_ptr\"=\"excluded\".\"pb$str_ptr\",\"pb$string\"=\"excluded\".\"pb$string\",\"pb$string_map\"=\"excluded\".\"pb$string_map\",\"pb$uint_32\"=\"excluded\".\"pb$uint_32\",\"pb$uint_64\"=\"excluded\".\"pb$uint_64\" WHERE (\"pb_scalar_value_models_animals_v1_35025835\".\"pb$created_at\" <= \"excluded\".\"pb$created_at\")",
+    "insert_params": [
+      {
+        "bool": true
+      },
+      {
+        "x": "deadbeef"
+      },
+      {
+        "t": "2023-01-02T03:04:05Z"
+      },
+      {
+        "f": 1.5
+      },
+      {
+        "i": 1132
+      },
+      {
+        "i": 1164
+      },
+      {
+        "f": 2.25
+      },
+      {
+        "s": "'hello':1A 'ell':1B 'h':1B 'he':1B 'hel':1B 'hell':1B 'hello':1B 'llo':1B 'hello':1A 'postgres':7A 'gre':7B 'ost':7B 'p':7B 'po':7B 'pos':7B 'post':7B 'postg':7B 'postgr':7B 'postgre':7B 'postgres':7B 'res':7B 'stg':7B 'tgr':7B 'postgr':7A 'world':16A 'orl':16B 'rld':16B 'w':16B 'wo':16B 'wor':16B 'worl':16B 'world':16B 'world':16A 'alpha':21A 'a':21B 'al':21B 'alp':21B 'alph':21B 'alpha':21B 'lph':21B 'pha':21B 'alpha':21A 'beta':27A 'b':27B 'be':27B 'bet':27B 'beta':27B 'eta':27B 'beta':27A 'gamma':32A 'amm':32B 'g':32B 'ga':32B 'gam':32B 'gamm':32B 'gamma':32B 'mma':32B 'gamma':32A '日':38A '日':38B '日':38A '本':41A '本':41B '本':41A '語':44A '語':44B '語':44A 'hello':5A 'world':20A "
+      },
+      {
+        "s": "sv_1"
+      },
+      {
+        "i": -32
+      },
+      {
+        "i": -64
+      },
+      {
+        "x": "0a027431120473765f3119000000000000f83f250000104028e0ffffffffffffffff0130c0ffffffffffffffff01382040ffffffffffffffffff0148ff0450ff095d6c040000618c040000000000006d94fbffff7174fbffffffffffff780182011448656c6c6f20706f73746772657320576f726c648a0104deadbeefba0110000000000000f83f00000000000004c0c201040000003fca010c01feffffffffffffffff0103d2010b04fbffffffffffffffff01da010106e201020708ea010111f2010114fa01040b0000008202080c000000000000008a0204f3ffffff9202080e000000000000009a02020100a20205616c706861a2020a626574612067616d6d61a20209e697a5e69cace8aa9eaa020101aa02020203b2020102ba02080a026b3112027631c2020608a593c99d06"
+      },
+      {
+        "s": "models_animals_v1_scalar_value:t1"
+      },
+      {
+        "s": "models_animals_v1_scalar_value:t1|sv_1"
+      },
+      {
+        "s": "{true, false}"
+      },
+      {
+        "s": "{'\\x01', '\\x0203'}"
+      },
+      {
+        "s": "{1.5, -2.5}"
+      },
+      {
+        "s": "{2}"
+      },
+      {
+        "s": "{11}"
+      },
+      {
+        "s": "{12}"
+      },
+      {
+        "s": "{0.5}"
+      },
+      {
+        "s": "{1, -2, 3}"
+      },
+      {
+        "s": "{4, -5}"
+      },
+      {
+        "s": "{-13}"
+      },
+      {
+        "s": "{14}"
+      },
+      {
+        "s": "{-9}"
+      },
+      {
+        "s": "{10}"
+      },
+      {
+        "s": "{\"alpha\", \"beta gamma\", \"日本語\"}"
+      },
+      {
+        "s": "{6}"
+      },
+      {
+        "s": "{7, 8}"
+      },
+      {
+        "i": -1132
+      },
+      {
+        "i": -1164
+      },
+      {
+        "i": -320
+      },
+      {
+        "i": -640
+      },
+      {
+        "s": "sv_1"
+      },
+      {
+        "s": "Hello postgres World"
+      },
+      {
+        "s": "{\"k1\":\"v1\"}"
+      },
+      {
+        "s": "t1"
+      },
+      {
+        "i": 32
+      },
+      {
+        "i": -1
+      }
+    ],
+    "delete_sql": "DELETE FROM \"pb_scalar_value_models_animals_v1_35025835\" WHERE ((\"pb_scalar_value_models_animals_v1_35025835\".\"pb$created_at\" <= $1::timestamptz) AND (\"pb_scalar_value_models_animals_v1_35025835\".\"pb$tenant_id\" = $2) AND (\"pb_scalar_value_models_animals_v1_35025835\".\"pb$pksk\" = $3))",
+    "delete_params": [
+      {
+        "t": "2023-01-02T03:04:05Z"
+      },
+      {
+        "s": "t1"
+      },
+      {
+        "s": "models_animals_v1_scalar_value:t1|sv_1"
+      }
+    ],
+    "pksk": "models_animals_v1_scalar_value:t1|sv_1"
+  },
+  "zoo.v1.Shop": {
+    "table_name": "pb_shop_models_zoo_v1_ca2425f6",
+    "create_schema": [
+      "CREATE TABLE IF NOT EXISTS\n  \"pb_shop_models_zoo_v1_ca2425f6\"\n(\n  \"pb$tenant_id\" varchar NOT NULL COLLATE \"C\",\n  \"pb$pksk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$pk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$sk\" varchar NOT NULL COLLATE \"C\",\n  \"pb$fts_data\" tsvector,\n  \"pb$pb_data\" bytea NOT NULL,\n  \"pb$id\" text NOT NULL DEFAULT '' COLLATE \"C\",\n  \"pb$created_at\" timestamptz,\n  \"pb$fur\" int4 NOT NULL DEFAULT 0,\n  \"pb$medium_oneof\" int4 NOT NULL DEFAULT 0,\n  \"pb$50$pages\" int4 DEFAULT 0,\n  \"pb$51$size\" int8 DEFAULT 0,\n  \"pb$52$id\" text DEFAULT '' COLLATE \"C\",\n  \"pb$52$double\" float8 DEFAULT 0.0,\n  \"pb$52$float\" float4 DEFAULT 0.0,\n  \"pb$52$int_32\" int4 DEFAULT 0,\n  \"pb$52$int_64\" int8 DEFAULT 0,\n  \"pb$52$uint_32\" int8 DEFAULT 0,\n  \"pb$52$uint_64\" numeric DEFAULT 0,\n  \"pb$52$sint_32\" int4 DEFAULT 0,\n  \"pb$52$sint_64\" int8 DEFAULT 0,\n  \"pb$52$fixed_32\" int8 DEFAULT 0,\n  \"pb$52$fixed_64\" numeric DEFAULT 0,\n  \"pb$52$sfixed_32\" int4 DEFAULT 0,\n  \"pb$52$sfixed_64\" int8 DEFAULT 0,\n  \"pb$52$bool\" bool DEFAULT false,\n  \"pb$52$string\" text DEFAULT '',\n  \"pb$52$bytes\" bytea,\n  \"pb$52$repeated_double\" _float8,\n  \"pb$52$repeated_float\" _float4,\n  \"pb$52$repeated_int32\" _int4,\n  \"pb$52$repeated_int64\" _int8,\n  \"pb$52$repeated_uint32\" _int8,\n  \"pb$52$repeated_uint64\" _numeric,\n  \"pb$52$repeated_sint32\" _int4,\n  \"pb$52$repeated_sint64\" _int8,\n  \"pb$52$repeated_fixed32\" _int8,\n  \"pb$52$repeated_fixed64\" _numeric,\n  \"pb$52$repeated_sfixed32\" _int4,\n  \"pb$52$repeated_sfixed64\" _int8,\n  \"pb$52$repeated_bool\" _bool,\n  \"pb$52$repeated_string\" _text,\n  \"pb$52$repeated_bytes\" _bytea,\n  \"pb$52$repeated_enum\" _int4,\n  \"pb$52$string_map\" jsonb,\n  \"pb$52$created_at\" timestamptz,\n  \"pb$52$str_ptr\" text,\n  \"pb$52$bool_ptr\" bool,\n  \"pb$5$id\" int4 DEFAULT 0,\n  CONSTRAINT pbidx_pksk_shop_models_zoo_v1_a0f13ce7 PRIMARY KEY (\"pb$tenant_id\",\"pb$pksk\")\n)\n",
+      "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n  \"pbidx_pksk_split2_shop_models_zoo_v1_3fd2424c\"\nON\n  \"pb_shop_models_zoo_v1_ca2425f6\"\nUSING\n  BTREE\n(\n  \"pb$tenant_id\", \n  \"pb$pk\", \n  \"pb$sk\"\n)\n",
+      "CREATE INDEX CONCURRENTLY IF NOT EXISTS\n  \"pbidx_fts_data_shop_models_zoo_v1_1b685f12\"\nON\n  \"pb_shop_models_zoo_v1_ca2425f6\"\nUSING\n  GIN\n(\n  \"pb$tenant_id\", \n  \"pb$fts_data\"\n)\n"
+    ],
+    "insert_sql": "INSERT INTO \"pb_shop_models_zoo_v1_ca2425f6\" (\"pb$5$id\", \"pb$50$pages\", \"pb$51$size\", \"pb$52$bool\", \"pb$52$bool_ptr\", \"pb$52$bytes\", \"pb$52$created_at\", \"pb$52$double\", \"pb$52$fixed_32\", \"pb$52$fixed_64\", \"pb$52$float\", \"pb$52$id\", \"pb$52$int_32\", \"pb$52$int_64\", \"pb$52$repeated_bool\", \"pb$52$repeated_bytes\", \"pb$52$repeated_double\", \"pb$52$repeated_enum\", \"pb$52$repeated_fixed32\", \"pb$52$repeated_fixed64\", \"pb$52$repeated_float\", \"pb$52$repeated_int32\", \"pb$52$repeated_int64\", \"pb$52$repeated_sfixed32\", \"pb$52$repeated_sfixed64\", \"pb$52$repeated_sint32\", \"pb$52$repeated_sint64\", \"pb$52$repeated_string\", \"pb$52$repeated_uint32\", \"pb$52$repeated_uint64\", \"pb$52$sfixed_32\", \"pb$52$sfixed_64\", \"pb$52$sint_32\", \"pb$52$sint_64\", \"pb$52$str_ptr\", \"pb$52$string\", \"pb$52$string_map\", \"pb$52$uint_32\", \"pb$52$uint_64\", \"pb$created_at\", \"pb$fts_data\", \"pb$fur\", \"pb$id\", \"pb$medium_oneof\", \"pb$pb_data\", \"pb$pk\", \"pb$pksk\", \"pb$sk\", \"pb$tenant_id\") VALUES ($1, NULL, NULL, $2, NULL, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, NULL, $32, $33::jsonb, $34, $35, $36, $37::tsvector, $38, $39, $40, $41, $42, $43, $44, $45) ON CONFLICT ON CONSTRAINT \"pbidx_pksk_shop_models_zoo_v1_a0f13ce7\" DO UPDATE SET \"pb$5$id\"=\"excluded\".\"pb$5$id\",\"pb$50$pages\"=\"excluded\".\"pb$50$pages\",\"pb$51$size\"=\"excluded\".\"pb$51$size\",\"pb$52$bool\"=\"excluded\".\"pb$52$bool\",\"pb$52$bool_ptr\"=\"excluded\".\"pb$52$bool_ptr\",\"pb$52$bytes\"=\"excluded\".\"pb$52$bytes\",\"pb$52$created_at\"=\"excluded\".\"pb$52$created_at\",\"pb$52$double\"=\"excluded\".\"pb$52$double\",\"pb$52$fixed_32\"=\"excluded\".\"pb$52$fixed_32\",\"pb$52$fixed_64\"=\"excluded\".\"pb$52$fixed_64\",\"pb$52$float\"=\"excluded\".\"pb$52$float\",\"pb$52$id\"=\"excluded\".\"pb$52$id\",\"pb$52$int_32\"=\"excluded\".\"pb$52$int_32\",\"pb$52$int_64\"=\"excluded\".\"pb$52$int_64\",\"pb$52$repeated_bool\"=\"excluded\".\"pb$52$repeated_bool\",\"pb$52$repeated_bytes\"=\"excluded\".\"pb$52$repeated_bytes\",\"pb$52$repeated_double\"=\"excluded\".\"pb$52$repeated_double\",\"pb$52$repeated_enum\"=\"excluded\".\"pb$52$repeated_enum\",\"pb$52$repeated_fixed32\"=\"excluded\".\"pb$52$repeated_fixed32\",\"pb$52$repeated_fixed64\"=\"excluded\".\"pb$52$repeated_fixed64\",\"pb$52$repeated_float\"=\"excluded\".\"pb$52$repeated_float\",\"pb$52$repeated_int32\"=\"excluded\".\"pb$52$repeated_int32\",\"pb$52$repeated_int64\"=\"excluded\".\"pb$52$repeated_int64\",\"pb$52$repeated_sfixed32\"=\"excluded\".\"pb$52$repeated_sfixed32\",\"pb$52$repeated_sfixed64\"=\"excluded\".\"pb$52$repeated_sfixed64\",\"pb$52$repeated_sint32\"=\"excluded\".\"pb$52$repeated_sint32\",\"pb$52$repeated_sint64\"=\"excluded\".\"pb$52$repeated_sint64\",\"pb$52$repeated_string\"=\"excluded\".\"pb$52$repeated_string\",\"pb$52$repeated_uint32\"=\"excluded\".\"pb$52$repeated_uint32\",\"pb$52$repeated_uint64\"=\"excluded\".\"pb$52$repeated_uint64\",\"pb$52$sfixed_32\"=\"excluded\".\"pb$52$sfixed_32\",\"pb$52$sfixed_64\"=\"excluded\".\"pb$52$sfixed_64\",\"pb$52$sint_32\"=\"excluded\".\"pb$52$sint_32\",\"pb$52$sint_64\"=\"excluded\".\"pb$52$sint_64\",\"pb$52$str_ptr\"=\"excluded\".\"pb$52$str_ptr\",\"pb$52$string\"=\"excluded\".\"pb$52$string\",\"pb$52$string_map\"=\"excluded\".\"pb$52$string_map\",\"pb$52$uint_32\"=\"excluded\".\"pb$52$uint_32\",\"pb$52$uint_64\"=\"excluded\".\"pb$52$uint_64\",\"pb$created_at\"=\"excluded\".\"pb$created_at\",\"pb$fts_data\"=\"excluded\".\"pb$fts_data\",\"pb$fur\"=\"excluded\".\"pb$fur\",\"pb$id\"=\"excluded\".\"pb$id\",\"pb$medium_oneof\"=\"excluded\".\"pb$medium_oneof\",\"pb$pb_data\"=\"excluded\".\"pb$pb_data\",\"pb$pk\"=\"excluded\".\"pb$pk\",\"pb$sk\"=\"excluded\".\"pb$sk\" WHERE (\"pb_shop_models_zoo_v1_ca2425f6\".\"pb$created_at\" <= \"excluded\".\"pb$created_at\")",
+    "insert_params": [
+      {
+        "i": 7
+      },
+      {
+        "bool": true
+      },
+      {
+        "x": "deadbeef"
+      },
+      {
+        "t": "2023-01-02T03:04:05Z"
+      },
+      {
+        "f": 1.5
+      },
+      {
+        "i": 1132
+      },
+      {
+        "i": 1164
+      },
+      {
+        "f": 2.25
+      },
+      {
+        "s": "sv_1"
+      },
+      {
+        "i": -32
+      },
+      {
+        "i": -64
+      },
+      {
+        "s": "{true, false}"
+      },
+      {
+        "s": "{'\\x01', '\\x0203'}"
+      },
+      {
+        "s": "{1.5, -2.5}"
+      },
+      {
+        "s": "{2}"
+      },
+      {
+        "s": "{11}"
+      },
+      {
+        "s": "{12}"
+      },
+      {
+        "s": "{0.5}"
+      },
+      {
+        "s": "{1, -2, 3}"
+      },
+      {
+        "s": "{4, -5}"
+      },
+      {
+        "s": "{-13}"
+      },
+      {
+        "s": "{14}"
+      },
+      {
+        "s": "{-9}"
+      },
+      {
+        "s": "{10}"
+      },
+      {
+        "s": "{\"alpha\", \"beta gamma\", \"日本語\"}"
+      },
+      {
+        "s": "{6}"
+      },
+      {
+        "s": "{7, 8}"
+      },
+      {
+        "i": -1132
+      },
+      {
+        "i": -1164
+      },
+      {
+        "i": -320
+      },
+      {
+        "i": -640
+      },
+      {
+        "s": "Hello postgres World"
+      },
+      {
+        "s": "{\"k1\":\"v1\"}"
+      },
+      {
+        "i": 32
+      },
+      {
+        "i": -1
+      },
+      {
+        "t": "2023-01-02T03:04:05Z"
+      },
+      {
+        "s": "'shop1':1D 'hello':7A 'ell':7B 'h':7B 'he':7B 'hel':7B 'hell':7B 'hello':7B 'llo':7B 'hello':7A 'postgres':13A 'gre':13B 'ost':13B 'p':13B 'po':13B 'pos':13B 'post':13B 'postg':13B 'postgr':13B 'postgre':13B 'postgres':13B 'res':13B 'stg':13B 'tgr':13B 'postgr':13A 'world':22A 'orl':22B 'rld':22B 'w':22B 'wo':22B 'wor':22B 'worl':22B 'world':22B 'world':22A 'alpha':27A 'a':27B 'al':27B 'alp':27B 'alph':27B 'alpha':27B 'lph':27B 'pha':27B 'alpha':27A 'beta':33A 'b':33B 'be':33B 'bet':33B 'beta':33B 'eta':33B 'beta':33A 'gamma':38A 'amm':38B 'g':38B 'ga':38B 'gam':38B 'gamm':38B 'gamma':38B 'mma':38B 'gamma':38A '日':44A '日':44B '日':44A '本':47A '本':47B '本':47A '語':50A '語':50B '語':50A 's':6D 'sh':6D 'sho':6D 'shop':6D 'shop1':6D 'hello':5A 'world':20A "
+      },
+      {
+        "i": 2
+      },
+      {
+        "s": "shop_1"
+      },
+      {
+        "i": 52
+      },
+      {
+        "x": "0a027431120673686f705f311a0608a593c99d0620022a020807a203b0020a027431120473765f3119000000000000f83f250000104028e0ffffffffffffffff0130c0ffffffffffffffff01382040ffffffffffffffffff0148ff0450ff095d6c040000618c040000000000006d94fbffff7174fbffffffffffff780182011448656c6c6f20706f73746772657320576f726c648a0104deadbeefba0110000000000000f83f00000000000004c0c201040000003fca010c01feffffffffffffffff0103d2010b04fbffffffffffffffff01da010106e201020708ea010111f2010114fa01040b0000008202080c000000000000008a0204f3ffffff9202080e000000000000009a02020100a20205616c706861a2020a626574612067616d6d61a20209e697a5e69cace8aa9eaa020101aa02020203b2020102ba02080a026b3112027631c2020608a593c99d06"
+      },
+      {
+        "s": "models_zoo_v1_shop:t1:shop_1"
+      },
+      {
+        "s": "models_zoo_v1_shop:t1:shop_1|example"
+      },
+      {
+        "s": "example"
+      },
+      {
+        "s": "t1"
+      }
+    ],
+    "delete_sql": "DELETE FROM \"pb_shop_models_zoo_v1_ca2425f6\" WHERE ((\"pb_shop_models_zoo_v1_ca2425f6\".\"pb$created_at\" <= $1::timestamptz) AND (\"pb_shop_models_zoo_v1_ca2425f6\".\"pb$tenant_id\" = $2) AND (\"pb_shop_models_zoo_v1_ca2425f6\".\"pb$pksk\" = $3))",
+    "delete_params": [
+      {
+        "t": "2023-01-02T03:04:05Z"
+      },
+      {
+        "s": "t1"
+      },
+      {
+        "s": "models_zoo_v1_shop:t1:shop_1|example"
+      }
+    ],
+    "pksk": "models_zoo_v1_shop:t1:shop_1|example"
+  }
+}
