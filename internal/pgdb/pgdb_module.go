@@ -104,17 +104,18 @@ func (module *Module) applyTemplate(ctx pgsgo.Context, outputBuffer *bytes.Buffe
 			return fmt.Errorf("pgdb: applyTemplate: failed to extract Message extension from '%s': %w", m.FullyQualifiedName(), err)
 		}
 
-		if fext.GetDisabled() {
-			continue
-		}
-
 		// A drop_enabled message only gets DROP TABLE / TRUNCATE TABLE helpers;
 		// no descriptor, message, or query builder code is generated for it.
+		// Checked before disabled so both may be set on the same message.
 		if fext.GetDropEnabled() {
 			err = module.renderDrop(ctx, buf, in, m, ix)
 			if err != nil {
 				return err
 			}
+			continue
+		}
+
+		if fext.GetDisabled() {
 			continue
 		}
 

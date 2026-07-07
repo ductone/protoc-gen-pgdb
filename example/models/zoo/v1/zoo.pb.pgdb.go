@@ -4389,6 +4389,189 @@ func (x *ShopPaperQueryBuilder) UnsafePages() *ShopPaperPagesSafeOperators {
 	return &ShopPaperPagesSafeOperators{tableName: x.tableName, column: "pb$" + x.prefix + "pages"}
 }
 
+type pgdbDescriptorExhibitFilter struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorExhibitFilter    pgdb_v1.Descriptor = &pgdbDescriptorExhibitFilter{}
+	instancepgdbDescriptorExhibitFilterV17 pgdb_v1.Descriptor = &pgdbDescriptorExhibitFilter{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorExhibitFilter) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorExhibitFilter) TableName() string {
+	return "pb_exhibit_filter_models_zoo_v1_7c41f0a4"
+}
+
+func (d *pgdbDescriptorExhibitFilter) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorExhibitFilter) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorExhibitFilter) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorExhibitFilter) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorExhibitFilter) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return nil
+}
+
+func (d *pgdbDescriptorExhibitFilter) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_exhibit_filter_models_zoo_v1_7c41f0a4"),
+		Name:               df.ColumnName("exhibit_ids"),
+		Type:               "_text",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+		ProtoPath:          df.ExtendProtoPath("exhibit_ids"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         true,
+		OneofName:          "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorExhibitFilter) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_exhibit_filter_models_zoo_v1_7c41f0a4",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorExhibitFilter) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_exhibit_filter_models_zoo_v1_7c41f0a4", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorExhibitFilter) SearchField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_exhibit_filter_models_zoo_v1_7c41f0a4", Name: "pb$fts_data", Type: "tsvector"}
+}
+
+func (d *pgdbDescriptorExhibitFilter) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_exhibit_filter_models_zoo_v1_7c41f0a4", Name: "pb$", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorExhibitFilter) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_exhibit_filter_models_zoo_v1_7c41f0a4",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorExhibitFilter) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return nil
+
+}
+
+func (d *pgdbDescriptorExhibitFilter) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	return rv
+}
+
+func (d *pgdbDescriptorExhibitFilter) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageExhibitFilter struct {
+	self    *ExhibitFilter
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *ExhibitFilter) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageExhibitFilter{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageExhibitFilter) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorExhibitFilterV17
+	default:
+		return instancepgdbDescriptorExhibitFilter
+	}
+}
+
+func (m *pgdbMessageExhibitFilter) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	rv := exp.Record{}
+
+	v1 := make(xpq.Array[string], 0, len(m.self.GetExhibitIds()))
+	for _, v1arrTmp := range m.self.GetExhibitIds() {
+
+		v1 = append(v1, strings.ReplaceAll(string(v1arrTmp), "\u0000", ""))
+
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("exhibit_ids")] = nullExp
+	} else {
+		rv[ro.ColumnName("exhibit_ids")] = v1
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageExhibitFilter) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+func (m *pgdbMessageExhibitFilter) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
 func (x *DeprecatedExhibit) DBDropTableStatement() string {
 	return pgdb_v1.DropTableStatement("pb_deprecated_exhibit_models_zoo_v1_70d47275")
 }
