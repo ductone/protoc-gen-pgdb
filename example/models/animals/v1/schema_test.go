@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -16,6 +17,35 @@ import (
 	"github.com/ductone/protoc-gen-pgdb/internal/pgtest"
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
+
+// TestFTSDataIndexGatedOnFullText verifies that the fts_data BTREE_GIN index is
+// only created when a message has a direct full-text field. Pet declares
+// full-text fields, so its index is present. Newspaper declares none, so its
+// fts_data column is always NULL and the index would never match — it is not
+// generated at all (existing indexes on already-provisioned tables are left
+// untouched; dropping those is out of scope for this change).
+func TestFTSDataIndexGatedOnFullText(t *testing.T) {
+	ftsIndex := func(d pgdb_v1.Descriptor) *pgdb_v1.Index {
+		for _, idx := range d.Indexes() {
+			// Identify the fts index by the column it actually covers
+			// (pb$fts_data), not a brittle index-name substring.
+			if idx.Method == pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN &&
+				slices.Contains(idx.Columns, "pb$fts_data") {
+				return idx
+			}
+		}
+		return nil
+	}
+
+	petFTS := ftsIndex((*Pet)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor())
+	require.NotNil(t, petFTS,
+		"Pet declares full-text fields; its fts_data GIN index must be created")
+	require.False(t, petFTS.IsDropped, "Pet's fts_data GIN index must not be dropped")
+
+	newsFTS := ftsIndex((*Newspaper)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor())
+	require.Nil(t, newsFTS,
+		"Newspaper has no full-text field; no fts_data GIN index should be generated")
+}
 
 func TestSchemaPet(t *testing.T) {
 	ctx := context.Background()
