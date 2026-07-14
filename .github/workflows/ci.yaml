@@ -30,9 +30,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Install Postgres Server for Tests
-        run: sudo apt install -y postgresql
+        # pgvector from PGDG: the example models use halfvec, which needs
+        # pgvector >= 0.7 (distro universe ships 0.6).
+        run: |
+          sudo apt install -y postgresql postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          PGV=$(ls /usr/lib/postgresql/ | sort -n | tail -1)
+          sudo apt install -y "postgresql-${PGV}-pgvector"
       - name: go tests
-        run: go test -v -covermode=count -json ./... > test.json
+        run: go test -v -covermode=count -json ./... ./example/... > test.json
       - name: annotate go tests
         if: always()
         uses: guyarb/golang-test-annotations@v0.5.1

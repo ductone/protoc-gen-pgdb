@@ -34,7 +34,7 @@ func (d *{{.ReceiverType}}) GetPartitionDateRange() pgdb_v1.MessageOptions_Parti
 
 func (d *{{.ReceiverType}}) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
     {{- if .HasStorageParameters }}
-    return &pgdb_v1.MessageOptions_StorageParameters{
+    return pgdb_v1.MessageOptions_StorageParameters_builder{
         {{- if .StorageParameters.AutovacuumVacuumThreshold }}
         AutovacuumVacuumThreshold: proto.Int32({{.StorageParameters.AutovacuumVacuumThreshold}}),
         {{- end }}
@@ -71,7 +71,7 @@ func (d *{{.ReceiverType}}) GetStorageParameters() *pgdb_v1.MessageOptions_Stora
         {{- if .StorageParameters.HasAutovacuumEnabled }}
         AutovacuumEnabled: proto.Bool({{.StorageParameters.AutovacuumEnabled}}),
         {{- end }}
-    }
+    }.Build()
     {{- else }}
     return nil
     {{- end }}
