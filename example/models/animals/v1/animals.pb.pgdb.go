@@ -50,7 +50,11 @@ func (d *pgdbDescriptorPet) GetPartitionDateRange() pgdb_v1.MessageOptions_Parti
 }
 
 func (d *pgdbDescriptorPet) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
-	return nil
+	return pgdb_v1.MessageOptions_StorageParameters_builder{
+		AutovacuumVacuumThreshold:   proto.Int32(1000),
+		AutovacuumVacuumScaleFactor: proto.Float32(0.01),
+		Fillfactor:                  proto.Int32(90),
+	}.Build()
 }
 
 func (d *pgdbDescriptorPet) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

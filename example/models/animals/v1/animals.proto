@@ -33,6 +33,11 @@ message Pet {
       "profile"
     ]
   };
+  option (pgdb.v1.msg).storage_parameters = {
+    autovacuum_vacuum_scale_factor: 0.01
+    autovacuum_vacuum_threshold: 1000
+    fillfactor: 90
+  };
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];
   google.protobuf.Timestamp created_at = 3;
