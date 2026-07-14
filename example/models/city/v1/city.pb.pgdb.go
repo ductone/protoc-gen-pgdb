@@ -10061,21 +10061,6 @@ func (d *pgdbDescriptorAttractionsV2) Indexes(opts ...pgdb_v1.IndexOptionsFunc) 
 
 	}
 
-	if !io.IsNested {
-
-		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_attractions_v_2_models_city_v1_b495b2b2"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
-			OverrideExpression: "",
-			WherePredicate:     "",
-		})
-
-	}
-
 	return rv
 }
 
@@ -10591,23 +10576,6 @@ func (x *AttractionsV2SKSafeOperators) NotBetween(start string, end string) exp.
 
 func (x *AttractionsV2DBQueryBuilder) SK() *AttractionsV2SKSafeOperators {
 	return &AttractionsV2SKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type AttractionsV2FTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsV2FTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsV2FTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsV2DBQueryBuilder) FTSData() *AttractionsV2FTSDataSafeOperators {
-	return &AttractionsV2FTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type AttractionsV2ConfigNameSafeOperators struct {
@@ -11554,21 +11522,6 @@ func (d *pgdbDescriptorNestedOnlyMiddle) Indexes(opts ...pgdb_v1.IndexOptionsFun
 
 	}
 
-	if !io.IsNested {
-
-		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_nested_only_middle_models_city_dac4a4de"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
-			OverrideExpression: "",
-			WherePredicate:     "",
-		})
-
-	}
-
 	return rv
 }
 
@@ -12096,23 +12049,6 @@ func (x *NestedOnlyMiddleSKSafeOperators) NotBetween(start string, end string) e
 
 func (x *NestedOnlyMiddleDBQueryBuilder) SK() *NestedOnlyMiddleSKSafeOperators {
 	return &NestedOnlyMiddleSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type NestedOnlyMiddleFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *NestedOnlyMiddleFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *NestedOnlyMiddleFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *NestedOnlyMiddleDBQueryBuilder) FTSData() *NestedOnlyMiddleFTSDataSafeOperators {
-	return &NestedOnlyMiddleFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type NestedOnlyMiddleOneofFieldSelectorSafeOperators struct {
@@ -12913,21 +12849,6 @@ func (d *pgdbDescriptorNestedOnlyWrapper) Indexes(opts ...pgdb_v1.IndexOptionsFu
 
 	}
 
-	if !io.IsNested {
-
-		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_nested_only_wrapper_models_cit_ecc71cb1"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
-			OverrideExpression: "",
-			WherePredicate:     "",
-		})
-
-	}
-
 	return rv
 }
 
@@ -13455,23 +13376,6 @@ func (x *NestedOnlyWrapperSKSafeOperators) NotBetween(start string, end string) 
 
 func (x *NestedOnlyWrapperDBQueryBuilder) SK() *NestedOnlyWrapperSKSafeOperators {
 	return &NestedOnlyWrapperSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type NestedOnlyWrapperFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *NestedOnlyWrapperFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *NestedOnlyWrapperFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *NestedOnlyWrapperDBQueryBuilder) FTSData() *NestedOnlyWrapperFTSDataSafeOperators {
-	return &NestedOnlyWrapperFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type NestedOnlyWrapperMiddleIdSafeOperators struct {
@@ -14892,21 +14796,6 @@ func (d *pgdbDescriptorDuplicateTypeBugOuter) Indexes(opts ...pgdb_v1.IndexOptio
 
 	}
 
-	if !io.IsNested {
-
-		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_duplicate_type_bug_outer_model_f76e4fbd"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
-			OverrideExpression: "",
-			WherePredicate:     "",
-		})
-
-	}
-
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("nested_indexed_duplicate_type_bug_outer_a792d04c"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
@@ -15445,23 +15334,6 @@ func (x *DuplicateTypeBugOuterSKSafeOperators) NotBetween(start string, end stri
 
 func (x *DuplicateTypeBugOuterDBQueryBuilder) SK() *DuplicateTypeBugOuterSKSafeOperators {
 	return &DuplicateTypeBugOuterSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type DuplicateTypeBugOuterFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *DuplicateTypeBugOuterFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *DuplicateTypeBugOuterFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *DuplicateTypeBugOuterDBQueryBuilder) FTSData() *DuplicateTypeBugOuterFTSDataSafeOperators {
-	return &DuplicateTypeBugOuterFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type DuplicateTypeBugOuterNestedIndexedFieldSafeOperators struct {
@@ -16440,21 +16312,6 @@ func (d *pgdbDescriptorEmbeddedWithOwnDB) Indexes(opts ...pgdb_v1.IndexOptionsFu
 
 	}
 
-	if !io.IsNested {
-
-		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_embedded_with_own_db_models_ci_826a67df"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
-			OverrideExpression: "",
-			WherePredicate:     "",
-		})
-
-	}
-
 	return rv
 }
 
@@ -16982,23 +16839,6 @@ func (x *EmbeddedWithOwnDBSKSafeOperators) NotBetween(start string, end string) 
 
 func (x *EmbeddedWithOwnDBDBQueryBuilder) SK() *EmbeddedWithOwnDBSKSafeOperators {
 	return &EmbeddedWithOwnDBSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type EmbeddedWithOwnDBFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *EmbeddedWithOwnDBFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *EmbeddedWithOwnDBFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *EmbeddedWithOwnDBDBQueryBuilder) FTSData() *EmbeddedWithOwnDBFTSDataSafeOperators {
-	return &EmbeddedWithOwnDBFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type EmbeddedWithOwnDBInnerValueSafeOperators struct {
@@ -17647,21 +17487,6 @@ func (d *pgdbDescriptorParentWithEmbeddedDB) Indexes(opts ...pgdb_v1.IndexOption
 
 	}
 
-	if !io.IsNested {
-
-		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_parent_with_embedded_db_models_a6a4c6f0"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
-			OverrideExpression: "",
-			WherePredicate:     "",
-		})
-
-	}
-
 	return rv
 }
 
@@ -18189,23 +18014,6 @@ func (x *ParentWithEmbeddedDBSKSafeOperators) NotBetween(start string, end strin
 
 func (x *ParentWithEmbeddedDBDBQueryBuilder) SK() *ParentWithEmbeddedDBSKSafeOperators {
 	return &ParentWithEmbeddedDBSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type ParentWithEmbeddedDBFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *ParentWithEmbeddedDBFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *ParentWithEmbeddedDBFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *ParentWithEmbeddedDBDBQueryBuilder) FTSData() *ParentWithEmbeddedDBFTSDataSafeOperators {
-	return &ParentWithEmbeddedDBFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type ParentWithEmbeddedDBEmbeddedIdSafeOperators struct {
@@ -19474,21 +19282,6 @@ func (d *pgdbDescriptorDuplicateMethodsBugRoot) Indexes(opts ...pgdb_v1.IndexOpt
 
 	}
 
-	if !io.IsNested {
-
-		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_duplicate_methods_bug_root_mod_a9ce30bc"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
-			OverrideExpression: "",
-			WherePredicate:     "",
-		})
-
-	}
-
 	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("middle_indexed_duplicate_methods_bug_ro_b2da4897"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
@@ -20027,23 +19820,6 @@ func (x *DuplicateMethodsBugRootSKSafeOperators) NotBetween(start string, end st
 
 func (x *DuplicateMethodsBugRootDBQueryBuilder) SK() *DuplicateMethodsBugRootSKSafeOperators {
 	return &DuplicateMethodsBugRootSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type DuplicateMethodsBugRootFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *DuplicateMethodsBugRootFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *DuplicateMethodsBugRootFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *DuplicateMethodsBugRootDBQueryBuilder) FTSData() *DuplicateMethodsBugRootFTSDataSafeOperators {
-	return &DuplicateMethodsBugRootFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators struct {
@@ -21395,21 +21171,6 @@ func (d *pgdbDescriptorDuplicateTypePathsBugRoot) Indexes(opts ...pgdb_v1.IndexO
 
 	}
 
-	if !io.IsNested {
-
-		rv = append(rv, &pgdb_v1.Index{
-			Name:               io.IndexName("fts_data_duplicate_type_paths_bug_root_5ccb240c"),
-			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-			IsPrimary:          false,
-			IsUnique:           false,
-			IsDropped:          false,
-			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
-			OverrideExpression: "",
-			WherePredicate:     "",
-		})
-
-	}
-
 	return rv
 }
 
@@ -21976,23 +21737,6 @@ func (x *DuplicateTypePathsBugRootSKSafeOperators) NotBetween(start string, end 
 
 func (x *DuplicateTypePathsBugRootDBQueryBuilder) SK() *DuplicateTypePathsBugRootSKSafeOperators {
 	return &DuplicateTypePathsBugRootSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type DuplicateTypePathsBugRootFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *DuplicateTypePathsBugRootFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *DuplicateTypePathsBugRootFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *DuplicateTypePathsBugRootDBQueryBuilder) FTSData() *DuplicateTypePathsBugRootFTSDataSafeOperators {
-	return &DuplicateTypePathsBugRootFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators struct {
