@@ -33,7 +33,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Install Postgres Server for Tests
-        run: sudo apt install -y postgresql
+        run: |
+          sudo apt install -y postgresql
+          PGV=$(ls /usr/lib/postgresql/ | sort -n | tail -1)
+          sudo apt install -y "postgresql-${PGV}-pgvector"
       - name: go tests
         run: go test -v -covermode=count -json ./... ./example/... > test.json
       - name: annotate go tests
