@@ -646,6 +646,17 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 		WherePredicate:     "",
 	})
 
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("profile_primary_expr_pet_models_animals_6637ab0b"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{},
+		OverrideExpression: "tenant_id, ((\"pb$profile\" ->> 'primary'))",
+		WherePredicate:     "" + io.ColumnName("deleted_at") + " IS NULL",
+	})
+
 	return rv
 }
 

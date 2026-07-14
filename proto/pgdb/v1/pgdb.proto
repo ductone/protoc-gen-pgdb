@@ -53,6 +53,14 @@ message MessageOptions {
     bool partial_deleted_at_is_null = 5;
     // adds bit_hamming_ops to the index for HNSW_COSINE indexes
     bool bit_hamming_ops = 6;
+    // override_expression replaces the "(column, ...)" body of the generated
+    // CREATE INDEX with this raw SQL, enabling functional/expression indexes
+    // (e.g. a btree over a JSONB path). Write physical column tokens: proto
+    // fields are pb$-prefixed and quoted, system columns are bare — matching
+    // the convention the HNSW vector indexes already use. When set, `columns`
+    // is ignored for DDL. Example:
+    //   "tenant_id, ((\"pb$role_to_entitlement_id\" ->> 'primary'))"
+    string override_expression = 7;
   }
   repeated Index indexes = 2;
   // defaults to `tenant_id`.  Must be set if an object does not have a

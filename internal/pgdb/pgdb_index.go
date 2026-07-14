@@ -120,6 +120,14 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		rv.DB.OverrideExpression = fmt.Sprintf("pb$%s bit_hamming_ops", rv.DB.Columns[0])
 	}
 
+	// A caller-supplied expression wins over resolved columns, enabling
+	// functional indexes (e.g. a btree over a JSONB path). The body is emitted
+	// verbatim, so it carries physical column tokens — same contract as the
+	// vector override above.
+	if oe := idx.GetOverrideExpression(); oe != "" {
+		rv.DB.OverrideExpression = oe
+	}
+
 	if idx.GetPartialDeletedAtIsNull() {
 		if f, ok := tryFieldByName(m, "deleted_at"); ok {
 			name, err := getColumnName(f)
