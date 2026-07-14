@@ -37,7 +37,7 @@ message Pet {
     name: "profile_primary_expr"
     method: INDEX_METHOD_BTREE,
     partial_deleted_at_is_null: true,
-    override_expression: "tenant_id, ((\"pb$profile\" ->> 'primary'))"
+    override_expression: "\"pb$tenant_id\", ((\"pb$profile\" ->> 'primary'))"
   };
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];

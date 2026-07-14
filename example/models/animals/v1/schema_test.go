@@ -45,13 +45,18 @@ func TestSchemaPet(t *testing.T) {
 	migrations, err := pgdb_v1.Migrations(ctx, pg.DB, &Pet{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 
-	require.Len(t, migrations, 2)
+	// pb$profile backs three objects: the column, the GIN index, and the
+	// functional override index — dropping the column cascades to both indexes,
+	// so restoring it regenerates all three.
+	require.Len(t, migrations, 3)
 	// fmt.Printf("-----\n%s\n", m[0])
 	require.Contains(t, migrations[0], "ALTER TABLE")
 	require.Contains(t, migrations[0], "pb$profile")
 	// fmt.Printf("-----\n%s\n", m[1])
 	require.Contains(t, migrations[1], "CREATE INDEX CONCURRENTLY IF NOT EXISTS")
 	require.Contains(t, migrations[1], "pb$profile")
+	require.Contains(t, migrations[2], "CREATE INDEX CONCURRENTLY IF NOT EXISTS")
+	require.Contains(t, migrations[2], "pb$profile")
 
 	for _, line := range migrations {
 		_, err := pg.DB.Exec(ctx, line)

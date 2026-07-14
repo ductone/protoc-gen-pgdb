@@ -1332,12 +1332,13 @@ type MessageOptions_Index_builder struct {
 	BitHammingOps bool
 	// override_expression replaces the "(column, ...)" body of the generated
 	// CREATE INDEX with this raw SQL, enabling functional/expression indexes
-	// (e.g. a btree over a JSONB path). Write physical column tokens: proto
-	// fields are pb$-prefixed and quoted, system columns are bare — matching
-	// the convention the HNSW vector indexes already use. When set, `columns`
-	// is ignored for DDL. Example:
+	// (e.g. a btree over a JSONB path). Write *physical* column tokens: every
+	// column is pb$-prefixed and should be quoted — including system columns
+	// like tenant_id/deleted_at (physically "pb$tenant_id", "pb$deleted_at").
+	// This matches the tokens the column-list path emits. When set, `columns`
+	// is ignored for DDL; mutually exclusive with bit_hamming_ops. Example:
 	//
-	//	"tenant_id, ((\"pb$role_to_entitlement_id\" ->> 'primary'))"
+	//	"\"pb$tenant_id\", ((\"pb$role_to_entitlement_id\" ->> 'primary'))"
 	OverrideExpression string
 }
 

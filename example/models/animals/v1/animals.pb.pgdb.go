@@ -653,7 +653,7 @@ func (d *pgdbDescriptorPet) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1
 		IsUnique:           false,
 		IsDropped:          false,
 		Columns:            []string{},
-		OverrideExpression: "tenant_id, ((\"pb$profile\" ->> 'primary'))",
+		OverrideExpression: "\"pb$tenant_id\", ((\"pb$profile\" ->> 'primary'))",
 		WherePredicate:     "" + io.ColumnName("deleted_at") + " IS NULL",
 	})
 

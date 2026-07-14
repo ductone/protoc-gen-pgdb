@@ -31,7 +31,7 @@ func TestIndexOverrideExpression(t *testing.T) {
 
 	require.Contains(t, got, "USING\n  BTREE")
 	// the raw expression body is emitted verbatim (not a quoted column list)
-	require.Contains(t, got, `tenant_id, (("pb$profile" ->> 'primary'))`)
+	require.Contains(t, got, `"pb$tenant_id", (("pb$profile" ->> 'primary'))`)
 	// partial predicate still applies alongside the override
 	require.Contains(t, got, "WHERE pb$deleted_at IS NULL")
 }

@@ -2,6 +2,7 @@ package v1
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 )
 
@@ -550,5 +551,37 @@ SET (
 				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
 			}
 		})
+	}
+}
+
+// TestIndex2SQLOverrideExpression pins the DDL for an override_expression
+// (functional) index: the body is emitted verbatim (not a quoted column list),
+// columns are ignored, and a partial predicate still applies. Renderer-level so
+// it runs in the root module's CI (unlike the example/ integration tests).
+func TestIndex2SQLOverrideExpression(t *testing.T) {
+	desc := &mockDescriptor{tableName: "pb_pet"}
+	idx := &Index{
+		Name:               "pbidx_primary_owner",
+		Method:             MessageOptions_Index_INDEX_METHOD_BTREE,
+		Columns:            []string{"tenant_id", "should_be_ignored"},
+		OverrideExpression: `"pb$tenant_id", (("pb$role_to_entitlement_id" ->> 'primary'))`,
+		WherePredicate:     "pb$deleted_at IS NULL",
+	}
+	got := index2sql(desc, idx)
+
+	if !strings.Contains(got, "USING\n  BTREE") {
+		t.Errorf("expected BTREE method; got:\n%s", got)
+	}
+	// verbatim override body, including embedded double-quoted identifiers
+	if !strings.Contains(got, `"pb$tenant_id", (("pb$role_to_entitlement_id" ->> 'primary'))`) {
+		t.Errorf("expected verbatim override body; got:\n%s", got)
+	}
+	// columns are ignored when an override is set
+	if strings.Contains(got, "should_be_ignored") {
+		t.Errorf("columns must be ignored when override_expression is set; got:\n%s", got)
+	}
+	// partial predicate still applies alongside the override
+	if !strings.Contains(got, "WHERE pb$deleted_at IS NULL") {
+		t.Errorf("expected partial WHERE predicate; got:\n%s", got)
 	}
 }
