@@ -116,6 +116,14 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		}
 	}
 
+	// bit_hamming_ops and override_expression both write rv.DB.OverrideExpression;
+	// allowing both would silently drop one. Reject the combination up front —
+	// this also keeps the Columns[0] access below out of reach of an
+	// override-only index that legitimately supplies no columns.
+	if idx.GetOverrideExpression() != "" && idx.GetBitHammingOps() {
+		panic(fmt.Errorf("pgdb: index %q on '%s': bit_hamming_ops and override_expression are mutually exclusive", idx.GetName(), m.FullyQualifiedName()))
+	}
+
 	if idx.GetBitHammingOps() && idx.GetMethod() == pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE {
 		rv.DB.OverrideExpression = fmt.Sprintf("pb$%s bit_hamming_ops", rv.DB.Columns[0])
 	}
