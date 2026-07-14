@@ -4702,7 +4702,7 @@ func (d *pgdbDescriptorEBook) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorEBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorEBook) VersioningField() *pgdb_v1.Column {
@@ -4881,7 +4881,7 @@ func (d *pgdbDescriptorPaperBook) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorPaperBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorPaperBook) VersioningField() *pgdb_v1.Column {
@@ -6850,7 +6850,7 @@ func (d *pgdbDescriptorNewspaper) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorNewspaper) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_newspaper_models_animals_v1_f52e04fd", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNewspaper) VersioningField() *pgdb_v1.Column {
@@ -6932,6 +6932,21 @@ func (d *pgdbDescriptorNewspaper) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*p
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_newspaper_models_animals_v1_a1025ab6"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -7432,6 +7447,23 @@ func (x *NewspaperSKSafeOperators) NotBetween(start string, end string) exp.Rang
 
 func (x *NewspaperDBQueryBuilder) SK() *NewspaperSKSafeOperators {
 	return &NewspaperSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type NewspaperFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *NewspaperFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *NewspaperFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *NewspaperDBQueryBuilder) FTSData() *NewspaperFTSDataSafeOperators {
+	return &NewspaperFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type NewspaperTenantIdQueryType struct {

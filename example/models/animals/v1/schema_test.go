@@ -18,12 +18,11 @@ import (
 	pgdb_v1 "github.com/ductone/protoc-gen-pgdb/pgdb/v1"
 )
 
-// TestFTSDataIndexGatedOnFullText verifies that the fts_data BTREE_GIN index is
-// only created when a message has a direct full-text field. Pet declares
-// full-text fields, so its index is present. Newspaper declares none, so its
-// fts_data column is always NULL and the index would never match — it is not
-// generated at all (existing indexes on already-provisioned tables are left
-// untouched; dropping those is out of scope for this change).
+// TestFTSDataIndexGatedOnFullText verifies the fts_data BTREE_GIN index is only
+// created when a message has a direct full-text field. Pet declares full-text
+// fields, so its index is created. Newspaper declares none, so its fts_data
+// column is always NULL and the index would never match — it is emitted as
+// dropped, so schema apply removes any existing index and never re-creates it.
 func TestFTSDataIndexGatedOnFullText(t *testing.T) {
 	ftsIndex := func(d pgdb_v1.Descriptor) *pgdb_v1.Index {
 		for _, idx := range d.Indexes() {
@@ -43,8 +42,21 @@ func TestFTSDataIndexGatedOnFullText(t *testing.T) {
 	require.False(t, petFTS.IsDropped, "Pet's fts_data GIN index must not be dropped")
 
 	newsFTS := ftsIndex((*Newspaper)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor())
-	require.Nil(t, newsFTS,
-		"Newspaper has no full-text field; no fts_data GIN index should be generated")
+	require.NotNil(t, newsFTS,
+		"Newspaper's fts_data GIN index is still emitted so schema apply can drop it")
+	require.True(t, newsFTS.IsDropped,
+		"Newspaper has no full-text field; its fts_data GIN index must be dropped")
+}
+
+// TestSearchFieldGatedOnFullText verifies the descriptor's SearchField() (the
+// generic entry point the FTS query builder uses) returns the fts_data column
+// only for messages with a direct full-text field, and nil otherwise. Consumers
+// already treat a nil SearchField() as "not searchable".
+func TestSearchFieldGatedOnFullText(t *testing.T) {
+	require.NotNil(t, (*Pet)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor().SearchField(),
+		"Pet declares full-text fields; SearchField() must return the fts_data column")
+	require.Nil(t, (*Newspaper)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor().SearchField(),
+		"Newspaper has no full-text field; SearchField() must be nil")
 }
 
 func TestSchemaPet(t *testing.T) {

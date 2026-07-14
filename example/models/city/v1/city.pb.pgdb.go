@@ -9552,7 +9552,7 @@ func (d *pgdbDescriptorAttractionsConfig) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorAttractionsConfig) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_attractions_config_models_city_v1_4e3f35be", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorAttractionsConfig) VersioningField() *pgdb_v1.Column {
@@ -9973,7 +9973,7 @@ func (d *pgdbDescriptorAttractionsV2) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorAttractionsV2) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_attractions_v_2_models_city_v1_8f82a0e4", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorAttractionsV2) VersioningField() *pgdb_v1.Column {
@@ -10055,6 +10055,21 @@ func (d *pgdbDescriptorAttractionsV2) Indexes(opts ...pgdb_v1.IndexOptionsFunc) 
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_attractions_v_2_models_city_v1_b495b2b2"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -10578,6 +10593,23 @@ func (x *AttractionsV2DBQueryBuilder) SK() *AttractionsV2SKSafeOperators {
 	return &AttractionsV2SKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
+type AttractionsV2FTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *AttractionsV2FTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *AttractionsV2FTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *AttractionsV2DBQueryBuilder) FTSData() *AttractionsV2FTSDataSafeOperators {
+	return &AttractionsV2FTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
 type AttractionsV2ConfigNameSafeOperators struct {
 	column    string
 	tableName string
@@ -10965,7 +10997,7 @@ func (d *pgdbDescriptorNestedOnlyWithOneof) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_nested_only_with_oneof_models_city_v_84bb2985", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof) VersioningField() *pgdb_v1.Column {
@@ -11434,7 +11466,7 @@ func (d *pgdbDescriptorNestedOnlyMiddle) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorNestedOnlyMiddle) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_nested_only_middle_models_city_v1_400b3e49", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyMiddle) VersioningField() *pgdb_v1.Column {
@@ -11516,6 +11548,21 @@ func (d *pgdbDescriptorNestedOnlyMiddle) Indexes(opts ...pgdb_v1.IndexOptionsFun
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_nested_only_middle_models_city_dac4a4de"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -12049,6 +12096,23 @@ func (x *NestedOnlyMiddleSKSafeOperators) NotBetween(start string, end string) e
 
 func (x *NestedOnlyMiddleDBQueryBuilder) SK() *NestedOnlyMiddleSKSafeOperators {
 	return &NestedOnlyMiddleSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type NestedOnlyMiddleFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *NestedOnlyMiddleFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *NestedOnlyMiddleFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *NestedOnlyMiddleDBQueryBuilder) FTSData() *NestedOnlyMiddleFTSDataSafeOperators {
+	return &NestedOnlyMiddleFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type NestedOnlyMiddleOneofFieldSelectorSafeOperators struct {
@@ -12761,7 +12825,7 @@ func (d *pgdbDescriptorNestedOnlyWrapper) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorNestedOnlyWrapper) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_nested_only_wrapper_models_city_v1_7eca246f", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyWrapper) VersioningField() *pgdb_v1.Column {
@@ -12843,6 +12907,21 @@ func (d *pgdbDescriptorNestedOnlyWrapper) Indexes(opts ...pgdb_v1.IndexOptionsFu
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_nested_only_wrapper_models_cit_ecc71cb1"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -13376,6 +13455,23 @@ func (x *NestedOnlyWrapperSKSafeOperators) NotBetween(start string, end string) 
 
 func (x *NestedOnlyWrapperDBQueryBuilder) SK() *NestedOnlyWrapperSKSafeOperators {
 	return &NestedOnlyWrapperSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type NestedOnlyWrapperFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *NestedOnlyWrapperFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *NestedOnlyWrapperFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *NestedOnlyWrapperDBQueryBuilder) FTSData() *NestedOnlyWrapperFTSDataSafeOperators {
+	return &NestedOnlyWrapperFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type NestedOnlyWrapperMiddleIdSafeOperators struct {
@@ -14064,7 +14160,7 @@ func (d *pgdbDescriptorDuplicateTypeBugInner) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugInner) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_bug_inner_models_city_60068b25", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugInner) VersioningField() *pgdb_v1.Column {
@@ -14262,7 +14358,7 @@ func (d *pgdbDescriptorDuplicateTypeBugNested) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugNested) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_bug_nested_models_cit_3437a236", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugNested) VersioningField() *pgdb_v1.Column {
@@ -14708,7 +14804,7 @@ func (d *pgdbDescriptorDuplicateTypeBugOuter) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugOuter) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_bug_outer_models_city_d504449c", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugOuter) VersioningField() *pgdb_v1.Column {
@@ -14790,6 +14886,21 @@ func (d *pgdbDescriptorDuplicateTypeBugOuter) Indexes(opts ...pgdb_v1.IndexOptio
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_duplicate_type_bug_outer_model_f76e4fbd"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -15336,6 +15447,23 @@ func (x *DuplicateTypeBugOuterDBQueryBuilder) SK() *DuplicateTypeBugOuterSKSafeO
 	return &DuplicateTypeBugOuterSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
+type DuplicateTypeBugOuterFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypeBugOuterFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypeBugOuterFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypeBugOuterDBQueryBuilder) FTSData() *DuplicateTypeBugOuterFTSDataSafeOperators {
+	return &DuplicateTypeBugOuterFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
 type DuplicateTypeBugOuterNestedIndexedFieldSafeOperators struct {
 	column    string
 	tableName string
@@ -15807,7 +15935,7 @@ func (d *pgdbDescriptorEmbeddedDBInnerConfig) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorEmbeddedDBInnerConfig) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_embedded_db_inner_config_models_city_12e4a27d", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorEmbeddedDBInnerConfig) VersioningField() *pgdb_v1.Column {
@@ -16224,7 +16352,7 @@ func (d *pgdbDescriptorEmbeddedWithOwnDB) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorEmbeddedWithOwnDB) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_embedded_with_own_db_models_city_v1_2e0a1e29", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorEmbeddedWithOwnDB) VersioningField() *pgdb_v1.Column {
@@ -16306,6 +16434,21 @@ func (d *pgdbDescriptorEmbeddedWithOwnDB) Indexes(opts ...pgdb_v1.IndexOptionsFu
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_embedded_with_own_db_models_ci_826a67df"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -16839,6 +16982,23 @@ func (x *EmbeddedWithOwnDBSKSafeOperators) NotBetween(start string, end string) 
 
 func (x *EmbeddedWithOwnDBDBQueryBuilder) SK() *EmbeddedWithOwnDBSKSafeOperators {
 	return &EmbeddedWithOwnDBSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type EmbeddedWithOwnDBFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *EmbeddedWithOwnDBFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *EmbeddedWithOwnDBFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *EmbeddedWithOwnDBDBQueryBuilder) FTSData() *EmbeddedWithOwnDBFTSDataSafeOperators {
+	return &EmbeddedWithOwnDBFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type EmbeddedWithOwnDBInnerValueSafeOperators struct {
@@ -17399,7 +17559,7 @@ func (d *pgdbDescriptorParentWithEmbeddedDB) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorParentWithEmbeddedDB) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_parent_with_embedded_db_models_city_1f304a2d", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorParentWithEmbeddedDB) VersioningField() *pgdb_v1.Column {
@@ -17481,6 +17641,21 @@ func (d *pgdbDescriptorParentWithEmbeddedDB) Indexes(opts ...pgdb_v1.IndexOption
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_parent_with_embedded_db_models_a6a4c6f0"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -18014,6 +18189,23 @@ func (x *ParentWithEmbeddedDBSKSafeOperators) NotBetween(start string, end strin
 
 func (x *ParentWithEmbeddedDBDBQueryBuilder) SK() *ParentWithEmbeddedDBSKSafeOperators {
 	return &ParentWithEmbeddedDBSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type ParentWithEmbeddedDBFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *ParentWithEmbeddedDBFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *ParentWithEmbeddedDBFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *ParentWithEmbeddedDBDBQueryBuilder) FTSData() *ParentWithEmbeddedDBFTSDataSafeOperators {
+	return &ParentWithEmbeddedDBFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type ParentWithEmbeddedDBEmbeddedIdSafeOperators struct {
@@ -18550,7 +18742,7 @@ func (d *pgdbDescriptorDuplicateMethodsBugLeaf) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugLeaf) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_leaf_models_ci_61cd4839", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugLeaf) VersioningField() *pgdb_v1.Column {
@@ -18748,7 +18940,7 @@ func (d *pgdbDescriptorDuplicateMethodsBugMiddle) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugMiddle) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_middle_models_afdc72d1", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugMiddle) VersioningField() *pgdb_v1.Column {
@@ -19194,7 +19386,7 @@ func (d *pgdbDescriptorDuplicateMethodsBugRoot) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugRoot) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_root_models_ci_0c1beebe", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugRoot) VersioningField() *pgdb_v1.Column {
@@ -19276,6 +19468,21 @@ func (d *pgdbDescriptorDuplicateMethodsBugRoot) Indexes(opts ...pgdb_v1.IndexOpt
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_duplicate_methods_bug_root_mod_a9ce30bc"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -19822,6 +20029,23 @@ func (x *DuplicateMethodsBugRootDBQueryBuilder) SK() *DuplicateMethodsBugRootSKS
 	return &DuplicateMethodsBugRootSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
+type DuplicateMethodsBugRootFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateMethodsBugRootFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateMethodsBugRootFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateMethodsBugRootDBQueryBuilder) FTSData() *DuplicateMethodsBugRootFTSDataSafeOperators {
+	return &DuplicateMethodsBugRootFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
 type DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators struct {
 	column    string
 	tableName string
@@ -20293,7 +20517,7 @@ func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) DataField() *pgdb_v1.Col
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_grandchild_1f5292af", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) VersioningField() *pgdb_v1.Column {
@@ -20457,7 +20681,7 @@ func (d *pgdbDescriptorDuplicateTypePathsBugChildA) DataField() *pgdb_v1.Column 
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugChildA) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugChildA) VersioningField() *pgdb_v1.Column {
@@ -20634,7 +20858,7 @@ func (d *pgdbDescriptorDuplicateTypePathsBugChildB) DataField() *pgdb_v1.Column 
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugChildB) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_b_mod_02f63a31", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugChildB) VersioningField() *pgdb_v1.Column {
@@ -21083,7 +21307,7 @@ func (d *pgdbDescriptorDuplicateTypePathsBugRoot) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugRoot) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_root_models_4a5b53c4", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugRoot) VersioningField() *pgdb_v1.Column {
@@ -21165,6 +21389,21 @@ func (d *pgdbDescriptorDuplicateTypePathsBugRoot) Indexes(opts ...pgdb_v1.IndexO
 			IsUnique:           false,
 			IsDropped:          false,
 			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_duplicate_type_paths_bug_root_5ccb240c"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
 			OverrideExpression: "",
 			WherePredicate:     "",
 		})
@@ -21739,6 +21978,23 @@ func (x *DuplicateTypePathsBugRootDBQueryBuilder) SK() *DuplicateTypePathsBugRoo
 	return &DuplicateTypePathsBugRootSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
+type DuplicateTypePathsBugRootFTSDataSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *DuplicateTypePathsBugRootFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *DuplicateTypePathsBugRootFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *DuplicateTypePathsBugRootDBQueryBuilder) FTSData() *DuplicateTypePathsBugRootFTSDataSafeOperators {
+	return &DuplicateTypePathsBugRootFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
 type DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators struct {
 	column    string
 	tableName string
@@ -22174,7 +22430,7 @@ func (d *pgdbDescriptorAttractionsConfig_Detail) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorAttractionsConfig_Detail) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_detail_models_city_v1_cb331b3f", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorAttractionsConfig_Detail) VersioningField() *pgdb_v1.Column {
@@ -22353,7 +22609,7 @@ func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceA) DataField() *pgdb_v1.Column 
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceA) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_choice_a_models_city_v1_a7e4df45", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceA) VersioningField() *pgdb_v1.Column {
@@ -22532,7 +22788,7 @@ func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceB) DataField() *pgdb_v1.Column 
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceB) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_choice_b_models_city_v1_3593edeb", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceB) VersioningField() *pgdb_v1.Column {
