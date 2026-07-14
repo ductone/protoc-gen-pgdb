@@ -7232,7 +7232,7 @@ func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) DataField() *pgdb_v1.Colu
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_model_embedding_models_food_v1_de910e59", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorPastaIngredient_ModelEmbedding) VersioningField() *pgdb_v1.Column {

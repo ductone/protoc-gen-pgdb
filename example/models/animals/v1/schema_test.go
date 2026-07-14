@@ -47,6 +47,17 @@ func TestFTSDataIndexGatedOnFullText(t *testing.T) {
 		"Newspaper has no full-text field; no fts_data GIN index should be generated")
 }
 
+// TestSearchFieldGatedOnFullText verifies the descriptor's SearchField() (the
+// generic entry point the FTS query builder uses) returns the fts_data column
+// only for messages with a direct full-text field, and nil otherwise. Consumers
+// already treat a nil SearchField() as "not searchable".
+func TestSearchFieldGatedOnFullText(t *testing.T) {
+	require.NotNil(t, (*Pet)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor().SearchField(),
+		"Pet declares full-text fields; SearchField() must return the fts_data column")
+	require.Nil(t, (*Newspaper)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor().SearchField(),
+		"Newspaper has no full-text field; SearchField() must be nil")
+}
+
 func TestSchemaPet(t *testing.T) {
 	ctx := context.Background()
 	pg, err := pgtest.Start()

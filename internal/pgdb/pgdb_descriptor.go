@@ -35,6 +35,7 @@ type descriptorTemplateContext struct {
 	Indexes                     []*indexContext
 	Statistics                  []*statsContext
 	VersioningField             string
+	HasSearchField              bool
 	IsPartitioned               bool
 	IsPartitionedByCreatedAt    bool
 	PartitionedByKsuidFieldName string
@@ -150,6 +151,7 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		Statistics:                  module.getMessageStatistics(ctx, m, ix),
 		TableName:                   tableName,
 		VersioningField:             vf,
+		HasSearchField:              len(getSearchFields(ctx, m)) > 0,
 		IsPartitioned:               fext.GetPartitioned(),
 		IsPartitionedByCreatedAt:    fext.GetPartitionedByCreatedAt(),
 		PartitionedByKsuidFieldName: fext.GetPartitionedByKsuidFieldName(),

@@ -9552,7 +9552,7 @@ func (d *pgdbDescriptorAttractionsConfig) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorAttractionsConfig) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_attractions_config_models_city_v1_4e3f35be", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorAttractionsConfig) VersioningField() *pgdb_v1.Column {
@@ -9973,7 +9973,7 @@ func (d *pgdbDescriptorAttractionsV2) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorAttractionsV2) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_attractions_v_2_models_city_v1_8f82a0e4", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorAttractionsV2) VersioningField() *pgdb_v1.Column {
@@ -10965,7 +10965,7 @@ func (d *pgdbDescriptorNestedOnlyWithOneof) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_nested_only_with_oneof_models_city_v_84bb2985", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof) VersioningField() *pgdb_v1.Column {
@@ -11434,7 +11434,7 @@ func (d *pgdbDescriptorNestedOnlyMiddle) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorNestedOnlyMiddle) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_nested_only_middle_models_city_v1_400b3e49", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyMiddle) VersioningField() *pgdb_v1.Column {
@@ -12761,7 +12761,7 @@ func (d *pgdbDescriptorNestedOnlyWrapper) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorNestedOnlyWrapper) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_nested_only_wrapper_models_city_v1_7eca246f", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyWrapper) VersioningField() *pgdb_v1.Column {
@@ -14064,7 +14064,7 @@ func (d *pgdbDescriptorDuplicateTypeBugInner) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugInner) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_bug_inner_models_city_60068b25", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugInner) VersioningField() *pgdb_v1.Column {
@@ -14262,7 +14262,7 @@ func (d *pgdbDescriptorDuplicateTypeBugNested) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugNested) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_bug_nested_models_cit_3437a236", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugNested) VersioningField() *pgdb_v1.Column {
@@ -14708,7 +14708,7 @@ func (d *pgdbDescriptorDuplicateTypeBugOuter) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugOuter) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_bug_outer_models_city_d504449c", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypeBugOuter) VersioningField() *pgdb_v1.Column {
@@ -15807,7 +15807,7 @@ func (d *pgdbDescriptorEmbeddedDBInnerConfig) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorEmbeddedDBInnerConfig) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_embedded_db_inner_config_models_city_12e4a27d", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorEmbeddedDBInnerConfig) VersioningField() *pgdb_v1.Column {
@@ -16224,7 +16224,7 @@ func (d *pgdbDescriptorEmbeddedWithOwnDB) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorEmbeddedWithOwnDB) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_embedded_with_own_db_models_city_v1_2e0a1e29", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorEmbeddedWithOwnDB) VersioningField() *pgdb_v1.Column {
@@ -17399,7 +17399,7 @@ func (d *pgdbDescriptorParentWithEmbeddedDB) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorParentWithEmbeddedDB) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_parent_with_embedded_db_models_city_1f304a2d", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorParentWithEmbeddedDB) VersioningField() *pgdb_v1.Column {
@@ -18550,7 +18550,7 @@ func (d *pgdbDescriptorDuplicateMethodsBugLeaf) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugLeaf) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_leaf_models_ci_61cd4839", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugLeaf) VersioningField() *pgdb_v1.Column {
@@ -18748,7 +18748,7 @@ func (d *pgdbDescriptorDuplicateMethodsBugMiddle) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugMiddle) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_middle_models_afdc72d1", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugMiddle) VersioningField() *pgdb_v1.Column {
@@ -19194,7 +19194,7 @@ func (d *pgdbDescriptorDuplicateMethodsBugRoot) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugRoot) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_methods_bug_root_models_ci_0c1beebe", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateMethodsBugRoot) VersioningField() *pgdb_v1.Column {
@@ -20293,7 +20293,7 @@ func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) DataField() *pgdb_v1.Col
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_grandchild_1f5292af", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugGrandchild) VersioningField() *pgdb_v1.Column {
@@ -20457,7 +20457,7 @@ func (d *pgdbDescriptorDuplicateTypePathsBugChildA) DataField() *pgdb_v1.Column 
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugChildA) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_a_mod_19dd4d7b", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugChildA) VersioningField() *pgdb_v1.Column {
@@ -20634,7 +20634,7 @@ func (d *pgdbDescriptorDuplicateTypePathsBugChildB) DataField() *pgdb_v1.Column 
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugChildB) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_child_b_mod_02f63a31", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugChildB) VersioningField() *pgdb_v1.Column {
@@ -21083,7 +21083,7 @@ func (d *pgdbDescriptorDuplicateTypePathsBugRoot) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugRoot) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_duplicate_type_paths_bug_root_models_4a5b53c4", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorDuplicateTypePathsBugRoot) VersioningField() *pgdb_v1.Column {
@@ -22174,7 +22174,7 @@ func (d *pgdbDescriptorAttractionsConfig_Detail) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorAttractionsConfig_Detail) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_detail_models_city_v1_cb331b3f", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorAttractionsConfig_Detail) VersioningField() *pgdb_v1.Column {
@@ -22353,7 +22353,7 @@ func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceA) DataField() *pgdb_v1.Column 
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceA) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_choice_a_models_city_v1_a7e4df45", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceA) VersioningField() *pgdb_v1.Column {
@@ -22532,7 +22532,7 @@ func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceB) DataField() *pgdb_v1.Column 
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceB) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_choice_b_models_city_v1_3593edeb", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNestedOnlyWithOneof_ChoiceB) VersioningField() *pgdb_v1.Column {

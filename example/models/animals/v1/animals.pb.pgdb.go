@@ -4698,7 +4698,7 @@ func (d *pgdbDescriptorEBook) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorEBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_e_book_models_animals_v1_a344683d", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorEBook) VersioningField() *pgdb_v1.Column {
@@ -4877,7 +4877,7 @@ func (d *pgdbDescriptorPaperBook) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorPaperBook) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_paper_book_models_animals_v1_ba82559d", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorPaperBook) VersioningField() *pgdb_v1.Column {
@@ -6846,7 +6846,7 @@ func (d *pgdbDescriptorNewspaper) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorNewspaper) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_newspaper_models_animals_v1_f52e04fd", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorNewspaper) VersioningField() *pgdb_v1.Column {
