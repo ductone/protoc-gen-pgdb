@@ -10593,23 +10593,6 @@ func (x *AttractionsV2DBQueryBuilder) SK() *AttractionsV2SKSafeOperators {
 	return &AttractionsV2SKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
-type AttractionsV2FTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *AttractionsV2FTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *AttractionsV2FTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *AttractionsV2DBQueryBuilder) FTSData() *AttractionsV2FTSDataSafeOperators {
-	return &AttractionsV2FTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
-}
-
 type AttractionsV2ConfigNameSafeOperators struct {
 	column    string
 	tableName string
@@ -12098,23 +12081,6 @@ func (x *NestedOnlyMiddleDBQueryBuilder) SK() *NestedOnlyMiddleSKSafeOperators {
 	return &NestedOnlyMiddleSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
-type NestedOnlyMiddleFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *NestedOnlyMiddleFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *NestedOnlyMiddleFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *NestedOnlyMiddleDBQueryBuilder) FTSData() *NestedOnlyMiddleFTSDataSafeOperators {
-	return &NestedOnlyMiddleFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
-}
-
 type NestedOnlyMiddleOneofFieldSelectorSafeOperators struct {
 	column    string
 	tableName string
@@ -13455,23 +13421,6 @@ func (x *NestedOnlyWrapperSKSafeOperators) NotBetween(start string, end string) 
 
 func (x *NestedOnlyWrapperDBQueryBuilder) SK() *NestedOnlyWrapperSKSafeOperators {
 	return &NestedOnlyWrapperSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type NestedOnlyWrapperFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *NestedOnlyWrapperFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *NestedOnlyWrapperFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *NestedOnlyWrapperDBQueryBuilder) FTSData() *NestedOnlyWrapperFTSDataSafeOperators {
-	return &NestedOnlyWrapperFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type NestedOnlyWrapperMiddleIdSafeOperators struct {
@@ -15447,23 +15396,6 @@ func (x *DuplicateTypeBugOuterDBQueryBuilder) SK() *DuplicateTypeBugOuterSKSafeO
 	return &DuplicateTypeBugOuterSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
-type DuplicateTypeBugOuterFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *DuplicateTypeBugOuterFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *DuplicateTypeBugOuterFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *DuplicateTypeBugOuterDBQueryBuilder) FTSData() *DuplicateTypeBugOuterFTSDataSafeOperators {
-	return &DuplicateTypeBugOuterFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
-}
-
 type DuplicateTypeBugOuterNestedIndexedFieldSafeOperators struct {
 	column    string
 	tableName string
@@ -16984,23 +16916,6 @@ func (x *EmbeddedWithOwnDBDBQueryBuilder) SK() *EmbeddedWithOwnDBSKSafeOperators
 	return &EmbeddedWithOwnDBSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
-type EmbeddedWithOwnDBFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *EmbeddedWithOwnDBFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *EmbeddedWithOwnDBFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *EmbeddedWithOwnDBDBQueryBuilder) FTSData() *EmbeddedWithOwnDBFTSDataSafeOperators {
-	return &EmbeddedWithOwnDBFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
-}
-
 type EmbeddedWithOwnDBInnerValueSafeOperators struct {
 	column    string
 	tableName string
@@ -18189,23 +18104,6 @@ func (x *ParentWithEmbeddedDBSKSafeOperators) NotBetween(start string, end strin
 
 func (x *ParentWithEmbeddedDBDBQueryBuilder) SK() *ParentWithEmbeddedDBSKSafeOperators {
 	return &ParentWithEmbeddedDBSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type ParentWithEmbeddedDBFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *ParentWithEmbeddedDBFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *ParentWithEmbeddedDBFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *ParentWithEmbeddedDBDBQueryBuilder) FTSData() *ParentWithEmbeddedDBFTSDataSafeOperators {
-	return &ParentWithEmbeddedDBFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type ParentWithEmbeddedDBEmbeddedIdSafeOperators struct {
@@ -20027,23 +19925,6 @@ func (x *DuplicateMethodsBugRootSKSafeOperators) NotBetween(start string, end st
 
 func (x *DuplicateMethodsBugRootDBQueryBuilder) SK() *DuplicateMethodsBugRootSKSafeOperators {
 	return &DuplicateMethodsBugRootSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type DuplicateMethodsBugRootFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *DuplicateMethodsBugRootFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *DuplicateMethodsBugRootFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *DuplicateMethodsBugRootDBQueryBuilder) FTSData() *DuplicateMethodsBugRootFTSDataSafeOperators {
-	return &DuplicateMethodsBugRootFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type DuplicateMethodsBugRootMiddleIndexedFieldSafeOperators struct {
@@ -21976,23 +21857,6 @@ func (x *DuplicateTypePathsBugRootSKSafeOperators) NotBetween(start string, end 
 
 func (x *DuplicateTypePathsBugRootDBQueryBuilder) SK() *DuplicateTypePathsBugRootSKSafeOperators {
 	return &DuplicateTypePathsBugRootSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
-}
-
-type DuplicateTypePathsBugRootFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *DuplicateTypePathsBugRootFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *DuplicateTypePathsBugRootFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *DuplicateTypePathsBugRootDBQueryBuilder) FTSData() *DuplicateTypePathsBugRootFTSDataSafeOperators {
-	return &DuplicateTypePathsBugRootFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
 }
 
 type DuplicateTypePathsBugRootChildANestedGrandchildValueSafeOperators struct {

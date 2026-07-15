@@ -704,6 +704,12 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 	indexByFullName := make(map[string][]pgdb_v1.MessageOptions_Index_IndexMethod)
 	missingIndices := map[string]bool{}
 	for _, idx := range allIndexes {
+		// Tombstone (dropped) indexes exist only to drive DROP INDEX during
+		// migrations; they are not physically present, so they must not
+		// contribute safe query operators to the generated API.
+		if idx.DB.IsDropped {
+			continue
+		}
 		for _, f := range idx.DB.Columns {
 			if _, ok := indexByFullName[f]; !ok {
 				indexByFullName[f] = []pgdb_v1.MessageOptions_Index_IndexMethod{}

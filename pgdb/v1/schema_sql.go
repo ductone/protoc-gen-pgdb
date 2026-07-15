@@ -13,9 +13,9 @@ func index2sql(desc Descriptor, idx *Index) string {
 
 	if idx.IsDropped {
 		_, _ = buf.WriteString("DROP INDEX")
-		// WARNING: unique indexes cannot be dropped
-		// concurrently.  Maybe unsafe?
-		if !idx.IsUnique && !desc.IsPartitioned() {
+		// WARNING: unique indexes cannot be dropped concurrently. Neither can
+		// indexes on master partition tables -- mirror the CREATE gating below.
+		if !idx.IsUnique && !desc.IsPartitioned() && !desc.IsPartitionedByCreatedAt() && desc.GetPartitionedByKsuidFieldName() == "" {
 			_, _ = buf.WriteString(" CONCURRENTLY")
 		}
 		_, _ = buf.WriteString(" IF EXISTS ")

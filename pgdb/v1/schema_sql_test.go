@@ -2,6 +2,7 @@ package v1
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 )
 
@@ -560,6 +561,60 @@ SET (
 			result := storageParams2alter(test.desc, test.existingParams)
 			if result != test.expected {
 				t.Errorf("Expected:\n%s\nGot:\n%s", test.expected, result)
+			}
+		})
+	}
+}
+
+func TestIndex2SQLDropConcurrentlyGating(t *testing.T) {
+	// A dropped, non-unique index (e.g. the fts_data tombstone) may only use
+	// DROP INDEX CONCURRENTLY on non-partitioned tables. Master partition
+	// tables -- including partition-by-created-at and partition-by-ksuid --
+	// reject CONCURRENTLY, so the gating must match index2sql's CREATE path.
+	droppedFTS := &Index{
+		Name:      "some_fts_data_idx",
+		IsDropped: true,
+		IsUnique:  false,
+		Method:    MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+		Columns:   []string{"tenant_id", "fts_data"},
+	}
+
+	tests := []struct {
+		name           string
+		desc           Descriptor
+		wantConcurrent bool
+	}{
+		{
+			name:           "non-partitioned uses CONCURRENTLY",
+			desc:           &mockDescriptor{tableName: "t"},
+			wantConcurrent: true,
+		},
+		{
+			name:           "partitioned master table omits CONCURRENTLY",
+			desc:           &mockDescriptor{tableName: "t", isPartitioned: true},
+			wantConcurrent: false,
+		},
+		{
+			name:           "partitioned-by-created-at omits CONCURRENTLY",
+			desc:           &mockDescriptor{tableName: "t", isPartitionedByCreatedAt: true},
+			wantConcurrent: false,
+		},
+		{
+			name:           "partitioned-by-ksuid omits CONCURRENTLY",
+			desc:           &mockDescriptor{tableName: "t", partitionedByKsuidFieldName: "id"},
+			wantConcurrent: false,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := index2sql(test.desc, droppedFTS)
+			if !strings.HasPrefix(got, "DROP INDEX") {
+				t.Fatalf("expected a DROP INDEX statement, got:\n%s", got)
+			}
+			hasConcurrent := strings.Contains(got, "CONCURRENTLY")
+			if hasConcurrent != test.wantConcurrent {
+				t.Errorf("CONCURRENTLY present=%v, want %v; sql:\n%s", hasConcurrent, test.wantConcurrent, got)
 			}
 		})
 	}

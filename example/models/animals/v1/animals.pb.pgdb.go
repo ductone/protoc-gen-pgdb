@@ -7449,23 +7449,6 @@ func (x *NewspaperDBQueryBuilder) SK() *NewspaperSKSafeOperators {
 	return &NewspaperSKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
 }
 
-type NewspaperFTSDataSafeOperators struct {
-	column    string
-	tableName string
-}
-
-func (x *NewspaperFTSDataSafeOperators) Identifier() exp.IdentifierExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column)
-}
-
-func (x *NewspaperFTSDataSafeOperators) Eq(v string) exp.BooleanExpression {
-	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
-}
-
-func (x *NewspaperDBQueryBuilder) FTSData() *NewspaperFTSDataSafeOperators {
-	return &NewspaperFTSDataSafeOperators{tableName: x.tableName, column: "pb$" + "fts_data"}
-}
-
 type NewspaperTenantIdQueryType struct {
 	column    string
 	tableName string
