@@ -4472,7 +4472,7 @@ func (d *pgdbDescriptorExhibitFilter) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorExhibitFilter) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_exhibit_filter_models_zoo_v1_7c41f0a4", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorExhibitFilter) VersioningField() *pgdb_v1.Column {
@@ -4663,7 +4663,7 @@ func (d *pgdbDescriptorShop_Manager) DataField() *pgdb_v1.Column {
 }
 
 func (d *pgdbDescriptorShop_Manager) SearchField() *pgdb_v1.Column {
-	return &pgdb_v1.Column{Table: "pb_manager_models_zoo_v1_6ccf2214", Name: "pb$fts_data", Type: "tsvector"}
+	return nil
 }
 
 func (d *pgdbDescriptorShop_Manager) VersioningField() *pgdb_v1.Column {

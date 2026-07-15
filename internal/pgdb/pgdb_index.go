@@ -217,23 +217,25 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 	// The fts_data BTREE_GIN index is only useful when the message declares a
 	// direct full-text field. Without one, ftsDataConvert.CodeForValue writes a
 	// literal NULL for the column (same getSearchFields predicate), so a
-	// full-text predicate on fts_data can never match -- the index would only
-	// be maintained on writes, never used for a search. Only create it when a
-	// full-text field exists; messages without one simply never get the index.
-	if len(getSearchFields(ctx, m)) > 0 {
-		ftsIndexName, err := getIndexName(m, "fts_data")
-		if err != nil {
-			return nil, err
-		}
-		rv = append(rv, &indexContext{
-			ExcludeNested: true,
-			DB: pgdb_v1.Index{
-				Name:    ftsIndexName,
-				Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
-				Columns: []string{"tenant_id", "fts_data"},
-			},
-		})
+	// full-text predicate on fts_data can never match. For those messages the
+	// index is emitted as dropped: schema apply issues DROP INDEX to remove any
+	// index already present, and never creates it again.
+	ftsIndexName, err := getIndexName(m, "fts_data")
+	if err != nil {
+		return nil, err
 	}
+	ftsIndex := &indexContext{
+		ExcludeNested: true,
+		DB: pgdb_v1.Index{
+			Name:    ftsIndexName,
+			Method:  pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			Columns: []string{"tenant_id", "fts_data"},
+		},
+	}
+	if len(getSearchFields(ctx, m)) == 0 {
+		ftsIndex.DB.IsDropped = true
+	}
+	rv = append(rv, ftsIndex)
 
 	// iterate message for vector behavior options
 	for _, field := range m.Fields() {
