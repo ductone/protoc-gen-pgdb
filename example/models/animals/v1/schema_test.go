@@ -48,6 +48,36 @@ func TestFTSDataIndexGatedOnFullText(t *testing.T) {
 		"Newspaper has no full-text field; its fts_data GIN index must be dropped")
 }
 
+// TestDropPKSKSplitIndex verifies the drop_pksk_split_index message option. Pet
+// does not set it, so its auto-generated non-unique (tenant_id, pk, sk)
+// "pksk_split2" index is created. Widget sets it, so that index is emitted as
+// dropped — schema apply removes any existing index and never re-creates it.
+func TestDropPKSKSplitIndex(t *testing.T) {
+	split2 := func(d pgdb_v1.Descriptor) *pgdb_v1.Index {
+		for _, idx := range d.Indexes() {
+			// pksk_split2 shares its columns with the legacy always-dropped
+			// pksk_split index, so discriminate by name (the legacy one is
+			// "pksk_split_", which does not contain "pksk_split2").
+			if strings.Contains(idx.Name, "pksk_split2") {
+				return idx
+			}
+		}
+		return nil
+	}
+
+	petSplit2 := split2((*Pet)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor())
+	require.NotNil(t, petSplit2, "Pet should have a pksk_split2 index")
+	require.False(t, petSplit2.IsDropped,
+		"Pet does not set drop_pksk_split_index; pksk_split2 must be created")
+
+	widgetSplit2 := split2((*Widget)(nil).DBReflect(pgdb_v1.DialectV13).Descriptor())
+	require.NotNil(t, widgetSplit2,
+		"Widget's pksk_split2 index is still emitted so schema apply can drop it")
+	require.True(t, widgetSplit2.IsDropped,
+		"Widget sets drop_pksk_split_index; pksk_split2 must be dropped")
+	require.False(t, widgetSplit2.IsUnique, "pksk_split2 is non-unique")
+}
+
 // TestSearchFieldGatedOnFullText verifies the descriptor's SearchField() (the
 // generic entry point the FTS query builder uses) returns the fts_data column
 // only for messages with a direct full-text field, and nil otherwise. Consumers

@@ -165,3 +165,19 @@ message Newspaper {
   string name = 2;
   google.protobuf.Timestamp created_at = 3;
 }
+
+// Widget opts out of the auto-generated (tenant_id, pk, sk) "pksk_split2" index
+// via drop_pksk_split_index, so that index must be emitted as dropped.
+message Widget {
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "id"
+    ]
+    sk_const: "example"
+  };
+  option (pgdb.v1.msg).drop_pksk_split_index = true;
+  string tenant_id = 1;
+  string id = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
