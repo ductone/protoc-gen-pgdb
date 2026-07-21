@@ -372,6 +372,7 @@ type MessageOptions struct {
 	state                                  protoimpl.MessageState                `protogen:"opaque.v1"`
 	xxx_hidden_Disabled                    bool                                  `protobuf:"varint,1,opt,name=disabled,proto3"`
 	xxx_hidden_DropEnabled                 bool                                  `protobuf:"varint,12,opt,name=drop_enabled,json=dropEnabled,proto3"`
+	xxx_hidden_DropPkskSplitIndex          bool                                  `protobuf:"varint,13,opt,name=drop_pksk_split_index,json=dropPkskSplitIndex,proto3"`
 	xxx_hidden_StorageParameters           *MessageOptions_StorageParameters     `protobuf:"bytes,11,opt,name=storage_parameters,json=storageParameters,proto3"`
 	xxx_hidden_Indexes                     *[]*MessageOptions_Index              `protobuf:"bytes,2,rep,name=indexes,proto3"`
 	xxx_hidden_TenantIdField               string                                `protobuf:"bytes,3,opt,name=tenant_id_field,json=tenantIdField,proto3"`
@@ -421,6 +422,13 @@ func (x *MessageOptions) GetDisabled() bool {
 func (x *MessageOptions) GetDropEnabled() bool {
 	if x != nil {
 		return x.xxx_hidden_DropEnabled
+	}
+	return false
+}
+
+func (x *MessageOptions) GetDropPkskSplitIndex() bool {
+	if x != nil {
+		return x.xxx_hidden_DropPkskSplitIndex
 	}
 	return false
 }
@@ -508,6 +516,10 @@ func (x *MessageOptions) SetDropEnabled(v bool) {
 	x.xxx_hidden_DropEnabled = v
 }
 
+func (x *MessageOptions) SetDropPkskSplitIndex(v bool) {
+	x.xxx_hidden_DropPkskSplitIndex = v
+}
+
 func (x *MessageOptions) SetStorageParameters(v *MessageOptions_StorageParameters) {
 	x.xxx_hidden_StorageParameters = v
 }
@@ -570,9 +582,15 @@ type MessageOptions_builder struct {
 	// mark a record as completely inactive and prepare it to be removed from
 	// the database. No other code is generated when this is set. Takes
 	// precedence over `disabled`, so both can be set on the same message.
-	DropEnabled       bool
-	StorageParameters *MessageOptions_StorageParameters
-	Indexes           []*MessageOptions_Index
+	DropEnabled bool
+	// If set, the auto-generated non-unique (tenant_id, pk, sk) BTREE index
+	// ("pksk_split2") is dropped for this message instead of created. The unique
+	// primary key on (tenant_id, pksk) still serves point gets. Enable ONLY when
+	// no query filters pk/sk as separate columns -- verify against index-scan
+	// telemetry first. Unset = index is created (default, unchanged).
+	DropPkskSplitIndex bool
+	StorageParameters  *MessageOptions_StorageParameters
+	Indexes            []*MessageOptions_Index
 	// defaults to `tenant_id`.  Must be set if an object does not have a
 	// `tenant_id` field.
 	TenantIdField string
@@ -602,6 +620,7 @@ func (b0 MessageOptions_builder) Build() *MessageOptions {
 	_, _ = b, x
 	x.xxx_hidden_Disabled = b.Disabled
 	x.xxx_hidden_DropEnabled = b.DropEnabled
+	x.xxx_hidden_DropPkskSplitIndex = b.DropPkskSplitIndex
 	x.xxx_hidden_StorageParameters = b.StorageParameters
 	x.xxx_hidden_Indexes = &b.Indexes
 	x.xxx_hidden_TenantIdField = b.TenantIdField
@@ -1502,10 +1521,11 @@ var File_pgdb_v1_pgdb_proto protoreflect.FileDescriptor
 
 const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\n" +
-	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\xd8\x14\n" +
+	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\x8b\x15\n" +
 	"\x0eMessageOptions\x12\x1a\n" +
 	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x12!\n" +
-	"\fdrop_enabled\x18\f \x01(\bR\vdropEnabled\x12X\n" +
+	"\fdrop_enabled\x18\f \x01(\bR\vdropEnabled\x121\n" +
+	"\x15drop_pksk_split_index\x18\r \x01(\bR\x12dropPkskSplitIndex\x12X\n" +
 	"\x12storage_parameters\x18\v \x01(\v2).pgdb.v1.MessageOptions.StorageParametersR\x11storageParameters\x127\n" +
 	"\aindexes\x18\x02 \x03(\v2\x1d.pgdb.v1.MessageOptions.IndexR\aindexes\x12&\n" +
 	"\x0ftenant_id_field\x18\x03 \x01(\tR\rtenantIdField\x12\x1f\n" +

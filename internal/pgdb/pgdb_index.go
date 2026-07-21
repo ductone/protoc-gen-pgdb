@@ -209,6 +209,13 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns: []string{"tenant_id", "pk", "sk"},
 		},
 	}
+	// Opt-out: drop the redundant (tenant_id, pk, sk) index for messages that
+	// never filter pk/sk as separate columns (the unique pksk primary covers
+	// point gets). Emitted as a single dropped entry so schema-apply issues
+	// DROP INDEX CONCURRENTLY without a create/drop flap.
+	if fext.GetDropPkskSplitIndex() {
+		pkskIndex.DB.IsDropped = true
+	}
 
 	// again loop through and look for vector / hnsw indexes
 
