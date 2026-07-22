@@ -76,6 +76,8 @@ func TestDropPKSKSplitIndex(t *testing.T) {
 	require.True(t, widgetSplit2.IsDropped,
 		"Widget sets drop_pksk_split_index; pksk_split2 must be dropped")
 	require.False(t, widgetSplit2.IsUnique, "pksk_split2 is non-unique")
+	require.Equal(t, []string{"pb$tenant_id", "pb$pk", "pb$sk"}, widgetSplit2.Columns,
+		"the dropped index must be the (tenant_id, pk, sk) split index, not another")
 }
 
 // TestSearchFieldGatedOnFullText verifies the descriptor's SearchField() (the

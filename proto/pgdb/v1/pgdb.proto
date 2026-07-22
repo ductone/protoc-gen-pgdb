@@ -29,6 +29,12 @@ message MessageOptions {
   // primary key on (tenant_id, pksk) still serves point gets. Enable ONLY when
   // no query filters pk/sk as separate columns -- verify against index-scan
   // telemetry first. Unset = index is created (default, unchanged).
+  //
+  // NOT supported on partitioned messages (partitioned / partitioned_by_created_at
+  // / partitioned_by_date_range / partitioned_by_ksuid_field_name): DROP INDEX
+  // cannot be CONCURRENT on a partitioned parent, so it would take ACCESS
+  // EXCLUSIVE on the parent and every partition. Code generation fails if this is
+  // set on a partitioned message; drop such an index out-of-band instead.
   bool drop_pksk_split_index = 13;
 
   // PostgreSQL storage parameters for the table.
