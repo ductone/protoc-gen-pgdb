@@ -209,6 +209,26 @@ func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error)
 			Columns: []string{"tenant_id", "pk", "sk"},
 		},
 	}
+	// Opt-out: drop the redundant (tenant_id, pk, sk) index for messages that
+	// never filter pk/sk as separate columns (the unique pksk primary covers
+	// point gets). Emitted as a single dropped entry so schema-apply issues
+	// DROP INDEX CONCURRENTLY without a create/drop flap.
+	if fext.GetDropPkskSplitIndex() {
+		// Fail closed on partitioned messages: DROP INDEX cannot be CONCURRENT on
+		// a partitioned parent (see index2sql), so the drop would take ACCESS
+		// EXCLUSIVE on the parent and every partition. Drop it out-of-band instead.
+		if fext.GetPartitioned() || fext.GetPartitionedByCreatedAt() ||
+			fext.GetPartitionedByDateRange() != pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED ||
+			fext.GetPartitionedByKsuidFieldName() != "" {
+			return nil, fmt.Errorf(
+				"pgdb: drop_pksk_split_index is not supported on partitioned message %q: "+
+					"a non-concurrent DROP INDEX would take ACCESS EXCLUSIVE on the parent and all partitions; "+
+					"drop the (tenant_id, pk, sk) index out-of-band instead",
+				m.FullyQualifiedName(),
+			)
+		}
+		pkskIndex.DB.IsDropped = true
+	}
 
 	// again loop through and look for vector / hnsw indexes
 
