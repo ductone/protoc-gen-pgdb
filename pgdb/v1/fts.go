@@ -487,6 +487,18 @@ func buildSearchQuery(searchTerms []string) exp.Expression {
 			prefixText, lastTerm)
 	}
 
+	// The raw trailing token is guarded above, but stemming can shorten the stemmed
+	// trailing token below minPrefixLen (e.g. "going" -> "go", "ads" -> "ad"). A short
+	// stemmed prefix ("go:*") reintroduces the same pathological GIN prefix scan, so when
+	// the stemmed trailing token is too short, drop the ':*' on the stemmed arm and match
+	// the full stemmed text exactly instead. The raw arm keeps its (already guarded) prefix.
+	if utf8.RuneCountInString(stemmedLastTerm) < minPrefixLen {
+		return exp.NewLiteralExpression(
+			"((websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*')) || websearch_to_tsquery('simple', ?))",
+			prefixText, lastTerm,
+			stemmedSearchText)
+	}
+
 	return exp.NewLiteralExpression(
 		"((websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*')) || (websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*')))",
 		prefixText, lastTerm,

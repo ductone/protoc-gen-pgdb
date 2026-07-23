@@ -1188,13 +1188,34 @@ func TestBuildSearchQueryShortPrefix(t *testing.T) {
 			name:        "multi_term_one_char_trailing_drops_token",
 			searchTerms: []string{"admin", "c"},
 			wantPrefix:  false,
+			wantArg:     "admin", // retained term is still searched
 			notWantArg:  "c",
 		},
 		{
 			name:        "multi_term_two_char_trailing_drops_token",
 			searchTerms: []string{"admin", "se"},
 			wantPrefix:  false,
+			wantArg:     "admin",
 			notWantArg:  "se",
+		},
+		{
+			// Raw trailing token is long enough to keep its prefix, but stemming
+			// shortens it below minPrefixLen ("going" -> "go"). The stemmed arm must
+			// NOT emit a short "go:*" prefix; only the raw "going:*" prefix survives.
+			name:        "stemmed_trailing_short_drops_stemmed_prefix_only",
+			searchTerms: []string{"admin", "going"},
+			wantPrefix:  true,    // raw arm keeps "going:*"
+			wantArg:     "going", // raw prefix token retained
+			notWantArg:  "go",    // pathological short stemmed prefix must not be emitted
+		},
+		{
+			// Length is measured in runes, not bytes: a 2-rune multibyte trailing token
+			// (3 bytes) must still be dropped. A byte-length check would wrongly keep it.
+			name:        "two_rune_multibyte_trailing_drops_token",
+			searchTerms: []string{"admin", "aé"}, // "aé" = 2 runes, 3 bytes
+			wantPrefix:  false,
+			wantArg:     "admin",
+			notWantArg:  "aé",
 		},
 		{
 			name:        "single_term_never_emits_prefix",
@@ -1217,10 +1238,12 @@ func TestBuildSearchQueryShortPrefix(t *testing.T) {
 		},
 		{
 			// All-short terms recurse down to the single-term branch: no ':*',
-			// and recursion terminates (this test would hang otherwise).
+			// collapses to the first term, and recursion terminates (would hang otherwise).
 			name:        "all_short_terms_terminate_without_prefix",
 			searchTerms: []string{"a", "b", "c"},
 			wantPrefix:  false,
+			wantArg:     "a",
+			notWantArg:  "c",
 		},
 	}
 
