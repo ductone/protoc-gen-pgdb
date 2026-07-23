@@ -20,7 +20,13 @@ type SearchContent struct {
 }
 
 const (
-	minWordSize          = 3
+	minWordSize = 3
+	// minPrefixLen is the shortest trailing token we will turn into a ':*' prefix
+	// tsquery term. Anything shorter is dropped (see buildSearchQuery), because a
+	// very short prefix like "c:*" matches a huge fraction of a tenant's rows and
+	// forces a pathological GIN prefix scan. Tied to minWordSize: tokens shorter
+	// than this are not independently indexed on the vector side either.
+	minPrefixLen         = minWordSize
 	kiloByte             = 1000
 	lexemeMaxBytes       = kiloByte * 2
 	tsvectorMaxMegabytes = kiloByte * 1000
@@ -451,6 +457,18 @@ func buildSearchQuery(searchTerms []string) exp.Expression {
 	}
 
 	lastTerm := strings.TrimSpace(searchTerms[len(searchTerms)-1])
+
+	// Guard against pathological short prefix terms. The trailing token is the only
+	// one turned into a ':*' prefix match. When it is very short (e.g. "c") the
+	// resulting "c:*" tsquery matches an enormous fraction of rows and the GIN prefix
+	// scan does not short-circuit against the other ANDed terms, so typeahead can time
+	// out. Drop the too-short trailing token and search on the remaining terms instead.
+	// Recursion always makes progress (one fewer term) and terminates at the single-term
+	// branch above, which never emits ':*'.
+	if utf8.RuneCountInString(lastTerm) < minPrefixLen {
+		return buildSearchQuery(searchTerms[:len(searchTerms)-1])
+	}
+
 	stemmedTerms := strings.Fields(stemmedSearchText)
 	stemmedLastTerm := lastTerm
 	if len(stemmedTerms) > 0 {
@@ -467,6 +485,18 @@ func buildSearchQuery(searchTerms []string) exp.Expression {
 		return exp.NewLiteralExpression(
 			"(websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*'))",
 			prefixText, lastTerm)
+	}
+
+	// The raw trailing token is guarded above, but stemming can shorten the stemmed
+	// trailing token below minPrefixLen (e.g. "going" -> "go", "ads" -> "ad"). A short
+	// stemmed prefix ("go:*") reintroduces the same pathological GIN prefix scan, so when
+	// the stemmed trailing token is too short, drop the ':*' on the stemmed arm and match
+	// the full stemmed text exactly instead. The raw arm keeps its (already guarded) prefix.
+	if utf8.RuneCountInString(stemmedLastTerm) < minPrefixLen {
+		return exp.NewLiteralExpression(
+			"((websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*')) || websearch_to_tsquery('simple', ?))",
+			prefixText, lastTerm,
+			stemmedSearchText)
 	}
 
 	return exp.NewLiteralExpression(

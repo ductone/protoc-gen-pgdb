@@ -1164,6 +1164,119 @@ func TestSearchMultiDotPrefix(t *testing.T) {
 	requireQueryFalse(t, pg, deepVector, "org.department.team.project.missing")
 }
 
+// TestBuildSearchQueryShortPrefix verifies that buildSearchQuery only emits a
+// ':*' prefix term when the trailing token is at least minPrefixLen runes long.
+// A too-short trailing token is dropped (recursing onto the remaining terms) to
+// avoid the pathological GIN prefix scan described in the function's comment.
+func TestBuildSearchQueryShortPrefix(t *testing.T) {
+	testCases := []struct {
+		name        string
+		searchTerms []string
+		wantPrefix  bool // expect a ':*' prefix operator in the generated SQL
+		// wantArg, if non-empty, must appear as one of the query args (the token
+		// the ':*' prefix is applied to, or a retained term).
+		wantArg    string
+		notWantArg string // must NOT appear as a query arg
+	}{
+		{
+			name:        "multi_term_long_trailing_emits_prefix",
+			searchTerms: []string{"admin", "sec"},
+			wantPrefix:  true,
+			wantArg:     "sec",
+		},
+		{
+			name:        "multi_term_one_char_trailing_drops_token",
+			searchTerms: []string{"admin", "c"},
+			wantPrefix:  false,
+			wantArg:     "admin", // retained term is still searched
+			notWantArg:  "c",
+		},
+		{
+			name:        "multi_term_two_char_trailing_drops_token",
+			searchTerms: []string{"admin", "se"},
+			wantPrefix:  false,
+			wantArg:     "admin",
+			notWantArg:  "se",
+		},
+		{
+			// Raw trailing token is long enough to keep its prefix, but stemming
+			// shortens it below minPrefixLen ("going" -> "go"). The stemmed arm must
+			// NOT emit a short "go:*" prefix; only the raw "going:*" prefix survives.
+			name:        "stemmed_trailing_short_drops_stemmed_prefix_only",
+			searchTerms: []string{"admin", "going"},
+			wantPrefix:  true,    // raw arm keeps "going:*"
+			wantArg:     "going", // raw prefix token retained
+			notWantArg:  "go",    // pathological short stemmed prefix must not be emitted
+		},
+		{
+			// Length is measured in runes, not bytes: a 2-rune multibyte trailing token
+			// (3 bytes) must still be dropped. A byte-length check would wrongly keep it.
+			name:        "two_rune_multibyte_trailing_drops_token",
+			searchTerms: []string{"admin", "aé"}, // "aé" = 2 runes, 3 bytes
+			wantPrefix:  false,
+			wantArg:     "admin",
+			notWantArg:  "aé",
+		},
+		{
+			name:        "single_term_never_emits_prefix",
+			searchTerms: []string{"admin"},
+			wantPrefix:  false,
+		},
+		{
+			name:        "single_short_term_never_emits_prefix",
+			searchTerms: []string{"c"},
+			wantPrefix:  false,
+		},
+		{
+			// After dropping the short trailing token, the now-last full-length
+			// term still gets prefix matching.
+			name:        "drops_short_trailing_but_keeps_prefix_on_remaining",
+			searchTerms: []string{"admin", "test", "s"},
+			wantPrefix:  true,
+			wantArg:     "test",
+			notWantArg:  "s",
+		},
+		{
+			// All-short terms recurse down to the single-term branch: no ':*',
+			// collapses to the first term, and recursion terminates (would hang otherwise).
+			name:        "all_short_terms_terminate_without_prefix",
+			searchTerms: []string{"a", "b", "c"},
+			wantPrefix:  false,
+			wantArg:     "a",
+			notWantArg:  "c",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			expr, ok := buildSearchQuery(tc.searchTerms).(exp.LiteralExpression)
+			require.True(t, ok, "expected a LiteralExpression")
+
+			literal := expr.Literal()
+			if tc.wantPrefix {
+				assert.Contains(t, literal, ":*", "expected a prefix (':*') term in %q", literal)
+			} else {
+				assert.NotContains(t, literal, ":*", "did not expect a prefix (':*') term in %q", literal)
+			}
+
+			var args []string
+			for _, a := range expr.Args() {
+				if s, ok := a.(string); ok {
+					args = append(args, s)
+				}
+			}
+			if tc.wantArg != "" {
+				assert.True(t, slices.Contains(args, tc.wantArg),
+					"expected arg %q in %v", tc.wantArg, args)
+			}
+			if tc.notWantArg != "" {
+				assert.False(t, slices.Contains(args, tc.notWantArg),
+					"did not expect dropped token %q in %v", tc.notWantArg, args)
+			}
+		})
+	}
+}
+
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
 	qb := goqu.Dialect("postgres")
 	ctx := context.Background()
