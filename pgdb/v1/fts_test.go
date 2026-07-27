@@ -1189,6 +1189,22 @@ func requireQueryFalse(t *testing.T, pg *pgtest.PG, vectors exp.Expression, quer
 	requireQueryIs(t, pg, vectors, query, false)
 }
 
+// TestSearchTrailingTermNoPrefixExplosion asserts the emitted tsquery no longer
+// uses a `:*` prefix match on the trailing term. normalizeVectorDocs now indexes
+// the prefix ladder of each bare sub-token, so the trailing partial matches as an
+// exact single-posting-list lexeme; `:*` would instead union the GIN posting lists
+// of every lexeme sharing the prefix, which is unbounded on a common prefix.
+// End-to-end recall for the trailing partial is covered by TestSearchMultiDotPrefix.
+func TestSearchTrailingTermNoPrefixExplosion(t *testing.T) {
+	qb := goqu.Dialect("postgres")
+	for _, input := range []string{"prod environment", "ad.ph02t1.admin.se"} {
+		query, args, err := qb.Select(FullTextSearchQuery(input)).ToSQL()
+		require.NoError(t, err, "input=%q", input)
+		assert.NotContains(t, query, ":*", "emitted tsquery for %q must not use a prefix match: %s", input, query)
+		_ = args
+	}
+}
+
 func FuzzFullTextSearchQuery(f *testing.F) {
 	testcases := []string{"Hello, world", " ", "!12345", "☃️ snowman!"}
 	for _, tc := range testcases {
