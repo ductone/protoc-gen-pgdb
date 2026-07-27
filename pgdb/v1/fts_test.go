@@ -1107,6 +1107,63 @@ func TestAcronymSplitDoc(t *testing.T) {
 	}
 }
 
+func TestSearchMultiDotPrefix(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	adVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "ad.ph02t1.admin.securitygroup",
+		},
+	})
+
+	requireQueryTrue(t, pg, adVector, "ad")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin.se")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin.sec")
+	requireQueryTrue(t, pg, adVector, "ad.ph02t1.admin.securitygroup")
+	requireQueryTrue(t, pg, adVector, "securitygroup")
+	requireQueryTrue(t, pg, adVector, "admin")
+	requireQueryTrue(t, pg, adVector, "ph02t1")
+	requireQueryFalse(t, pg, adVector, "ad.ph02t1.admin.xyz")
+	requireQueryFalse(t, pg, adVector, "ad.ph02t1.admin.securitygroup.extra")
+	requireQueryFalse(t, pg, adVector, "notfound")
+
+	roleVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "roles/bigquery.dataViewer",
+		},
+	})
+
+	requireQueryTrue(t, pg, roleVector, "bigquery")
+	requireQueryTrue(t, pg, roleVector, "roles")
+	requireQueryTrue(t, pg, roleVector, "bigquery.data")
+	requireQueryTrue(t, pg, roleVector, "bigquery.dataV")
+	requireQueryFalse(t, pg, roleVector, "bigquery.admin")
+
+	deepVector := FullTextSearchVectors([]*SearchContent{
+		{
+			Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+			Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+			Value:  "org.department.team.project.resource",
+		},
+	})
+
+	requireQueryTrue(t, pg, deepVector, "org.department")
+	requireQueryTrue(t, pg, deepVector, "org.department.team")
+	requireQueryTrue(t, pg, deepVector, "org.department.team.pro")
+	requireQueryTrue(t, pg, deepVector, "org.department.team.project")
+	requireQueryTrue(t, pg, deepVector, "org.department.team.project.res")
+	requireQueryTrue(t, pg, deepVector, "org.department.team.project.resource")
+	requireQueryFalse(t, pg, deepVector, "org.department.team.project.missing")
+}
+
 func requireQueryIs(t *testing.T, pg *pgtest.PG, vectors exp.Expression, input string, matched bool) {
 	qb := goqu.Dialect("postgres")
 	ctx := context.Background()
@@ -1130,6 +1187,85 @@ func requireQueryTrue(t *testing.T, pg *pgtest.PG, vectors exp.Expression, query
 
 func requireQueryFalse(t *testing.T, pg *pgtest.PG, vectors exp.Expression, query string) {
 	requireQueryIs(t, pg, vectors, query, false)
+}
+
+// containsLexeme reports whether lexemes contains one with the given value, regardless
+// of position/weight.
+func containsLexeme(lexemes []lexeme, value string) bool {
+	for _, l := range lexemes {
+		if l.value == value {
+			return true
+		}
+	}
+	return false
+}
+
+// TestSubTokenEdgeGrams is a non-DB unit test (no postgres binary required) covering
+// Change 1: normalizeVectorDocs must additionally emit edge-grams of each dot-separated
+// sub-token (e.g. "se", "sec", ... "securitygroup" as grams of the "securitygroup"
+// sub-token), on top of the pre-existing joined-token prefix lexemes (e.g.
+// "adph02t1adminse" as a prefix of the joined token "adph02t1adminsecuritygroup"). This
+// is what lets query-side symbol-split terms (Change 2) match without a `:*` operator.
+func TestSubTokenEdgeGrams(t *testing.T) {
+	doc := &SearchContent{
+		Type:   FieldOptions_FULL_TEXT_TYPE_ENGLISH,
+		Weight: FieldOptions_FULL_TEXT_WEIGHT_HIGH,
+		Value:  "ad.ph02t1.admin.securitygroup",
+	}
+
+	lexemes := normalizeVectorDocs([]*SearchContent{doc})
+
+	for _, want := range []string{"se", "sec", "securitygroup", "adph02t1adminse"} {
+		assert.True(t, containsLexeme(lexemes, want), "expected lexeme %q to be present in %#v", want, lexemes)
+	}
+}
+
+// renderQuerySQL renders a FullTextSearchQuery expression to SQL via the goqu postgres
+// dialect, mirroring how requireQueryIs renders vectors/queries for the DB-backed tests.
+// goqu's default dialect interpolates literal arguments directly into the SQL string (see
+// requireQueryIs, which discards the returned args), so assertions here are made against
+// the rendered query string.
+func renderQuerySQL(t *testing.T, q exp.Expression) string {
+	t.Helper()
+	qb := goqu.Dialect("postgres")
+	query, _, err := qb.Select(goqu.L("?", q)).ToSQL()
+	require.NoError(t, err)
+	return query
+}
+
+// TestFullTextSearchQueryDotVariants is a non-DB unit test covering Change 2: querying a
+// multi-dot input must render both the joined variant (matches the joined-token prefix
+// lexemes already indexed pre-fix) and the space-split variant (matches the new sub-token
+// edge-gram lexemes from Change 1).
+func TestFullTextSearchQueryDotVariants(t *testing.T) {
+	query := renderQuerySQL(t, FullTextSearchQuery("ad.ph02t1.admin.se"))
+
+	assert.Contains(t, query, "adph02t1adminse", "expected joined variant term in query: %s", query)
+	assert.Contains(t, query, "ad ph02t1 admin se", "expected split variant term in query: %s", query)
+}
+
+// TestFullTextSearchQueryNoPrefixOperator is a guard test: no rendered query, for any of a
+// representative set of inputs (multi-word, dotted, slashed, snake_case, unicode, single
+// word), may contain the `:*` prefix tsquery operator that caused the pathological GIN
+// scans fixed by this change.
+func TestFullTextSearchQueryNoPrefixOperator(t *testing.T) {
+	inputs := []string{
+		"dataplane prod",
+		"ad.ph02t1.admin.se",
+		"roles/bigquery.dataViewer",
+		"foo_bar_baz_21_quux",
+		"café.naïve_zürich",
+		"single",
+		" ",
+		"!12345",
+	}
+
+	for _, input := range inputs {
+		t.Run(input, func(t *testing.T) {
+			query := renderQuerySQL(t, FullTextSearchQuery(input))
+			assert.NotContains(t, query, ":*", "query for %q must not contain the :* prefix operator: %s", input, query)
+		})
+	}
 }
 
 func FuzzFullTextSearchQuery(f *testing.F) {
