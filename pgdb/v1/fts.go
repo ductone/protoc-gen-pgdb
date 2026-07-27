@@ -337,7 +337,17 @@ func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 		docValue := interfaceToValue(doc.Value)
 		var wordBuffer bytes.Buffer
 		rv = append(rv, camelSplitDoc(docValue, wordBuffer, doc)...)
-		rv = append(rv, symbolsSubTokensSplitDoc(symbols, docValue, wordBuffer, doc)...)
+		subTokens := symbolsSubTokensSplitDoc(symbols, docValue, wordBuffer, doc)
+		for _, v := range subTokens {
+			// Index the prefix ladder of each bare sub-token (securitygroup ->
+			// s, se, sec, ...) so a trailing partial search term matches as an
+			// exact lexeme rather than a `:*` prefix scan, which unions unbounded
+			// GIN posting lists for a common prefix.
+			for i := 1; i < len(v.value); i++ {
+				rv = append(rv, lexeme{v.value[0:i], v.pos, lowerWeight(doc.Weight)})
+			}
+		}
+		rv = append(rv, subTokens...)
 		symbolsFullTokens := symbolsFullTokensSplitDoc(symbols, docValue, wordBuffer, doc)
 		for _, v := range symbolsFullTokens {
 			if len(v.value) >= 1 {
@@ -465,12 +475,12 @@ func buildSearchQuery(searchTerms []string) exp.Expression {
 
 	if searchText == stemmedSearchText {
 		return exp.NewLiteralExpression(
-			"(websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*'))",
+			"(websearch_to_tsquery('simple', ?) && to_tsquery('simple', ?))",
 			prefixText, lastTerm)
 	}
 
 	return exp.NewLiteralExpression(
-		"((websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*')) || (websearch_to_tsquery('simple', ?) && to_tsquery('simple', ? || ':*')))",
+		"((websearch_to_tsquery('simple', ?) && to_tsquery('simple', ?)) || (websearch_to_tsquery('simple', ?) && to_tsquery('simple', ?)))",
 		prefixText, lastTerm,
 		stemmedPrefixText, stemmedLastTerm)
 }
