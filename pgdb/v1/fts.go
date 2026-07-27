@@ -330,6 +330,7 @@ func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 		'/': {},
 		'-': {},
 	}
+	edgeGramFilter := edgegramStream(3)
 	for _, doc := range docs {
 		if doc.Type == FieldOptions_FULL_TEXT_TYPE_ENGLISH_LONG {
 			continue
@@ -337,7 +338,23 @@ func normalizeVectorDocs(docs []*SearchContent) []lexeme {
 		docValue := interfaceToValue(doc.Value)
 		var wordBuffer bytes.Buffer
 		rv = append(rv, camelSplitDoc(docValue, wordBuffer, doc)...)
-		rv = append(rv, symbolsSubTokensSplitDoc(symbols, docValue, wordBuffer, doc)...)
+		subTokens := symbolsSubTokensSplitDoc(symbols, docValue, wordBuffer, doc)
+		rv = append(rv, subTokens...)
+
+		// index-side sub-token edge-grams: since jargon's tokenizer merges dotted/
+		// symbol-separated segments back together (e.g. "admin.securitygroup" stays one
+		// token), a bare sub-token gram like "se" (a prefix of "securitygroup") would
+		// otherwise never get indexed. Emitting the edge-grams here lets query-time
+		// symbol-split terms (see FullTextSearchQuery) match progressively typed,
+		// dotted/underscored/slashed/dashed input without needing a `:*` prefix operator.
+		subTokenGramWeight := lowerWeight(doc.Weight)
+		for _, sub := range subTokens {
+			grams, _ := jargon.TokenizeString(sub.value).Filter(edgeGramFilter).Words().ToSlice()
+			for _, gram := range grams {
+				rv = append(rv, lexeme{gram.String(), sub.pos, subTokenGramWeight})
+			}
+		}
+
 		symbolsFullTokens := symbolsFullTokensSplitDoc(symbols, docValue, wordBuffer, doc)
 		for _, v := range symbolsFullTokens {
 			if len(v.value) >= 1 {
@@ -382,9 +399,21 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 	return exp.NewLiteralExpression("?::tsvector", sb.String())
 }
 
-func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
-	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold}
-	filters = append(filters, additionalFilters...)
+// symbolQuerySplitChars mirrors the symbol set that normalizeVectorDocs splits index-side
+// documents on. FullTextSearchQuery uses it to build query-time variants that can match
+// the sub-token edge-grams and joined-token prefixes indexed for those documents, without
+// resorting to a `:*` prefix tsquery operator (which can cause pathological GIN scans).
+var symbolQuerySplitChars = map[rune]struct{}{
+	'.': {},
+	'_': {},
+	'/': {},
+	'-': {},
+}
+
+// tokenizeSearchText runs the same jargon tokenize/lowercase/fold/strip pipeline the
+// original (pre-symbol-aware) FullTextSearchQuery used, so each query variant is
+// normalized identically.
+func tokenizeSearchText(input string, filters []jargon.Filter) string {
 	tokens := jargon.TokenizeString(input).Filter(filters...).Words()
 
 	var searchTerms []string
@@ -410,17 +439,78 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 		searchTerms = append(searchTerms, t)
 	}
 
-	searchText := strings.Join(searchTerms, " ")
-	stemmedSearchText, _ := jargon.TokenizeString(searchText).Filter(stemmer.English).String()
+	return strings.Join(searchTerms, " ")
+}
 
-	if searchText == stemmedSearchText {
-		return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", searchText)
+func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
+	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold}
+	filters = append(filters, additionalFilters...)
+
+	// origInput: today's back-compat behavior - input as-is.
+	origInput := input
+
+	// splitInput: every symbol rune becomes a space, so "ad.ph02t1.admin.se" becomes
+	// the separate terms "ad ph02t1 admin se". This matches the index-side sub-token
+	// edge-grams emitted by normalizeVectorDocs (e.g. "se" as a gram of "securitygroup").
+	splitInput := strings.Map(func(r rune) rune {
+		if _, ok := symbolQuerySplitChars[r]; ok {
+			return ' '
+		}
+		return r
+	}, input)
+
+	// joinedInput: every symbol rune is deleted (whitespace is preserved), so
+	// "ad.ph02t1.admin.se" becomes the single term "adph02t1adminse". This matches the
+	// joined-token prefix lexemes normalizeVectorDocs already emits for symbol-separated
+	// documents (e.g. "adph02t1adminse" as a prefix of "adph02t1adminsecuritygroup").
+	joinedInput := strings.Map(func(r rune) rune {
+		if _, ok := symbolQuerySplitChars[r]; ok {
+			return -1
+		}
+		return r
+	}, input)
+
+	var texts []string
+	seen := make(map[string]struct{}, 6)
+	addText := func(s string) {
+		if s == "" {
+			return
+		}
+		if _, ok := seen[s]; ok {
+			return
+		}
+		seen[s] = struct{}{}
+		texts = append(texts, s)
 	}
 
-	return exp.NewLiteralExpression(
-		"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
-		searchText,
-		stemmedSearchText)
+	for _, variant := range []string{origInput, splitInput, joinedInput} {
+		searchText := tokenizeSearchText(variant, filters)
+		stemmedSearchText, _ := jargon.TokenizeString(searchText).Filter(stemmer.English).String()
+		addText(searchText)
+		addText(stemmedSearchText)
+	}
+
+	if len(texts) == 0 {
+		return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", "")
+	}
+
+	if len(texts) == 1 {
+		return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", texts[0])
+	}
+
+	sb := strings.Builder{}
+	args := make([]interface{}, 0, len(texts))
+	sb.WriteString("(")
+	for i, t := range texts {
+		if i > 0 {
+			sb.WriteString(" || ")
+		}
+		sb.WriteString("websearch_to_tsquery('simple', ?)")
+		args = append(args, t)
+	}
+	sb.WriteString(")")
+
+	return exp.NewLiteralExpression(sb.String(), args...)
 }
 
 type lexeme struct {
