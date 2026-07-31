@@ -51,7 +51,9 @@ func (d *pgdbDescriptorPasta) GetPartitionDateRange() pgdb_v1.MessageOptions_Par
 }
 
 func (d *pgdbDescriptorPasta) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
-	return nil
+	return pgdb_v1.MessageOptions_StorageParameters_builder{
+		Fillfactor: proto.Int32(90),
+	}.Build()
 }
 
 func (d *pgdbDescriptorPasta) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -4424,7 +4426,9 @@ func (d *pgdbDescriptorGarlicIngredient) GetPartitionDateRange() pgdb_v1.Message
 }
 
 func (d *pgdbDescriptorGarlicIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
-	return nil
+	return pgdb_v1.MessageOptions_StorageParameters_builder{
+		Fillfactor: proto.Int32(90),
+	}.Build()
 }
 
 func (d *pgdbDescriptorGarlicIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
@@ -5790,7 +5794,9 @@ func (d *pgdbDescriptorCheeseIngredient) GetPartitionDateRange() pgdb_v1.Message
 }
 
 func (d *pgdbDescriptorCheeseIngredient) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
-	return nil
+	return pgdb_v1.MessageOptions_StorageParameters_builder{
+		Fillfactor: proto.Int32(90),
+	}.Build()
 }
 
 func (d *pgdbDescriptorCheeseIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {

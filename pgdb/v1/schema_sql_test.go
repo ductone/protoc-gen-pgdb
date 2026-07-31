@@ -401,6 +401,72 @@ func TestStorageParams2with(t *testing.T) {
 	}
 }
 
+func TestPartitionStorageParams(t *testing.T) {
+	makeFillfactor := func(v int32) *MessageOptions_StorageParameters {
+		sp := &MessageOptions_StorageParameters{}
+		sp.SetFillfactor(v)
+		return sp
+	}
+
+	tests := []struct {
+		name     string
+		desc     Descriptor
+		expected string
+	}{
+		{
+			name: "No storage parameters, no clause",
+			desc: &mockDescriptor{
+				tableName: "test_table",
+			},
+			expected: "",
+		},
+		{
+			// Leading newline matters: the clause is concatenated straight onto a
+			// CREATE TABLE ... PARTITION OF ... FOR VALUES ... statement.
+			name: "Fillfactor is emitted with a leading newline",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeFillfactor(90),
+			},
+			expected: "\nWITH (\n  fillfactor = 90\n)",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := partitionStorageParams(test.desc)
+			if result != test.expected {
+				t.Errorf("Expected:\n%q\nGot:\n%q", test.expected, result)
+			}
+		})
+	}
+}
+
+// TestPartitionStorageParamsClauseOrder pins the clause order PostgreSQL requires:
+// WITH must follow the FOR VALUES bound spec, not precede it.
+func TestPartitionStorageParamsClauseOrder(t *testing.T) {
+	sp := &MessageOptions_StorageParameters{}
+	sp.SetFillfactor(90)
+	desc := &mockDescriptorWithStorageParams{
+		mockDescriptor: mockDescriptor{tableName: "child"},
+		storageParams:  sp,
+	}
+
+	stmt := `CREATE TABLE IF NOT EXISTS child PARTITION OF parent FOR VALUES IN ($1)` + partitionStorageParams(desc) + `;`
+
+	forValues := strings.Index(stmt, "FOR VALUES")
+	with := strings.Index(stmt, "WITH (")
+	if forValues == -1 || with == -1 {
+		t.Fatalf("expected both FOR VALUES and WITH in:\n%s", stmt)
+	}
+	if with < forValues {
+		t.Errorf("WITH must come after FOR VALUES, got:\n%s", stmt)
+	}
+	if !strings.HasSuffix(stmt, ");") {
+		t.Errorf("statement must end with );, got:\n%s", stmt)
+	}
+}
+
 func TestStorageParams2alter(t *testing.T) {
 	makeWithVacuumThreshold := func(threshold int32) *MessageOptions_StorageParameters {
 		sp := &MessageOptions_StorageParameters{}

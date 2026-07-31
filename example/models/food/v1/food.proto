@@ -11,6 +11,7 @@ option go_package = "github.com/ductone/protoc-gen-pgdb/example/models/food/v1";
 
 message Pasta {
   option (pgdb.v1.msg).partitioned = true;
+  option (pgdb.v1.msg).storage_parameters = {fillfactor: 90};
   option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id",
@@ -141,6 +142,7 @@ message GarlicIngredient {
     partitioned_by_created_at: true
     partitioned_by_date_range: PARTITIONED_BY_DATE_RANGE_MONTH
   };
+  option (pgdb.v1.msg).storage_parameters = {fillfactor: 90};
   option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id",
@@ -170,6 +172,7 @@ message CheeseIngredient {
     partitioned_by_date_range: PARTITIONED_BY_DATE_RANGE_MONTH
   };
   option (pgdb.v1.msg).use_pkskv2_column = true;
+  option (pgdb.v1.msg).storage_parameters = {fillfactor: 90};
   option (dynamo.v1.msg).key = {
     pk_fields: [
       "tenant_id",
