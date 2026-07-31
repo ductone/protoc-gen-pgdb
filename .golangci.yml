@@ -97,6 +97,11 @@ linters:
       - linters:
           - godot
         source: (TODO)
+      # example/ consumes the in-repo library through a local replace; scoped to
+      # that file so the check still applies to the root go.mod.
+      - linters:
+          - gomoddirectives
+        path: example/go\.mod
     paths:
       - internal/stackoverflow/generated.go
       - third_party$

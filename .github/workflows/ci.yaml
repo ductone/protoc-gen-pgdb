@@ -15,6 +15,14 @@ jobs:
         with:
           version: latest
           args: --timeout=3m
+      # example/ is a separate module, so the root invocation above does not
+      # reach it -- and it holds every integration test.
+      - name: Run linters (example module)
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: latest
+          args: --timeout=3m
+          working-directory: example
   go-test:
     strategy:
       matrix:

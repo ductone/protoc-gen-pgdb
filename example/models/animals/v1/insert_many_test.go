@@ -168,7 +168,8 @@ func TestInsertMany_OneConflictAcceptNew(t *testing.T) {
 	// Verify the first record was updated
 	var displayName string
 	var updatedAt string
-	err = pg.DB.QueryRow(ctx, `SELECT "pb$display_name", "pb$updated_at" FROM pb_pet_models_animals_v1_8a3723d5 WHERE "pb$tenant_id" = $1 AND "pb$id" = $2`, "t1", "pet1").Scan(&displayName, &updatedAt)
+	const updatedPetQuery = `SELECT "pb$display_name", "pb$updated_at" FROM pb_pet_models_animals_v1_8a3723d5 WHERE "pb$tenant_id" = $1 AND "pb$id" = $2`
+	err = pg.DB.QueryRow(ctx, updatedPetQuery, "t1", "pet1").Scan(&displayName, &updatedAt)
 	require.NoError(t, err)
 	require.Equal(t, "New Name", displayName)
 }

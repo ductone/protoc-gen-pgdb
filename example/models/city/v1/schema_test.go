@@ -26,7 +26,6 @@ func TestSchemaAttractions(t *testing.T) {
 	schema, err := pgdb_v1.CreateSchema(&Attractions{}, pgdb_v1.DialectV13)
 	require.NoError(t, err)
 	for _, line := range schema {
-
 		// fmt.Printf("%s \n", line)
 		_, err := pg.DB.Exec(ctx, line)
 		require.NoErrorf(t, err, "TestSchemaPet: failed to execute sql: '\n%s\n'", line)
@@ -218,7 +217,6 @@ func TestNestedAccessorSQLGeneration(t *testing.T) {
 			require.Contains(t, sql, tt.mustContain, "SQL should contain expected clause")
 		})
 	}
-
 }
 
 // TestNestedAccessorQueryExecution is an integration test that verifies

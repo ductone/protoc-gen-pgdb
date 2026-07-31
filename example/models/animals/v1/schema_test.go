@@ -246,7 +246,6 @@ func TestSchemaPet(t *testing.T) {
 	res, err = pg.DB.Exec(ctx, query, params...)
 	require.NoError(t, err, "query failed: %s\n\n%+v\n\n", query, params)
 	require.Equal(t, int64(1), res.RowsAffected())
-
 }
 
 func TestSchemaBook(t *testing.T) {

@@ -194,21 +194,21 @@ func TestSchemaFoodPasta(t *testing.T) {
 		require.NoError(t, err)
 		require.Len(t, schema, 0, "Should have no migrations after repair")
 
-		fakeTenantIds := []string{"t1", "t2", "t3"}
+		fakeTenantIDs := []string{"t1", "t2", "t3"}
 		protoTableName := smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName()
 
 		if smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().IsPartitioned() {
-			verifyMasterPartition(t, pg, protoTableName, fakeTenantIds)
+			verifyMasterPartition(t, pg, protoTableName, fakeTenantIDs)
 			// Test sub-tables for partitions
 			// Create sub-tables
-			testCreatePartitionTables(t, pg, smsg, fakeTenantIds)
-			childTables := verifySubTables(t, pg, protoTableName, fakeTenantIds)
+			testCreatePartitionTables(t, pg, smsg, fakeTenantIDs)
+			childTables := verifySubTables(t, pg, protoTableName, fakeTenantIDs)
 			if sp := smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().GetStorageParameters(); sp != nil && sp.HasFillfactor() {
 				requireChildFillfactor(t, pg, childTables, fmt.Sprintf("%d", sp.GetFillfactor()))
 				childFillfactorAsserted++
 			}
 			// Insert data into master table
-			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, testobj.objects)
+			testInsertAndVerify(t, pg, protoTableName, fakeTenantIDs, testobj.objects)
 		}
 	}
 
@@ -221,10 +221,10 @@ func TestSchemaFoodPasta(t *testing.T) {
 		"no partitioned model declared a fillfactor; the child reloptions assertion stopped running")
 }
 
-func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflectMessage, fakeTenantIds []string) {
+func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflectMessage, fakeTenantIDs []string) {
 	ctx := context.Background()
 	// Create sub-tables
-	tenantIter := TenantIteratorTest(ctx, fakeTenantIds)
+	tenantIter := TenantIteratorTest(ctx, fakeTenantIDs)
 	// Don't really need tenantId in update func but good for logging purposes.
 	err := pgdb_v1.TenantPartitionsUpdate(ctx, pg.DB, msg, pgdb_v1.DialectV13, tenantIter, func(ctx context.Context, schema string, args ...interface{}) error {
 		_, err := pg.DB.Exec(ctx, schema, args...)
@@ -257,7 +257,7 @@ func requireChildFillfactor(t *testing.T, pg *pgtest.PG, childTables []string, w
 	}
 }
 
-func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
+func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIDs []string) {
 	ctx := context.Background()
 	// fmt.Println(tableName)
 	// Verify number of master partition tables
@@ -281,10 +281,9 @@ func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTe
 	require.NoError(t, rows.Err())
 	require.Equal(t, 1, partTableCount, "Should have one master partition table")
 	require.Equal(t, tableName, queryTableName, "Should have matching table names")
-
 }
 
-func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) []string {
+func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIDs []string) []string {
 	ctx := context.Background()
 	// Verify number of sub tables
 	// Verify sub-partition tables
@@ -305,7 +304,7 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 	var parentTable string
 	var childTable string
 	rowCount := 0
-	selectedSubTableNames := make([]string, 0, len(fakeTenantIds))
+	selectedSubTableNames := make([]string, 0, len(fakeTenantIDs))
 
 	for rows.Next() {
 		err = rows.Scan(&parentTable, &childTable)
@@ -317,12 +316,12 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 	}
 
 	require.NoError(t, rows.Err())
-	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one sub-partition table per fake tenant: %v", selectedSubTableNames)
+	require.Equal(t, len(fakeTenantIDs), rowCount, "Should have one sub-partition table per fake tenant: %v", selectedSubTableNames)
 
 	return selectedSubTableNames
 }
 
-func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, objects []pgdb_v1.DBReflectMessage) {
+func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIDs []string, objects []pgdb_v1.DBReflectMessage) {
 	ctx := context.Background()
 	// Insert data into master table
 	// Verify data in master table
@@ -347,9 +346,9 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 	var tenantIdSelect string
 	selectColStr := msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TenantField().Name
 	// Test select from master table
-	masterSelectSql := `SELECT %s FROM %s`
-	fmtSql := fmt.Sprintf(masterSelectSql, selectColStr, tableName)
-	rows, err := pg.DB.Query(ctx, fmtSql)
+	masterSelectSQL := `SELECT %s FROM %s`
+	fmtSQL := fmt.Sprintf(masterSelectSQL, selectColStr, tableName)
+	rows, err := pg.DB.Query(ctx, fmtSQL)
 	require.NoError(t, err)
 	defer rows.Close()
 	rowCount := 0
@@ -358,18 +357,17 @@ func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTena
 		require.NoError(t, err)
 		rowCount += 1
 	}
-	fmt.Println()
 	require.NoError(t, rows.Err())
-	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one row per tenant")
+	require.Equal(t, len(fakeTenantIDs), rowCount, "Should have one row per tenant")
 
 	subTables, err := readPartitionSubTables(ctx, pg.DB, msg.DBReflect(pgdb_v1.DialectV13).Descriptor())
 	require.NoError(t, err)
 
 	// Test select each tenant
 	for _, subTable := range subTables {
-		selectSql := `SELECT %s FROM %s`
-		fmtSql := fmt.Sprintf(selectSql, selectColStr, subTable)
-		rows, err := pg.DB.Query(ctx, fmtSql)
+		selectSQL := `SELECT %s FROM %s`
+		fmtSQL := fmt.Sprintf(selectSQL, selectColStr, subTable)
+		rows, err := pg.DB.Query(ctx, fmtSQL)
 		require.NoError(t, err)
 		defer rows.Close()
 		rowCount := 0
@@ -394,14 +392,13 @@ func TenantIteratorTest(ctx context.Context, tenantList []string) pgdb_v1.Tenant
 		index += 1
 		return tenantId, nil
 	}
-
 }
 
 type sqlScanner interface {
 	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
 }
 
-// this
+// this.
 func readPartitionSubTables(ctx context.Context, db sqlScanner, desc pgdb_v1.Descriptor) ([]string, error) {
 	dialect := goqu.Dialect("postgres")
 
@@ -512,7 +509,6 @@ func TestSchemaSauceIngredientNetworkRange(t *testing.T) {
 		}, values)
 	}
 	require.Equal(t, 1, count)
-
 }
 
 func TestSchemaSauceIngredientInBehavoirs(t *testing.T) {
@@ -562,7 +558,6 @@ func TestSchemaSauceIngredientInBehavoirs(t *testing.T) {
 			}
 			require.Equal(t, tx.count, count)
 		})
-
 	}
 }
 
@@ -762,7 +757,7 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 	requireChildFillfactor(t, pg, subTables, "90")
 }
 
-// generateKSUIDForTime creates a KSUID string for a given time
+// generateKSUIDForTime creates a KSUID string for a given time.
 func generateKSUIDForTime(t time.Time) string {
 	// Create a KSUID with the given timestamp
 	id, _ := ksuid.NewRandomWithTime(t)
@@ -845,17 +840,17 @@ func TestKSUIDCollation(t *testing.T) {
 	require.NoError(t, err)
 	defer rows.Close()
 
-	var eventIds []string
+	var eventIDs []string
 	for rows.Next() {
 		var eventId string
 		err = rows.Scan(&eventId)
 		require.NoError(t, err)
-		eventIds = append(eventIds, eventId)
+		eventIDs = append(eventIDs, eventId)
 	}
 
 	// Verify the order matches the chronological order of the KSUIDs
-	require.Equal(t, testData[0].GetEventId(), eventIds[0], "First KSUID should be earlier timestamp")
-	require.Equal(t, testData[1].GetEventId(), eventIds[1], "Second KSUID should be later timestamp")
+	require.Equal(t, testData[0].GetEventId(), eventIDs[0], "First KSUID should be earlier timestamp")
+	require.Equal(t, testData[1].GetEventId(), eventIDs[1], "Second KSUID should be later timestamp")
 }
 
 func TestPastaIngredientBitVector(t *testing.T) {
@@ -895,8 +890,8 @@ func TestPastaIngredientBitVector(t *testing.T) {
 	}
 
 	// Create partitions for tenant_id
-	fakeTenantIds := []string{"t1"}
-	testCreatePartitionTables(t, pg, testData[0], fakeTenantIds)
+	fakeTenantIDs := []string{"t1"}
+	testCreatePartitionTables(t, pg, testData[0], fakeTenantIDs)
 
 	// Insert test data
 	for _, data := range testData {
@@ -994,8 +989,8 @@ func TestPastaIngredientBitVectorRetrieval(t *testing.T) {
 	// fmt.Println(schema)
 
 	// Create partitions for tenant_id
-	fakeTenantIds := []string{"t1"}
-	testCreatePartitionTables(t, pg, testData, fakeTenantIds)
+	fakeTenantIDs := []string{"t1"}
+	testCreatePartitionTables(t, pg, testData, fakeTenantIDs)
 
 	// Insert test data
 	sql, args, err := pgdb_v1.Insert(testData, pgdb_v1.DialectV13)
@@ -1060,7 +1055,7 @@ func bitStringToBytes(t *testing.T, bitString string) []byte {
 	bytes := make([]byte, len(bitString)/8)
 	for i := 0; i < len(bitString); i += 8 {
 		byteValue := bitString[i : i+8]
-		intValue, err := strconv.ParseInt(byteValue, 2, 64)
+		intValue, err := strconv.ParseUint(byteValue, 2, 8)
 		require.NoError(t, err)
 		bytes[i/8] = byte(intValue)
 	}
@@ -1103,8 +1098,8 @@ func TestKSUIDCollationV17(t *testing.T) {
 	}
 
 	// Create tenant partitions for the partitioned table
-	fakeTenantIds := []string{"t1"}
-	tenantIter := TenantIteratorTest(ctx, fakeTenantIds)
+	fakeTenantIDs := []string{"t1"}
+	tenantIter := TenantIteratorTest(ctx, fakeTenantIDs)
 	err = pgdb_v1.TenantPartitionsUpdate(ctx, pg.DB, smsg, pgdb_v1.DialectV17, tenantIter, func(ctx context.Context, schema string, args ...interface{}) error {
 		_, err := pg.DB.Exec(ctx, schema, args...)
 		require.NoError(t, err)
@@ -1235,9 +1230,9 @@ func TestPartitionChildStorageParamRetrofit(t *testing.T) {
 		require.NoErrorf(t, err, "failed to execute: %s", q)
 	}
 
-	fakeTenantIds := []string{"t1", "t2", "t3"}
-	testCreatePartitionTables(t, pg, msg, fakeTenantIds)
-	childTables := verifySubTables(t, pg, tableName, fakeTenantIds)
+	fakeTenantIDs := []string{"t1", "t2", "t3"}
+	testCreatePartitionTables(t, pg, msg, fakeTenantIDs)
+	childTables := verifySubTables(t, pg, tableName, fakeTenantIDs)
 	require.NotEmpty(t, childTables)
 
 	// Children created after the declaration already carry it, so nothing is pending.
