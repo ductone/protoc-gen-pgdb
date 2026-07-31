@@ -2,6 +2,7 @@ package v1
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -465,6 +466,72 @@ func TestPartitionStorageParamsClauseOrder(t *testing.T) {
 	if !strings.HasSuffix(stmt, ");") {
 		t.Errorf("statement must end with );, got:\n%s", stmt)
 	}
+}
+
+func TestPartitionChildAlters(t *testing.T) {
+	sp := &MessageOptions_StorageParameters{}
+	sp.SetFillfactor(90)
+	desc := &mockDescriptorWithStorageParams{
+		mockDescriptor: mockDescriptor{tableName: "parent"},
+		storageParams:  sp,
+	}
+
+	drifted := func(n int) []partitionChildParams {
+		out := make([]partitionChildParams, 0, n)
+		for i := 0; i < n; i++ {
+			out = append(out, partitionChildParams{
+				tableName: fmt.Sprintf("parent_%03d", i),
+				params:    map[string]string{},
+			})
+		}
+		return out
+	}
+
+	t.Run("children already correct emit nothing", func(t *testing.T) {
+		converged := []partitionChildParams{
+			{tableName: "parent_000", params: map[string]string{"fillfactor": "90"}},
+			{tableName: "parent_001", params: map[string]string{"fillfactor": "90"}},
+		}
+		if got := partitionChildAlters(desc, converged, 50); len(got) != 0 {
+			t.Errorf("Expected no ALTERs for converged children, got %d:\n%v", len(got), got)
+		}
+	})
+
+	t.Run("under the limit emits one per drifted child", func(t *testing.T) {
+		alters := partitionChildAlters(desc, drifted(3), 50)
+		if len(alters) != 3 {
+			t.Fatalf("Expected 3 ALTERs, got %d", len(alters))
+		}
+		for i, alter := range alters {
+			want := fmt.Sprintf("parent_%03d", i)
+			if !strings.Contains(alter, want) {
+				t.Errorf("ALTER %d should target %s, got:\n%s", i, want, alter)
+			}
+			if !strings.Contains(alter, "fillfactor = 90") {
+				t.Errorf("ALTER %d should set fillfactor = 90, got:\n%s", i, alter)
+			}
+		}
+	})
+
+	t.Run("over the limit truncates in order", func(t *testing.T) {
+		alters := partitionChildAlters(desc, drifted(120), 50)
+		if len(alters) != 50 {
+			t.Fatalf("A single run must stay bounded at 50, got %d", len(alters))
+		}
+		if !strings.Contains(alters[0], "parent_000") {
+			t.Errorf("First ALTER should target parent_000, got:\n%s", alters[0])
+		}
+		if !strings.Contains(alters[49], "parent_049") {
+			t.Errorf("Last ALTER should target parent_049, got:\n%s", alters[49])
+		}
+	})
+
+	t.Run("no storage parameters declared emits nothing", func(t *testing.T) {
+		bare := &mockDescriptor{tableName: "parent"}
+		if got := partitionChildAlters(bare, drifted(5), 50); len(got) != 0 {
+			t.Errorf("Expected no ALTERs when nothing is declared, got %d", len(got))
+		}
+	})
 }
 
 func TestStorageParams2alter(t *testing.T) {

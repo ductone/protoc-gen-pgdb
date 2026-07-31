@@ -1173,3 +1173,88 @@ func TestKSUIDCollationV17(t *testing.T) {
 	require.Equal(t, testData[0].GetIngredientId(), ingredientIDs[0], "First KSUID should be earlier timestamp")
 	require.Equal(t, testData[1].GetIngredientId(), ingredientIDs[1], "Second KSUID should be later timestamp")
 }
+
+// storageParamAlters filters rendered migrations down to storage-parameter ALTERs.
+func storageParamAlters(lines []string) []string {
+	out := make([]string, 0)
+	for _, q := range lines {
+		if strings.HasPrefix(strings.TrimSpace(q), "ALTER TABLE") && strings.Contains(q, "SET (") {
+			out = append(out, q)
+		}
+	}
+	return out
+}
+
+// requireNoChildFillfactor is the negative of requireChildFillfactor: it asserts the
+// child carries no fillfactor at all, which is how a partition created before the
+// model declared storage parameters looks.
+func requireNoChildFillfactor(t *testing.T, pg *pgtest.PG, child string) {
+	t.Helper()
+	var fillfactor *string
+	err := pg.DB.QueryRow(context.Background(), `SELECT (
+			SELECT option_value FROM pg_options_to_table(c.reloptions)
+			WHERE option_name = 'fillfactor'
+		)
+		FROM pg_class c
+		JOIN pg_namespace n ON n.oid = c.relnamespace
+		WHERE n.nspname = 'public' AND c.relname = $1;`, child).Scan(&fillfactor)
+	require.NoErrorf(t, err, "reading reloptions for partition %s", child)
+	require.Nilf(t, fillfactor, "partition %s should have no fillfactor yet", child)
+}
+
+// TestPartitionChildStorageParamRetrofit covers the retrofit path. Tenant partitions
+// never roll over, so a child that already existed when the model gained
+// storage_parameters would otherwise keep the default forever.
+func TestPartitionChildStorageParamRetrofit(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin; CREATE EXTENSION IF NOT EXISTS vector;")
+	require.NoError(t, err)
+
+	// Pasta is tenant-list partitioned and declares fillfactor: 90.
+	msg := Pasta_builder{TenantId: "t1", Id: "p1"}.Build()
+	tableName := msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName()
+
+	schema, err := pgdb_v1.CreateSchema(msg, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	for _, q := range schema {
+		_, err = pg.DB.Exec(ctx, q)
+		require.NoErrorf(t, err, "failed to execute: %s", q)
+	}
+
+	fakeTenantIds := []string{"t1", "t2", "t3"}
+	testCreatePartitionTables(t, pg, msg, fakeTenantIds)
+	childTables := verifySubTables(t, pg, tableName, fakeTenantIds)
+	require.NotEmpty(t, childTables)
+
+	// Children created after the declaration already carry it, so nothing is pending.
+	lines, err := pgdb_v1.Migrations(ctx, pg.DB, msg, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	require.Empty(t, storageParamAlters(lines), "converged children should emit no ALTER")
+
+	// Simulate a child that predates the declaration.
+	stale := childTables[0]
+	_, err = pg.DB.Exec(ctx, fmt.Sprintf("ALTER TABLE %s RESET (fillfactor)", stale))
+	require.NoError(t, err)
+	requireNoChildFillfactor(t, pg, stale)
+
+	lines, err = pgdb_v1.Migrations(ctx, pg.DB, msg, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	alters := storageParamAlters(lines)
+	require.Len(t, alters, 1, "only the stale child should be retrofitted")
+	require.Contains(t, alters[0], stale)
+
+	for _, q := range alters {
+		_, err = pg.DB.Exec(ctx, q)
+		require.NoErrorf(t, err, "failed to execute: %s", q)
+	}
+	requireChildFillfactor(t, pg, []string{stale}, "90")
+
+	// And no churn once every child is correct again.
+	lines, err = pgdb_v1.Migrations(ctx, pg.DB, msg, pgdb_v1.DialectV13)
+	require.NoError(t, err)
+	require.Empty(t, storageParamAlters(lines), "no ALTER once children are correct")
+}

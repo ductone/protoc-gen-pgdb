@@ -208,6 +208,13 @@ func partitionStorageParams(desc Descriptor) string {
 }
 
 func storageParams2alter(desc Descriptor, existingParams map[string]string) string {
+	return storageParams2alterTable(desc, desc.TableName(), existingParams)
+}
+
+// storageParams2alterTable diffs desc's declared storage parameters against
+// existingParams and renders the ALTER for tableName. Partition children need the
+// same diff applied to a relation the descriptor does not name.
+func storageParams2alterTable(desc Descriptor, tableName string, existingParams map[string]string) string {
 	sp := desc.GetStorageParameters()
 	if sp == nil {
 		return ""
@@ -338,7 +345,7 @@ func storageParams2alter(desc Descriptor, existingParams map[string]string) stri
 
 	buf := &bytes.Buffer{}
 	_, _ = buf.WriteString("ALTER TABLE ")
-	pgWriteString(buf, desc.TableName())
+	pgWriteString(buf, tableName)
 	_, _ = buf.WriteString("\nSET (\n  ")
 	_, _ = buf.WriteString(strings.Join(params, ",\n  "))
 	_, _ = buf.WriteString("\n)\n")
