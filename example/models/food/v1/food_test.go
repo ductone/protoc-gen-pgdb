@@ -112,6 +112,8 @@ func TestSchemaFoodPasta(t *testing.T) {
 		},
 	}
 
+	childFillfactorAsserted := 0
+
 	for _, testobj := range testobjects {
 		smsg := testobj.objects[0]
 		schema, err := pgdb_v1.CreateSchema(smsg, pgdb_v1.DialectV13)
@@ -203,12 +205,20 @@ func TestSchemaFoodPasta(t *testing.T) {
 			childTables := verifySubTables(t, pg, protoTableName, fakeTenantIds)
 			if sp := smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().GetStorageParameters(); sp != nil && sp.HasFillfactor() {
 				requireChildFillfactor(t, pg, childTables, fmt.Sprintf("%d", sp.GetFillfactor()))
+				childFillfactorAsserted++
 			}
 			// Insert data into master table
 			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, testobj.objects)
 		}
 	}
 
+	// Only models declaring a fillfactor are checked above, so a dropped declaration
+	// would make that assertion vanish rather than fail. This is the only test
+	// covering the tenant-list path, which is in turn the only coverage of the
+	// Migrations suppression that keeps ALTER off a partitioned parent (SQLSTATE
+	// 42809), so the assertion going quiet must itself be a failure.
+	require.Positive(t, childFillfactorAsserted,
+		"no partitioned model declared a fillfactor; the child reloptions assertion stopped running")
 }
 
 func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflectMessage, fakeTenantIds []string) {
