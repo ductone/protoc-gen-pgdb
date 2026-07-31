@@ -200,7 +200,10 @@ func TestSchemaFoodPasta(t *testing.T) {
 			// Test sub-tables for partitions
 			// Create sub-tables
 			testCreatePartitionTables(t, pg, smsg, fakeTenantIds)
-			verifySubTables(t, pg, protoTableName, fakeTenantIds)
+			childTables := verifySubTables(t, pg, protoTableName, fakeTenantIds)
+			if sp := smsg.DBReflect(pgdb_v1.DialectV13).Descriptor().GetStorageParameters(); sp != nil && sp.HasFillfactor() {
+				requireChildFillfactor(t, pg, childTables, fmt.Sprintf("%d", sp.GetFillfactor()))
+			}
 			// Insert data into master table
 			testInsertAndVerify(t, pg, protoTableName, fakeTenantIds, testobj.objects)
 		}
@@ -219,6 +222,29 @@ func testCreatePartitionTables(t *testing.T, pg *pgtest.PG, msg pgdb_v1.DBReflec
 		return nil
 	})
 	require.NoError(t, err)
+}
+
+// requireChildFillfactor asserts every child partition carries the fillfactor the
+// model declared. PostgreSQL does not propagate reloptions from a partitioned parent
+// to children created via PARTITION OF, so a child created without an explicit WITH
+// clause silently falls back to the default and the option becomes a no-op.
+func requireChildFillfactor(t *testing.T, pg *pgtest.PG, childTables []string, want string) {
+	t.Helper()
+	ctx := context.Background()
+	require.NotEmpty(t, childTables, "expected at least one child partition to assert against")
+	for _, child := range childTables {
+		var fillfactor *string
+		err := pg.DB.QueryRow(ctx, `SELECT (
+				SELECT option_value FROM pg_options_to_table(c.reloptions)
+				WHERE option_name = 'fillfactor'
+			)
+			FROM pg_class c
+			JOIN pg_namespace n ON n.oid = c.relnamespace
+			WHERE n.nspname = 'public' AND c.relname = $1;`, child).Scan(&fillfactor)
+		require.NoErrorf(t, err, "reading reloptions for partition %s", child)
+		require.NotNilf(t, fillfactor, "partition %s has no fillfactor: PARTITION OF does not inherit reloptions from the parent", child)
+		require.Equalf(t, want, *fillfactor, "partition %s fillfactor", child)
+	}
 }
 
 func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
@@ -248,7 +274,7 @@ func verifyMasterPartition(t *testing.T, pg *pgtest.PG, tableName string, fakeTe
 
 }
 
-func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) {
+func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string) []string {
 	ctx := context.Background()
 	// Verify number of sub tables
 	// Verify sub-partition tables
@@ -282,6 +308,8 @@ func verifySubTables(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantId
 
 	require.NoError(t, rows.Err())
 	require.Equal(t, len(fakeTenantIds), rowCount, "Should have one sub-partition table per fake tenant: %v", selectedSubTableNames)
+
+	return selectedSubTableNames
 }
 
 func testInsertAndVerify(t *testing.T, pg *pgtest.PG, tableName string, fakeTenantIds []string, objects []pgdb_v1.DBReflectMessage) {
@@ -623,6 +651,8 @@ func TestDatePartitionsUpdate(t *testing.T) {
 			createdAt.UTC().Format("2006-01"),
 			"Data should be in correct monthly partition")
 	}
+
+	requireChildFillfactor(t, pg, subTables, "90")
 }
 
 func TestEventIDPartitionsUpdate(t *testing.T) {
@@ -718,6 +748,8 @@ func TestEventIDPartitionsUpdate(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, testData[i].GetEventId(), eventId, "Data should be in correct monthly partition")
 	}
+
+	requireChildFillfactor(t, pg, subTables, "90")
 }
 
 // generateKSUIDForTime creates a KSUID string for a given time

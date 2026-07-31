@@ -74,10 +74,13 @@ func CreateSchema(msg DBReflectMessage, dialect Dialect) ([]string, error) {
 
 	_, _ = buf.WriteString(")")
 
-	// Add WITH clause for storage parameters if configured
-	if withClause := storageParams2with(desc); withClause != "" {
-		_, _ = buf.WriteString("\n")
-		_, _ = buf.WriteString(withClause)
+	// Children carry storage parameters instead, via the WITH clause the
+	// *PartitionsUpdate functions attach to each CREATE TABLE ... PARTITION OF.
+	if !isPartitionedParent(desc) {
+		if withClause := storageParams2with(desc); withClause != "" {
+			_, _ = buf.WriteString("\n")
+			_, _ = buf.WriteString(withClause)
+		}
 	}
 	_, _ = buf.WriteString("\n")
 
@@ -399,14 +402,16 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialec
 		}
 	}
 
-	// Handle storage parameters for existing tables
-	existingStorageParams, err := readStorageParameters(ctx, db, desc)
-	if err != nil {
-		return nil, err
-	}
+	// Handle storage parameters for existing tables.
+	if !isPartitionedParent(desc) {
+		existingStorageParams, err := readStorageParameters(ctx, db, desc)
+		if err != nil {
+			return nil, err
+		}
 
-	if storageParamsAlter := storageParams2alter(desc, existingStorageParams); storageParamsAlter != "" {
-		rv = append(rv, storageParamsAlter)
+		if storageParamsAlter := storageParams2alter(desc, existingStorageParams); storageParamsAlter != "" {
+			rv = append(rv, storageParamsAlter)
+		}
 	}
 
 	return rv, nil
@@ -447,7 +452,8 @@ type TenantIteratorFunc func(ctx context.Context) (string, error)
 type SchemaUpdateFunc func(ctx context.Context, schema string, args ...interface{}) error
 
 func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialect Dialect, iteratorFunc TenantIteratorFunc, updateFunc SchemaUpdateFunc) error {
-	tableName := msg.DBReflect(dialect).Descriptor().TableName()
+	desc := msg.DBReflect(dialect).Descriptor()
+	tableName := desc.TableName()
 
 	isParentPartition, err := tableIsParentPartition(ctx, db, tableName)
 	if err != nil {
@@ -462,7 +468,7 @@ func TenantPartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMes
 	// We'll only need to attach partitions if the table already exists as a regular table.
 	// but this shouldn't happen.
 	// As for detaching we'll only need to do that if we want to preserve data in a partitioned table.
-	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES IN ($1);`
+	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES IN ($1)` + partitionStorageParams(desc) + `;`
 
 	for {
 		tenantId, err := iteratorFunc(ctx)
@@ -509,7 +515,7 @@ func DatePartitionsUpdate(ctx context.Context, db sqlScanner, msg DBReflectMessa
 	}
 
 	// Create partition schema template
-	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES FROM ($1) TO ($2);`
+	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s FOR VALUES FROM ($1) TO ($2)` + partitionStorageParams(desc) + `;`
 
 	// Get partition interval
 	interval := desc.GetPartitionDateRange()
@@ -572,12 +578,12 @@ func KSUIDPartitionsUpdate(ctx context.Context, fieldName string, db sqlScanner,
 	}
 
 	// Create partition schema template
-	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s 
+	createPartitionSchema := `CREATE TABLE IF NOT EXISTS %s PARTITION OF %s
 		FOR VALUES FROM (
 			'%s'  -- Start KSUID for this time range
 		) TO (
 			'%s'  -- End KSUID for this time range
-		);`
+		)` + partitionStorageParams(desc) + `;`
 
 	// Get partition interval
 	interval := desc.GetPartitionDateRange()

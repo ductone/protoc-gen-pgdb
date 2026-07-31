@@ -190,6 +190,23 @@ func storageParams2with(desc Descriptor) string {
 	return "WITH (\n  " + strings.Join(params, ",\n  ") + "\n)"
 }
 
+// isPartitionedParent reports whether the model declares a partitioning strategy.
+// PostgreSQL rejects storage parameters on such a table (SQLSTATE 42809), so neither
+// the CREATE nor the drift-detection ALTER may carry them for it.
+func isPartitionedParent(desc Descriptor) bool {
+	return desc.IsPartitioned() || desc.IsPartitionedByCreatedAt() || desc.GetPartitionedByKsuidFieldName() != ""
+}
+
+// partitionStorageParams returns the WITH (...) clause a child partition needs.
+// PostgreSQL does not propagate reloptions from a partitioned parent to children
+// created via PARTITION OF, so every child must declare them itself.
+func partitionStorageParams(desc Descriptor) string {
+	if withClause := storageParams2with(desc); withClause != "" {
+		return "\n" + withClause
+	}
+	return ""
+}
+
 func storageParams2alter(desc Descriptor, existingParams map[string]string) string {
 	sp := desc.GetStorageParameters()
 	if sp == nil {
