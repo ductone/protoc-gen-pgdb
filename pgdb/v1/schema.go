@@ -290,16 +290,103 @@ func readStorageParameters(ctx context.Context, db sqlScanner, desc Descriptor) 
 		return storageParams, nil
 	}
 
-	// Parse reloptions array: {"autovacuum_vacuum_threshold=10000", "fillfactor=80"}
-	// Each element is in the format "key=value"
+	parseReloptions(reloptions, storageParams)
+
+	return storageParams, nil
+}
+
+// parseReloptions fills dst from a pg_class.reloptions array whose elements are
+// "key=value".
+func parseReloptions(reloptions []string, dst map[string]string) {
 	for _, opt := range reloptions {
 		parts := strings.SplitN(opt, "=", 2)
 		if len(parts) == 2 {
-			storageParams[parts[0]] = parts[1]
+			dst[parts[0]] = parts[1]
 		}
 	}
+}
 
-	return storageParams, nil
+// maxPartitionChildStorageParamAlters bounds how many child ALTERs one Migrations
+// call emits. Each takes a brief ACCESS EXCLUSIVE lock, and the consumer abandons
+// a table's remaining statements on the first lock_timeout, so an unbounded batch
+// on a many-tenant table could stall convergence behind one busy partition.
+// Children are ordered by name and only emitted when they actually differ, so
+// successive runs advance through the set.
+const maxPartitionChildStorageParamAlters = 50
+
+// partitionChildParams is one partition child's current reloptions. Ordered
+// rather than mapped so the per-run cap advances deterministically.
+type partitionChildParams struct {
+	tableName string
+	params    map[string]string
+}
+
+// partitionChildAlters renders at most limit ALTERs, one per child whose reloptions
+// differ from what desc declares. Children already in agreement render nothing, so
+// each run advances through the set rather than re-emitting the same prefix.
+func partitionChildAlters(desc Descriptor, children []partitionChildParams, limit int) []string {
+	alters := make([]string, 0)
+	for _, child := range children {
+		if len(alters) >= limit {
+			break
+		}
+		if alter := storageParams2alterTable(desc, child.tableName, child.params); alter != "" {
+			alters = append(alters, alter)
+		}
+	}
+	return alters
+}
+
+// readPartitionChildStorageParameters returns the current reloptions of every
+// partition child of desc's table, ordered by child relation name.
+func readPartitionChildStorageParameters(ctx context.Context, db sqlScanner, desc Descriptor) ([]partitionChildParams, error) {
+	dialect := goqu.Dialect("postgres")
+
+	/*
+		SELECT child.relname, child.reloptions
+		FROM pg_inherits
+		JOIN pg_class parent ON parent.oid = pg_inherits.inhparent
+		JOIN pg_class child ON child.oid = pg_inherits.inhrelid
+		JOIN pg_namespace ON pg_namespace.oid = child.relnamespace
+		WHERE parent.relname = 'table_name' AND pg_namespace.nspname = 'public'
+		ORDER BY child.relname;
+	*/
+	qb := dialect.From("pg_inherits")
+	qb = qb.Select("child.relname", "child.reloptions")
+	qb = qb.Join(goqu.T("pg_class").As("parent"), goqu.On(goqu.I("parent.oid").Eq(goqu.I("pg_inherits.inhparent"))))
+	qb = qb.Join(goqu.T("pg_class").As("child"), goqu.On(goqu.I("child.oid").Eq(goqu.I("pg_inherits.inhrelid"))))
+	qb = qb.Join(goqu.T("pg_namespace"), goqu.On(goqu.I("pg_namespace.oid").Eq(goqu.I("child.relnamespace"))))
+	qb = qb.Where(goqu.L("parent.relname = ?", desc.TableName()))
+	qb = qb.Where(goqu.L("pg_namespace.nspname = ?", "public"))
+	qb = qb.Order(goqu.I("child.relname").Asc())
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	children := make([]partitionChildParams, 0)
+	for rows.Next() {
+		var childName string
+		var reloptions []string
+		if err := rows.Scan(&childName, &reloptions); err != nil {
+			return nil, err
+		}
+		childParams := make(map[string]string)
+		parseReloptions(reloptions, childParams)
+		children = append(children, partitionChildParams{tableName: childName, params: childParams})
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return children, nil
 }
 
 func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string) (bool, error) {
@@ -412,6 +499,18 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialec
 		if storageParamsAlter := storageParams2alter(desc, existingStorageParams); storageParamsAlter != "" {
 			rv = append(rv, storageParamsAlter)
 		}
+	}
+
+	// A partitioned parent cannot carry storage parameters itself, so its children
+	// are reconciled individually. Emitted last on purpose: the consumer abandons a
+	// table's remaining statements on the first lock_timeout, and a contended child
+	// must not cost us the column and index statements above.
+	if isPartitionedParent(desc) && desc.GetStorageParameters() != nil {
+		children, err := readPartitionChildStorageParameters(ctx, db, desc)
+		if err != nil {
+			return nil, err
+		}
+		rv = append(rv, partitionChildAlters(desc, children, maxPartitionChildStorageParamAlters)...)
 	}
 
 	return rv, nil
