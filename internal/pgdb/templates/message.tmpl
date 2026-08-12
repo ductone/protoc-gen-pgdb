@@ -29,7 +29,7 @@ func (m *{{.MessageType}}) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
     nullExp := exp.NewLiteralExpression("NULL")
     _ = nullExp
     {{ if .WantRecordStringBuilder }}
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
     {{ end }}
 
     rv := exp.Record{}
@@ -94,7 +94,7 @@ func (m *{{.MessageType}}) Dialect() pgdb_v1.Dialect {
 
 {{- if .PKField }}
 func (m *{{.MessageType}}) PKSK() string {
-    var sb strings.Builder
+    var sb pgdb_v1.KeyBuilder
     {{ .PKField.Convert.CodeForValue }}
     {{ .SKField.Convert.CodeForValue }}
     return {{ .PKField.Convert.VarForValue }} + "|" + {{ .SKField.Convert.VarForValue }}

@@ -514,7 +514,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -548,7 +548,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -564,7 +564,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		_, _ = sb.WriteString("example")
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -766,7 +766,7 @@ func (m *pgdbMessageShop) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageShop) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -780,13 +780,13 @@ func (m *pgdbMessageShop) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("example")
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }

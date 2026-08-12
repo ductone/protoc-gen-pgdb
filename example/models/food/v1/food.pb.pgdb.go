@@ -496,7 +496,7 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -530,7 +530,7 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -546,7 +546,7 @@ func (m *pgdbMessagePasta) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record
 
 		_, _ = sb.WriteString("example")
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -664,7 +664,7 @@ func (m *pgdbMessagePasta) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessagePasta) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -678,13 +678,13 @@ func (m *pgdbMessagePasta) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("example")
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -1911,7 +1911,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -1953,7 +1953,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -1969,7 +1969,7 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		_, _ = sb.WriteString("exampleingredient")
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -2192,7 +2192,7 @@ func (m *pgdbMessagePastaIngredient) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessagePastaIngredient) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -2214,13 +2214,13 @@ func (m *pgdbMessagePastaIngredient) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("exampleingredient")
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -3594,7 +3594,7 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -3628,7 +3628,7 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -3644,7 +3644,7 @@ func (m *pgdbMessageSauceIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 
 		_, _ = sb.WriteString("examplesauce")
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -3778,7 +3778,7 @@ func (m *pgdbMessageSauceIngredient) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageSauceIngredient) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -3792,13 +3792,13 @@ func (m *pgdbMessageSauceIngredient) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("examplesauce")
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -4899,7 +4899,7 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -4933,7 +4933,7 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -4949,7 +4949,7 @@ func (m *pgdbMessageGarlicIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 		_, _ = sb.WriteString("examplecheese")
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -5083,7 +5083,7 @@ func (m *pgdbMessageGarlicIngredient) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageGarlicIngredient) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -5097,13 +5097,13 @@ func (m *pgdbMessageGarlicIngredient) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("examplecheese")
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -6277,7 +6277,7 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -6311,7 +6311,7 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -6327,7 +6327,7 @@ func (m *pgdbMessageCheeseIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 		_, _ = sb.WriteString("examplecheese")
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -6457,7 +6457,7 @@ func (m *pgdbMessageCheeseIngredient) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageCheeseIngredient) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -6471,13 +6471,13 @@ func (m *pgdbMessageCheeseIngredient) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("examplecheese")
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }

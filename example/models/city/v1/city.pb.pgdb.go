@@ -591,7 +591,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -621,7 +621,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -641,7 +641,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		_, _ = sb.WriteString(strconv.FormatInt(int64(m.self.GetNumid()), 10))
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -843,7 +843,7 @@ func (m *pgdbMessageAttractions) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageAttractions) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -853,7 +853,7 @@ func (m *pgdbMessageAttractions) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
@@ -863,7 +863,7 @@ func (m *pgdbMessageAttractions) PKSK() string {
 
 	_, _ = sb.WriteString(strconv.FormatInt(int64(m.self.GetNumid()), 10))
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -10114,7 +10114,7 @@ func (m *pgdbMessageAttractionsV2) Record(opts ...pgdb_v1.RecordOptionsFunc) (ex
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -10144,7 +10144,7 @@ func (m *pgdbMessageAttractionsV2) Record(opts ...pgdb_v1.RecordOptionsFunc) (ex
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -10160,7 +10160,7 @@ func (m *pgdbMessageAttractionsV2) Record(opts ...pgdb_v1.RecordOptionsFunc) (ex
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -10259,7 +10259,7 @@ func (m *pgdbMessageAttractionsV2) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageAttractionsV2) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -10269,13 +10269,13 @@ func (m *pgdbMessageAttractionsV2) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -11590,7 +11590,7 @@ func (m *pgdbMessageNestedOnlyMiddle) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -11620,7 +11620,7 @@ func (m *pgdbMessageNestedOnlyMiddle) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -11636,7 +11636,7 @@ func (m *pgdbMessageNestedOnlyMiddle) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -11747,7 +11747,7 @@ func (m *pgdbMessageNestedOnlyMiddle) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageNestedOnlyMiddle) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -11757,13 +11757,13 @@ func (m *pgdbMessageNestedOnlyMiddle) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -12932,7 +12932,7 @@ func (m *pgdbMessageNestedOnlyWrapper) Record(opts ...pgdb_v1.RecordOptionsFunc)
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -12962,7 +12962,7 @@ func (m *pgdbMessageNestedOnlyWrapper) Record(opts ...pgdb_v1.RecordOptionsFunc)
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -12978,7 +12978,7 @@ func (m *pgdbMessageNestedOnlyWrapper) Record(opts ...pgdb_v1.RecordOptionsFunc)
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -13089,7 +13089,7 @@ func (m *pgdbMessageNestedOnlyWrapper) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageNestedOnlyWrapper) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -13099,13 +13099,13 @@ func (m *pgdbMessageNestedOnlyWrapper) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -14905,7 +14905,7 @@ func (m *pgdbMessageDuplicateTypeBugOuter) Record(opts ...pgdb_v1.RecordOptionsF
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -14935,7 +14935,7 @@ func (m *pgdbMessageDuplicateTypeBugOuter) Record(opts ...pgdb_v1.RecordOptionsF
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -14951,7 +14951,7 @@ func (m *pgdbMessageDuplicateTypeBugOuter) Record(opts ...pgdb_v1.RecordOptionsF
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -15062,7 +15062,7 @@ func (m *pgdbMessageDuplicateTypeBugOuter) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageDuplicateTypeBugOuter) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -15072,13 +15072,13 @@ func (m *pgdbMessageDuplicateTypeBugOuter) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -16425,7 +16425,7 @@ func (m *pgdbMessageEmbeddedWithOwnDB) Record(opts ...pgdb_v1.RecordOptionsFunc)
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -16455,7 +16455,7 @@ func (m *pgdbMessageEmbeddedWithOwnDB) Record(opts ...pgdb_v1.RecordOptionsFunc)
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -16471,7 +16471,7 @@ func (m *pgdbMessageEmbeddedWithOwnDB) Record(opts ...pgdb_v1.RecordOptionsFunc)
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -16582,7 +16582,7 @@ func (m *pgdbMessageEmbeddedWithOwnDB) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageEmbeddedWithOwnDB) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -16592,13 +16592,13 @@ func (m *pgdbMessageEmbeddedWithOwnDB) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -17615,7 +17615,7 @@ func (m *pgdbMessageParentWithEmbeddedDB) Record(opts ...pgdb_v1.RecordOptionsFu
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -17645,7 +17645,7 @@ func (m *pgdbMessageParentWithEmbeddedDB) Record(opts ...pgdb_v1.RecordOptionsFu
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -17661,7 +17661,7 @@ func (m *pgdbMessageParentWithEmbeddedDB) Record(opts ...pgdb_v1.RecordOptionsFu
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -17772,7 +17772,7 @@ func (m *pgdbMessageParentWithEmbeddedDB) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageParentWithEmbeddedDB) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -17782,13 +17782,13 @@ func (m *pgdbMessageParentWithEmbeddedDB) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -19436,7 +19436,7 @@ func (m *pgdbMessageDuplicateMethodsBugRoot) Record(opts ...pgdb_v1.RecordOption
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -19466,7 +19466,7 @@ func (m *pgdbMessageDuplicateMethodsBugRoot) Record(opts ...pgdb_v1.RecordOption
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -19482,7 +19482,7 @@ func (m *pgdbMessageDuplicateMethodsBugRoot) Record(opts ...pgdb_v1.RecordOption
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -19593,7 +19593,7 @@ func (m *pgdbMessageDuplicateMethodsBugRoot) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageDuplicateMethodsBugRoot) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -19603,13 +19603,13 @@ func (m *pgdbMessageDuplicateMethodsBugRoot) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }
@@ -21339,7 +21339,7 @@ func (m *pgdbMessageDuplicateTypePathsBugRoot) Record(opts ...pgdb_v1.RecordOpti
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -21369,7 +21369,7 @@ func (m *pgdbMessageDuplicateTypePathsBugRoot) Record(opts ...pgdb_v1.RecordOpti
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv2 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -21385,7 +21385,7 @@ func (m *pgdbMessageDuplicateTypePathsBugRoot) Record(opts ...pgdb_v1.RecordOpti
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+		cfv3 := sb.String()
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -21525,7 +21525,7 @@ func (m *pgdbMessageDuplicateTypePathsBugRoot) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageDuplicateTypePathsBugRoot) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -21535,13 +21535,13 @@ func (m *pgdbMessageDuplicateTypePathsBugRoot) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv2 := sb.String()
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
+	cfv3 := sb.String()
 
 	return cfv2 + "|" + cfv3
 }

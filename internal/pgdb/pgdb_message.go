@@ -36,7 +36,8 @@ func (module *Module) renderMessage(ctx pgsgo.Context, w io.Writer, in pgs.File,
 	ix.GoquExp = true
 	wantRecordStringBuilder := false
 	if !ext.GetNestedOnly() {
-		// used by pk/sk builder
+		// pk/sk use pgdb_v1.KeyBuilder; strings stays imported for the
+		// ReplaceAll on tenant_id and other plain string columns
 		wantRecordStringBuilder = true
 		ix.Strings = true
 		// used by pb_data
