@@ -10,4 +10,4 @@ sb.Reset()
     _, _ = sb.WriteString({{.}})
 {{ end }}
 
-{{.VarName}} := sb.String()
+{{.VarName}} := strings.ReplaceAll(sb.String(), "\u0000", "")

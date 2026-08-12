@@ -722,7 +722,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := sb.String()
+		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -738,7 +738,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 
 		_, _ = sb.WriteString("example")
 
-		cfv3 := sb.String()
+		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -989,13 +989,13 @@ func (m *pgdbMessagePet) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := sb.String()
+	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("example")
 
-	cfv3 := sb.String()
+	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	return cfv2 + "|" + cfv3
 }
@@ -2796,7 +2796,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		_, _ = sb.WriteString(m.self.GetTenantId())
 
-		cfv2 := sb.String()
+		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -2812,7 +2812,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv3 := sb.String()
+		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -3300,13 +3300,13 @@ func (m *pgdbMessageScalarValue) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetTenantId())
 
-	cfv2 := sb.String()
+	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	sb.Reset()
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv3 := sb.String()
+	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	return cfv2 + "|" + cfv3
 }
@@ -5489,7 +5489,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := sb.String()
+		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -5505,7 +5505,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		_, _ = sb.WriteString("example")
 
-		cfv3 := sb.String()
+		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -5690,13 +5690,13 @@ func (m *pgdbMessageBook) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := sb.String()
+	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("example")
 
-	cfv3 := sb.String()
+	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	return cfv2 + "|" + cfv3
 }
@@ -7021,7 +7021,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := sb.String()
+		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -7037,7 +7037,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 
 		_, _ = sb.WriteString("example")
 
-		cfv3 := sb.String()
+		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -7125,13 +7125,13 @@ func (m *pgdbMessageNewspaper) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := sb.String()
+	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("example")
 
-	cfv3 := sb.String()
+	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	return cfv2 + "|" + cfv3
 }
@@ -8066,7 +8066,7 @@ func (m *pgdbMessageWidget) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Recor
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := sb.String()
+		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -8082,7 +8082,7 @@ func (m *pgdbMessageWidget) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Recor
 
 		_, _ = sb.WriteString("example")
 
-		cfv3 := sb.String()
+		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -8174,13 +8174,13 @@ func (m *pgdbMessageWidget) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := sb.String()
+	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("example")
 
-	cfv3 := sb.String()
+	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	return cfv2 + "|" + cfv3
 }

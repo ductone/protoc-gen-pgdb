@@ -548,7 +548,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		_, _ = sb.WriteString(m.self.GetId())
 
-		cfv2 := sb.String()
+		cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("pk")] = nullExp
@@ -564,7 +564,7 @@ func (m *pgdbMessageShop) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 
 		_, _ = sb.WriteString("example")
 
-		cfv3 := sb.String()
+		cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 		if ro.Nulled {
 			rv[ro.ColumnName("sk")] = nullExp
@@ -780,13 +780,13 @@ func (m *pgdbMessageShop) PKSK() string {
 
 	_, _ = sb.WriteString(m.self.GetId())
 
-	cfv2 := sb.String()
+	cfv2 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	sb.Reset()
 
 	_, _ = sb.WriteString("example")
 
-	cfv3 := sb.String()
+	cfv3 := strings.ReplaceAll(sb.String(), "\u0000", "")
 
 	return cfv2 + "|" + cfv3
 }
