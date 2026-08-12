@@ -101,3 +101,29 @@ func TestInsertMany_NulByteInKeyField(t *testing.T) {
 	require.NoError(t, err)
 	require.False(t, strings.Contains(pk, "\x00"))
 }
+
+// ScalarValue's sort key is field-derived (sk_fields: ["id"]), unlike Pet's
+// constant sk — this pins the NUL strip on the sk path, which is the shape of
+// the original prod failure (username feeding a sort key).
+func TestRecord_NulByteInSortKeyField(t *testing.T) {
+	nul := string(rune(0))
+	sv := ScalarValue_builder{
+		TenantId: "t1",
+		Id:       "id" + nul + "nul",
+	}.Build()
+
+	for _, dialect := range []pgdb_v1.Dialect{pgdb_v1.DialectV13, pgdb_v1.DialectV17} {
+		dbr := sv.DBReflect(dialect)
+		record, err := dbr.Record()
+		require.NoError(t, err)
+
+		sk, ok := record["pb$sk"].(string)
+		require.True(t, ok, "pb$sk should be a plain string")
+		require.NotContains(t, sk, nul)
+		require.Equal(t, "idnul", sk)
+
+		pker, ok := dbr.(pgdb_v1.PrimaryKeyer)
+		require.True(t, ok)
+		require.NotContains(t, pker.PKSK(), nul)
+	}
+}
