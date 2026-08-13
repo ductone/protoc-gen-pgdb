@@ -688,7 +688,7 @@ func (m *pgdbMessagePet) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, 
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -975,7 +975,7 @@ func (m *pgdbMessagePet) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessagePet) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -2766,7 +2766,7 @@ func (m *pgdbMessageScalarValue) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -3290,7 +3290,7 @@ func (m *pgdbMessageScalarValue) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageScalarValue) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -5455,7 +5455,7 @@ func (m *pgdbMessageBook) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record,
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -5676,7 +5676,7 @@ func (m *pgdbMessageBook) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageBook) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -6991,7 +6991,7 @@ func (m *pgdbMessageNewspaper) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Re
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -7115,7 +7115,7 @@ func (m *pgdbMessageNewspaper) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageNewspaper) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -8032,7 +8032,7 @@ func (m *pgdbMessageWidget) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Recor
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -8160,7 +8160,7 @@ func (m *pgdbMessageWidget) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageWidget) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 

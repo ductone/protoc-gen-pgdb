@@ -591,7 +591,7 @@ func (m *pgdbMessageAttractions) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -843,7 +843,7 @@ func (m *pgdbMessageAttractions) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageAttractions) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -10114,7 +10114,7 @@ func (m *pgdbMessageAttractionsV2) Record(opts ...pgdb_v1.RecordOptionsFunc) (ex
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -10259,7 +10259,7 @@ func (m *pgdbMessageAttractionsV2) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageAttractionsV2) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -11590,7 +11590,7 @@ func (m *pgdbMessageNestedOnlyMiddle) Record(opts ...pgdb_v1.RecordOptionsFunc) 
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -11747,7 +11747,7 @@ func (m *pgdbMessageNestedOnlyMiddle) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageNestedOnlyMiddle) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -12932,7 +12932,7 @@ func (m *pgdbMessageNestedOnlyWrapper) Record(opts ...pgdb_v1.RecordOptionsFunc)
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -13089,7 +13089,7 @@ func (m *pgdbMessageNestedOnlyWrapper) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageNestedOnlyWrapper) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -14905,7 +14905,7 @@ func (m *pgdbMessageDuplicateTypeBugOuter) Record(opts ...pgdb_v1.RecordOptionsF
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -15062,7 +15062,7 @@ func (m *pgdbMessageDuplicateTypeBugOuter) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageDuplicateTypeBugOuter) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -16425,7 +16425,7 @@ func (m *pgdbMessageEmbeddedWithOwnDB) Record(opts ...pgdb_v1.RecordOptionsFunc)
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -16582,7 +16582,7 @@ func (m *pgdbMessageEmbeddedWithOwnDB) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageEmbeddedWithOwnDB) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -17615,7 +17615,7 @@ func (m *pgdbMessageParentWithEmbeddedDB) Record(opts ...pgdb_v1.RecordOptionsFu
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -17772,7 +17772,7 @@ func (m *pgdbMessageParentWithEmbeddedDB) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageParentWithEmbeddedDB) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -19436,7 +19436,7 @@ func (m *pgdbMessageDuplicateMethodsBugRoot) Record(opts ...pgdb_v1.RecordOption
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -19593,7 +19593,7 @@ func (m *pgdbMessageDuplicateMethodsBugRoot) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageDuplicateMethodsBugRoot) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
@@ -21339,7 +21339,7 @@ func (m *pgdbMessageDuplicateTypePathsBugRoot) Record(opts ...pgdb_v1.RecordOpti
 	nullExp := exp.NewLiteralExpression("NULL")
 	_ = nullExp
 
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	rv := exp.Record{}
 
@@ -21525,7 +21525,7 @@ func (m *pgdbMessageDuplicateTypePathsBugRoot) Dialect() pgdb_v1.Dialect {
 	return pgdb_v1.DialectOrDefault(m.dialect)
 }
 func (m *pgdbMessageDuplicateTypePathsBugRoot) PKSK() string {
-	var sb strings.Builder
+	var sb pgdb_v1.KeyBuilder
 
 	sb.Reset()
 
