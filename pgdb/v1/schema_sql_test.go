@@ -348,6 +348,13 @@ func TestStorageParams2with(t *testing.T) {
 		return sp
 	}
 
+	makeInsertDriven := func() *MessageOptions_StorageParameters {
+		sp := &MessageOptions_StorageParameters{}
+		sp.SetAutovacuumVacuumInsertThreshold(1000000)
+		sp.SetAutovacuumVacuumInsertScaleFactor(0.01)
+		return sp
+	}
+
 	makeMultiple := func() *MessageOptions_StorageParameters {
 		sp := &MessageOptions_StorageParameters{}
 		sp.SetAutovacuumVacuumThreshold(5000)
@@ -388,6 +395,87 @@ func TestStorageParams2with(t *testing.T) {
   autovacuum_vacuum_threshold = 5000,
   autovacuum_vacuum_scale_factor = 0.1,
   fillfactor = 90
+)`,
+		},
+		{
+			// Insert-driven pair (PG13+). Its own case rather than folded into
+			// "Multiple options" so a regression names which pair broke.
+			name: "Insert-driven autovacuum",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeInsertDriven(),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_insert_threshold = 1000000,
+  autovacuum_vacuum_insert_scale_factor = 0.01
+)`,
+		},
+		{
+			// Each of the pair alone: a guard that checks the sibling's
+			// presence would still pass the both-set case above.
+			name: "Insert-driven autovacuum, threshold only",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumInsertThreshold(1000000)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_insert_threshold = 1000000
+)`,
+		},
+		{
+			name: "Insert-driven autovacuum, scale factor only",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumInsertScaleFactor(0.01)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_insert_scale_factor = 0.01
+)`,
+		},
+		{
+			// -1 is PostgreSQL's documented sentinel for disabling the
+			// insert-driven trigger, so it is a value users will declare.
+			name: "Insert-driven autovacuum, disabled via -1",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumInsertThreshold(-1)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_insert_threshold = -1
+)`,
+		},
+		{
+			// Pins the pair rendering next to other parameters, so neither
+			// double-emits nor gets dropped when others are present.
+			name: "Insert-driven autovacuum alongside other parameters",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumThreshold(5000)
+					sp.SetFillfactor(90)
+					sp.SetAutovacuumVacuumInsertThreshold(1000000)
+					sp.SetAutovacuumVacuumInsertScaleFactor(0.01)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_threshold = 5000,
+  fillfactor = 90,
+  autovacuum_vacuum_insert_threshold = 1000000,
+  autovacuum_vacuum_insert_scale_factor = 0.01
 )`,
 		},
 	}
@@ -541,6 +629,13 @@ func TestStorageParams2alter(t *testing.T) {
 		return sp
 	}
 
+	makeInsertDriven := func() *MessageOptions_StorageParameters {
+		sp := &MessageOptions_StorageParameters{}
+		sp.SetAutovacuumVacuumInsertThreshold(1000000)
+		sp.SetAutovacuumVacuumInsertScaleFactor(0.01)
+		return sp
+	}
+
 	makeMultiple := func() *MessageOptions_StorageParameters {
 		sp := &MessageOptions_StorageParameters{}
 		sp.SetAutovacuumVacuumThreshold(5000)
@@ -621,6 +716,83 @@ SET (
   fillfactor = 90
 )
 `,
+		},
+		{
+			// Retrofit onto a table that already carries the threshold but has
+			// drifted on the scale factor: only the drifted one may be emitted.
+			name: "Insert-driven autovacuum, one matches one drifts",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeInsertDriven(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_insert_threshold":    "1000000", // matches
+				"autovacuum_vacuum_insert_scale_factor": "0.2",     // differs (0.01 desired)
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_insert_scale_factor = 0.01
+)
+`,
+		},
+		{
+			// Both drifted — without this the threshold's emission on the
+			// ALTER path is never executed, so a typo in the emitted literal
+			// would go unnoticed.
+			name: "Insert-driven autovacuum, both drift",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams:  makeInsertDriven(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_insert_threshold":    "500",
+				"autovacuum_vacuum_insert_scale_factor": "0.2",
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_insert_threshold = 1000000,
+  autovacuum_vacuum_insert_scale_factor = 0.01
+)
+`,
+		},
+		{
+			// The scale factors that matter on a large append-mostly table sit
+			// below the old fixed absolute tolerance, so drift like this was
+			// reported as agreement and never converged.
+			name: "Small scale factor drift is detected",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumInsertScaleFactor(0.001)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_insert_scale_factor": "0.0011", // 10% off
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_insert_scale_factor = 0.001
+)
+`,
+		},
+		{
+			// ...while float32 round-trip noise at that same magnitude must
+			// still not trigger a pointless ALTER.
+			name: "Small scale factor round-trip noise is not drift",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumInsertScaleFactor(0.001)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_insert_scale_factor": "0.001000000001",
+			},
+			expected: "",
 		},
 		{
 			name: "Existing parameter not in descriptor, leave it alone",

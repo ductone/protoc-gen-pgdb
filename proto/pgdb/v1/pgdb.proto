@@ -52,6 +52,20 @@ message MessageOptions {
     optional int32 fillfactor = 10;
     optional int32 toast_tuple_target = 11;
     optional bool autovacuum_enabled = 12;
+
+    // Insert-driven autovacuum (PG13+). Distinct from the vacuum_threshold /
+    // vacuum_scale_factor pair above, which trigger on DEAD tuples: on an
+    // append-mostly table dead tuples accumulate slowly, so those triggers may
+    // rarely fire however tightly they are set, while freshly-inserted pages
+    // pile up all-visible-but-unmarked. That stale visibility map is what makes
+    // an Index Only Scan fall back to heap fetches. These two trigger on
+    // inserts since the last vacuum instead, which is what refreshes it.
+    //
+    // Absolute number of inserts since the last vacuum needed to trigger one;
+    // autovacuum_vacuum_insert_scale_factor adds a fraction of the table size.
+    optional int32 autovacuum_vacuum_insert_threshold = 13;
+    // Fraction-of-table-size term of the insert-driven trigger described above.
+    optional float autovacuum_vacuum_insert_scale_factor = 14;
   }
   StorageParameters storage_parameters = 11;
 
