@@ -37,6 +37,8 @@ message Pet {
     autovacuum_vacuum_scale_factor: 0.01
     autovacuum_vacuum_threshold: 1000
     fillfactor: 90
+    autovacuum_vacuum_insert_threshold: 1000
+    autovacuum_vacuum_insert_scale_factor: 0.005
   };
   string tenant_id = 1;
   string id = 2 [(pgdb.v1.options) = {full_text_type: FULL_TEXT_TYPE_EXACT}];

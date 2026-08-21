@@ -182,6 +182,12 @@ func storageParams2with(desc Descriptor) string {
 	if sp.HasAutovacuumEnabled() {
 		params = append(params, "autovacuum_enabled = "+strconv.FormatBool(sp.GetAutovacuumEnabled()))
 	}
+	if sp.HasAutovacuumVacuumInsertThreshold() {
+		params = append(params, "autovacuum_vacuum_insert_threshold = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumInsertThreshold()), 10))
+	}
+	if sp.HasAutovacuumVacuumInsertScaleFactor() {
+		params = append(params, "autovacuum_vacuum_insert_scale_factor = "+strconv.FormatFloat(float64(sp.GetAutovacuumVacuumInsertScaleFactor()), 'f', -1, 32))
+	}
 
 	if len(params) == 0 {
 		return ""
@@ -243,12 +249,19 @@ func storageParams2alterTable(desc Descriptor, tableName string, existingParams 
 				// If parsing fails, fall back to string comparison
 				return existing != desiredValue
 			}
-			// Compare floats with small epsilon for precision differences
-			epsilon := 0.0001
+			// Compare floats with a relative epsilon. A fixed absolute
+			// tolerance is too coarse for the scale-factor parameters, whose
+			// useful values on large tables sit below it — drift there would
+			// never be detected and so never converge.
 			diff := existingFloat - desiredFloat
 			if diff < 0 {
 				diff = -diff
 			}
+			desiredMag := desiredFloat
+			if desiredMag < 0 {
+				desiredMag = -desiredMag
+			}
+			epsilon := 1e-9 + 0.0001*desiredMag
 			return diff > epsilon
 		}
 		// For non-float values, direct string comparison
@@ -336,6 +349,20 @@ func storageParams2alterTable(desc Descriptor, tableName string, existingParams 
 		desired := strconv.FormatBool(sp.GetAutovacuumEnabled())
 		if needsUpdate("autovacuum_enabled", desired, false) {
 			params = append(params, "autovacuum_enabled = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumVacuumInsertThreshold() {
+		desired := strconv.FormatInt(int64(sp.GetAutovacuumVacuumInsertThreshold()), 10)
+		if needsUpdate("autovacuum_vacuum_insert_threshold", desired, false) {
+			params = append(params, "autovacuum_vacuum_insert_threshold = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumVacuumInsertScaleFactor() {
+		desired := strconv.FormatFloat(float64(sp.GetAutovacuumVacuumInsertScaleFactor()), 'f', -1, 32)
+		if needsUpdate("autovacuum_vacuum_insert_scale_factor", desired, true) {
+			params = append(params, "autovacuum_vacuum_insert_scale_factor = "+desired)
 		}
 	}
 

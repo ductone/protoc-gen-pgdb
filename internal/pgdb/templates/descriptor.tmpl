@@ -68,6 +68,12 @@ func (d *{{.ReceiverType}}) GetStorageParameters() *pgdb_v1.MessageOptions_Stora
         {{- if .StorageParameters.ToastTupleTarget }}
         ToastTupleTarget: proto.Int32({{.StorageParameters.ToastTupleTarget}}),
         {{- end }}
+        {{- if .StorageParameters.AutovacuumVacuumInsertThreshold }}
+        AutovacuumVacuumInsertThreshold: proto.Int32({{.StorageParameters.AutovacuumVacuumInsertThreshold}}),
+        {{- end }}
+        {{- if .StorageParameters.AutovacuumVacuumInsertScaleFactor }}
+        AutovacuumVacuumInsertScaleFactor: proto.Float32({{.StorageParameters.AutovacuumVacuumInsertScaleFactor}}),
+        {{- end }}
         {{- if .StorageParameters.HasAutovacuumEnabled }}
         AutovacuumEnabled: proto.Bool({{.StorageParameters.AutovacuumEnabled}}),
         {{- end }}

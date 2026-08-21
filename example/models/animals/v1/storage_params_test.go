@@ -20,4 +20,11 @@ func TestPetStorageParameters(t *testing.T) {
 	require.InDelta(t, 0.01, sp.GetAutovacuumVacuumScaleFactor(), 1e-9)
 	require.Equal(t, int32(90), sp.GetFillfactor())
 	require.False(t, sp.HasAutovacuumEnabled())
+
+	// The generator's storage-parameter context and template are a
+	// hand-maintained mirror of the proto message, so a parameter can be
+	// declared in the .proto and silently never reach the descriptor. These
+	// two assert the declaration in animals.proto actually survives codegen.
+	require.Equal(t, int32(1000), sp.GetAutovacuumVacuumInsertThreshold())
+	require.InDelta(t, 0.005, sp.GetAutovacuumVacuumInsertScaleFactor(), 1e-9)
 }
