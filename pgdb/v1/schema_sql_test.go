@@ -13,6 +13,7 @@ type mockDescriptor struct {
 	isPartitionedByCreatedAt    bool
 	partitionedByKsuidFieldName string
 	partitionDateRange          MessageOptions_PartitionedByDateRange
+	indexes                     []*Index
 }
 
 func (m *mockDescriptor) TableName() string {
@@ -60,7 +61,7 @@ func (m *mockDescriptor) GetPartitionedByKsuidFieldName() string {
 }
 
 func (m *mockDescriptor) Indexes(opts ...IndexOptionsFunc) []*Index {
-	return nil
+	return m.indexes
 }
 
 func (m *mockDescriptor) IndexPrimaryKey(opts ...IndexOptionsFunc) *Index {
