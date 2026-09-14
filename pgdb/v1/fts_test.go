@@ -1162,3 +1162,80 @@ func FuzzFullTextSearchVectors(f *testing.F) {
 		})
 	})
 }
+
+// renderQuerySQL renders a FullTextSearchQuery expression to SQL via the goqu postgres
+// dialect, mirroring how requireQueryIs renders vectors/queries for the DB-backed tests.
+// goqu's default dialect interpolates literal arguments directly into the SQL string (see
+// requireQueryIs, which discards the returned args), so assertions here are made against
+// the rendered query string.
+func renderQuerySQL(t *testing.T, q exp.Expression) string {
+	t.Helper()
+	qb := goqu.Dialect("postgres")
+	query, _, err := qb.Select(goqu.L("?", q)).ToSQL()
+	require.NoError(t, err)
+	return query
+}
+
+// TestFullTextSearchQueryDotVariants is a non-DB unit test covering Change 2: querying a
+// multi-dot input must render both the joined variant (matches the joined-token prefix
+// lexemes already indexed pre-fix) and the space-split variant (matches the new sub-token
+// edge-gram lexemes from Change 1).
+func TestFullTextSearchQueryDotVariants(t *testing.T) {
+	query := renderQuerySQL(t, FullTextSearchQuery("ad.ph02t1.admin.se"))
+
+	assert.Contains(t, query, "adph02t1adminse", "expected joined variant term in query: %s", query)
+	assert.Contains(t, query, "ad ph02t1 admin se", "expected split variant term in query: %s", query)
+}
+
+// TestFullTextSearchQueryNoPrefixOperator is a guard test: no rendered query, for any of a
+// representative set of inputs (multi-word, dotted, slashed, snake_case, unicode, single
+// word), may contain the `:*` prefix tsquery operator that caused the pathological GIN
+// scans fixed by this change.
+func TestFullTextSearchQueryNoPrefixOperator(t *testing.T) {
+	inputs := []string{
+		"dataplane prod",
+		"ad.ph02t1.admin.se",
+		"roles/bigquery.dataViewer",
+		"foo_bar_baz_21_quux",
+		"café.naïve_zürich",
+		"single",
+		" ",
+		"!12345",
+	}
+
+	for _, input := range inputs {
+		t.Run(input, func(t *testing.T) {
+			query := renderQuerySQL(t, FullTextSearchQuery(input))
+			assert.NotContains(t, query, ":*", "query for %q must not contain the :* prefix operator: %s", input, query)
+		})
+	}
+}
+
+// TestFullTextSearchQueryUnderscoreAmpersand pins the rendered SQL for underscore and
+// ampersand inputs (IGA-4267): the split variant must AND the tokens, the stemmed variant
+// must match, `&` must drop out (not become a term), and the joined variant must dedupe
+// away for `&`-separated inputs because jargon tokenizes on the symbol.
+func TestFullTextSearchQueryUnderscoreAmpersand(t *testing.T) {
+	t.Run("underscore ampersand", func(t *testing.T) {
+		query := renderQuerySQL(t, FullTextSearchQuery("Research_&_Development"))
+		assert.Contains(t, query, "research development", "expected AND variant term: %s", query)
+		assert.Contains(t, query, "research develop", "expected stemmed variant term: %s", query)
+		assert.NotContains(t, query, "researchdevelopment", "joined variant must dedupe away: %s", query)
+		assert.NotContains(t, query, ":*")
+	})
+
+	t.Run("R&D", func(t *testing.T) {
+		query := renderQuerySQL(t, FullTextSearchQuery("R&D"))
+		assert.Contains(t, query, "(websearch_to_tsquery('simple', 'r d'))", "expected single AND variant term: %s", query)
+		assert.NotContains(t, query, ":*")
+	})
+
+	t.Run("hyphen joined survives", func(t *testing.T) {
+		query := renderQuerySQL(t, FullTextSearchQuery("Research-Development"))
+		assert.Contains(t, query, "research development", "expected AND variant term: %s", query)
+		assert.Contains(t, query, "research develop", "expected stemmed split variant: %s", query)
+		assert.Contains(t, query, "researchdevelopment", "expected joined variant term: %s", query)
+		assert.Contains(t, query, "researchdevelop", "expected stemmed joined variant term: %s", query)
+		assert.NotContains(t, query, ":*")
+	})
+}
