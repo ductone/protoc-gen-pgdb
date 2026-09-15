@@ -382,9 +382,26 @@ func FullTextSearchVectors(docs []*SearchContent, additionalFilters ...jargon.Fi
 	return exp.NewLiteralExpression("?::tsvector", sb.String())
 }
 
-func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
-	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold}
-	filters = append(filters, additionalFilters...)
+// symbolQuerySplitChars is the query-side mirror of the symbol set in normalizeVectorDocs
+// (the inline `symbols` map above). The two sets MUST stay identical: the index side
+// splits documents into sub-token and joined-token lexemes at exactly these runes
+// (symbolsSubTokensSplitDoc / symbolsFullTokensSplitDoc), and FullTextSearchQuery builds
+// its query variants over the same set so those lexemes stay reachable — drift between
+// the two silently breaks query/index lexeme alignment. `&` is deliberately absent: the
+// index side treats it as ordinary punctuation (it terminates words), and the jargon
+// tokenizer already treats it as a token separator on the query side, so the original
+// variant covers it.
+var symbolQuerySplitChars = map[rune]struct{}{
+	'.': {},
+	'_': {},
+	'/': {},
+	'-': {},
+}
+
+// tokenizeSearchText runs the same jargon tokenize/lowercase/fold/strip pipeline the
+// original (pre-symbol-aware) FullTextSearchQuery used, so each query variant is
+// normalized identically.
+func tokenizeSearchText(input string, filters []jargon.Filter) string {
 	tokens := jargon.TokenizeString(input).Filter(filters...).Words()
 
 	var searchTerms []string
@@ -410,17 +427,79 @@ func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.E
 		searchTerms = append(searchTerms, t)
 	}
 
-	searchText := strings.Join(searchTerms, " ")
-	stemmedSearchText, _ := jargon.TokenizeString(searchText).Filter(stemmer.English).String()
+	return strings.Join(searchTerms, " ")
+}
 
-	if searchText == stemmedSearchText {
-		return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", searchText)
+func FullTextSearchQuery(input string, additionalFilters ...jargon.Filter) exp.Expression {
+	filters := []jargon.Filter{lowerCaseFilter, ascii.Fold}
+	filters = append(filters, additionalFilters...)
+
+	// origInput: today's back-compat behavior - input as-is.
+	origInput := input
+
+	// splitInput: every symbol rune becomes a space, so "ad.ph02t1.admin.se" becomes
+	// the separate terms "ad ph02t1 admin se". This matches the sub-token lexemes
+	// symbolsSubTokensSplitDoc indexes for documents containing the same symbols.
+	splitInput := strings.Map(func(r rune) rune {
+		if _, ok := symbolQuerySplitChars[r]; ok {
+			return ' '
+		}
+		return r
+	}, input)
+
+	// joinedInput: every symbol rune is deleted (whitespace is preserved), so
+	// "ad.ph02t1.admin.se" becomes the single term "adph02t1adminse". This matches the
+	// joined full-token lexemes (and their leading-substring prefixes) that
+	// symbolsFullTokensSplitDoc and normalizeVectorDocs index for symbol-separated
+	// documents.
+	joinedInput := strings.Map(func(r rune) rune {
+		if _, ok := symbolQuerySplitChars[r]; ok {
+			return -1
+		}
+		return r
+	}, input)
+
+	var texts []string
+	seen := make(map[string]struct{}, 6)
+	addText := func(s string) {
+		if s == "" {
+			return
+		}
+		if _, ok := seen[s]; ok {
+			return
+		}
+		seen[s] = struct{}{}
+		texts = append(texts, s)
 	}
 
-	return exp.NewLiteralExpression(
-		"(websearch_to_tsquery('simple', ?) || websearch_to_tsquery('simple', ?))",
-		searchText,
-		stemmedSearchText)
+	for _, variant := range []string{origInput, splitInput, joinedInput} {
+		searchText := tokenizeSearchText(variant, filters)
+		stemmedSearchText, _ := jargon.TokenizeString(searchText).Filter(stemmer.English).String()
+		addText(searchText)
+		addText(stemmedSearchText)
+	}
+
+	if len(texts) == 0 {
+		return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", "")
+	}
+
+	if len(texts) == 1 {
+		return exp.NewLiteralExpression("(websearch_to_tsquery('simple', ?))", texts[0])
+	}
+
+	sb := strings.Builder{}
+	args := make([]interface{}, 0, len(texts))
+	sb.WriteString("(")
+	for i, t := range texts {
+		if i > 0 {
+			sb.WriteString(" || ")
+		}
+		sb.WriteString("websearch_to_tsquery('simple', ?)")
+		args = append(args, t)
+	}
+	sb.WriteString(")")
+
+	return exp.NewLiteralExpression(sb.String(), args...)
 }
 
 type lexeme struct {
