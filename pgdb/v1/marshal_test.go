@@ -2,10 +2,10 @@ package v1
 
 import (
 	reflect "reflect"
-	"strings"
 	"testing"
 
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 	pstruct "google.golang.org/protobuf/types/known/structpb"
 
 	jsoniter "github.com/json-iterator/go"
@@ -109,45 +109,36 @@ func TestMarshalProtoJSON(t *testing.T) {
 		},
 	}
 
-	msgExpectedBytes, err := protojson.Marshal(msgExpected)
-	if err != nil {
-		t.Errorf("Failed to marshal expected message: %v", err)
-	}
-
-	expected := string(msgExpectedBytes)
-	expectedNoSpace := strings.ReplaceAll(expected, " ", "")
-
+	// Compare decoded messages, not bytes: the NUL-stripping path re-encodes
+	// through a Go map, so key order varies between runs.
 	tests := []struct {
-		name     string
-		input    *pstruct.Struct
-		expected string
+		name  string
+		input *pstruct.Struct
 	}{
 		{
-			name:     "With null bytes",
-			input:    msg,
-			expected: expectedNoSpace,
+			name:  "With null bytes",
+			input: msg,
 		},
 		{
-			name:     "Without null bytes",
-			input:    msg2,
-			expected: expected,
+			name:  "Without null bytes",
+			input: msg2,
 		},
-	}
-
-	result, err := MarshalProtoJSON(msg)
-	if err != nil {
-		t.Fatalf("Expected an error when interpreting binary proto data as JSON, got none.\nResult: %s", string(result))
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			result, err := MarshalProtoJSON(test.input)
 			if err != nil {
-				t.Fatalf("Expected an error when interpreting binary proto data as JSON, got none.\nResult: %s", string(result))
+				t.Fatalf("MarshalProtoJSON: %v", err)
 			}
 
-			if string(result) != test.expected {
-				t.Errorf("Unexpected result.\nGot:      %s\nExpected: %s", result, test.expected)
+			got := &pstruct.Struct{}
+			if err := protojson.Unmarshal(result, got); err != nil {
+				t.Fatalf("Failed to unmarshal result %s: %v", result, err)
+			}
+
+			if !proto.Equal(got, msgExpected) {
+				t.Errorf("Unexpected result.\nGot:      %s\nExpected: %v", result, msgExpected)
 			}
 		})
 	}
