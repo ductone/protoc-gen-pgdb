@@ -24,6 +24,13 @@ type storageParamsTemplateContext struct {
 	ToastTupleTarget             *int32
 	AutovacuumEnabled            *bool
 	HasAutovacuumEnabled         bool
+
+	AutovacuumVacuumInsertThreshold   *int32
+	AutovacuumVacuumInsertScaleFactor *float32
+
+	AutovacuumVacuumMaxThreshold    *int32
+	VacuumMaxEagerFreezeFailureRate *float32
+	VacuumIndexCleanup              string
 }
 
 type descriptorTemplateContext struct {
@@ -129,6 +136,30 @@ func (module *Module) renderDescriptor(ctx pgsgo.Context, w io.Writer, in pgs.Fi
 		if sp.HasToastTupleTarget() {
 			v := sp.GetToastTupleTarget()
 			spCtx.ToastTupleTarget = &v
+			hasStorageParams = true
+		}
+		if sp.HasAutovacuumVacuumInsertThreshold() {
+			v := sp.GetAutovacuumVacuumInsertThreshold()
+			spCtx.AutovacuumVacuumInsertThreshold = &v
+			hasStorageParams = true
+		}
+		if sp.HasAutovacuumVacuumInsertScaleFactor() {
+			v := sp.GetAutovacuumVacuumInsertScaleFactor()
+			spCtx.AutovacuumVacuumInsertScaleFactor = &v
+			hasStorageParams = true
+		}
+		if sp.HasAutovacuumVacuumMaxThreshold() {
+			v := sp.GetAutovacuumVacuumMaxThreshold()
+			spCtx.AutovacuumVacuumMaxThreshold = &v
+			hasStorageParams = true
+		}
+		if sp.HasVacuumMaxEagerFreezeFailureRate() {
+			v := sp.GetVacuumMaxEagerFreezeFailureRate()
+			spCtx.VacuumMaxEagerFreezeFailureRate = &v
+			hasStorageParams = true
+		}
+		if v := sp.GetVacuumIndexCleanup(); v != pgdb_v1.MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_UNSPECIFIED {
+			spCtx.VacuumIndexCleanup = v.String()
 			hasStorageParams = true
 		}
 		if sp.HasAutovacuumEnabled() {

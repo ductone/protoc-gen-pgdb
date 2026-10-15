@@ -182,6 +182,21 @@ func storageParams2with(desc Descriptor) string {
 	if sp.HasAutovacuumEnabled() {
 		params = append(params, "autovacuum_enabled = "+strconv.FormatBool(sp.GetAutovacuumEnabled()))
 	}
+	if sp.HasAutovacuumVacuumInsertThreshold() {
+		params = append(params, "autovacuum_vacuum_insert_threshold = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumInsertThreshold()), 10))
+	}
+	if sp.HasAutovacuumVacuumInsertScaleFactor() {
+		params = append(params, "autovacuum_vacuum_insert_scale_factor = "+strconv.FormatFloat(float64(sp.GetAutovacuumVacuumInsertScaleFactor()), 'f', -1, 32))
+	}
+	if sp.HasAutovacuumVacuumMaxThreshold() {
+		params = append(params, "autovacuum_vacuum_max_threshold = "+strconv.FormatInt(int64(sp.GetAutovacuumVacuumMaxThreshold()), 10))
+	}
+	if sp.HasVacuumMaxEagerFreezeFailureRate() {
+		params = append(params, "vacuum_max_eager_freeze_failure_rate = "+strconv.FormatFloat(float64(sp.GetVacuumMaxEagerFreezeFailureRate()), 'f', -1, 32))
+	}
+	if v := vacuumIndexCleanupValue(sp.GetVacuumIndexCleanup()); v != "" {
+		params = append(params, "vacuum_index_cleanup = "+v)
+	}
 
 	if len(params) == 0 {
 		return ""
@@ -243,12 +258,21 @@ func storageParams2alterTable(desc Descriptor, tableName string, existingParams 
 				// If parsing fails, fall back to string comparison
 				return existing != desiredValue
 			}
-			// Compare floats with small epsilon for precision differences
-			epsilon := 0.0001
+			// Compare floats with a relative epsilon. A fixed absolute
+			// tolerance is too coarse for the scale-factor parameters, whose
+			// useful values on large tables sit below it — drift there would
+			// never be detected and so never converge.
 			diff := existingFloat - desiredFloat
 			if diff < 0 {
 				diff = -diff
 			}
+			desiredMag := desiredFloat
+			if desiredMag < 0 {
+				desiredMag = -desiredMag
+			}
+			// The 1e-9 floor keeps a declared 0 comparable; it sits far below
+			// any value a reloption float meaningfully takes.
+			epsilon := 1e-9 + 0.0001*desiredMag
 			return diff > epsilon
 		}
 		// For non-float values, direct string comparison
@@ -339,6 +363,41 @@ func storageParams2alterTable(desc Descriptor, tableName string, existingParams 
 		}
 	}
 
+	if sp.HasAutovacuumVacuumInsertThreshold() {
+		desired := strconv.FormatInt(int64(sp.GetAutovacuumVacuumInsertThreshold()), 10)
+		if needsUpdate("autovacuum_vacuum_insert_threshold", desired, false) {
+			params = append(params, "autovacuum_vacuum_insert_threshold = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumVacuumInsertScaleFactor() {
+		desired := strconv.FormatFloat(float64(sp.GetAutovacuumVacuumInsertScaleFactor()), 'f', -1, 32)
+		if needsUpdate("autovacuum_vacuum_insert_scale_factor", desired, true) {
+			params = append(params, "autovacuum_vacuum_insert_scale_factor = "+desired)
+		}
+	}
+
+	if sp.HasAutovacuumVacuumMaxThreshold() {
+		desired := strconv.FormatInt(int64(sp.GetAutovacuumVacuumMaxThreshold()), 10)
+		if needsUpdate("autovacuum_vacuum_max_threshold", desired, false) {
+			params = append(params, "autovacuum_vacuum_max_threshold = "+desired)
+		}
+	}
+
+	if sp.HasVacuumMaxEagerFreezeFailureRate() {
+		desired := strconv.FormatFloat(float64(sp.GetVacuumMaxEagerFreezeFailureRate()), 'f', -1, 32)
+		if needsUpdate("vacuum_max_eager_freeze_failure_rate", desired, true) {
+			params = append(params, "vacuum_max_eager_freeze_failure_rate = "+desired)
+		}
+	}
+
+	if desired := vacuumIndexCleanupValue(sp.GetVacuumIndexCleanup()); desired != "" {
+		existing, exists := getExistingValue("vacuum_index_cleanup")
+		if !exists || normalizeVacuumIndexCleanup(existing) != desired {
+			params = append(params, "vacuum_index_cleanup = "+desired)
+		}
+	}
+
 	if len(params) == 0 {
 		return ""
 	}
@@ -350,6 +409,38 @@ func storageParams2alterTable(desc Descriptor, tableName string, existingParams 
 	_, _ = buf.WriteString(strings.Join(params, ",\n  "))
 	_, _ = buf.WriteString("\n)\n")
 	return buf.String()
+}
+
+// vacuumIndexCleanupValue renders the reloption value for v, or "" when it is
+// unspecified and the server default should stand.
+func vacuumIndexCleanupValue(v MessageOptions_StorageParameters_VacuumIndexCleanup) string {
+	switch v {
+	case MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_AUTO:
+		return "auto"
+	case MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_ON:
+		return "on"
+	case MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_OFF:
+		return "off"
+	default:
+		return ""
+	}
+}
+
+// normalizeVacuumIndexCleanup maps a stored vacuum_index_cleanup reloption to
+// auto/on/off. PostgreSQL keeps the spelling it was set with and accepts
+// exactly auto, on/off, true/false, yes/no and 1/0 for it; unlike a boolean
+// GUC, prefixes such as "t" or "of" are rejected, so they never reach here.
+func normalizeVacuumIndexCleanup(stored string) string {
+	switch strings.ToLower(strings.TrimSpace(stored)) {
+	case "auto":
+		return "auto"
+	case "on", "true", "yes", "1":
+		return "on"
+	case "off", "false", "no", "0":
+		return "off"
+	default:
+		return stored
+	}
 }
 
 func col2alter(desc Descriptor, col *Column) string {

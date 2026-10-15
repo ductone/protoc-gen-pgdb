@@ -1553,11 +1553,111 @@ func (b0 Widget_builder) Build() *Widget {
 	return m0
 }
 
+// StorageParamsPG18 declares the PostgreSQL 18 storage parameters, plus the
+// zero and -1 values a template guard could silently drop. No test creates
+// its table, so it compiles everywhere but only exercises codegen: the
+// parameters themselves are rejected by servers older than 18.
+type StorageParamsPG18 struct {
+	state                protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_TenantId  string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3"`
+	xxx_hidden_Id        string                 `protobuf:"bytes,2,opt,name=id,proto3"`
+	xxx_hidden_CreatedAt *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_at,json=createdAt,proto3"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *StorageParamsPG18) Reset() {
+	*x = StorageParamsPG18{}
+	mi := &file_models_animals_v1_animals_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StorageParamsPG18) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageParamsPG18) ProtoMessage() {}
+
+func (x *StorageParamsPG18) ProtoReflect() protoreflect.Message {
+	mi := &file_models_animals_v1_animals_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *StorageParamsPG18) GetTenantId() string {
+	if x != nil {
+		return x.xxx_hidden_TenantId
+	}
+	return ""
+}
+
+func (x *StorageParamsPG18) GetId() string {
+	if x != nil {
+		return x.xxx_hidden_Id
+	}
+	return ""
+}
+
+func (x *StorageParamsPG18) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_CreatedAt
+	}
+	return nil
+}
+
+func (x *StorageParamsPG18) SetTenantId(v string) {
+	x.xxx_hidden_TenantId = v
+}
+
+func (x *StorageParamsPG18) SetId(v string) {
+	x.xxx_hidden_Id = v
+}
+
+func (x *StorageParamsPG18) SetCreatedAt(v *timestamppb.Timestamp) {
+	x.xxx_hidden_CreatedAt = v
+}
+
+func (x *StorageParamsPG18) HasCreatedAt() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_CreatedAt != nil
+}
+
+func (x *StorageParamsPG18) ClearCreatedAt() {
+	x.xxx_hidden_CreatedAt = nil
+}
+
+type StorageParamsPG18_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	TenantId  string
+	Id        string
+	CreatedAt *timestamppb.Timestamp
+}
+
+func (b0 StorageParamsPG18_builder) Build() *StorageParamsPG18 {
+	m0 := &StorageParamsPG18{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_TenantId = b.TenantId
+	x.xxx_hidden_Id = b.Id
+	x.xxx_hidden_CreatedAt = b.CreatedAt
+	return m0
+}
+
 var File_models_animals_v1_animals_proto protoreflect.FileDescriptor
 
 const file_models_animals_v1_animals_proto_rawDesc = "" +
 	"\n" +
-	"\x1fmodels/animals/v1/animals.proto\x12\x11models.animals.v1\x1a\x16dynamo/v1/dynamo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x12pgdb/v1/pgdb.proto\"\xfb\x06\n" +
+	"\x1fmodels/animals/v1/animals.proto\x12\x11models.animals.v1\x1a\x16dynamo/v1/dynamo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x12pgdb/v1/pgdb.proto\"\x86\a\n" +
 	"\x03Pet\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x16\n" +
 	"\x02id\x18\x02 \x01(\tB\x06\xd2\xf7\x02\x02\b\x01R\x02id\x129\n" +
@@ -1577,12 +1677,12 @@ const file_models_animals_v1_animals_proto_rawDesc = "" +
 	"\x05price\x18\r \x01(\x01R\x05price\x12\x9a\x01\n" +
 	"Ivery_long_naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame\x18\x0e \x01(\bRGveryLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame\x12>\n" +
 	"\x0eextra_profiles\x18\x0f \x03(\v2\x17.google.protobuf.StructR\rextraProfiles\x12H\n" +
-	"\x1dfield_with_v17_collation_only\x18\x10 \x01(\tB\x06\xd2\xf7\x02\x028\x01R\x19fieldWithV17CollationOnly:O\x82\xf7\x02\x1a\x12\x18\n" +
+	"\x1dfield_with_v17_collation_only\x18\x10 \x01(\tB\x06\xd2\xf7\x02\x028\x01R\x19fieldWithV17CollationOnly:Z\x82\xf7\x02\x1a\x12\x18\n" +
 	"\ttenant_id\n" +
-	"\x02id\x1a\aexample\xd2\xf7\x02-\x12\x1f\n" +
-	"\aprofile\x10\x03\x1a\ttenant_id\x1a\aprofileZ\n" +
-	"\b\xe8\a\x15\n" +
-	"\xd7#<PZ\"\xac\f\n" +
+	"\x02id\x1a\aexample\xd2\xf7\x028\x12\x1f\n" +
+	"\aprofile\x10\x03\x1a\ttenant_id\x1a\aprofileZ\x15\b\xe8\a\x15\n" +
+	"\xd7#<PZh\xe8\au\n" +
+	"ף;\x88\x01\x02\"\xac\f\n" +
 	"\vScalarValue\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\x12\x16\n" +
@@ -1657,14 +1757,21 @@ const file_models_animals_v1_animals_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt:$\x82\xf7\x02\x1a\x12\x18\n" +
 	"\ttenant_id\n" +
-	"\x02id\x1a\aexample\xd2\xf7\x02\x02h\x01*I\n" +
+	"\x02id\x1a\aexample\xd2\xf7\x02\x02h\x01\"\xb7\x01\n" +
+	"\x11StorageParamsPG18\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x129\n" +
+	"\n" +
+	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt::\x82\xf7\x02\x1a\x12\x18\n" +
+	"\ttenant_id\n" +
+	"\x02id\x1a\aexample\xd2\xf7\x02\x18Z\x16h\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01x\xc0\x96\xb1\x02\x85\x01\x00\x00\x00\x00*I\n" +
 	"\aFurType\x12\x18\n" +
 	"\x14FUR_TYPE_UNSPECIFIED\x10\x00\x12\x11\n" +
 	"\rFUR_TYPE_NONE\x10\x01\x12\x11\n" +
 	"\rFUR_TYPE_LOTS\x10\x02B>Z<github.com/ductone/protoc-gen-pgdb/example/models/animals/v1b\x06proto3"
 
 var file_models_animals_v1_animals_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_models_animals_v1_animals_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_models_animals_v1_animals_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_models_animals_v1_animals_proto_goTypes = []any{
 	(FurType)(0),                   // 0: models.animals.v1.FurType
 	(*Pet)(nil),                    // 1: models.animals.v1.Pet
@@ -1674,36 +1781,38 @@ var file_models_animals_v1_animals_proto_goTypes = []any{
 	(*Book)(nil),                   // 5: models.animals.v1.Book
 	(*Newspaper)(nil),              // 6: models.animals.v1.Newspaper
 	(*Widget)(nil),                 // 7: models.animals.v1.Widget
-	nil,                            // 8: models.animals.v1.ScalarValue.StringMapEntry
-	(*timestamppb.Timestamp)(nil),  // 9: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),    // 10: google.protobuf.Duration
-	(*structpb.Struct)(nil),        // 11: google.protobuf.Struct
-	(*wrapperspb.StringValue)(nil), // 12: google.protobuf.StringValue
-	(*wrapperspb.BoolValue)(nil),   // 13: google.protobuf.BoolValue
+	(*StorageParamsPG18)(nil),      // 8: models.animals.v1.StorageParamsPG18
+	nil,                            // 9: models.animals.v1.ScalarValue.StringMapEntry
+	(*timestamppb.Timestamp)(nil),  // 10: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),    // 11: google.protobuf.Duration
+	(*structpb.Struct)(nil),        // 12: google.protobuf.Struct
+	(*wrapperspb.StringValue)(nil), // 13: google.protobuf.StringValue
+	(*wrapperspb.BoolValue)(nil),   // 14: google.protobuf.BoolValue
 }
 var file_models_animals_v1_animals_proto_depIdxs = []int32{
-	9,  // 0: models.animals.v1.Pet.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 1: models.animals.v1.Pet.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 2: models.animals.v1.Pet.deleted_at:type_name -> google.protobuf.Timestamp
-	10, // 3: models.animals.v1.Pet.elapsed:type_name -> google.protobuf.Duration
-	11, // 4: models.animals.v1.Pet.profile:type_name -> google.protobuf.Struct
-	11, // 5: models.animals.v1.Pet.extra_profiles:type_name -> google.protobuf.Struct
+	10, // 0: models.animals.v1.Pet.created_at:type_name -> google.protobuf.Timestamp
+	10, // 1: models.animals.v1.Pet.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 2: models.animals.v1.Pet.deleted_at:type_name -> google.protobuf.Timestamp
+	11, // 3: models.animals.v1.Pet.elapsed:type_name -> google.protobuf.Duration
+	12, // 4: models.animals.v1.Pet.profile:type_name -> google.protobuf.Struct
+	12, // 5: models.animals.v1.Pet.extra_profiles:type_name -> google.protobuf.Struct
 	0,  // 6: models.animals.v1.ScalarValue.repeated_enum:type_name -> models.animals.v1.FurType
-	8,  // 7: models.animals.v1.ScalarValue.string_map:type_name -> models.animals.v1.ScalarValue.StringMapEntry
-	9,  // 8: models.animals.v1.ScalarValue.created_at:type_name -> google.protobuf.Timestamp
-	12, // 9: models.animals.v1.ScalarValue.str_ptr:type_name -> google.protobuf.StringValue
-	13, // 10: models.animals.v1.ScalarValue.bool_ptr:type_name -> google.protobuf.BoolValue
-	9,  // 11: models.animals.v1.Book.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 7: models.animals.v1.ScalarValue.string_map:type_name -> models.animals.v1.ScalarValue.StringMapEntry
+	10, // 8: models.animals.v1.ScalarValue.created_at:type_name -> google.protobuf.Timestamp
+	13, // 9: models.animals.v1.ScalarValue.str_ptr:type_name -> google.protobuf.StringValue
+	14, // 10: models.animals.v1.ScalarValue.bool_ptr:type_name -> google.protobuf.BoolValue
+	10, // 11: models.animals.v1.Book.created_at:type_name -> google.protobuf.Timestamp
 	4,  // 12: models.animals.v1.Book.paper:type_name -> models.animals.v1.PaperBook
 	3,  // 13: models.animals.v1.Book.ebook:type_name -> models.animals.v1.EBook
 	6,  // 14: models.animals.v1.Book.news:type_name -> models.animals.v1.Newspaper
-	9,  // 15: models.animals.v1.Newspaper.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 16: models.animals.v1.Widget.created_at:type_name -> google.protobuf.Timestamp
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	10, // 15: models.animals.v1.Newspaper.created_at:type_name -> google.protobuf.Timestamp
+	10, // 16: models.animals.v1.Widget.created_at:type_name -> google.protobuf.Timestamp
+	10, // 17: models.animals.v1.StorageParamsPG18.created_at:type_name -> google.protobuf.Timestamp
+	18, // [18:18] is the sub-list for method output_type
+	18, // [18:18] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_models_animals_v1_animals_proto_init() }
@@ -1722,7 +1831,7 @@ func file_models_animals_v1_animals_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_models_animals_v1_animals_proto_rawDesc), len(file_models_animals_v1_animals_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
