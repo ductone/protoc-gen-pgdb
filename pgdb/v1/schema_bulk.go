@@ -19,16 +19,23 @@ type CatalogSnapshot struct {
 	stats map[string]map[string]struct{}
 	// storageParams maps table_name -> storage parameter key-value pairs
 	storageParams map[string]map[string]string
+	// partitionChildren maps a parent table name -> its partition children's
+	// reloptions, ordered by child name as readPartitionChildStorageParameters
+	// orders them, so the per-run ALTER cap advances identically.
+	partitionChildren map[string][]partitionChildParams
 }
 
-// ReadCatalogSnapshot fetches columns, indexes, statistics, and storage parameters
-// for all tables in the public schema in 4 bulk queries, rather than 4 queries per table.
+// ReadCatalogSnapshot fetches columns, indexes, statistics, storage parameters, and
+// partition children's storage parameters for all tables in the public schema in 5
+// bulk queries, rather than 4-5 queries per table.
 func ReadCatalogSnapshot(ctx context.Context, db sqlScanner) (*CatalogSnapshot, error) {
 	snap := &CatalogSnapshot{
 		columns:       make(map[string]map[string]struct{}),
 		indexes:       make(map[string]map[string]struct{}),
 		stats:         make(map[string]map[string]struct{}),
 		storageParams: make(map[string]map[string]string),
+
+		partitionChildren: make(map[string][]partitionChildParams),
 	}
 
 	if err := snap.readAllColumns(ctx, db); err != nil {
@@ -42,6 +49,9 @@ func ReadCatalogSnapshot(ctx context.Context, db sqlScanner) (*CatalogSnapshot, 
 	}
 	if err := snap.readAllStorageParams(ctx, db); err != nil {
 		return nil, fmt.Errorf("catalog snapshot: reading storage params: %w", err)
+	}
+	if err := snap.readAllPartitionChildren(ctx, db); err != nil {
+		return nil, fmt.Errorf("catalog snapshot: reading partition children: %w", err)
 	}
 
 	return snap, nil
@@ -205,6 +215,41 @@ func (s *CatalogSnapshot) storageParamsForTable(tableName string) map[string]str
 	return s.storageParams[tableName]
 }
 
+// readAllPartitionChildren is the bulk form of readPartitionChildStorageParameters.
+func (s *CatalogSnapshot) readAllPartitionChildren(ctx context.Context, db sqlScanner) error {
+	dialect := goqu.Dialect("postgres")
+
+	qb := dialect.From("pg_inherits")
+	qb = qb.Select("parent.relname", "child.relname", "child.reloptions")
+	qb = qb.Join(goqu.T("pg_class").As("parent"), goqu.On(goqu.I("parent.oid").Eq(goqu.I("pg_inherits.inhparent"))))
+	qb = qb.Join(goqu.T("pg_class").As("child"), goqu.On(goqu.I("child.oid").Eq(goqu.I("pg_inherits.inhrelid"))))
+	qb = qb.Join(goqu.T("pg_namespace"), goqu.On(goqu.I("pg_namespace.oid").Eq(goqu.I("child.relnamespace"))))
+	qb = qb.Where(goqu.L("pg_namespace.nspname = ?", "public"))
+	qb = qb.Order(goqu.I("parent.relname").Asc(), goqu.I("child.relname").Asc())
+	query, params, err := qb.ToSQL()
+	if err != nil {
+		return err
+	}
+
+	rows, err := db.Query(ctx, query, params...)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var parentName, childName string
+		var reloptions []string
+		if err := rows.Scan(&parentName, &childName, &reloptions); err != nil {
+			return err
+		}
+		childParams := make(map[string]string)
+		parseReloptions(reloptions, childParams)
+		s.partitionChildren[parentName] = append(s.partitionChildren[parentName], partitionChildParams{tableName: childName, params: childParams})
+	}
+	return rows.Err()
+}
+
 // MigrationsWithCatalog computes the DDL migrations needed for a single table using
 // a pre-fetched CatalogSnapshot instead of querying the catalog per table.
 // This is functionally identical to Migrations but avoids per-table catalog queries.
@@ -272,9 +317,17 @@ func MigrationsWithCatalog(snap *CatalogSnapshot, msg DBReflectMessage, dialect 
 		}
 	}
 
-	existingStorageParams := snap.storageParamsForTable(desc.TableName())
-	if storageParamsAlter := storageParams2alter(desc, existingStorageParams); storageParamsAlter != "" {
-		rv = append(rv, storageParamsAlter)
+	if !isPartitionedParent(desc) {
+		existingStorageParams := snap.storageParamsForTable(desc.TableName())
+		if storageParamsAlter := storageParams2alter(desc, existingStorageParams); storageParamsAlter != "" {
+			rv = append(rv, storageParamsAlter)
+		}
+	}
+
+	// Last for the same reason as in Migrations: a contended child must not
+	// cost the column and index statements above.
+	if isPartitionedParent(desc) && desc.GetStorageParameters() != nil {
+		rv = append(rv, partitionChildAlters(desc, snap.partitionChildren[desc.TableName()], maxPartitionChildStorageParamAlters)...)
 	}
 
 	return rv, nil
