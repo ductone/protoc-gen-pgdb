@@ -27,4 +27,5 @@ func TestPetStorageParameters(t *testing.T) {
 	// two assert the declaration in animals.proto actually survives codegen.
 	require.Equal(t, int32(1000), sp.GetAutovacuumVacuumInsertThreshold())
 	require.InDelta(t, 0.005, sp.GetAutovacuumVacuumInsertScaleFactor(), 1e-9)
+	require.Equal(t, pgdb_v1.MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_ON, sp.GetVacuumIndexCleanup())
 }

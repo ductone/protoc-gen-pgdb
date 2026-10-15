@@ -66,6 +66,32 @@ message MessageOptions {
     optional int32 autovacuum_vacuum_insert_threshold = 13;
     // Fraction-of-table-size term of the insert-driven trigger described above.
     optional float autovacuum_vacuum_insert_scale_factor = 14;
+
+    // PG18+. Caps the dead-tuple trigger: vacuum starts once dead tuples
+    // exceed min(threshold + scale_factor * reltuples, this). Keeps a scale
+    // factor from deferring vacuum on a very large table. -1 disables the cap.
+    // Declaring it on an older server fails the CREATE/ALTER.
+    optional int32 autovacuum_vacuum_max_threshold = 15;
+    // PG18+. Fraction of all-visible-but-not-all-frozen pages a normal vacuum
+    // may fail to freeze while eagerly scanning before it stops doing so.
+    // 0 disables eager scanning. Declaring it on an older server fails the
+    // CREATE/ALTER.
+    optional float vacuum_max_eager_freeze_failure_rate = 16;
+
+    enum VacuumIndexCleanup {
+      VACUUM_INDEX_CLEANUP_UNSPECIFIED = 0;
+      // Skip index vacuuming when too few heap pages hold dead tuples for it
+      // to be worth it (PostgreSQL's default).
+      VACUUM_INDEX_CLEANUP_AUTO = 1;
+      VACUUM_INDEX_CLEANUP_ON = 2;
+      // Never vacuum indexes. Dead index entries are left behind, so this
+      // suits only short-lived tables or emergencies.
+      VACUUM_INDEX_CLEANUP_OFF = 3;
+    }
+    // Whether vacuum removes index entries pointing to dead tuples. Matters
+    // most for tables whose index pass dominates vacuum cost, such as large
+    // HNSW indexes. UNSPECIFIED leaves the server default.
+    VacuumIndexCleanup vacuum_index_cleanup = 17;
   }
   StorageParameters storage_parameters = 11;
 

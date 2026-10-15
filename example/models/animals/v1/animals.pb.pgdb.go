@@ -56,6 +56,7 @@ func (d *pgdbDescriptorPet) GetStorageParameters() *pgdb_v1.MessageOptions_Stora
 		Fillfactor:                        proto.Int32(90),
 		AutovacuumVacuumInsertThreshold:   proto.Int32(1000),
 		AutovacuumVacuumInsertScaleFactor: proto.Float32(0.005),
+		VacuumIndexCleanup:                pgdb_v1.MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_ON,
 	}.Build()
 }
 

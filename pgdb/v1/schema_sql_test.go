@@ -478,6 +478,52 @@ func TestStorageParams2with(t *testing.T) {
   autovacuum_vacuum_insert_scale_factor = 0.01
 )`,
 		},
+		{
+			name: "PG18 dead-tuple cap and eager freeze rate",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumMaxThreshold(5000000)
+					sp.SetVacuumMaxEagerFreezeFailureRate(0.05)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_max_threshold = 5000000,
+  vacuum_max_eager_freeze_failure_rate = 0.05
+)`,
+		},
+		{
+			name: "vacuum_index_cleanup off",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetVacuumIndexCleanup(MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_OFF)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  vacuum_index_cleanup = off
+)`,
+		},
+		{
+			// UNSPECIFIED is the zero value, so a message that sets other
+			// parameters must not also emit an index-cleanup override.
+			name: "vacuum_index_cleanup unspecified renders nothing",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetFillfactor(90)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  fillfactor = 90
+)`,
+		},
 	}
 
 	for _, test := range tests {
@@ -856,6 +902,80 @@ SET (
 			expected: `ALTER TABLE "test_table"
 SET (
   autovacuum_enabled = false
+)
+`,
+		},
+		{
+			name: "PG18 parameters drift",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumMaxThreshold(5000000)
+					sp.SetVacuumMaxEagerFreezeFailureRate(0.05)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_max_threshold":      "100000000",
+				"vacuum_max_eager_freeze_failure_rate": "0.05", // matches
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_max_threshold = 5000000
+)
+`,
+		},
+		{
+			// PostgreSQL keeps the spelling the reloption was set with, so a
+			// table set to "false" out of band already agrees with off.
+			name: "vacuum_index_cleanup boolean spelling is not drift",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetVacuumIndexCleanup(MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_OFF)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"vacuum_index_cleanup": "FALSE",
+			},
+			expected: "",
+		},
+		{
+			name: "vacuum_index_cleanup drift",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetVacuumIndexCleanup(MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_AUTO)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"vacuum_index_cleanup": "on",
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  vacuum_index_cleanup = auto
+)
+`,
+		},
+		{
+			name: "vacuum_index_cleanup missing",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetVacuumIndexCleanup(MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_OFF)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{},
+			expected: `ALTER TABLE "test_table"
+SET (
+  vacuum_index_cleanup = off
 )
 `,
 		},

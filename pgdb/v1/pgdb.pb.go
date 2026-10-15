@@ -114,6 +114,57 @@ func (x MessageOptions_PartitionedByDateRange) Number() protoreflect.EnumNumber 
 	return protoreflect.EnumNumber(x)
 }
 
+type MessageOptions_StorageParameters_VacuumIndexCleanup int32
+
+const (
+	MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_UNSPECIFIED MessageOptions_StorageParameters_VacuumIndexCleanup = 0
+	// Skip index vacuuming when too few heap pages hold dead tuples for it
+	// to be worth it (PostgreSQL's default).
+	MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_AUTO MessageOptions_StorageParameters_VacuumIndexCleanup = 1
+	MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_ON   MessageOptions_StorageParameters_VacuumIndexCleanup = 2
+	// Never vacuum indexes. Dead index entries are left behind, so this
+	// suits only short-lived tables or emergencies.
+	MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_OFF MessageOptions_StorageParameters_VacuumIndexCleanup = 3
+)
+
+// Enum value maps for MessageOptions_StorageParameters_VacuumIndexCleanup.
+var (
+	MessageOptions_StorageParameters_VacuumIndexCleanup_name = map[int32]string{
+		0: "VACUUM_INDEX_CLEANUP_UNSPECIFIED",
+		1: "VACUUM_INDEX_CLEANUP_AUTO",
+		2: "VACUUM_INDEX_CLEANUP_ON",
+		3: "VACUUM_INDEX_CLEANUP_OFF",
+	}
+	MessageOptions_StorageParameters_VacuumIndexCleanup_value = map[string]int32{
+		"VACUUM_INDEX_CLEANUP_UNSPECIFIED": 0,
+		"VACUUM_INDEX_CLEANUP_AUTO":        1,
+		"VACUUM_INDEX_CLEANUP_ON":          2,
+		"VACUUM_INDEX_CLEANUP_OFF":         3,
+	}
+)
+
+func (x MessageOptions_StorageParameters_VacuumIndexCleanup) Enum() *MessageOptions_StorageParameters_VacuumIndexCleanup {
+	p := new(MessageOptions_StorageParameters_VacuumIndexCleanup)
+	*p = x
+	return p
+}
+
+func (x MessageOptions_StorageParameters_VacuumIndexCleanup) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (MessageOptions_StorageParameters_VacuumIndexCleanup) Descriptor() protoreflect.EnumDescriptor {
+	return file_pgdb_v1_pgdb_proto_enumTypes[2].Descriptor()
+}
+
+func (MessageOptions_StorageParameters_VacuumIndexCleanup) Type() protoreflect.EnumType {
+	return &file_pgdb_v1_pgdb_proto_enumTypes[2]
+}
+
+func (x MessageOptions_StorageParameters_VacuumIndexCleanup) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
 type MessageOptions_Index_IndexMethod int32
 
 const (
@@ -155,11 +206,11 @@ func (x MessageOptions_Index_IndexMethod) String() string {
 }
 
 func (MessageOptions_Index_IndexMethod) Descriptor() protoreflect.EnumDescriptor {
-	return file_pgdb_v1_pgdb_proto_enumTypes[2].Descriptor()
+	return file_pgdb_v1_pgdb_proto_enumTypes[3].Descriptor()
 }
 
 func (MessageOptions_Index_IndexMethod) Type() protoreflect.EnumType {
-	return &file_pgdb_v1_pgdb_proto_enumTypes[2]
+	return &file_pgdb_v1_pgdb_proto_enumTypes[3]
 }
 
 func (x MessageOptions_Index_IndexMethod) Number() protoreflect.EnumNumber {
@@ -202,11 +253,11 @@ func (x MessageOptions_Stat_StatsKind) String() string {
 }
 
 func (MessageOptions_Stat_StatsKind) Descriptor() protoreflect.EnumDescriptor {
-	return file_pgdb_v1_pgdb_proto_enumTypes[3].Descriptor()
+	return file_pgdb_v1_pgdb_proto_enumTypes[4].Descriptor()
 }
 
 func (MessageOptions_Stat_StatsKind) Type() protoreflect.EnumType {
-	return &file_pgdb_v1_pgdb_proto_enumTypes[3]
+	return &file_pgdb_v1_pgdb_proto_enumTypes[4]
 }
 
 func (x MessageOptions_Stat_StatsKind) Number() protoreflect.EnumNumber {
@@ -251,11 +302,11 @@ func (x FieldOptions_FullTextType) String() string {
 }
 
 func (FieldOptions_FullTextType) Descriptor() protoreflect.EnumDescriptor {
-	return file_pgdb_v1_pgdb_proto_enumTypes[4].Descriptor()
+	return file_pgdb_v1_pgdb_proto_enumTypes[5].Descriptor()
 }
 
 func (FieldOptions_FullTextType) Type() protoreflect.EnumType {
-	return &file_pgdb_v1_pgdb_proto_enumTypes[4]
+	return &file_pgdb_v1_pgdb_proto_enumTypes[5]
 }
 
 func (x FieldOptions_FullTextType) Number() protoreflect.EnumNumber {
@@ -298,11 +349,11 @@ func (x FieldOptions_FullTextWeight) String() string {
 }
 
 func (FieldOptions_FullTextWeight) Descriptor() protoreflect.EnumDescriptor {
-	return file_pgdb_v1_pgdb_proto_enumTypes[5].Descriptor()
+	return file_pgdb_v1_pgdb_proto_enumTypes[6].Descriptor()
 }
 
 func (FieldOptions_FullTextWeight) Type() protoreflect.EnumType {
-	return &file_pgdb_v1_pgdb_proto_enumTypes[5]
+	return &file_pgdb_v1_pgdb_proto_enumTypes[6]
 }
 
 func (x FieldOptions_FullTextWeight) Number() protoreflect.EnumNumber {
@@ -357,11 +408,11 @@ func (x FieldOptions_MessageBehavior) String() string {
 }
 
 func (FieldOptions_MessageBehavior) Descriptor() protoreflect.EnumDescriptor {
-	return file_pgdb_v1_pgdb_proto_enumTypes[6].Descriptor()
+	return file_pgdb_v1_pgdb_proto_enumTypes[7].Descriptor()
 }
 
 func (FieldOptions_MessageBehavior) Type() protoreflect.EnumType {
-	return &file_pgdb_v1_pgdb_proto_enumTypes[6]
+	return &file_pgdb_v1_pgdb_proto_enumTypes[7]
 }
 
 func (x FieldOptions_MessageBehavior) Number() protoreflect.EnumNumber {
@@ -844,21 +895,24 @@ func (b0 EnumValueOptions_builder) Build() *EnumValueOptions {
 // PostgreSQL storage parameters for the table.
 // See: https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-STORAGE-PARAMETERS
 type MessageOptions_StorageParameters struct {
-	state                                        protoimpl.MessageState `protogen:"opaque.v1"`
-	xxx_hidden_AutovacuumVacuumThreshold         int32                  `protobuf:"varint,1,opt,name=autovacuum_vacuum_threshold,json=autovacuumVacuumThreshold,proto3,oneof"`
-	xxx_hidden_AutovacuumVacuumScaleFactor       float32                `protobuf:"fixed32,2,opt,name=autovacuum_vacuum_scale_factor,json=autovacuumVacuumScaleFactor,proto3,oneof"`
-	xxx_hidden_AutovacuumAnalyzeThreshold        int32                  `protobuf:"varint,3,opt,name=autovacuum_analyze_threshold,json=autovacuumAnalyzeThreshold,proto3,oneof"`
-	xxx_hidden_AutovacuumAnalyzeScaleFactor      float32                `protobuf:"fixed32,4,opt,name=autovacuum_analyze_scale_factor,json=autovacuumAnalyzeScaleFactor,proto3,oneof"`
-	xxx_hidden_AutovacuumVacuumCostDelay         int32                  `protobuf:"varint,5,opt,name=autovacuum_vacuum_cost_delay,json=autovacuumVacuumCostDelay,proto3,oneof"`
-	xxx_hidden_AutovacuumVacuumCostLimit         int32                  `protobuf:"varint,6,opt,name=autovacuum_vacuum_cost_limit,json=autovacuumVacuumCostLimit,proto3,oneof"`
-	xxx_hidden_AutovacuumFreezeMinAge            int64                  `protobuf:"varint,7,opt,name=autovacuum_freeze_min_age,json=autovacuumFreezeMinAge,proto3,oneof"`
-	xxx_hidden_AutovacuumFreezeMaxAge            int64                  `protobuf:"varint,8,opt,name=autovacuum_freeze_max_age,json=autovacuumFreezeMaxAge,proto3,oneof"`
-	xxx_hidden_AutovacuumFreezeTableAge          int64                  `protobuf:"varint,9,opt,name=autovacuum_freeze_table_age,json=autovacuumFreezeTableAge,proto3,oneof"`
-	xxx_hidden_Fillfactor                        int32                  `protobuf:"varint,10,opt,name=fillfactor,proto3,oneof"`
-	xxx_hidden_ToastTupleTarget                  int32                  `protobuf:"varint,11,opt,name=toast_tuple_target,json=toastTupleTarget,proto3,oneof"`
-	xxx_hidden_AutovacuumEnabled                 bool                   `protobuf:"varint,12,opt,name=autovacuum_enabled,json=autovacuumEnabled,proto3,oneof"`
-	xxx_hidden_AutovacuumVacuumInsertThreshold   int32                  `protobuf:"varint,13,opt,name=autovacuum_vacuum_insert_threshold,json=autovacuumVacuumInsertThreshold,proto3,oneof"`
-	xxx_hidden_AutovacuumVacuumInsertScaleFactor float32                `protobuf:"fixed32,14,opt,name=autovacuum_vacuum_insert_scale_factor,json=autovacuumVacuumInsertScaleFactor,proto3,oneof"`
+	state                                        protoimpl.MessageState                              `protogen:"opaque.v1"`
+	xxx_hidden_AutovacuumVacuumThreshold         int32                                               `protobuf:"varint,1,opt,name=autovacuum_vacuum_threshold,json=autovacuumVacuumThreshold,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumScaleFactor       float32                                             `protobuf:"fixed32,2,opt,name=autovacuum_vacuum_scale_factor,json=autovacuumVacuumScaleFactor,proto3,oneof"`
+	xxx_hidden_AutovacuumAnalyzeThreshold        int32                                               `protobuf:"varint,3,opt,name=autovacuum_analyze_threshold,json=autovacuumAnalyzeThreshold,proto3,oneof"`
+	xxx_hidden_AutovacuumAnalyzeScaleFactor      float32                                             `protobuf:"fixed32,4,opt,name=autovacuum_analyze_scale_factor,json=autovacuumAnalyzeScaleFactor,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumCostDelay         int32                                               `protobuf:"varint,5,opt,name=autovacuum_vacuum_cost_delay,json=autovacuumVacuumCostDelay,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumCostLimit         int32                                               `protobuf:"varint,6,opt,name=autovacuum_vacuum_cost_limit,json=autovacuumVacuumCostLimit,proto3,oneof"`
+	xxx_hidden_AutovacuumFreezeMinAge            int64                                               `protobuf:"varint,7,opt,name=autovacuum_freeze_min_age,json=autovacuumFreezeMinAge,proto3,oneof"`
+	xxx_hidden_AutovacuumFreezeMaxAge            int64                                               `protobuf:"varint,8,opt,name=autovacuum_freeze_max_age,json=autovacuumFreezeMaxAge,proto3,oneof"`
+	xxx_hidden_AutovacuumFreezeTableAge          int64                                               `protobuf:"varint,9,opt,name=autovacuum_freeze_table_age,json=autovacuumFreezeTableAge,proto3,oneof"`
+	xxx_hidden_Fillfactor                        int32                                               `protobuf:"varint,10,opt,name=fillfactor,proto3,oneof"`
+	xxx_hidden_ToastTupleTarget                  int32                                               `protobuf:"varint,11,opt,name=toast_tuple_target,json=toastTupleTarget,proto3,oneof"`
+	xxx_hidden_AutovacuumEnabled                 bool                                                `protobuf:"varint,12,opt,name=autovacuum_enabled,json=autovacuumEnabled,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumInsertThreshold   int32                                               `protobuf:"varint,13,opt,name=autovacuum_vacuum_insert_threshold,json=autovacuumVacuumInsertThreshold,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumInsertScaleFactor float32                                             `protobuf:"fixed32,14,opt,name=autovacuum_vacuum_insert_scale_factor,json=autovacuumVacuumInsertScaleFactor,proto3,oneof"`
+	xxx_hidden_AutovacuumVacuumMaxThreshold      int32                                               `protobuf:"varint,15,opt,name=autovacuum_vacuum_max_threshold,json=autovacuumVacuumMaxThreshold,proto3,oneof"`
+	xxx_hidden_VacuumMaxEagerFreezeFailureRate   float32                                             `protobuf:"fixed32,16,opt,name=vacuum_max_eager_freeze_failure_rate,json=vacuumMaxEagerFreezeFailureRate,proto3,oneof"`
+	xxx_hidden_VacuumIndexCleanup                MessageOptions_StorageParameters_VacuumIndexCleanup `protobuf:"varint,17,opt,name=vacuum_index_cleanup,json=vacuumIndexCleanup,proto3,enum=pgdb.v1.MessageOptions_StorageParameters_VacuumIndexCleanup"`
 	XXX_raceDetectHookData                       protoimpl.RaceDetectHookData
 	XXX_presence                                 [1]uint32
 	unknownFields                                protoimpl.UnknownFields
@@ -988,74 +1042,109 @@ func (x *MessageOptions_StorageParameters) GetAutovacuumVacuumInsertScaleFactor(
 	return 0
 }
 
+func (x *MessageOptions_StorageParameters) GetAutovacuumVacuumMaxThreshold() int32 {
+	if x != nil {
+		return x.xxx_hidden_AutovacuumVacuumMaxThreshold
+	}
+	return 0
+}
+
+func (x *MessageOptions_StorageParameters) GetVacuumMaxEagerFreezeFailureRate() float32 {
+	if x != nil {
+		return x.xxx_hidden_VacuumMaxEagerFreezeFailureRate
+	}
+	return 0
+}
+
+func (x *MessageOptions_StorageParameters) GetVacuumIndexCleanup() MessageOptions_StorageParameters_VacuumIndexCleanup {
+	if x != nil {
+		return x.xxx_hidden_VacuumIndexCleanup
+	}
+	return MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_UNSPECIFIED
+}
+
 func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumThreshold(v int32) {
 	x.xxx_hidden_AutovacuumVacuumThreshold = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumScaleFactor(v float32) {
 	x.xxx_hidden_AutovacuumVacuumScaleFactor = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumAnalyzeThreshold(v int32) {
 	x.xxx_hidden_AutovacuumAnalyzeThreshold = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumAnalyzeScaleFactor(v float32) {
 	x.xxx_hidden_AutovacuumAnalyzeScaleFactor = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumCostDelay(v int32) {
 	x.xxx_hidden_AutovacuumVacuumCostDelay = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumCostLimit(v int32) {
 	x.xxx_hidden_AutovacuumVacuumCostLimit = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumFreezeMinAge(v int64) {
 	x.xxx_hidden_AutovacuumFreezeMinAge = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumFreezeMaxAge(v int64) {
 	x.xxx_hidden_AutovacuumFreezeMaxAge = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumFreezeTableAge(v int64) {
 	x.xxx_hidden_AutovacuumFreezeTableAge = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 8, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 8, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetFillfactor(v int32) {
 	x.xxx_hidden_Fillfactor = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 9, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 9, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetToastTupleTarget(v int32) {
 	x.xxx_hidden_ToastTupleTarget = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 10, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 10, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumEnabled(v bool) {
 	x.xxx_hidden_AutovacuumEnabled = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 11, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 11, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumInsertThreshold(v int32) {
 	x.xxx_hidden_AutovacuumVacuumInsertThreshold = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 12, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 12, 17)
 }
 
 func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumInsertScaleFactor(v float32) {
 	x.xxx_hidden_AutovacuumVacuumInsertScaleFactor = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 13, 14)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 13, 17)
+}
+
+func (x *MessageOptions_StorageParameters) SetAutovacuumVacuumMaxThreshold(v int32) {
+	x.xxx_hidden_AutovacuumVacuumMaxThreshold = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 14, 17)
+}
+
+func (x *MessageOptions_StorageParameters) SetVacuumMaxEagerFreezeFailureRate(v float32) {
+	x.xxx_hidden_VacuumMaxEagerFreezeFailureRate = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 15, 17)
+}
+
+func (x *MessageOptions_StorageParameters) SetVacuumIndexCleanup(v MessageOptions_StorageParameters_VacuumIndexCleanup) {
+	x.xxx_hidden_VacuumIndexCleanup = v
 }
 
 func (x *MessageOptions_StorageParameters) HasAutovacuumVacuumThreshold() bool {
@@ -1156,6 +1245,20 @@ func (x *MessageOptions_StorageParameters) HasAutovacuumVacuumInsertScaleFactor(
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 13)
 }
 
+func (x *MessageOptions_StorageParameters) HasAutovacuumVacuumMaxThreshold() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 14)
+}
+
+func (x *MessageOptions_StorageParameters) HasVacuumMaxEagerFreezeFailureRate() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 15)
+}
+
 func (x *MessageOptions_StorageParameters) ClearAutovacuumVacuumThreshold() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
 	x.xxx_hidden_AutovacuumVacuumThreshold = 0
@@ -1226,6 +1329,16 @@ func (x *MessageOptions_StorageParameters) ClearAutovacuumVacuumInsertScaleFacto
 	x.xxx_hidden_AutovacuumVacuumInsertScaleFactor = 0
 }
 
+func (x *MessageOptions_StorageParameters) ClearAutovacuumVacuumMaxThreshold() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 14)
+	x.xxx_hidden_AutovacuumVacuumMaxThreshold = 0
+}
+
+func (x *MessageOptions_StorageParameters) ClearVacuumMaxEagerFreezeFailureRate() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 15)
+	x.xxx_hidden_VacuumMaxEagerFreezeFailureRate = 0
+}
+
 type MessageOptions_StorageParameters_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
@@ -1254,6 +1367,20 @@ type MessageOptions_StorageParameters_builder struct {
 	AutovacuumVacuumInsertThreshold *int32
 	// Fraction-of-table-size term of the insert-driven trigger described above.
 	AutovacuumVacuumInsertScaleFactor *float32
+	// PG18+. Caps the dead-tuple trigger: vacuum starts once dead tuples
+	// exceed min(threshold + scale_factor * reltuples, this). Keeps a scale
+	// factor from deferring vacuum on a very large table. -1 disables the cap.
+	// Declaring it on an older server fails the CREATE/ALTER.
+	AutovacuumVacuumMaxThreshold *int32
+	// PG18+. Fraction of all-visible-but-not-all-frozen pages a normal vacuum
+	// may fail to freeze while eagerly scanning before it stops doing so.
+	// 0 disables eager scanning. Declaring it on an older server fails the
+	// CREATE/ALTER.
+	VacuumMaxEagerFreezeFailureRate *float32
+	// Whether vacuum removes index entries pointing to dead tuples. Matters
+	// most for tables whose index pass dominates vacuum cost, such as large
+	// HNSW indexes. UNSPECIFIED leaves the server default.
+	VacuumIndexCleanup MessageOptions_StorageParameters_VacuumIndexCleanup
 }
 
 func (b0 MessageOptions_StorageParameters_builder) Build() *MessageOptions_StorageParameters {
@@ -1261,61 +1388,70 @@ func (b0 MessageOptions_StorageParameters_builder) Build() *MessageOptions_Stora
 	b, x := &b0, m0
 	_, _ = b, x
 	if b.AutovacuumVacuumThreshold != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 17)
 		x.xxx_hidden_AutovacuumVacuumThreshold = *b.AutovacuumVacuumThreshold
 	}
 	if b.AutovacuumVacuumScaleFactor != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 17)
 		x.xxx_hidden_AutovacuumVacuumScaleFactor = *b.AutovacuumVacuumScaleFactor
 	}
 	if b.AutovacuumAnalyzeThreshold != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 17)
 		x.xxx_hidden_AutovacuumAnalyzeThreshold = *b.AutovacuumAnalyzeThreshold
 	}
 	if b.AutovacuumAnalyzeScaleFactor != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 17)
 		x.xxx_hidden_AutovacuumAnalyzeScaleFactor = *b.AutovacuumAnalyzeScaleFactor
 	}
 	if b.AutovacuumVacuumCostDelay != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 17)
 		x.xxx_hidden_AutovacuumVacuumCostDelay = *b.AutovacuumVacuumCostDelay
 	}
 	if b.AutovacuumVacuumCostLimit != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 17)
 		x.xxx_hidden_AutovacuumVacuumCostLimit = *b.AutovacuumVacuumCostLimit
 	}
 	if b.AutovacuumFreezeMinAge != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 17)
 		x.xxx_hidden_AutovacuumFreezeMinAge = *b.AutovacuumFreezeMinAge
 	}
 	if b.AutovacuumFreezeMaxAge != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 17)
 		x.xxx_hidden_AutovacuumFreezeMaxAge = *b.AutovacuumFreezeMaxAge
 	}
 	if b.AutovacuumFreezeTableAge != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 8, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 8, 17)
 		x.xxx_hidden_AutovacuumFreezeTableAge = *b.AutovacuumFreezeTableAge
 	}
 	if b.Fillfactor != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 9, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 9, 17)
 		x.xxx_hidden_Fillfactor = *b.Fillfactor
 	}
 	if b.ToastTupleTarget != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 10, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 10, 17)
 		x.xxx_hidden_ToastTupleTarget = *b.ToastTupleTarget
 	}
 	if b.AutovacuumEnabled != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 11, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 11, 17)
 		x.xxx_hidden_AutovacuumEnabled = *b.AutovacuumEnabled
 	}
 	if b.AutovacuumVacuumInsertThreshold != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 12, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 12, 17)
 		x.xxx_hidden_AutovacuumVacuumInsertThreshold = *b.AutovacuumVacuumInsertThreshold
 	}
 	if b.AutovacuumVacuumInsertScaleFactor != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 13, 14)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 13, 17)
 		x.xxx_hidden_AutovacuumVacuumInsertScaleFactor = *b.AutovacuumVacuumInsertScaleFactor
 	}
+	if b.AutovacuumVacuumMaxThreshold != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 14, 17)
+		x.xxx_hidden_AutovacuumVacuumMaxThreshold = *b.AutovacuumVacuumMaxThreshold
+	}
+	if b.VacuumMaxEagerFreezeFailureRate != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 15, 17)
+		x.xxx_hidden_VacuumMaxEagerFreezeFailureRate = *b.VacuumMaxEagerFreezeFailureRate
+	}
+	x.xxx_hidden_VacuumIndexCleanup = b.VacuumIndexCleanup
 	return m0
 }
 
@@ -1598,7 +1734,7 @@ var File_pgdb_v1_pgdb_proto protoreflect.FileDescriptor
 
 const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\n" +
-	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\x85\x17\n" +
+	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\xf9\x1a\n" +
 	"\x0eMessageOptions\x12\x1a\n" +
 	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x12!\n" +
 	"\fdrop_enabled\x18\f \x01(\bR\vdropEnabled\x121\n" +
@@ -1614,8 +1750,7 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\x1fpartitioned_by_ksuid_field_name\x18\t \x01(\tR\x1bpartitionedByKsuidFieldName\x122\n" +
 	"\x05stats\x18\x06 \x03(\v2\x1c.pgdb.v1.MessageOptions.StatR\x05stats\x12.\n" +
 	"\x11use_pkskv2_column\x18\n" +
-	" \x01(\bB\x02\x18\x01R\x0fusePkskv2Column\x1a\xee\n" +
-	"\n" +
+	" \x01(\bB\x02\x18\x01R\x0fusePkskv2Column\x1a\xe2\x0e\n" +
 	"\x11StorageParameters\x12C\n" +
 	"\x1bautovacuum_vacuum_threshold\x18\x01 \x01(\x05H\x00R\x19autovacuumVacuumThreshold\x88\x01\x01\x12H\n" +
 	"\x1eautovacuum_vacuum_scale_factor\x18\x02 \x01(\x02H\x01R\x1bautovacuumVacuumScaleFactor\x88\x01\x01\x12E\n" +
@@ -1634,7 +1769,15 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"R\x10toastTupleTarget\x88\x01\x01\x122\n" +
 	"\x12autovacuum_enabled\x18\f \x01(\bH\vR\x11autovacuumEnabled\x88\x01\x01\x12P\n" +
 	"\"autovacuum_vacuum_insert_threshold\x18\r \x01(\x05H\fR\x1fautovacuumVacuumInsertThreshold\x88\x01\x01\x12U\n" +
-	"%autovacuum_vacuum_insert_scale_factor\x18\x0e \x01(\x02H\rR!autovacuumVacuumInsertScaleFactor\x88\x01\x01B\x1e\n" +
+	"%autovacuum_vacuum_insert_scale_factor\x18\x0e \x01(\x02H\rR!autovacuumVacuumInsertScaleFactor\x88\x01\x01\x12J\n" +
+	"\x1fautovacuum_vacuum_max_threshold\x18\x0f \x01(\x05H\x0eR\x1cautovacuumVacuumMaxThreshold\x88\x01\x01\x12R\n" +
+	"$vacuum_max_eager_freeze_failure_rate\x18\x10 \x01(\x02H\x0fR\x1fvacuumMaxEagerFreezeFailureRate\x88\x01\x01\x12n\n" +
+	"\x14vacuum_index_cleanup\x18\x11 \x01(\x0e2<.pgdb.v1.MessageOptions.StorageParameters.VacuumIndexCleanupR\x12vacuumIndexCleanup\"\x94\x01\n" +
+	"\x12VacuumIndexCleanup\x12$\n" +
+	" VACUUM_INDEX_CLEANUP_UNSPECIFIED\x10\x00\x12\x1d\n" +
+	"\x19VACUUM_INDEX_CLEANUP_AUTO\x10\x01\x12\x1b\n" +
+	"\x17VACUUM_INDEX_CLEANUP_ON\x10\x02\x12\x1c\n" +
+	"\x18VACUUM_INDEX_CLEANUP_OFF\x10\x03B\x1e\n" +
 	"\x1c_autovacuum_vacuum_thresholdB!\n" +
 	"\x1f_autovacuum_vacuum_scale_factorB\x1f\n" +
 	"\x1d_autovacuum_analyze_thresholdB\"\n" +
@@ -1648,7 +1791,9 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\x13_toast_tuple_targetB\x15\n" +
 	"\x13_autovacuum_enabledB%\n" +
 	"#_autovacuum_vacuum_insert_thresholdB(\n" +
-	"&_autovacuum_vacuum_insert_scale_factor\x1a\x8c\x03\n" +
+	"&_autovacuum_vacuum_insert_scale_factorB\"\n" +
+	" _autovacuum_vacuum_max_thresholdB'\n" +
+	"%_vacuum_max_eager_freeze_failure_rate\x1a\x8c\x03\n" +
 	"\x05Index\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12A\n" +
 	"\x06method\x18\x02 \x01(\x0e2).pgdb.v1.MessageOptions.Index.IndexMethodR\x06method\x12\x18\n" +
@@ -1715,48 +1860,50 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\x04enum\x12!.google.protobuf.EnumValueOptions\x18\xfa. \x01(\v2\x19.pgdb.v1.EnumValueOptionsR\x04enumB\x81\x01\n" +
 	"\vcom.pgdb.v1B\tPgdbProtoP\x01Z*github.com/ductone/protoc-gen-pgdb/pgdb/v1\xa2\x02\x03PXX\xaa\x02\aPgdb.V1\xca\x02\aPgdb\\V1\xe2\x02\x13Pgdb\\V1\\GPBMetadata\xea\x02\bPgdb::V1b\x06proto3"
 
-var file_pgdb_v1_pgdb_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
+var file_pgdb_v1_pgdb_proto_enumTypes = make([]protoimpl.EnumInfo, 8)
 var file_pgdb_v1_pgdb_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_pgdb_v1_pgdb_proto_goTypes = []any{
-	(VectorElementType)(0),                     // 0: pgdb.v1.VectorElementType
-	(MessageOptions_PartitionedByDateRange)(0), // 1: pgdb.v1.MessageOptions.PartitionedByDateRange
-	(MessageOptions_Index_IndexMethod)(0),      // 2: pgdb.v1.MessageOptions.Index.IndexMethod
-	(MessageOptions_Stat_StatsKind)(0),         // 3: pgdb.v1.MessageOptions.Stat.StatsKind
-	(FieldOptions_FullTextType)(0),             // 4: pgdb.v1.FieldOptions.FullTextType
-	(FieldOptions_FullTextWeight)(0),           // 5: pgdb.v1.FieldOptions.FullTextWeight
-	(FieldOptions_MessageBehavior)(0),          // 6: pgdb.v1.FieldOptions.MessageBehavior
-	(*MessageOptions)(nil),                     // 7: pgdb.v1.MessageOptions
-	(*FieldOptions)(nil),                       // 8: pgdb.v1.FieldOptions
-	(*EnumValueOptions)(nil),                   // 9: pgdb.v1.EnumValueOptions
-	(*MessageOptions_StorageParameters)(nil),   // 10: pgdb.v1.MessageOptions.StorageParameters
-	(*MessageOptions_Index)(nil),               // 11: pgdb.v1.MessageOptions.Index
-	(*MessageOptions_Stat)(nil),                // 12: pgdb.v1.MessageOptions.Stat
-	(*descriptorpb.MessageOptions)(nil),        // 13: google.protobuf.MessageOptions
-	(*descriptorpb.FieldOptions)(nil),          // 14: google.protobuf.FieldOptions
-	(*descriptorpb.EnumValueOptions)(nil),      // 15: google.protobuf.EnumValueOptions
+	(VectorElementType)(0),                                   // 0: pgdb.v1.VectorElementType
+	(MessageOptions_PartitionedByDateRange)(0),               // 1: pgdb.v1.MessageOptions.PartitionedByDateRange
+	(MessageOptions_StorageParameters_VacuumIndexCleanup)(0), // 2: pgdb.v1.MessageOptions.StorageParameters.VacuumIndexCleanup
+	(MessageOptions_Index_IndexMethod)(0),                    // 3: pgdb.v1.MessageOptions.Index.IndexMethod
+	(MessageOptions_Stat_StatsKind)(0),                       // 4: pgdb.v1.MessageOptions.Stat.StatsKind
+	(FieldOptions_FullTextType)(0),                           // 5: pgdb.v1.FieldOptions.FullTextType
+	(FieldOptions_FullTextWeight)(0),                         // 6: pgdb.v1.FieldOptions.FullTextWeight
+	(FieldOptions_MessageBehavior)(0),                        // 7: pgdb.v1.FieldOptions.MessageBehavior
+	(*MessageOptions)(nil),                                   // 8: pgdb.v1.MessageOptions
+	(*FieldOptions)(nil),                                     // 9: pgdb.v1.FieldOptions
+	(*EnumValueOptions)(nil),                                 // 10: pgdb.v1.EnumValueOptions
+	(*MessageOptions_StorageParameters)(nil),                 // 11: pgdb.v1.MessageOptions.StorageParameters
+	(*MessageOptions_Index)(nil),                             // 12: pgdb.v1.MessageOptions.Index
+	(*MessageOptions_Stat)(nil),                              // 13: pgdb.v1.MessageOptions.Stat
+	(*descriptorpb.MessageOptions)(nil),                      // 14: google.protobuf.MessageOptions
+	(*descriptorpb.FieldOptions)(nil),                        // 15: google.protobuf.FieldOptions
+	(*descriptorpb.EnumValueOptions)(nil),                    // 16: google.protobuf.EnumValueOptions
 }
 var file_pgdb_v1_pgdb_proto_depIdxs = []int32{
-	10, // 0: pgdb.v1.MessageOptions.storage_parameters:type_name -> pgdb.v1.MessageOptions.StorageParameters
-	11, // 1: pgdb.v1.MessageOptions.indexes:type_name -> pgdb.v1.MessageOptions.Index
+	11, // 0: pgdb.v1.MessageOptions.storage_parameters:type_name -> pgdb.v1.MessageOptions.StorageParameters
+	12, // 1: pgdb.v1.MessageOptions.indexes:type_name -> pgdb.v1.MessageOptions.Index
 	1,  // 2: pgdb.v1.MessageOptions.partitioned_by_date_range:type_name -> pgdb.v1.MessageOptions.PartitionedByDateRange
-	12, // 3: pgdb.v1.MessageOptions.stats:type_name -> pgdb.v1.MessageOptions.Stat
-	4,  // 4: pgdb.v1.FieldOptions.full_text_type:type_name -> pgdb.v1.FieldOptions.FullTextType
-	5,  // 5: pgdb.v1.FieldOptions.full_text_weight:type_name -> pgdb.v1.FieldOptions.FullTextWeight
-	6,  // 6: pgdb.v1.FieldOptions.message_behavior:type_name -> pgdb.v1.FieldOptions.MessageBehavior
+	13, // 3: pgdb.v1.MessageOptions.stats:type_name -> pgdb.v1.MessageOptions.Stat
+	5,  // 4: pgdb.v1.FieldOptions.full_text_type:type_name -> pgdb.v1.FieldOptions.FullTextType
+	6,  // 5: pgdb.v1.FieldOptions.full_text_weight:type_name -> pgdb.v1.FieldOptions.FullTextWeight
+	7,  // 6: pgdb.v1.FieldOptions.message_behavior:type_name -> pgdb.v1.FieldOptions.MessageBehavior
 	0,  // 7: pgdb.v1.EnumValueOptions.vector_element_type:type_name -> pgdb.v1.VectorElementType
-	2,  // 8: pgdb.v1.MessageOptions.Index.method:type_name -> pgdb.v1.MessageOptions.Index.IndexMethod
-	3,  // 9: pgdb.v1.MessageOptions.Stat.kinds:type_name -> pgdb.v1.MessageOptions.Stat.StatsKind
-	13, // 10: pgdb.v1.msg:extendee -> google.protobuf.MessageOptions
-	14, // 11: pgdb.v1.options:extendee -> google.protobuf.FieldOptions
-	15, // 12: pgdb.v1.enum:extendee -> google.protobuf.EnumValueOptions
-	7,  // 13: pgdb.v1.msg:type_name -> pgdb.v1.MessageOptions
-	8,  // 14: pgdb.v1.options:type_name -> pgdb.v1.FieldOptions
-	9,  // 15: pgdb.v1.enum:type_name -> pgdb.v1.EnumValueOptions
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	13, // [13:16] is the sub-list for extension type_name
-	10, // [10:13] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	2,  // 8: pgdb.v1.MessageOptions.StorageParameters.vacuum_index_cleanup:type_name -> pgdb.v1.MessageOptions.StorageParameters.VacuumIndexCleanup
+	3,  // 9: pgdb.v1.MessageOptions.Index.method:type_name -> pgdb.v1.MessageOptions.Index.IndexMethod
+	4,  // 10: pgdb.v1.MessageOptions.Stat.kinds:type_name -> pgdb.v1.MessageOptions.Stat.StatsKind
+	14, // 11: pgdb.v1.msg:extendee -> google.protobuf.MessageOptions
+	15, // 12: pgdb.v1.options:extendee -> google.protobuf.FieldOptions
+	16, // 13: pgdb.v1.enum:extendee -> google.protobuf.EnumValueOptions
+	8,  // 14: pgdb.v1.msg:type_name -> pgdb.v1.MessageOptions
+	9,  // 15: pgdb.v1.options:type_name -> pgdb.v1.FieldOptions
+	10, // 16: pgdb.v1.enum:type_name -> pgdb.v1.EnumValueOptions
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	14, // [14:17] is the sub-list for extension type_name
+	11, // [11:14] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_pgdb_v1_pgdb_proto_init() }
@@ -1770,7 +1917,7 @@ func file_pgdb_v1_pgdb_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pgdb_v1_pgdb_proto_rawDesc), len(file_pgdb_v1_pgdb_proto_rawDesc)),
-			NumEnums:      7,
+			NumEnums:      8,
 			NumMessages:   6,
 			NumExtensions: 3,
 			NumServices:   0,
