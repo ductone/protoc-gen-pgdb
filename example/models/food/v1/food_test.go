@@ -1268,3 +1268,59 @@ func TestPartitionChildStorageParamRetrofit(t *testing.T) {
 	require.NoError(t, err)
 	require.Empty(t, storageParamAlters(lines), "no ALTER once children are correct")
 }
+
+// TestMigrationsWithCatalogParity requires the snapshot-backed planner to emit
+// exactly what Migrations emits for a tenant-partitioned model with storage
+// parameters, across a missing table, converged children, a stale child, and
+// the retrofit. The partitioned parent must never get a storage-parameter
+// ALTER (PostgreSQL rejects it); only children may.
+func TestMigrationsWithCatalogParity(t *testing.T) {
+	ctx := context.Background()
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	_, err = pg.DB.Exec(ctx, "CREATE EXTENSION IF NOT EXISTS btree_gin; CREATE EXTENSION IF NOT EXISTS vector;")
+	require.NoError(t, err)
+
+	msg := Pasta_builder{TenantId: "t1", Id: "p1"}.Build()
+	tableName := msg.DBReflect(pgdb_v1.DialectV13).Descriptor().TableName()
+
+	requireParity := func(stage string) []string {
+		want, err := pgdb_v1.Migrations(ctx, pg.DB, msg, pgdb_v1.DialectV13)
+		require.NoError(t, err)
+		snap, err := pgdb_v1.ReadCatalogSnapshot(ctx, pg.DB)
+		require.NoError(t, err)
+		got, err := pgdb_v1.MigrationsWithCatalog(snap, msg, pgdb_v1.DialectV13)
+		require.NoError(t, err)
+		require.Equalf(t, want, got, "%s: MigrationsWithCatalog diverged from Migrations", stage)
+		return got
+	}
+
+	for _, q := range requireParity("missing table") {
+		_, err = pg.DB.Exec(ctx, q)
+		require.NoErrorf(t, err, "failed to execute: %s", q)
+	}
+
+	fakeTenantIds := []string{"t1", "t2", "t3"}
+	testCreatePartitionTables(t, pg, msg, fakeTenantIds)
+	childTables := verifySubTables(t, pg, tableName, fakeTenantIds)
+	require.NotEmpty(t, childTables)
+
+	require.Empty(t, storageParamAlters(requireParity("converged children")))
+
+	stale := childTables[0]
+	_, err = pg.DB.Exec(ctx, fmt.Sprintf("ALTER TABLE %s RESET (fillfactor)", stale))
+	require.NoError(t, err)
+
+	alters := storageParamAlters(requireParity("stale child"))
+	require.Len(t, alters, 1)
+	require.Contains(t, alters[0], stale)
+	require.NotContains(t, alters[0], `"`+tableName+`"`, "the partitioned parent must not be altered")
+	for _, q := range alters {
+		_, err = pg.DB.Exec(ctx, q)
+		require.NoErrorf(t, err, "failed to execute: %s", q)
+	}
+
+	require.Empty(t, storageParamAlters(requireParity("after retrofit")))
+}
