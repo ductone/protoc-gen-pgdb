@@ -184,3 +184,25 @@ message Widget {
   string id = 2;
   google.protobuf.Timestamp created_at = 3;
 }
+
+// StorageParamsPG18 declares the PostgreSQL 18 storage parameters, plus the
+// zero and -1 values a template guard could silently drop. No test creates
+// its table, so it compiles everywhere but only exercises codegen: the
+// parameters themselves are rejected by servers older than 18.
+message StorageParamsPG18 {
+  option (dynamo.v1.msg).key = {
+    pk_fields: [
+      "tenant_id",
+      "id"
+    ]
+    sk_const: "example"
+  };
+  option (pgdb.v1.msg).storage_parameters = {
+    autovacuum_vacuum_max_threshold: 5000000
+    vacuum_max_eager_freeze_failure_rate: 0
+    autovacuum_vacuum_insert_threshold: -1
+  };
+  string tenant_id = 1;
+  string id = 2;
+  google.protobuf.Timestamp created_at = 3;
+}

@@ -42,6 +42,20 @@ func TestStorageParamsRoundTrip(t *testing.T) {
 			},
 		},
 		{
+			name: "vacuum_index_cleanup on",
+			build: func(sp *MessageOptions_StorageParameters) {
+				sp.SetVacuumIndexCleanup(MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_ON)
+			},
+		},
+		{
+			name: "insert trigger disabled alongside existing parameters",
+			build: func(sp *MessageOptions_StorageParameters) {
+				sp.SetAutovacuumVacuumInsertThreshold(-1)
+				sp.SetFillfactor(90)
+				sp.SetAutovacuumEnabled(false)
+			},
+		},
+		{
 			name: "vacuum_index_cleanup auto",
 			build: func(sp *MessageOptions_StorageParameters) {
 				sp.SetVacuumIndexCleanup(MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_AUTO)
@@ -83,4 +97,54 @@ func TestStorageParamsRoundTrip(t *testing.T) {
 				"declared parameters must read back as converged; stored reloptions: %v", reloptions)
 		})
 	}
+}
+
+// TestStorageParamsDriftRoundTrip starts from reloptions a real server stored
+// for different values, requires the drift ALTER to name only what actually
+// differs, runs that ALTER, and requires convergence. vacuum_index_cleanup is
+// stored as "false" here: the declared off must read as already converged.
+func TestStorageParamsDriftRoundTrip(t *testing.T) {
+	pg, err := pgtest.Start()
+	require.NoError(t, err)
+	defer pg.Stop()
+
+	ctx := context.Background()
+	const tableName = "storage_params_drift"
+	_, err = pg.DB.Exec(ctx, `CREATE TABLE "`+tableName+`" (id int) WITH (
+  vacuum_index_cleanup = false,
+  autovacuum_vacuum_insert_scale_factor = 0.2,
+  autovacuum_vacuum_scale_factor = 0.01
+)`)
+	require.NoError(t, err)
+
+	sp := &MessageOptions_StorageParameters{}
+	sp.SetVacuumIndexCleanup(MessageOptions_StorageParameters_VACUUM_INDEX_CLEANUP_OFF)
+	sp.SetAutovacuumVacuumInsertScaleFactor(0.005)
+	sp.SetAutovacuumVacuumScaleFactor(0.01)
+	sp.SetAutovacuumVacuumInsertThreshold(1000)
+	desc := &mockDescriptorWithStorageParams{
+		mockDescriptor: mockDescriptor{tableName: tableName},
+		storageParams:  sp,
+	}
+
+	readReloptions := func() map[string]string {
+		var reloptions []string
+		require.NoError(t, pg.DB.QueryRow(ctx,
+			"SELECT reloptions FROM pg_class WHERE relname = $1", tableName).Scan(&reloptions))
+		existing := make(map[string]string)
+		parseReloptions(reloptions, existing)
+		return existing
+	}
+
+	alter := storageParams2alterTable(desc, tableName, readReloptions())
+	require.Equal(t, `ALTER TABLE "storage_params_drift"
+SET (
+  autovacuum_vacuum_insert_threshold = 1000,
+  autovacuum_vacuum_insert_scale_factor = 0.005
+)
+`, alter)
+
+	_, err = pg.DB.Exec(ctx, alter)
+	require.NoError(t, err)
+	require.Empty(t, storageParams2alterTable(desc, tableName, readReloptions()))
 }

@@ -8506,3 +8506,1056 @@ func (x *WidgetDBColumns) Id() exp.Expression {
 func (x *WidgetDBColumns) CreatedAt() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "created_at")
 }
+
+type pgdbDescriptorStorageParamsPG18 struct {
+	dialect pgdb_v1.Dialect
+}
+
+var (
+	instancepgdbDescriptorStorageParamsPG18    pgdb_v1.Descriptor = &pgdbDescriptorStorageParamsPG18{}
+	instancepgdbDescriptorStorageParamsPG18V17 pgdb_v1.Descriptor = &pgdbDescriptorStorageParamsPG18{dialect: pgdb_v1.DialectV17}
+)
+
+func (d *pgdbDescriptorStorageParamsPG18) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(d.dialect)
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) TableName() string {
+	return "pb_storage_params_pg_18_models_animals_bfc87034"
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) IsPartitioned() bool {
+	return false
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) IsPartitionedByCreatedAt() bool {
+	return false
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) GetPartitionedByKsuidFieldName() string {
+	return ""
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) GetPartitionDateRange() pgdb_v1.MessageOptions_PartitionedByDateRange {
+	return pgdb_v1.MessageOptions_PARTITIONED_BY_DATE_RANGE_UNSPECIFIED
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) GetStorageParameters() *pgdb_v1.MessageOptions_StorageParameters {
+	return pgdb_v1.MessageOptions_StorageParameters_builder{
+		AutovacuumVacuumInsertThreshold: proto.Int32(-1),
+		AutovacuumVacuumMaxThreshold:    proto.Int32(5000000),
+		VacuumMaxEagerFreezeFailureRate: proto.Float32(0),
+	}.Build()
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) Fields(opts ...pgdb_v1.DescriptorFieldOptionFunc) []*pgdb_v1.Column {
+	df := pgdb_v1.NewDescriptorFieldOption(opts)
+	_ = df
+
+	rv := make([]*pgdb_v1.Column, 0)
+
+	if !df.IsNested {
+
+		coltenant_idCollation := ""
+		coltenant_idOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			coltenant_idCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+			Name:               df.ColumnName("tenant_id"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: coltenant_idOverrideExpression,
+			Default:            "",
+			Collation:          coltenant_idCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(1),
+			ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{1}),
+			ProtoPath:          df.ExtendProtoPath("tenant_id"),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskCollation := ""
+		colpkskOverrideExpression := "varchar GENERATED ALWAYS AS (pb$pk || '|' || pb$sk) STORED"
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkskCollation = "C"
+			colpkskOverrideExpression = ""
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+			Name:               df.ColumnName("pksk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkskOverrideExpression,
+			Default:            "",
+			Collation:          colpkskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkCollation := ""
+		colpkOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colpkCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+			Name:               df.ColumnName("pk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colpkOverrideExpression,
+			Default:            "",
+			Collation:          colpkCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colskCollation := ""
+		colskOverrideExpression := ""
+
+		switch d.Dialect() {
+		case pgdb_v1.DialectV17:
+			colskCollation = "C"
+
+		default:
+		}
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+			Name:               df.ColumnName("sk"),
+			Type:               "varchar",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: colskOverrideExpression,
+			Default:            "",
+			Collation:          colskCollation,
+			SourceKind:         pgdb_v1.ColumnSourceKind(2),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(9),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		colpkskv2Collation := "C"
+		colpkskv2OverrideExpression := ""
+
+		if d.Dialect() != pgdb_v1.DialectV17 {
+			rv = append(rv, &pgdb_v1.Column{
+				Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+				Name:               df.ColumnName("pkskv2"),
+				Type:               "varchar",
+				Nullable:           df.Nullable(true),
+				OverrideExpression: colpkskv2OverrideExpression,
+				Default:            "",
+				Collation:          colpkskv2Collation,
+				SourceKind:         pgdb_v1.ColumnSourceKind(2),
+				ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+				ProtoPath:          df.ExtendProtoPath(""),
+				ProtoKind:          protoreflect.Kind(9),
+				ProtoTypeName:      "",
+				IsRepeated:         false,
+				OneofName:          "",
+			})
+		}
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+			Name:               df.ColumnName("fts_data"),
+			Type:               "tsvector",
+			Nullable:           df.Nullable(true),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(4),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(0),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	if !df.IsNested {
+
+		rv = append(rv, &pgdb_v1.Column{
+			Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+			Name:               df.ColumnName("pb_data"),
+			Type:               "bytea",
+			Nullable:           df.Nullable(false),
+			OverrideExpression: "",
+			Default:            "",
+			Collation:          "",
+			SourceKind:         pgdb_v1.ColumnSourceKind(3),
+			ProtoFieldPath:     df.ExtendProtoFieldPath(nil),
+			ProtoPath:          df.ExtendProtoPath(""),
+			ProtoKind:          protoreflect.Kind(12),
+			ProtoTypeName:      "",
+			IsRepeated:         false,
+			OneofName:          "",
+		})
+
+	}
+
+	colidCollation := ""
+	colidOverrideExpression := ""
+
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		colidCollation = "C"
+
+	default:
+	}
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+		Name:               df.ColumnName("id"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: colidOverrideExpression,
+		Default:            "''",
+		Collation:          colidCollation,
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{2}),
+		ProtoPath:          df.ExtendProtoPath("id"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_storage_params_pg_18_models_animals_bfc87034"),
+		Name:               df.ColumnName("created_at"),
+		Type:               "timestamptz",
+		Nullable:           df.Nullable(true),
+		OverrideExpression: "",
+		Default:            "",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{3}),
+		ProtoPath:          df.ExtendProtoPath("created_at"),
+		ProtoKind:          protoreflect.Kind(11),
+		ProtoTypeName:      ".google.protobuf.Timestamp",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
+	return rv
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) PKSKField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_storage_params_pg_18_models_animals_bfc87034",
+		Name:      "pb$pksk",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) DataField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_storage_params_pg_18_models_animals_bfc87034", Name: "pb$pb_data", Type: "bytea"}
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) SearchField() *pgdb_v1.Column {
+	return nil
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) VersioningField() *pgdb_v1.Column {
+	return &pgdb_v1.Column{Table: "pb_storage_params_pg_18_models_animals_bfc87034", Name: "pb$created_at", Type: "timestamptz"}
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) TenantField() *pgdb_v1.Column {
+	var collation string
+	switch d.Dialect() {
+	case pgdb_v1.DialectV17:
+		collation = "C"
+	default:
+	}
+	return &pgdb_v1.Column{
+		Table:     "pb_storage_params_pg_18_models_animals_bfc87034",
+		Name:      "pb$tenant_id",
+		Type:      "varchar",
+		Collation: collation,
+	}
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) IndexPrimaryKey(opts ...pgdb_v1.IndexOptionsFunc) *pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+
+	return &pgdb_v1.Index{
+		Name:               io.IndexName("pksk_storage_params_pg_18_models_animal_e12e051a"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          true,
+		IsUnique:           true,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+		OverrideExpression: "",
+	}
+
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) Indexes(opts ...pgdb_v1.IndexOptionsFunc) []*pgdb_v1.Index {
+	io := pgdb_v1.NewIndexOptions(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Index, 0)
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_storage_params_pg_18_models_animal_e12e051a"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          true,
+			IsUnique:           true,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pksk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split_storage_params_pg_18_models_3a8d10d5"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("pksk_split2_storage_params_pg_18_models_86b73bac"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          false,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pk"), io.ColumnName("sk")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	if !io.IsNested {
+
+		rv = append(rv, &pgdb_v1.Index{
+			Name:               io.IndexName("fts_data_storage_params_pg_18_models_an_bf3ec230"),
+			Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE_GIN,
+			IsPrimary:          false,
+			IsUnique:           false,
+			IsDropped:          true,
+			Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("fts_data")},
+			OverrideExpression: "",
+			WherePredicate:     "",
+		})
+
+	}
+
+	return rv
+}
+
+func (d *pgdbDescriptorStorageParamsPG18) Statistics(opts ...pgdb_v1.StatisticOptionsFunc) []*pgdb_v1.Statistic {
+	io := pgdb_v1.NewStatisticOption(opts)
+	_ = io
+	rv := make([]*pgdb_v1.Statistic, 0)
+
+	return rv
+}
+
+type pgdbMessageStorageParamsPG18 struct {
+	self    *StorageParamsPG18
+	dialect pgdb_v1.Dialect
+}
+
+func (dbr *StorageParamsPG18) DBReflect(dialect pgdb_v1.Dialect) pgdb_v1.Message {
+	return &pgdbMessageStorageParamsPG18{
+		self:    dbr,
+		dialect: dialect,
+	}
+}
+
+func (m *pgdbMessageStorageParamsPG18) Descriptor() pgdb_v1.Descriptor {
+	switch m.Dialect() {
+	case pgdb_v1.DialectV17:
+		return instancepgdbDescriptorStorageParamsPG18V17
+	default:
+		return instancepgdbDescriptorStorageParamsPG18
+	}
+}
+
+func (m *pgdbMessageStorageParamsPG18) Record(opts ...pgdb_v1.RecordOptionsFunc) (exp.Record, error) {
+	ro := pgdb_v1.NewRecordOptions(opts)
+	_ = ro
+	nullExp := exp.NewLiteralExpression("NULL")
+	_ = nullExp
+
+	var sb pgdb_v1.KeyBuilder
+
+	rv := exp.Record{}
+
+	if !ro.IsNested {
+
+		cfv0 := strings.ReplaceAll(string(m.self.GetTenantId()), "\u0000", "")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("tenant_id")] = nullExp
+		} else {
+			rv[ro.ColumnName("tenant_id")] = cfv0
+		}
+
+	}
+
+	if !ro.IsNested {
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("models_animals_v1_storage_params_pg_18")
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.GetTenantId())
+
+		_, _ = sb.WriteString(":")
+
+		_, _ = sb.WriteString(m.self.GetId())
+
+		cfv2 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pk")] = nullExp
+		} else {
+			rv[ro.ColumnName("pk")] = cfv2
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		sb.Reset()
+
+		_, _ = sb.WriteString("example")
+
+		cfv3 := sb.String()
+
+		if ro.Nulled {
+			rv[ro.ColumnName("sk")] = nullExp
+		} else {
+			rv[ro.ColumnName("sk")] = cfv3
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		if m.Dialect() != pgdb_v1.DialectV17 {
+
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv5 := exp.NewLiteralExpression("NULL")
+
+		if ro.Nulled {
+			rv[ro.ColumnName("fts_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("fts_data")] = cfv5
+		}
+
+	}
+
+	if !ro.IsNested {
+
+		cfv6, err := proto.Marshal(m.self)
+		if err != nil {
+			return nil, err
+		}
+
+		if ro.Nulled {
+			rv[ro.ColumnName("pb_data")] = nullExp
+		} else {
+			rv[ro.ColumnName("pb_data")] = cfv6
+		}
+
+	}
+
+	v1 := strings.ReplaceAll(string(m.self.GetId()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("id")] = nullExp
+	} else {
+		rv[ro.ColumnName("id")] = v1
+	}
+
+	var v2 *time.Time
+	if m.self.GetCreatedAt().IsValid() {
+		v2tmp := m.self.GetCreatedAt().AsTime()
+		v2 = &v2tmp
+	}
+
+	if ro.Nulled {
+		rv[ro.ColumnName("created_at")] = nullExp
+	} else {
+		rv[ro.ColumnName("created_at")] = v2
+	}
+
+	return rv, nil
+}
+
+func (m *pgdbMessageStorageParamsPG18) SearchData(opts ...pgdb_v1.RecordOptionsFunc) []*pgdb_v1.SearchContent {
+	rv := []*pgdb_v1.SearchContent{}
+
+	return rv
+}
+
+func (m *pgdbMessageStorageParamsPG18) Dialect() pgdb_v1.Dialect {
+	return pgdb_v1.DialectOrDefault(m.dialect)
+}
+func (m *pgdbMessageStorageParamsPG18) PKSK() string {
+	var sb pgdb_v1.KeyBuilder
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("models_animals_v1_storage_params_pg_18")
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetTenantId())
+
+	_, _ = sb.WriteString(":")
+
+	_, _ = sb.WriteString(m.self.GetId())
+
+	cfv2 := sb.String()
+
+	sb.Reset()
+
+	_, _ = sb.WriteString("example")
+
+	cfv3 := sb.String()
+
+	return cfv2 + "|" + cfv3
+}
+
+type StorageParamsPG18DB struct {
+	tableName string
+}
+
+type StorageParamsPG18DBQueryBuilder struct {
+	tableName string
+	prefix    string
+}
+
+type StorageParamsPG18DBQueryUnsafe struct {
+	tableName string
+}
+
+type StorageParamsPG18DBColumns struct {
+	tableName string
+}
+
+func (x *StorageParamsPG18) DB() *StorageParamsPG18DB {
+	return &StorageParamsPG18DB{tableName: x.DBReflect(pgdb_v1.DialectUnspecified).Descriptor().TableName()}
+}
+
+func (x *StorageParamsPG18DB) TableName() string {
+	return x.tableName
+}
+
+func (x *StorageParamsPG18DB) Query() *StorageParamsPG18DBQueryBuilder {
+	return &StorageParamsPG18DBQueryBuilder{tableName: x.tableName}
+}
+
+func (x *StorageParamsPG18DB) Columns() *StorageParamsPG18DBColumns {
+	return &StorageParamsPG18DBColumns{tableName: x.tableName}
+}
+
+func (x *StorageParamsPG18DB) WithTable(t string) *StorageParamsPG18DB {
+	return &StorageParamsPG18DB{tableName: t}
+}
+
+func (x *StorageParamsPG18DBQueryBuilder) WithTable(t string) *StorageParamsPG18DBQueryBuilder {
+	return &StorageParamsPG18DBQueryBuilder{tableName: t}
+}
+
+func (x *StorageParamsPG18DBQueryBuilder) Unsafe() *StorageParamsPG18DBQueryUnsafe {
+	return &StorageParamsPG18DBQueryUnsafe{tableName: x.tableName}
+}
+
+type StorageParamsPG18TenantIdSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *StorageParamsPG18TenantIdSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *StorageParamsPG18DBQueryBuilder) TenantId() *StorageParamsPG18TenantIdSafeOperators {
+	return &StorageParamsPG18TenantIdSafeOperators{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+type StorageParamsPG18PKSKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *StorageParamsPG18PKSKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *StorageParamsPG18DBQueryBuilder) PKSK() *StorageParamsPG18PKSKSafeOperators {
+	return &StorageParamsPG18PKSKSafeOperators{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+type StorageParamsPG18PKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18PKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *StorageParamsPG18PKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *StorageParamsPG18PKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *StorageParamsPG18PKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *StorageParamsPG18PKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *StorageParamsPG18PKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *StorageParamsPG18PKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *StorageParamsPG18PKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *StorageParamsPG18PKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *StorageParamsPG18PKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *StorageParamsPG18PKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *StorageParamsPG18PKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *StorageParamsPG18PKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *StorageParamsPG18DBQueryBuilder) PK() *StorageParamsPG18PKSafeOperators {
+	return &StorageParamsPG18PKSafeOperators{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+type StorageParamsPG18SKSafeOperators struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18SKSafeOperators) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *StorageParamsPG18SKSafeOperators) Eq(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Eq(v)
+}
+
+func (x *StorageParamsPG18SKSafeOperators) Gt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt(v)
+}
+
+func (x *StorageParamsPG18SKSafeOperators) Gte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gte(v)
+}
+
+func (x *StorageParamsPG18SKSafeOperators) Lt(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lt(v)
+}
+
+func (x *StorageParamsPG18SKSafeOperators) Lte(v string) exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Lte(v)
+}
+
+func (x *StorageParamsPG18SKSafeOperators) In(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("FALSE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).In(v)
+}
+
+func (x *StorageParamsPG18SKSafeOperators) NotIn(v []string) exp.BooleanExpression {
+	if len(v) == 0 {
+		return exp.NewBooleanExpression(exp.EqOp, exp.NewLiteralExpression("TRUE"), true)
+	}
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotIn(v)
+}
+
+func (x *StorageParamsPG18SKSafeOperators) IsNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNull()
+}
+
+func (x *StorageParamsPG18SKSafeOperators) IsNotEmpty() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Gt("")
+}
+
+func (x *StorageParamsPG18SKSafeOperators) IsNotNull() exp.BooleanExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).IsNotNull()
+}
+
+func (x *StorageParamsPG18SKSafeOperators) Between(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).Between(exp.NewRangeVal(start, end))
+}
+
+func (x *StorageParamsPG18SKSafeOperators) NotBetween(start string, end string) exp.RangeExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column).NotBetween(exp.NewRangeVal(start, end))
+}
+
+func (x *StorageParamsPG18DBQueryBuilder) SK() *StorageParamsPG18SKSafeOperators {
+	return &StorageParamsPG18SKSafeOperators{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+type StorageParamsPG18TenantIdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18DBQueryUnsafe) TenantId() *StorageParamsPG18TenantIdQueryType {
+	return &StorageParamsPG18TenantIdQueryType{tableName: x.tableName, column: "pb$" + "tenant_id"}
+}
+
+func (x *StorageParamsPG18TenantIdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type StorageParamsPG18PKSKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18DBQueryUnsafe) PKSK() *StorageParamsPG18PKSKQueryType {
+	return &StorageParamsPG18PKSKQueryType{tableName: x.tableName, column: "pb$" + "pksk"}
+}
+
+func (x *StorageParamsPG18PKSKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type StorageParamsPG18PKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18DBQueryUnsafe) PK() *StorageParamsPG18PKQueryType {
+	return &StorageParamsPG18PKQueryType{tableName: x.tableName, column: "pb$" + "pk"}
+}
+
+func (x *StorageParamsPG18PKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type StorageParamsPG18SKQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18DBQueryUnsafe) SK() *StorageParamsPG18SKQueryType {
+	return &StorageParamsPG18SKQueryType{tableName: x.tableName, column: "pb$" + "sk"}
+}
+
+func (x *StorageParamsPG18SKQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type StorageParamsPG18FTSDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18DBQueryUnsafe) FTSData() *StorageParamsPG18FTSDataQueryType {
+	return &StorageParamsPG18FTSDataQueryType{tableName: x.tableName, column: "pb$" + "fts_data"}
+}
+
+func (x *StorageParamsPG18FTSDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type StorageParamsPG18PBDataQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18DBQueryUnsafe) PBData() *StorageParamsPG18PBDataQueryType {
+	return &StorageParamsPG18PBDataQueryType{tableName: x.tableName, column: "pb$" + "pb_data"}
+}
+
+func (x *StorageParamsPG18PBDataQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type StorageParamsPG18IdQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18DBQueryUnsafe) Id() *StorageParamsPG18IdQueryType {
+	return &StorageParamsPG18IdQueryType{tableName: x.tableName, column: "pb$" + "id"}
+}
+
+func (x *StorageParamsPG18IdQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+type StorageParamsPG18CreatedAtQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *StorageParamsPG18DBQueryUnsafe) CreatedAt() *StorageParamsPG18CreatedAtQueryType {
+	return &StorageParamsPG18CreatedAtQueryType{tableName: x.tableName, column: "pb$" + "created_at"}
+}
+
+func (x *StorageParamsPG18CreatedAtQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
+func (x *StorageParamsPG18DBColumns) WithTable(t string) *StorageParamsPG18DBColumns {
+	return &StorageParamsPG18DBColumns{tableName: t}
+}
+
+func (x *StorageParamsPG18DBColumns) TenantId() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "tenant_id")
+}
+
+func (x *StorageParamsPG18DBColumns) PKSK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pksk")
+}
+
+func (x *StorageParamsPG18DBColumns) PK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pk")
+}
+
+func (x *StorageParamsPG18DBColumns) SK() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "sk")
+}
+
+func (x *StorageParamsPG18DBColumns) FTSData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "fts_data")
+}
+
+func (x *StorageParamsPG18DBColumns) PBData() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "pb_data")
+}
+
+func (x *StorageParamsPG18DBColumns) Id() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "id")
+}
+
+func (x *StorageParamsPG18DBColumns) CreatedAt() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "created_at")
+}

@@ -270,6 +270,8 @@ func storageParams2alterTable(desc Descriptor, tableName string, existingParams 
 			if desiredMag < 0 {
 				desiredMag = -desiredMag
 			}
+			// The 1e-9 floor keeps a declared 0 comparable; it sits far below
+			// any value a reloption float meaningfully takes.
 			epsilon := 1e-9 + 0.0001*desiredMag
 			return diff > epsilon
 		}
@@ -425,8 +427,9 @@ func vacuumIndexCleanupValue(v MessageOptions_StorageParameters_VacuumIndexClean
 }
 
 // normalizeVacuumIndexCleanup maps a stored vacuum_index_cleanup reloption to
-// auto/on/off. PostgreSQL keeps the spelling it was set with, and accepts any
-// boolean form for on and off.
+// auto/on/off. PostgreSQL keeps the spelling it was set with and accepts
+// exactly auto, on/off, true/false, yes/no and 1/0 for it; unlike a boolean
+// GUC, prefixes such as "t" or "of" are rejected, so they never reach here.
 func normalizeVacuumIndexCleanup(stored string) string {
 	switch strings.ToLower(strings.TrimSpace(stored)) {
 	case "auto":

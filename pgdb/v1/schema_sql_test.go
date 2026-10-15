@@ -509,6 +509,30 @@ func TestStorageParams2with(t *testing.T) {
 )`,
 		},
 		{
+			// None of these is exactly representable as a float32. Rendering
+			// must stay the shortest round-tripping decimal, never the widened
+			// float64 expansion (0.004999999888241291) or exponent form, or
+			// every drift check would compare against text PG never stored.
+			name: "Float32 scale factors render as shortest decimal",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumScaleFactor(0.05)
+					sp.SetAutovacuumAnalyzeScaleFactor(1e-7)
+					sp.SetAutovacuumVacuumInsertScaleFactor(0.005)
+					sp.SetVacuumMaxEagerFreezeFailureRate(0.03)
+					return sp
+				}(),
+			},
+			expected: `WITH (
+  autovacuum_vacuum_scale_factor = 0.05,
+  autovacuum_analyze_scale_factor = 0.0000001,
+  autovacuum_vacuum_insert_scale_factor = 0.005,
+  vacuum_max_eager_freeze_failure_rate = 0.03
+)`,
+		},
+		{
 			// UNSPECIFIED is the zero value, so a message that sets other
 			// parameters must not also emit an index-cleanup override.
 			name: "vacuum_index_cleanup unspecified renders nothing",
@@ -923,6 +947,110 @@ SET (
 			expected: `ALTER TABLE "test_table"
 SET (
   autovacuum_vacuum_max_threshold = 5000000
+)
+`,
+		},
+		{
+			name: "PG18 eager freeze rate drifts",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumMaxThreshold(5000000)
+					sp.SetVacuumMaxEagerFreezeFailureRate(0.05)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_max_threshold":      "5000000", // matches
+				"vacuum_max_eager_freeze_failure_rate": "0.03",
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  vacuum_max_eager_freeze_failure_rate = 0.05
+)
+`,
+		},
+		{
+			name: "PG18 parameters already converged",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumMaxThreshold(5000000)
+					sp.SetVacuumMaxEagerFreezeFailureRate(0.05)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_max_threshold":      "5000000",
+				"vacuum_max_eager_freeze_failure_rate": "0.05",
+			},
+			expected: "",
+		},
+		{
+			name: "New parameters missing from the table",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumInsertThreshold(1000)
+					sp.SetAutovacuumVacuumMaxThreshold(5000000)
+					sp.SetVacuumMaxEagerFreezeFailureRate(0.05)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_insert_threshold = 1000,
+  autovacuum_vacuum_max_threshold = 5000000,
+  vacuum_max_eager_freeze_failure_rate = 0.05
+)
+`,
+		},
+		{
+			// Presence, not value, decides emission: a declared 0 must still
+			// correct a table that holds something else.
+			name: "Declared zero values drift",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumMaxThreshold(0)
+					sp.SetVacuumMaxEagerFreezeFailureRate(0)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_max_threshold":      "100",
+				"vacuum_max_eager_freeze_failure_rate": "0.0000001",
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_max_threshold = 0,
+  vacuum_max_eager_freeze_failure_rate = 0
+)
+`,
+		},
+		{
+			// The relative tolerance applies to the pre-existing scale
+			// factors too, not only the insert-driven one it was written for.
+			name: "Small drift on existing vacuum scale factor is detected",
+			desc: &mockDescriptorWithStorageParams{
+				mockDescriptor: mockDescriptor{tableName: "test_table"},
+				storageParams: func() *MessageOptions_StorageParameters {
+					sp := &MessageOptions_StorageParameters{}
+					sp.SetAutovacuumVacuumScaleFactor(0.001)
+					return sp
+				}(),
+			},
+			existingParams: map[string]string{
+				"autovacuum_vacuum_scale_factor": "0.0011",
+			},
+			expected: `ALTER TABLE "test_table"
+SET (
+  autovacuum_vacuum_scale_factor = 0.001
 )
 `,
 		},
