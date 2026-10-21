@@ -415,6 +415,48 @@ func tableIsParentPartition(ctx context.Context, db sqlScanner, tableName string
 	return false, nil
 }
 
+// indexMigrations returns the CREATE/DROP INDEX statements for desc against
+// the set of index names that already exist, with every CREATE ordered
+// before every DROP.
+//
+// The consumer (xpgdb's execReconcile) abandons a table's remaining schema
+// statements the moment one is skipped on a lock_timeout -- the skip is only
+// retried on the next EnsureSchema run (a redeploy), not self-healing
+// in-process. So if a DROP for one index and a CREATE for its replacement
+// were interleaved by proto declaration order, a skipped CREATE could still
+// be followed by a DROP that runs anyway, leaving the table with neither
+// index until the next deploy. Two passes make "every create precedes every
+// drop" a property of this emitter, not of proto declaration order or a
+// future author's care when adding a replacement index (c1#24781).
+func indexMigrations(desc Descriptor, existing map[string]struct{}) []string {
+	creates := make([]string, 0)
+	drops := make([]string, 0)
+
+	for _, idx := range desc.Indexes() {
+		if idx.IsPrimary {
+			continue
+		}
+
+		_, exists := existing[idx.Name]
+		query := index2sql(desc, idx)
+
+		if idx.IsDropped {
+			// if it should be dropped, and its still here, byeeee
+			if exists {
+				drops = append(drops, query)
+			}
+			continue
+		}
+
+		// doesn't exist, but should, lets go!
+		if !exists {
+			creates = append(creates, query)
+		}
+	}
+
+	return append(creates, drops...)
+}
+
 func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialect Dialect) ([]string, error) {
 	rv := make([]string, 0)
 	dbr := msg.DBReflect(dialect)
@@ -441,29 +483,7 @@ func Migrations(ctx context.Context, db sqlScanner, msg DBReflectMessage, dialec
 	if err != nil {
 		return nil, err
 	}
-
-	for _, idx := range desc.Indexes() {
-		if idx.IsPrimary {
-			continue
-		}
-
-		_, exists := indexes[idx.Name]
-		query := index2sql(desc, idx)
-
-		if idx.IsDropped {
-			// if it should be dropped, and its still here, byeeee
-			if exists {
-				rv = append(rv, query)
-			}
-			continue
-		}
-
-		// doesn't exist, but should, lets go!
-		if !exists {
-			rv = append(rv, query)
-			continue
-		}
-	}
+	rv = append(rv, indexMigrations(desc, indexes)...)
 
 	existingStats, err := readStats(ctx, db, desc)
 	if err != nil {
