@@ -18,7 +18,9 @@ func (b BitsValue) Value() (driver.Value, error) {
 
 	bits := &pgtype.Bits{
 		Bytes: b,
-		Valid: true,
+		// B'' from an empty input makes pgvector's distance operators throw
+		// "different bit lengths N and 0"; NULL propagates through instead.
+		Valid: len(b) > 0,
 		Len:   bitsLen,
 	}
 
