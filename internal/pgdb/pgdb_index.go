@@ -74,6 +74,9 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 
 	rv.DB.Method = idx.GetMethod()
 
+	lowerColumns := validateLowerColumns(m.FullyQualifiedName(), idx)
+	lowered := make([]bool, 0, len(idx.GetColumns()))
+
 	for _, fieldName := range idx.GetColumns() {
 		path := strings.Split(fieldName, ".")
 		message := m
@@ -88,14 +91,24 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 				continue
 			}
 
+			_, isLower := lowerColumns[fieldName]
 			name := ""
 			// could be a real field!
 			if f, ok := tryFieldByName(message, p); ok {
+				if isLower {
+					if err := validateLowerColumnField(f); err != nil {
+						panic(fmt.Errorf("pgdb: index '%s' on '%s': %w", idx.GetName(), m.FullyQualifiedName(), err))
+					}
+				}
 				name, err = getColumnName(f)
 				if err != nil {
 					panic(err)
 				}
 			} else {
+				if isLower {
+					panic(fmt.Errorf("pgdb: index '%s' on '%s': lower_columns entry '%s' must be a string field, not a oneof",
+						idx.GetName(), m.FullyQualifiedName(), fieldName))
+				}
 				// look in oneofs!
 				for _, oo := range message.RealOneOfs() {
 					if oo.Name().String() == p {
@@ -113,7 +126,25 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 
 			resolution += name
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
+			lowered = append(lowered, isLower)
 		}
+	}
+
+	if len(lowerColumns) > 0 {
+		// The template emits OverrideExpression inside a Go string literal, so
+		// each column breaks out of it to call io.ColumnName at runtime, which
+		// applies the (possibly nested) column prefix. Generated column names are
+		// lower snake case or numeric behind a "pb$" prefix, so they are valid
+		// unquoted identifiers.
+		parts := make([]string, 0, len(rv.DB.Columns))
+		for i, col := range rv.DB.Columns {
+			part := fmt.Sprintf(`" + io.ColumnName("%s") + "`, col)
+			if lowered[i] {
+				part = "lower(" + part + ")"
+			}
+			parts = append(parts, part)
+		}
+		rv.DB.OverrideExpression = strings.Join(parts, ", ")
 	}
 
 	if idx.GetBitHammingOps() && idx.GetMethod() == pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE {
@@ -136,6 +167,50 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 		}
 	}
 	return rv
+}
+
+// validateLowerColumns checks the index-level constraints of lower_columns and
+// returns its entries as a set.
+func validateLowerColumns(msgName string, idx *pgdb_v1.MessageOptions_Index) map[string]struct{} {
+	if len(idx.GetLowerColumns()) == 0 {
+		return nil
+	}
+	if idx.GetMethod() != pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE {
+		panic(fmt.Errorf("pgdb: index '%s' on '%s': lower_columns requires method INDEX_METHOD_BTREE, got %s",
+			idx.GetName(), msgName, idx.GetMethod()))
+	}
+	if idx.GetBitHammingOps() {
+		panic(fmt.Errorf("pgdb: index '%s' on '%s': lower_columns cannot be combined with bit_hamming_ops",
+			idx.GetName(), msgName))
+	}
+	rv := make(map[string]struct{}, len(idx.GetLowerColumns()))
+	for _, lc := range idx.GetLowerColumns() {
+		if !slices.Contains(idx.GetColumns(), lc) {
+			panic(fmt.Errorf("pgdb: index '%s' on '%s': lower_columns entry '%s' is not listed in columns",
+				idx.GetName(), msgName, lc))
+		}
+		rv[lc] = struct{}{}
+	}
+	return rv
+}
+
+// validateLowerColumnField requires a singular string field stored as a text
+// column, since lower() is only defined for text.
+func validateLowerColumnField(f pgs.Field) error {
+	if f.Type().ProtoType() != pgs.StringT {
+		return fmt.Errorf("lower_columns field '%s' must be a string field, got %s", f.Name(), f.Type().ProtoType())
+	}
+	if f.Type().IsRepeated() || f.Type().IsMap() {
+		return fmt.Errorf("lower_columns field '%s' must not be repeated", f.Name())
+	}
+	ext := pgdb_v1.FieldOptions{}
+	if _, err := f.Extension(pgdb_v1.E_Options, &ext); err != nil {
+		return fmt.Errorf("lower_columns field '%s': failed to read field options: %w", f.Name(), err)
+	}
+	if ext.GetMessageBehavior() != pgdb_v1.FieldOptions_MESSAGE_BEHAVIOR_UNSPECIFIED {
+		return fmt.Errorf("lower_columns field '%s' must be stored as text, but has message_behavior %s", f.Name(), ext.GetMessageBehavior())
+	}
+	return nil
 }
 
 func getCommonIndexes(ctx pgsgo.Context, m pgs.Message) ([]*indexContext, error) {

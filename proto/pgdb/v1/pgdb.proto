@@ -114,6 +114,9 @@ message MessageOptions {
     bool partial_deleted_at_is_null = 5;
     // adds bit_hamming_ops to the index for HNSW_COSINE indexes
     bool bit_hamming_ops = 6;
+    // columns (entries of `columns`) to index as lower(column), for
+    // case-insensitive equality lookups. BTREE only.
+    repeated string lower_columns = 7;
   }
   repeated Index indexes = 2;
   // defaults to `tenant_id`.  Must be set if an object does not have a

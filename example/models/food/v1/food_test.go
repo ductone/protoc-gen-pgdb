@@ -149,8 +149,8 @@ func TestSchemaFoodPasta(t *testing.T) {
 		}
 		// fmt.Printf("hnswIndexCount: %d\n", hnswIndexCount)
 		if _, ok := smsg.(*PastaIngredient); ok {
-			require.Equal(t, 4, hnswIndexCount, "Should have 4 hnsw indexes") // 3 vector enums + 1 min_hash_bits index
-			require.Equal(t, 1, partialIndexCount, "Should have 1 partial index")
+			require.Equal(t, 4, hnswIndexCount, "Should have 4 hnsw indexes")       // 3 vector enums + 1 min_hash_bits index
+			require.Equal(t, 2, partialIndexCount, "Should have 2 partial indexes") // everythingggg_alive_only + pasta_id_ci_alive_only
 
 			// Verify halfvec column and index ops class
 			require.Contains(t, ct, "halfvec(5)", "Should contain halfvec(5) column for MODEL_5DIMS_HALF")

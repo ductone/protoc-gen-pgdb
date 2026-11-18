@@ -1856,6 +1856,28 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("pasta_id_ci_pasta_ingredient_models_foo_d420f500"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pasta_id")},
+		OverrideExpression: "" + io.ColumnName("tenant_id") + ", lower(" + io.ColumnName("pasta_id") + ")",
+		WherePredicate:     "",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("pasta_id_ci_alive_only_pasta_ingredient_2811a8f8"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pasta_id")},
+		OverrideExpression: "" + io.ColumnName("tenant_id") + ", lower(" + io.ColumnName("pasta_id") + ")",
+		WherePredicate:     "" + io.ColumnName("deleted_at") + " IS NULL",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
 		Name:               io.IndexName("min_hash_bits_pasta_ingredient_models_f_0f3197d4"),
 		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_HNSW_COSINE,
 		IsPrimary:          false,

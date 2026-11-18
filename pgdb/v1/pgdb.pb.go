@@ -1463,6 +1463,7 @@ type MessageOptions_Index struct {
 	xxx_hidden_Dropped                bool                             `protobuf:"varint,4,opt,name=dropped,proto3"`
 	xxx_hidden_PartialDeletedAtIsNull bool                             `protobuf:"varint,5,opt,name=partial_deleted_at_is_null,json=partialDeletedAtIsNull,proto3"`
 	xxx_hidden_BitHammingOps          bool                             `protobuf:"varint,6,opt,name=bit_hamming_ops,json=bitHammingOps,proto3"`
+	xxx_hidden_LowerColumns           []string                         `protobuf:"bytes,7,rep,name=lower_columns,json=lowerColumns,proto3"`
 	unknownFields                     protoimpl.UnknownFields
 	sizeCache                         protoimpl.SizeCache
 }
@@ -1534,6 +1535,13 @@ func (x *MessageOptions_Index) GetBitHammingOps() bool {
 	return false
 }
 
+func (x *MessageOptions_Index) GetLowerColumns() []string {
+	if x != nil {
+		return x.xxx_hidden_LowerColumns
+	}
+	return nil
+}
+
 func (x *MessageOptions_Index) SetName(v string) {
 	x.xxx_hidden_Name = v
 }
@@ -1558,6 +1566,10 @@ func (x *MessageOptions_Index) SetBitHammingOps(v bool) {
 	x.xxx_hidden_BitHammingOps = v
 }
 
+func (x *MessageOptions_Index) SetLowerColumns(v []string) {
+	x.xxx_hidden_LowerColumns = v
+}
+
 type MessageOptions_Index_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
@@ -1570,6 +1582,9 @@ type MessageOptions_Index_builder struct {
 	PartialDeletedAtIsNull bool
 	// adds bit_hamming_ops to the index for HNSW_COSINE indexes
 	BitHammingOps bool
+	// columns (entries of `columns`) to index as lower(column), for
+	// case-insensitive equality lookups. BTREE only.
+	LowerColumns []string
 }
 
 func (b0 MessageOptions_Index_builder) Build() *MessageOptions_Index {
@@ -1582,6 +1597,7 @@ func (b0 MessageOptions_Index_builder) Build() *MessageOptions_Index {
 	x.xxx_hidden_Dropped = b.Dropped
 	x.xxx_hidden_PartialDeletedAtIsNull = b.PartialDeletedAtIsNull
 	x.xxx_hidden_BitHammingOps = b.BitHammingOps
+	x.xxx_hidden_LowerColumns = b.LowerColumns
 	return m0
 }
 
@@ -1734,7 +1750,7 @@ var File_pgdb_v1_pgdb_proto protoreflect.FileDescriptor
 
 const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"\n" +
-	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\xf9\x1a\n" +
+	"\x12pgdb/v1/pgdb.proto\x12\apgdb.v1\x1a google/protobuf/descriptor.proto\"\x9e\x1b\n" +
 	"\x0eMessageOptions\x12\x1a\n" +
 	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x12!\n" +
 	"\fdrop_enabled\x18\f \x01(\bR\vdropEnabled\x121\n" +
@@ -1793,14 +1809,15 @@ const file_pgdb_v1_pgdb_proto_rawDesc = "" +
 	"#_autovacuum_vacuum_insert_thresholdB(\n" +
 	"&_autovacuum_vacuum_insert_scale_factorB\"\n" +
 	" _autovacuum_vacuum_max_thresholdB'\n" +
-	"%_vacuum_max_eager_freeze_failure_rate\x1a\x8c\x03\n" +
+	"%_vacuum_max_eager_freeze_failure_rate\x1a\xb1\x03\n" +
 	"\x05Index\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12A\n" +
 	"\x06method\x18\x02 \x01(\x0e2).pgdb.v1.MessageOptions.Index.IndexMethodR\x06method\x12\x18\n" +
 	"\acolumns\x18\x03 \x03(\tR\acolumns\x12\x18\n" +
 	"\adropped\x18\x04 \x01(\bR\adropped\x12:\n" +
 	"\x1apartial_deleted_at_is_null\x18\x05 \x01(\bR\x16partialDeletedAtIsNull\x12&\n" +
-	"\x0fbit_hamming_ops\x18\x06 \x01(\bR\rbitHammingOps\"\x93\x01\n" +
+	"\x0fbit_hamming_ops\x18\x06 \x01(\bR\rbitHammingOps\x12#\n" +
+	"\rlower_columns\x18\a \x03(\tR\flowerColumns\"\x93\x01\n" +
 	"\vIndexMethod\x12\x1c\n" +
 	"\x18INDEX_METHOD_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12INDEX_METHOD_BTREE\x10\x01\x12\x14\n" +
