@@ -1640,6 +1640,23 @@ func (d *pgdbDescriptorPastaIngredient) Fields(opts ...pgdb_v1.DescriptorFieldOp
 		OneofName:          "",
 	})
 
+	rv = append(rv, &pgdb_v1.Column{
+		Table:              df.TableName("pb_pasta_ingredient_models_food_v1_0565c036"),
+		Name:               df.ColumnName("label"),
+		Type:               "text",
+		Nullable:           df.Nullable(false),
+		OverrideExpression: "",
+		Default:            "''",
+		Collation:          "",
+		SourceKind:         pgdb_v1.ColumnSourceKind(0),
+		ProtoFieldPath:     df.ExtendProtoFieldPath([]int32{10}),
+		ProtoPath:          df.ExtendProtoPath("label"),
+		ProtoKind:          protoreflect.Kind(9),
+		ProtoTypeName:      "",
+		IsRepeated:         false,
+		OneofName:          "",
+	})
+
 	return rv
 }
 
@@ -1875,6 +1892,17 @@ func (d *pgdbDescriptorPastaIngredient) Indexes(opts ...pgdb_v1.IndexOptionsFunc
 		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("pasta_id")},
 		OverrideExpression: "" + io.ColumnName("tenant_id") + ", lower(" + io.ColumnName("pasta_id") + ")",
 		WherePredicate:     "" + io.ColumnName("deleted_at") + " IS NULL",
+	})
+
+	rv = append(rv, &pgdb_v1.Index{
+		Name:               io.IndexName("label_ci_pasta_ingredient_models_food_v_a1eb3cb1"),
+		Method:             pgdb_v1.MessageOptions_Index_INDEX_METHOD_BTREE,
+		IsPrimary:          false,
+		IsUnique:           false,
+		IsDropped:          false,
+		Columns:            []string{io.ColumnName("tenant_id"), io.ColumnName("label")},
+		OverrideExpression: "" + io.ColumnName("tenant_id") + ", lower(" + io.ColumnName("label") + ")",
+		WherePredicate:     "",
 	})
 
 	rv = append(rv, &pgdb_v1.Index{
@@ -2186,6 +2214,14 @@ func (m *pgdbMessagePastaIngredient) Record(opts ...pgdb_v1.RecordOptionsFunc) (
 		rv[ro.ColumnName("min_hash")] = nullExp
 	} else {
 		rv[ro.ColumnName("min_hash")] = v8
+	}
+
+	v9 := strings.ReplaceAll(string(m.self.GetLabel()), "\u0000", "")
+
+	if ro.Nulled {
+		rv[ro.ColumnName("label")] = nullExp
+	} else {
+		rv[ro.ColumnName("label")] = v9
 	}
 
 	return rv, nil
@@ -3043,6 +3079,19 @@ func (x *PastaIngredientMinHashQueryType) Identifier() exp.IdentifierExpression 
 	return exp.NewIdentifierExpression("", x.tableName, x.column)
 }
 
+type PastaIngredientLabelQueryType struct {
+	column    string
+	tableName string
+}
+
+func (x *PastaIngredientDBQueryUnsafe) Label() *PastaIngredientLabelQueryType {
+	return &PastaIngredientLabelQueryType{tableName: x.tableName, column: "pb$" + "label"}
+}
+
+func (x *PastaIngredientLabelQueryType) Identifier() exp.IdentifierExpression {
+	return exp.NewIdentifierExpression("", x.tableName, x.column)
+}
+
 func (x *PastaIngredientDBColumns) WithTable(t string) *PastaIngredientDBColumns {
 	return &PastaIngredientDBColumns{tableName: t}
 }
@@ -3109,6 +3158,10 @@ func (x *PastaIngredientDBColumns) Id() exp.Expression {
 
 func (x *PastaIngredientDBColumns) MinHash() exp.Expression {
 	return exp.NewIdentifierExpression("", x.tableName, "min_hash")
+}
+
+func (x *PastaIngredientDBColumns) Label() exp.Expression {
+	return exp.NewIdentifierExpression("", x.tableName, "label")
 }
 
 type pgdbDescriptorSauceIngredient struct {

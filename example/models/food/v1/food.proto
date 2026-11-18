@@ -94,6 +94,17 @@ message PastaIngredient {
     lower_columns: ["pasta_id"]
     partial_deleted_at_is_null: true
   };
+  // label is covered only by a lower(label) index, so the safe query builder
+  // must not offer plain-column operators for it.
+  option (pgdb.v1.msg).indexes = {
+    name: "label_ci"
+    method: INDEX_METHOD_BTREE
+    columns: [
+      "tenant_id",
+      "label"
+    ]
+    lower_columns: ["label"]
+  };
   option (pgdb.v1.msg).stats = {
     name: "tenant_id_ingredient_id"
     columns: [
@@ -130,6 +141,8 @@ message PastaIngredient {
   repeated ModelEmbedding model_embeddings = 8 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_VECTOR}];
 
   bytes min_hash = 9 [(pgdb.v1.options) = {message_behavior: MESSAGE_BEHAVIOR_BITS, bits_size: 4096}];
+
+  string label = 10;
 }
 
 message SauceIngredient {

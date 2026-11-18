@@ -711,6 +711,11 @@ func (module *Module) getSafeFields(ctx pgsgo.Context, m pgs.Message, ix *import
 			continue
 		}
 		for _, f := range idx.DB.Columns {
+			// A lower(column) expression index cannot serve plain-column
+			// predicates, so it contributes no safe operators for that column.
+			if _, lowered := idx.LoweredColumns[f]; lowered {
+				continue
+			}
 			if _, ok := indexByFullName[f]; !ok {
 				indexByFullName[f] = []pgdb_v1.MessageOptions_Index_IndexMethod{}
 			}

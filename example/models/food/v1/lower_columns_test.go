@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -92,8 +93,40 @@ func TestLowerColumnsIndexPostgres(t *testing.T) {
 		defs = append(defs, def)
 	}
 	require.NoError(t, rows.Err())
-	require.Len(t, defs, 2, "expected both lower_columns indexes: %v", defs)
+	require.Len(t, defs, 3, "expected all lower_columns indexes: %v", defs)
+	pastaDefs := 0
 	for _, def := range defs {
-		require.Contains(t, def, `lower("pb$pasta_id")`)
+		if strings.Contains(def, `lower("pb$pasta_id")`) {
+			pastaDefs++
+		} else {
+			require.Contains(t, def, `lower("pb$label")`)
+		}
 	}
+	require.Equal(t, 2, pastaDefs)
+}
+
+// TestLowerColumnsSafeOperators checks that a column covered only by a
+// lower(column) index gets no plain-column safe operators, while a column that
+// another plain index also covers keeps them.
+func TestLowerColumnsSafeOperators(t *testing.T) {
+	builder := reflect.TypeOf(&PastaIngredientDBQueryBuilder{})
+	unsafe := reflect.TypeOf(&PastaIngredientDBQueryUnsafe{})
+
+	_, hasSafeLabel := builder.MethodByName("Label")
+	require.False(t, hasSafeLabel, "label is only covered by a lower() index")
+	_, hasUnsafeLabel := unsafe.MethodByName("Label")
+	require.True(t, hasUnsafeLabel, "label must stay reachable via Unsafe()")
+
+	pastaID, ok := builder.MethodByName("PastaId")
+	require.True(t, ok, "pasta_id is also covered by plain indexes")
+	ops := pastaID.Type.Out(0)
+	for _, op := range []string{"Eq", "Gt", "Gte", "Lt", "Lte", "IsNotEmpty"} {
+		_, ok := ops.MethodByName(op)
+		require.Truef(t, ok, "PastaId safe operators should keep %s", op)
+	}
+
+	desc := (&PastaIngredient{}).DBReflect(pgdb_v1.DialectV13).Descriptor()
+	label := findIndex(t, desc.Indexes(), "label_ci")
+	require.Equal(t, []string{"pb$tenant_id", "pb$label"}, label.Columns)
+	require.Equal(t, "pb$tenant_id, lower(pb$label)", label.OverrideExpression)
 }

@@ -23,6 +23,10 @@ func resolveVectorOpsClass(vet pgdb_v1.VectorElementType) string {
 type indexContext struct {
 	DB            pgdb_v1.Index
 	ExcludeNested bool
+	// LoweredColumns holds the resolved names of DB.Columns that the index
+	// stores as lower(column). The index cannot serve plain-column predicates
+	// on them.
+	LoweredColumns map[string]struct{}
 }
 
 func (module *Module) getMessageIndexes(ctx pgsgo.Context, m pgs.Message, ix *importTracker) []*indexContext {
@@ -127,6 +131,12 @@ func (module *Module) extraIndexes(ctx pgsgo.Context, m pgs.Message, ix *importT
 			resolution += name
 			rv.DB.Columns = append(rv.DB.Columns, resolution)
 			lowered = append(lowered, isLower)
+			if isLower {
+				if rv.LoweredColumns == nil {
+					rv.LoweredColumns = map[string]struct{}{}
+				}
+				rv.LoweredColumns[resolution] = struct{}{}
+			}
 		}
 	}
 
