@@ -276,6 +276,21 @@ func (module *Module) getFieldSafe(ctx pgsgo.Context, f pgs.Field, vn *varNamer,
 		}
 		rv.DataType = dbTypeRef
 
+		// Handle sequence option for auto-incrementing columns
+		if seqOpts := ext.GetSequence(); seqOpts != nil {
+			// Validate that sequence is only used on integer types
+			if !isIntegerType(pt) {
+				return nil, fmt.Errorf("pgdb: sequence option can only be used on integer fields: %s (type %s)", f.FullyQualifiedName(), pt.String())
+			}
+			if isArray {
+				return nil, fmt.Errorf("pgdb: sequence option cannot be used on repeated fields: %s", f.FullyQualifiedName())
+			}
+			rv.DB.Sequence = protoSequenceToColumnSequence(seqOpts)
+			// Clear default value since identity columns don't use defaults
+			rv.DB.Default = ""
+			rv.DB.Nullable = false
+		}
+
 		if ext.GetKsuid() {
 			rv.V17FieldOverrides = &V17FieldOverrides{
 				Collation: "C",
@@ -660,4 +675,42 @@ func getProtoTypeName(f pgs.Field) string {
 		return ft.Embed().FullyQualifiedName()
 	}
 	return ""
+}
+
+// isIntegerType returns true if the proto type is an integer type suitable for sequences.
+func isIntegerType(pt pgs.ProtoType) bool {
+	switch pt {
+	case pgs.Int32T, pgs.Int64T, pgs.UInt32T, pgs.UInt64T,
+		pgs.SInt32, pgs.SInt64, pgs.Fixed32T, pgs.Fixed64T,
+		pgs.SFixed32, pgs.SFixed64:
+		return true
+	default:
+		return false
+	}
+}
+
+// protoSequenceToColumnSequence converts proto SequenceOptions to Column SequenceOptions.
+func protoSequenceToColumnSequence(seqOpts *pgdb_v1.FieldOptions_SequenceOptions) *pgdb_v1.SequenceOptions {
+	if seqOpts == nil {
+		return nil
+	}
+	rv := &pgdb_v1.SequenceOptions{
+		Always:    seqOpts.GetAlways(),
+		Start:     seqOpts.GetStart(),
+		Increment: seqOpts.GetIncrement(),
+		Cycle:     seqOpts.GetCycle(),
+	}
+	if seqOpts.HasMinValue() {
+		minVal := seqOpts.GetMinValue()
+		rv.MinValue = &minVal
+	}
+	if seqOpts.HasMaxValue() {
+		maxVal := seqOpts.GetMaxValue()
+		rv.MaxValue = &maxVal
+	}
+	if seqOpts.HasCache() {
+		cache := seqOpts.GetCache()
+		rv.Cache = &cache
+	}
+	return rv
 }
